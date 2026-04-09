@@ -6,3 +6,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-08 10:46:06 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in feedback reporter when reducing complexity
 - 2026-04-08 13:37:08 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure syed proctor to support optimizing memory usage
 - 2026-04-08 15:58:12 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for dashboard client regarding optimizing memory usage
+- 2026-04-09 10:55:31 | Ayush Shukla <ayush.shukla@adypu.edu.in> | test: add unit tests for candidate profile specifically reducing complexity
