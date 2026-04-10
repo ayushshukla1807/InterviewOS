@@ -1152,7 +1152,7 @@ function SessionContent() {
                            onChange={e => setSupportInput(e.target.value)}
                            onKeyDown={e => {
                              if (e.key === 'Enter' && supportInput.trim()) {
-                               const newMsgs = [...supportMessages, { role: 'user', content: supportInput }];
+                               const newMsgs: { role: 'user' | 'aura'; content: string }[] = [...supportMessages, { role: 'user', content: supportInput }];
                                setSupportMessages(newMsgs);
                                setSupportInput('');
                                // Simulated Aura Response
