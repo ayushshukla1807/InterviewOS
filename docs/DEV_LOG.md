@@ -15,3 +15,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-10 13:07:48 | Ayush Shukla <ayush.shukla@adypu.edu.in> | Fix typescript error in session page
 - 2026-04-10 14:48:50 | Ashish Rajput <ashish.rajput.tech@gmail.com> | docs: update developer guides for rate limiter regarding refactoring helper functions
 - 2026-04-10 15:24:37 | Ayush Shukla <ayush.shukla@adypu.edu.in> | test: add unit tests for PDF resume parser specifically fixing type errors
+- 2026-04-10 19:11:35 | Ayush Shukla <ayush.shukla@adypu.edu.in> | chore: configure auth module environment for refactoring helper functions
