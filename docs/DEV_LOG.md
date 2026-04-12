@@ -19,3 +19,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-10 19:37:23 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of feedback reporter by adding input validation
 - 2026-04-10 21:09:47 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for syed proctor and fixing type errors
 - 2026-04-11 19:22:21 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement chat component for fixing type errors
+- 2026-04-12 10:51:23 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in vercel config when adding input validation
