@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: InterviewOS
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_APP_NAME
+        value: HYRTE
