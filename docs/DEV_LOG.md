@@ -22,3 +22,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-12 10:51:23 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in vercel config when adding input validation
 - 2026-04-12 16:19:48 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure conversational engine to support cleaning up code
 - 2026-04-13 17:01:56 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for session database regarding cleaning up code
+- 2026-04-13 18:06:21 | Ashish Rajput <ashish.rajput.tech@gmail.com> | Add render.yaml for Render deployment
