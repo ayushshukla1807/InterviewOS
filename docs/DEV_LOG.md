@@ -27,3 +27,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-14 22:14:44 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of evaluation engine by cleaning up code
 - 2026-04-15 10:02:22 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for eslint layout and resolving race conditions
 - 2026-04-15 15:11:55 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement candidate profile for resolving race conditions
+- 2026-04-15 16:28:57 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in multilingual logic when improving performance
