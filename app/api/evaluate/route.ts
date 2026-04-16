@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
@@ -121,17 +121,20 @@ STRICT RULES:
 3. Flag if confidence inconsistent with actual knowledge level  
 4. The finalVerdict should tell 70% of the story in 4 sentences`;
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nFull Interview Transcript:\n${transcript}` }
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        { role: 'user', parts: [{ text: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nFull Interview Transcript:\n${transcript}` }] }
       ],
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: 'application/json',
+      }
     });
 
-    const raw = completion.choices[0].message.content || '{}';
-    return NextResponse.json(JSON.parse(raw));
+    const raw = response.text || '{}';
+    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '');
+    return NextResponse.json(JSON.parse(cleanRaw));
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: 'Failed to evaluate' }, { status: 500 });

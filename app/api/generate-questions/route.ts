@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
@@ -21,8 +21,7 @@ OUTPUT JSON FORMAT:
       "prompt": "<The actual deep-dive question>",
       "difficulty": "Expert",
       "weightage": 30
-    },
-    ...
+    }
   ]
 }
 `;
@@ -37,17 +36,20 @@ RESUME:
 ${resumeText}
 `;
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userPrompt }
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        { role: 'user', parts: [{ text: userPrompt }] }
       ],
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: 'application/json',
+      }
     });
 
-    const raw = completion.choices[0].message.content || '{}';
-    return NextResponse.json(JSON.parse(raw));
+    const raw = response.text || '{}';
+    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '');
+    return NextResponse.json(JSON.parse(cleanRaw));
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: 'Failed to generate questions' }, { status: 500 });

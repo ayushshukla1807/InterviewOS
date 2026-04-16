@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import OpenAI from 'openai';
+import { GoogleGenAI } from '@google/genai';
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
@@ -12,17 +12,24 @@ Always respond in JSON: {"content": "your message", "signals": ["signal1"], "ada
 Be concise, professional, and probe technical depth. Detect: hesitation, evasion, weak understanding.
 Provide micro-encouragements when candidates struggle. Never hallucinate facts.`;
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages,
-      ],
+    const contents = messages.map((m: any) => ({
+      role: m.role === 'assistant' || m.role === 'aura' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: contents,
+      config: {
+        systemInstruction: systemPrompt,
+        responseMimeType: 'application/json',
+      }
     });
 
-    const raw = completion.choices[0].message.content || '{}';
-    const data = JSON.parse(raw);
+    const raw = response.text || '{}';
+    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '');
+    const data = JSON.parse(cleanRaw);
+    
     return NextResponse.json({
       content: data.content || "Let's move to the next topic.",
       signals: data.signals || [],
