@@ -34,3 +34,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-16 22:01:34 | Ayush Shukla <ayush.shukla@adypu.edu.in> | chore: configure chat component environment for improving performance
 - 2026-04-16 22:18:41 | Ayush Shukla <ayush.shukla@adypu.edu.in> | Migrate completely to Gemini API for free usage
 - 2026-04-16 22:32:50 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for conversational engine and handling edge cases
+- 2026-04-17 12:09:37 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement PDF resume parser for handling edge cases
