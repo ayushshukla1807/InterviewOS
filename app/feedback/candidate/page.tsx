@@ -2,7 +2,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Shield, CheckCircle, AlertCircle, ChevronLeft, TrendingUp, Zap, XCircle } from 'lucide-react';
+import { Shield, CheckCircle, AlertCircle, ChevronLeft, TrendingUp, Zap, XCircle, Award, BookOpen, Download, ExternalLink, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 
 function StatusBadge({ value, thresholds = [70, 50] }: { value: number; thresholds?: [number, number] }) {
@@ -78,10 +78,71 @@ function CandidateContent() {
         </div>
       </header>
 
-      <div className="max-w-3xl mx-auto p-8 space-y-8">
+      <div className="max-w-3xl mx-auto p-8 space-y-8 print:p-0 print:max-w-none">
+
+        {/* ── SIMULATION CERTIFICATE OF COMPLETION ── */}
+        {report.simulation && (
+          <section className="space-y-4 print:my-0">
+            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] print:hidden">Credentials & Certification</h2>
+            <div className="relative bg-[#0e0e12] border-2 border-amber-500/20 rounded-[32px] p-8 md:p-12 overflow-hidden shadow-2xl print:border-slate-800 print:bg-white print:text-black">
+              {/* Premium Background Sheen */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-indigo-500/5 to-transparent pointer-events-none print:hidden" />
+              <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-500/[0.03] rounded-full blur-[80px] pointer-events-none print:hidden" />
+              
+              {/* Certificate Border Accents */}
+              <div className="absolute top-4 left-4 right-4 bottom-4 border border-white/5 rounded-[24px] pointer-events-none print:border-slate-300" />
+              
+              <div className="relative space-y-8 text-center">
+                {/* Gold Seal Header */}
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-yellow-600 p-0.5 shadow-[0_0_30px_rgba(245,158,11,0.2)] print:shadow-none print:from-amber-500 print:to-amber-600">
+                    <div className="w-full h-full bg-slate-950 rounded-full flex items-center justify-center print:bg-white">
+                      <Award className="w-8 h-8 text-amber-400 print:text-amber-600" />
+                    </div>
+                  </div>
+                  <p className="text-[8px] font-black text-amber-400 uppercase tracking-[0.4em] print:text-amber-600">Verified Job Simulation Accomplishment</p>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight font-serif uppercase print:text-black">Certificate of Completion</h3>
+                  <p className="text-slate-500 text-xs font-medium print:text-slate-600">This credential validates that the candidate successfully completed a structured industry work simulation.</p>
+                </div>
+
+                <div className="py-4 border-y border-white/5 max-w-lg mx-auto print:border-slate-200">
+                  <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest print:text-slate-600">Proudly Presented To</p>
+                  <p className="text-2xl font-black text-white tracking-tight mt-2 print:text-black">{name}</p>
+                  <p className="text-[11px] font-bold text-indigo-400 uppercase tracking-widest mt-2 print:text-indigo-600">
+                    For executing the {report.simulation.title || `${report.metadata?.track || 'Developer'} Track`}
+                  </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 max-w-lg mx-auto pt-4 text-left print:text-slate-700">
+                  <div>
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest print:text-slate-600">Verification Hash</p>
+                    <p className="text-[9px] font-mono text-slate-400 mt-1 uppercase print:text-slate-700">OS-{Math.abs(name.split('').reduce((a,b)=>(((a<<5)-a)+b.charCodeAt(0))|0,0)).toString(16).toUpperCase()}-{report.simulation.id?.toUpperCase()}</p>
+                  </div>
+                  <div className="sm:text-right">
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest print:text-slate-600">Verification Status</p>
+                    <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest mt-1 print:text-emerald-600">100% Verified Accomplishment</p>
+                  </div>
+                </div>
+
+                <div className="pt-6 flex justify-center print:hidden">
+                  <button 
+                    onClick={() => window.print()}
+                    className="flex items-center gap-2 px-6 py-3 bg-white text-black hover:bg-slate-200 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-[0_4px_20px_rgba(255,255,255,0.1)]"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Print Certificate
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ── PERFORMANCE SNAPSHOT ── */}
-        <section className="space-y-4">
+        <section className="space-y-4 print:hidden">
           <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">1. Performance Snapshot</h2>
           <div className="bg-[#111111] border border-white/5 rounded-2xl overflow-hidden">
             {areas.map((a, i) => (
@@ -160,9 +221,68 @@ function CandidateContent() {
           </div>
         </section>
 
+        {/* ── TAIRED LEARNING PATHS ── */}
+        <section className="space-y-4 print:hidden">
+          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">7. Tailored Learning Paths & Recommendations</h2>
+          <div className="bg-[#111111] border border-white/5 rounded-3xl p-6 space-y-6">
+            <div className="flex items-center gap-3">
+              <BookOpen className="w-5 h-5 text-indigo-400" />
+              <div>
+                <h3 className="text-sm font-black text-white">Custom Growth Path: {report.metadata?.track?.toUpperCase() || 'General'}</h3>
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5 font-bold">Based on simulated task outcomes</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {(() => {
+                const trackStr = (report.metadata?.track || 'javascript').toLowerCase();
+                const recommendations = trackStr.includes('dsa') ? {
+                  p1: 'Mastery of advanced Dynamic Programming optimization techniques (bitmasking, matrix exponentiation) and amortized complexity analyses.',
+                  p2: 'Implementing balanced search trees (AVL/Red-Black) and graph theories (A*, Dijkstra) on pressure scenarios.',
+                  proj: 'Build an interactive network latency route simulator visualizer using customized priority heap queues.',
+                  link: 'https://leetcode.com/'
+                } : trackStr.includes('ada') ? {
+                  p1: 'High-throughput architecture optimization focusing on asynchronous queues, system rate limiters, and socket thread pool distributions.',
+                  p2: 'Distributed consensus mechanisms (Raft, Paxos) and low-latency cache invalidation consistency structures.',
+                  proj: 'Build a custom multi-threaded asynchronous proxy server caching engine with custom Least Recently Used (LRU) invalidator.',
+                  link: 'https://systemdesignprimer.com/'
+                } : {
+                  p1: 'JavaScript Event Loop deep dive, macro/micro task prioritization structures, and efficient memory heap cleanups.',
+                  p2: 'Advanced asynchronous stream controllers, backpressure management pipelines, and garbage collection benchmarking.',
+                  proj: 'Build a high-performance custom Reactive Streams library with flow control and task batching capabilities.',
+                  link: 'https://javascript.info/'
+                };
+
+                return (
+                  <>
+                    <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl space-y-2">
+                      <p className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Phase 1: Foundation Enhancement</p>
+                      <p className="text-xs text-slate-400 leading-relaxed font-medium">{recommendations.p1}</p>
+                    </div>
+                    <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl space-y-2">
+                      <p className="text-[8px] font-black text-violet-400 uppercase tracking-widest">Phase 2: Mastery Progression</p>
+                      <p className="text-xs text-slate-400 leading-relaxed font-medium">{recommendations.p2}</p>
+                    </div>
+                    <div className="md:col-span-2 p-5 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <p className="text-[8px] font-black text-indigo-300 uppercase tracking-widest">Recommended Capstone Project</p>
+                        <p className="text-xs font-bold text-white mt-1">{recommendations.proj}</p>
+                      </div>
+                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all">
+                        Launch Resources
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+        </section>
+
         {/* ── FINAL VERDICT ── */}
-        <section className="space-y-4">
-          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">7. Final Verdict</h2>
+        <section className="space-y-4 print:hidden">
+          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">8. Final Verdict</h2>
           <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 space-y-4">
             {ev.finalVerdict && <p className="text-sm font-medium text-slate-300 leading-relaxed italic">"{ev.finalVerdict}"</p>}
             <div className="flex flex-wrap gap-3 pt-2 border-t border-white/5">

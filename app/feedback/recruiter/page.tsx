@@ -196,6 +196,76 @@ function RecruiterContent() {
           </div>
         </section>
 
+        {/* ── WORK SIMULATION & ROLE PLAY PERFORMANCE ── */}
+        {report.simulation && (
+          <section className="space-y-4">
+            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">3. Work Simulation & Role Play Performance</h2>
+            <div className="bg-[#111111] border border-white/5 rounded-3xl p-6 space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                <div>
+                  <p className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">{report.simulation.company || 'Corporate Client'} Simulation Scenario</p>
+                  <h3 className="text-xl font-black text-white tracking-tight">{report.simulation.title}</h3>
+                  <p className="text-xs text-slate-400 mt-1">Role Objective: {report.simulation.role || 'Software Engineer'}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+                    {(report.simulation.completedTasks || []).length} / {report.simulation.totalTasks || 0} Tasks Completed
+                  </span>
+                </div>
+              </div>
+
+              {/* Task Checklist Display */}
+              <div className="space-y-3">
+                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Simulated Deliverables & Checklist Status</p>
+                <div className="grid grid-cols-1 gap-2.5">
+                  {(report.simulation.completedTasks || []).map((taskId: string, index: number) => (
+                    <div key={taskId} className="p-4 bg-emerald-500/5 border border-emerald-500/15 rounded-2xl flex items-center gap-3">
+                      <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <div>
+                        <p className="text-xs font-black text-white">Task Completed: {taskId.toUpperCase().replace('_', ' ')}</p>
+                        <p className="text-[10px] font-bold text-slate-500 mt-0.5">The candidate successfully performed the simulated workload for this checklist item.</p>
+                      </div>
+                    </div>
+                  ))}
+                  {(!report.simulation.completedTasks || report.simulation.completedTasks.length === 0) && (
+                    <p className="text-xs text-slate-500 italic">No checklist tasks were marked as completed in this session.</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Skill Competency Level Mapping */}
+              {report.simulation.skills && report.simulation.skills.length > 0 && (
+                <div className="space-y-3 pt-4 border-t border-white/5">
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Target Skill Mappings & Weight Contribution</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {report.simulation.skills.map((skill: any, idx: number) => {
+                      // Calculate active proficiency based on task completions or general candidate metrics
+                      const completionRate = (report.simulation.completedTasks || []).length / (report.simulation.totalTasks || 1);
+                      const computedScore = Math.min(100, Math.round(skill.weight * (0.6 + 0.4 * completionRate)));
+                      return (
+                        <div key={idx} className="p-4 bg-slate-950/60 border border-white/5 rounded-2xl space-y-2">
+                          <div>
+                            <p className="text-[10px] font-black text-white">{skill.name}</p>
+                            <p className="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-0.5">{skill.level} Level</p>
+                          </div>
+                          <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden mt-1">
+                            <div className="h-full bg-indigo-500" style={{ width: `${computedScore}%` }} />
+                          </div>
+                          <div className="flex justify-between text-[7px] font-black text-slate-500 uppercase tracking-widest">
+                            <span>Computed: {computedScore}%</span>
+                            <span>Weight: {skill.weight}%</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
         {/* ── CRITICAL FLAGS ── */}
         {flags.length > 0 && (
           <section className="space-y-4">
