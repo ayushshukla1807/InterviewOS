@@ -7,14 +7,16 @@ import {
   Bot, User, Send, Mic, Sparkles, AlertCircle, 
   ChevronLeft, LayoutDashboard, TrendingUp, Clock, 
   Shield, CheckCircle, BarChart3, Code2, MessageSquare,
-  Maximize2, Play, Power, Volume2, VolumeX, ShieldAlert, Headphones, X, Terminal, Monitor
+  Maximize2, Play, Power, Volume2, VolumeX, ShieldAlert, Headphones, X, Terminal, Monitor,
+  Briefcase, ListTodo, CheckCircle2
 } from 'lucide-react';
 
 type Message = { role: 'assistant' | 'user'; content: string; };
-type TabType = 'question' | 'code' | 'evaluation';
+type TabType = 'simulation' | 'code';
 
 import { questionEngine } from '../../lib/db/questions';
 import { INTERVIEWER_PERSONA } from '../../lib/ai/prompts';
+import { getScenarioByTrack } from '../../lib/db/scenarios';
 
 function SessionContent() {
   const searchParams = useSearchParams();
@@ -25,7 +27,9 @@ function SessionContent() {
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>('question');
+  const [activeTab, setActiveTab] = useState<TabType>('simulation');
+  const [scenario, setScenario] = useState<any>(null);
+  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [code, setCode] = useState('// Write your solution here\n\n');
   const [input, setInput] = useState('');
@@ -120,6 +124,14 @@ function SessionContent() {
   
   // Load initial questions or generate dynamic ones
   useEffect(() => {
+    // Load scenario based on track
+    const activeScenario = getScenarioByTrack(track);
+    setScenario(activeScenario);
+    if (activeScenario) {
+      setCode(activeScenario.initialCode);
+      setLanguage(activeScenario.language);
+    }
+
     if (track === 'DYNAMIC') {
       const savedCtx = localStorage.getItem('hyrte_candidate_context');
       if (savedCtx) {
@@ -439,12 +451,21 @@ function SessionContent() {
         // Full evaluation data
         fullEvaluation: evaluationData,
         questionDetails: {
-          id: question.id,
-          title: question.title,
-          weightage: question.weightage,
-          difficulty: question.difficulty,
-          prompt: question.prompt,
+          id: question?.id,
+          title: question?.title,
+          weightage: question?.weightage,
+          difficulty: question?.difficulty,
+          prompt: question?.prompt,
           code: code
+        },
+        simulation: {
+          id: scenario?.id,
+          title: scenario?.title,
+          company: scenario?.company,
+          role: scenario?.role,
+          completedTasks: completedTasks,
+          totalTasks: scenario?.tasks.length || 0,
+          skills: scenario?.skills
         },
         metadata: {
           startTime,
@@ -479,6 +500,7 @@ function SessionContent() {
         violations: violations, // PERSIST INTEGRITY DATA
         koyoSignals: koyoSignals, // NEW: PERSIST KOYO DATA
         timestamp: new Date().toISOString(),
+        simulation: reportPayload.simulation, // NEW: PERSIST SIMULATION DETAILS
         report: reportPayload
       };
       localStorage.setItem('hyrte_applications', JSON.stringify([newApp, ...apps]));
@@ -626,58 +648,134 @@ function SessionContent() {
         
         {/* Left: Code & Question */}
         <div className="flex-1 flex flex-col bg-slate-950/20 overflow-hidden relative">
-           {/* Tab Bar */}
-           <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5">
-              {(['question', 'code'] as TabType[]).map(tab => (
-                <button 
-                  key={tab} 
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-8 py-3 rounded-t-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-2 ${
-                    activeTab === tab 
-                      ? 'bg-white/5 border-indigo-500 text-white' 
-                      : 'bg-transparent border-transparent text-slate-500 hover:text-slate-300'
-                  }`}
-                >
-                  {tab === 'question' ? <MessageSquare className="w-3.5 h-3.5" /> : <Code2 className="w-3.5 h-3.5" />}
-                  {tab}
-                </button>
-              ))}
-           </div>
+            {/* Tab Bar */}
+            <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5 bg-slate-950/40">
+               {(['simulation', 'code'] as TabType[]).map(tab => (
+                 <button 
+                   key={tab} 
+                   onClick={() => setActiveTab(tab)}
+                   className={`px-8 py-3 rounded-t-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-2 ${
+                     activeTab === tab 
+                       ? 'bg-white/5 border-indigo-500 text-white' 
+                       : 'bg-transparent border-transparent text-slate-500 hover:text-slate-300'
+                   }`}
+                 >
+                   {tab === 'simulation' ? <Briefcase className="w-3.5 h-3.5 text-indigo-400" /> : <Code2 className="w-3.5 h-3.5 text-emerald-400" />}
+                   {tab === 'simulation' ? 'Job Simulation' : 'IDE / Code Editor'}
+                 </button>
+               ))}
+            </div>
 
-           <div className="flex-1 overflow-y-auto bg-slate-950/40 p-8 custom-scrollbar">
-              <AnimatePresence mode="wait">
-                 {activeTab === 'question' ? (
-                   <motion.div 
-                     key="q"
-                     initial={{ opacity: 0, y: 10 }}
-                     animate={{ opacity: 1, y: 0 }}
-                     exit={{ opacity: 0, y: -10 }}
-                     className="space-y-8"
-                   >
-                      <div className="space-y-4">
-                         <div className="flex items-center gap-3">
-                            <span className="text-indigo-500 font-black text-xs">0{currentQ + 1}</span>
-                            <div className="h-px flex-1 bg-white/5" />
-                            <span className="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-[8px] font-black uppercase tracking-widest rounded-full border border-indigo-500/20">{question.difficulty}</span>
-                         </div>
-                         <h2 className="text-3xl font-black text-white tracking-tighter leading-tight">{question.title}</h2>
-                      </div>
-                      <div className="prose prose-invert max-w-none">
-                         <p className="text-slate-400 leading-relaxed text-sm font-medium whitespace-pre-wrap">
-                            {question.prompt}
-                         </p>
-                      </div>
-                      {isMock && (
-                         <div className="pt-4">
-                            <button onClick={() => setInput("Can you give me a hint on this? I'm a bit stuck.")} 
-                              className="group flex items-center gap-2 px-4 py-2 bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/20 rounded-xl transition-all">
-                               <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:animate-pulse" />
-                               <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Request Hint from {interviewer?.name || 'Syed'}</span>
-                            </button>
-                         </div>
-                      )}
-                   </motion.div>
-                 ) : (
+            <div className="flex-1 overflow-y-auto bg-slate-950/40 p-8 custom-scrollbar">
+               <AnimatePresence mode="wait">
+                  {activeTab === 'simulation' ? (
+                    <motion.div 
+                      key="sim"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="space-y-8"
+                    >
+                       <div className="space-y-4">
+                          <div className="flex items-center gap-3">
+                             <span className="text-[9px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full uppercase tracking-widest">
+                                {scenario?.company || 'Corporate Client'} · {scenario?.role || 'Developer'} Track
+                             </span>
+                             <div className="h-px flex-1 bg-white/5" />
+                             <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-[8px] font-black uppercase tracking-widest rounded-full border border-violet-500/20">
+                                {scenario?.difficulty || 'Advanced'}
+                             </span>
+                          </div>
+                          <h2 className="text-3xl font-black text-white tracking-tighter leading-tight">{scenario?.title || 'Interactive Job Simulator'}</h2>
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{scenario?.subtitle}</p>
+                       </div>
+
+                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-3">
+                          <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                             <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
+                             Simulation Background
+                          </h3>
+                          <p className="text-slate-400 leading-relaxed text-xs font-medium whitespace-pre-wrap">
+                             {scenario?.overview}
+                          </p>
+                       </div>
+
+                       {/* Mapped Skills */}
+                       <div className="space-y-3">
+                          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Target Skills Evaluated</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                             {scenario?.skills?.map((skill: any, idx: number) => (
+                               <div key={idx} className="p-4 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-2 hover:border-indigo-500/20 transition-all">
+                                  <div>
+                                     <p className="text-[10px] font-black text-white leading-tight">{skill.name}</p>
+                                     <p className="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{skill.level} Level</p>
+                                  </div>
+                                  <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden mt-1">
+                                     <div className="h-full bg-indigo-500" style={{ width: `${skill.weight}%` }} />
+                                  </div>
+                                  <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Weight: {skill.weight}%</span>
+                               </div>
+                             ))}
+                          </div>
+                       </div>
+
+                       {/* Project Checklist */}
+                       <div className="space-y-4 pt-4 border-t border-white/5">
+                          <div className="flex items-center justify-between">
+                             <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                <ListTodo className="w-3.5 h-3.5 text-indigo-400" />
+                                Project Checklist & Tasks
+                             </h3>
+                             <span className="text-[9px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">
+                                {completedTasks.length} / {scenario?.tasks?.length || 0} Completed
+                             </span>
+                          </div>
+                          
+                          <div className="space-y-3">
+                             {scenario?.tasks?.map((task: any) => {
+                               const isDone = completedTasks.includes(task.id);
+                               return (
+                                 <div 
+                                   key={task.id}
+                                   onClick={() => {
+                                     if (isDone) {
+                                       setCompletedTasks(prev => prev.filter(id => id !== task.id));
+                                     } else {
+                                       setCompletedTasks(prev => [...prev, task.id]);
+                                     }
+                                   }}
+                                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
+                                     isDone 
+                                       ? 'bg-emerald-500/5 border-emerald-500/20 hover:border-emerald-500/30' 
+                                       : 'bg-[#111113] border-white/5 hover:border-white/10'
+                                   }`}
+                                 >
+                                    <div className={`mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-all ${
+                                      isDone ? 'bg-emerald-600 border-emerald-600' : 'border-white/20 bg-white/5'
+                                    }`}>
+                                       {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                                    </div>
+                                    <div className="flex-1">
+                                       <p className={`text-xs font-black transition-all ${isDone ? 'text-emerald-400 line-through' : 'text-white'}`}>{task.title}</p>
+                                       <p className="text-[11px] font-medium text-slate-500 mt-1 leading-relaxed">{task.description}</p>
+                                    </div>
+                                 </div>
+                               );
+                             })}
+                          </div>
+                       </div>
+
+                       {isMock && (
+                          <div className="pt-4 border-t border-white/5">
+                             <button onClick={() => setInput("Can you give me a hint on this simulation task? I'm a bit stuck on implementation.")} 
+                               className="group flex items-center gap-2 px-4 py-2 bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/20 rounded-xl transition-all">
+                                <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:animate-pulse" />
+                                <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Request Hint from {interviewer?.name || 'Syed'}</span>
+                             </button>
+                          </div>
+                       )}
+                    </motion.div>
+                  ) : (
                    <motion.div 
                      key="c"
                      initial={{ opacity: 0 }}

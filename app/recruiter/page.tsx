@@ -230,11 +230,19 @@ export default function RecruiterDashboard() {
                     <div>
                       <div className="flex items-center gap-3 mb-2">
                         <h3 className="text-lg font-black text-white tracking-tight">{app.candidateName}</h3>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-wrap">
                           {app.violations > 0 && (
                             <div className="px-2 py-0.5 bg-rose-500/10 border border-rose-500/20 rounded-md flex items-center gap-1.5">
                                <ShieldAlert className="w-2.5 h-2.5 text-rose-500" />
                                <span className="text-[7px] font-black text-rose-500 uppercase tracking-widest">{app.violations} Risks</span>
+                            </div>
+                          )}
+                          {app.simulation && (
+                            <div className="px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded-md flex items-center gap-1.5">
+                               <Briefcase className="w-2.5 h-2.5 text-indigo-400" />
+                               <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">
+                                 Sim: {(app.simulation.completedTasks || []).length}/{app.simulation.totalTasks || 0} Tasks
+                               </span>
                             </div>
                           )}
                           <div className={`px-2 py-0.5 rounded-md border text-[7px] font-black uppercase tracking-widest ${app.score > 75 ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-white/5 border-white/10 text-slate-500'}`}>
