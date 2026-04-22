@@ -50,3 +50,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-22 14:31:10 | Ashish Rajput <ashish.rajput.tech@gmail.com> | chore: configure PDF resume parser environment for refactoring helper functions
 - 2026-04-22 15:09:58 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of auth module by updating documentation
 - 2026-04-22 17:01:44 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for rate limiter and refactoring helper functions
+- 2026-04-22 17:13:07 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement FHIR parser for refactoring helper functions
