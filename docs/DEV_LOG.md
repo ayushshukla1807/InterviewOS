@@ -51,3 +51,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-22 15:09:58 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of auth module by updating documentation
 - 2026-04-22 17:01:44 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for rate limiter and refactoring helper functions
 - 2026-04-22 17:13:07 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement FHIR parser for refactoring helper functions
+- 2026-04-23 12:43:39 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: limit question bank slice size to 3 for standard evaluations
