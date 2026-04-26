@@ -8,9 +8,9 @@ export async function POST(req: Request) {
     const { jobTitle, jobDescription, candidateName, resumeText } = await req.json();
 
     const systemPrompt = `You are a Senior Technical Interviewer preparing to interview a candidate.
-Your goal is to generate exactly 3 highly technical, elite-level interview questions that bridge the gap between the Candidate's past experience (Resume) and the company's needs (Job Description).
+Your goal is to generate exactly 4 highly technical, elite-level interview questions that bridge the gap between the Candidate's past experience (Resume) and the company's needs (Job Description).
 
-Do NOT ask generic questions. Ask specific, scenario-based questions that test their actual depth in the technologies mentioned in BOTH their resume and the JD.
+Do NOT ask generic questions. Ask specific, scenario-based questions that test their actual depth in the technologies mentioned in BOTH their resume and the JD. Make sure the questions cover a cumulative mix of JavaScript, DSA, System Design/Architecture, and AI/Fullstack as needed.
 
 OUTPUT JSON FORMAT:
 {
