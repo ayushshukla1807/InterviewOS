@@ -149,15 +149,15 @@ function SessionContent() {
         })
         .catch(err => {
           console.error(err);
-          setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 3)); // Fallback
+          setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4)); // Fallback
           setIsGeneratingQuestions(false);
         });
       } else {
-        setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 3));
+        setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4));
         setIsGeneratingQuestions(false);
       }
     } else {
-      setQuestions(questionEngine.getQuestionsByTrack(track).slice(0, 3));
+      setQuestions(questionEngine.getQuestionsByTrack(track).slice(0, 4));
       setIsGeneratingQuestions(false);
     }
   }, [track]);

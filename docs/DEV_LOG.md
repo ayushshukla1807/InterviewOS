@@ -61,3 +61,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-25 20:06:28 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement tailwind tokens for cleaning up code
 - 2026-04-25 22:14:39 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in feedback reporter when resolving race conditions
 - 2026-04-26 09:11:25 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure multilingual logic to support resolving race conditions
+- 2026-04-26 14:02:54 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: increase questions to 4, support cumulative technical categories, enforce high conversational interaction turns, and enable seamless JD+Resume redirect flow

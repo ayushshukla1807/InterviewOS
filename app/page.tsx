@@ -1,10 +1,23 @@
 'use client';
 
+import { useEffect, Suspense } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Shield, ArrowRight, Zap, Bot, UserCheck, ShieldAlert, Cpu, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
-export default function LandingPage() {
+function LandingPageContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const name = searchParams.get('name');
+  const track = searchParams.get('track');
+
+  useEffect(() => {
+    if (name && track) {
+      router.push(`/instructions?name=${encodeURIComponent(name)}&track=${track}`);
+    }
+  }, [name, track, router]);
+
   return (
     <div className="min-h-screen bg-[#020204] text-white font-sans selection:bg-indigo-500/30 overflow-hidden flex flex-col relative">
       
@@ -91,7 +104,7 @@ export default function LandingPage() {
                </div>
             </div>
             
-            <div className="group flex flex-col items-center gap-6 p-10 bg-white/[0.02] border border-white/5 rounded-[40px] hover:border-emerald-500/20 transition-all duration-500">
+            <div className="group flex flex-col items-center gap-6 p-10 bg-[#000000]/10 border border-white/5 rounded-[40px] hover:border-emerald-500/20 transition-all duration-500">
                <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center border border-emerald-500/20 group-hover:scale-110 transition-transform">
                   <ShieldAlert className="w-6 h-6 text-emerald-400" />
                </div>
@@ -125,5 +138,13 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#020204]" />}>
+      <LandingPageContent />
+    </Suspense>
   );
 }
