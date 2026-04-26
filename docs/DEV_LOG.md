@@ -60,3 +60,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-24 20:15:00 | Ashish Rajput <ashish.rajput.tech@gmail.com> | style: format codebase for evaluation engine and adding input validation
 - 2026-04-25 20:06:28 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement tailwind tokens for cleaning up code
 - 2026-04-25 22:14:39 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in feedback reporter when resolving race conditions
+- 2026-04-26 09:11:25 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure multilingual logic to support resolving race conditions
