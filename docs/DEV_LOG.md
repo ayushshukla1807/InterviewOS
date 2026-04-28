@@ -69,3 +69,4 @@ Tracked development updates for InterviewOS.
 - 2026-04-28 12:43:44 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement proctoring panel for enhancing user experience
 - 2026-04-28 17:00:24 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in evaluation engine when improving performance
 - 2026-04-28 18:30:46 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure auth module to support improving performance
+- 2026-04-28 21:33:21 | Ashish Rajput <ashish.rajput.tech@gmail.com> | docs: update developer guides for rate limiter regarding enhancing user experience
