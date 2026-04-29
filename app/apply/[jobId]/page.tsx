@@ -17,12 +17,39 @@ export default function ApplyPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    const defaultJobs = [
+      {
+        id: 'REQ-101',
+        title: 'Senior Staff Engineer (React & AI Integration)',
+        description: 'Design and deploy state-of-the-art interactive user interfaces. Deep knowledge of React internals, Next.js page lifecycles, and large language model APIs is required. You will collaborate on core AI workflows.'
+      },
+      {
+        id: 'REQ-102',
+        title: 'Lead Fullstack & Distributed Systems Architect',
+        description: 'Architect scalable distributed data networks, microservices, database schemas, and load balancer structures. Proficiency in system modeling, caching strategies, and queue streaming is highly desired.'
+      },
+      {
+        id: 'REQ-103',
+        title: 'Algorithms & Competitive Programmer Intern',
+        description: 'Write highly optimized algorithms, data structures (graphs, segment trees, dynamic programming), and solve scale complexities. Optimize memory usage and code execution performance.'
+      }
+    ];
+
     const savedJobs = localStorage.getItem('hyrte_jobs');
-    if (savedJobs) {
-      const parsed = JSON.parse(savedJobs);
-      const found = parsed.find((j: any) => j.id === jobId);
-      if (found) setJob(found);
-      else setError('Job not found.');
+    let parsed = savedJobs ? JSON.parse(savedJobs) : [];
+    
+    // Merge default jobs if not already exists in saved jobs
+    const merged = [...parsed];
+    defaultJobs.forEach(dj => {
+      if (!merged.some(j => j.id === dj.id)) {
+        merged.push(dj);
+      }
+    });
+    localStorage.setItem('hyrte_jobs', JSON.stringify(merged));
+
+    const found = merged.find((j: any) => j.id === jobId);
+    if (found) {
+      setJob(found);
     } else {
       setError('Job not found.');
     }
