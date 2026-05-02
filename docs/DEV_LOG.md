@@ -81,3 +81,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-01 21:49:32 | Ashish Rajput <ashish.rajput.tech@gmail.com> | test: add unit tests for eslint layout specifically reducing complexity
 - 2026-05-02 17:31:22 | Ayush Shukla <ayush.shukla@adypu.edu.in> | chore: configure proctoring panel environment for updating documentation
 - 2026-05-02 21:11:09 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of evaluation engine by reducing complexity
+- 2026-05-02 22:39:57 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: hide job simulation dashboard on general tryout tracks, add beautiful Candidate Dashboard workspace page, and fix ternary array cast syntax

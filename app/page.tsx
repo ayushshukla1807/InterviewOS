@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Shield, ArrowRight, Zap, Bot, UserCheck, 
   ShieldAlert, Cpu, Sparkles, FileText, 
-  BrainCircuit, Users, Award, ExternalLink 
+  BrainCircuit, Users, Award, ExternalLink, GraduationCap 
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -16,7 +16,7 @@ function LandingPageContent() {
   const nameParam = searchParams.get('name');
   const trackParam = searchParams.get('track');
 
-  // Redirection intercept for candidate invite links
+  // Redirection intercept for recruiter invite links
   useEffect(() => {
     if (nameParam && trackParam) {
       router.push(`/instructions?name=${encodeURIComponent(nameParam)}&track=${trackParam}`);
@@ -24,7 +24,7 @@ function LandingPageContent() {
   }, [nameParam, trackParam, router]);
 
   // Tab State
-  const [activeTab, setActiveTab] = useState<'tryout' | 'mvp' | 'recruiter'>('tryout');
+  const [activeTab, setActiveTab] = useState<'tryout' | 'candidate' | 'recruiter' | 'mvp'>('tryout');
 
   // Tryout State
   const [candidateName, setCandidateName] = useState('Guest Candidate');
@@ -107,27 +107,33 @@ function LandingPageContent() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="max-w-3xl w-full bg-[#111113]/80 border border-white/5 rounded-[40px] shadow-3xl backdrop-blur-2xl p-8 lg:p-12 space-y-10"
+          className="max-w-4xl w-full bg-[#111113]/80 border border-white/5 rounded-[40px] shadow-3xl backdrop-blur-2xl p-8 lg:p-12 space-y-10"
         >
           {/* Custom Tabs */}
-          <div className="flex bg-[#070709] border border-white/5 p-1.5 rounded-2xl">
+          <div className="flex bg-[#070709] border border-white/5 p-1.5 rounded-2xl flex-wrap">
             <button 
               onClick={() => setActiveTab('tryout')}
-              className={`flex-1 py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'tryout' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              className={`flex-1 min-w-[120px] py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'tryout' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
               <BrainCircuit className="w-4 h-4" /> Tryout Interview
             </button>
             <button 
-              onClick={() => setActiveTab('mvp')}
-              className={`flex-1 py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'mvp' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              onClick={() => setActiveTab('candidate')}
+              className={`flex-1 min-w-[120px] py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'candidate' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
-              <FileText className="w-4 h-4" /> JD & Resume (MVP)
+              <GraduationCap className="w-4 h-4" /> Candidate Workspace
             </button>
             <button 
               onClick={() => setActiveTab('recruiter')}
-              className={`flex-1 py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'recruiter' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
+              className={`flex-1 min-w-[120px] py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'recruiter' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
             >
               <Users className="w-4 h-4" /> Recruiter Portal
+            </button>
+            <button 
+              onClick={() => setActiveTab('mvp')}
+              className={`flex-1 min-w-[120px] py-4 text-[10px] font-black uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${activeTab === 'mvp' ? 'bg-white text-black shadow-lg' : 'text-slate-400 hover:text-white'}`}
+            >
+              <FileText className="w-4 h-4" /> JD & Resume (MVP)
             </button>
           </div>
 
@@ -143,8 +149,8 @@ function LandingPageContent() {
                   className="space-y-6 text-left"
                 >
                   <div>
-                    <h3 className="text-lg font-black text-white">General Candidate Tryout</h3>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Jump directly into a technical assessment scenario</p>
+                    <h3 className="text-lg font-black text-white">General Candidate Tryout (Clean Technical Assessment)</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Jump directly into a standard AI coding interview on your target stack (No Simulation Tab)</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -187,6 +193,76 @@ function LandingPageContent() {
                 </motion.div>
               )}
 
+              {activeTab === 'candidate' && (
+                <motion.div 
+                  key="candidate-tab" 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-6 text-left"
+                >
+                  <div>
+                    <h3 className="text-lg font-black text-white">Candidate Portfolio Workspace</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Review verified certificates, review merit reports, and execute adaptive training tasks</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
+                      <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Training Paths</span>
+                      <p className="text-xs font-black text-white">Customized Roadmap Matrix</p>
+                      <p className="text-[10px] text-slate-500 leading-relaxed">Direct checklist recommendations based on previous interview outcomes.</p>
+                    </div>
+                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
+                      <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Shareable Badge</span>
+                      <p className="text-xs font-black text-white">Verified Certificates</p>
+                      <p className="text-[10px] text-slate-500 leading-relaxed">Download glassmorphic credentials matching unique verification hashes.</p>
+                    </div>
+                  </div>
+
+                  <Link 
+                    href="/candidate"
+                    className="w-full py-4 bg-white text-black hover:bg-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg active:scale-98 transition-all"
+                  >
+                    Open Candidate Dashboard <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </motion.div>
+              )}
+
+              {activeTab === 'recruiter' && (
+                <motion.div 
+                  key="recruiter-tab" 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-6 text-left"
+                >
+                  <div>
+                    <h3 className="text-lg font-black text-white">Recruiter Control Dashboard</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Manage open positions, review proctor logs, and evaluate competency data</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
+                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Visual Proctoring</span>
+                      <p className="text-xs font-black text-white">Neural Integrity Log</p>
+                      <p className="text-[10px] text-slate-500 leading-relaxed">Gaze analysis, visual warning tracking, and screen-sharing audits.</p>
+                    </div>
+                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
+                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Analytics</span>
+                      <p className="text-xs font-black text-white">Competency Radars</p>
+                      <p className="text-[10px] text-slate-500 leading-relaxed">Radar grids checking candidate core engineering strengths dynamically.</p>
+                    </div>
+                  </div>
+
+                  <Link 
+                    href="/recruiter"
+                    className="w-full py-4 bg-white text-black hover:bg-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg active:scale-98 transition-all"
+                  >
+                    Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </motion.div>
+              )}
+
               {activeTab === 'mvp' && (
                 <motion.div 
                   key="mvp-tab" 
@@ -196,7 +272,7 @@ function LandingPageContent() {
                   className="space-y-6 text-left"
                 >
                   <div>
-                    <h3 className="text-lg font-black text-white">Dynamic JD + Resume Pipeline (MVP)</h3>
+                    <h3 className="text-lg font-black text-white">Dynamic JD + Resume Pipeline (MVP Simulator)</h3>
                     <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Simulate custom interview generation matching candidate resumes against active JDs</p>
                   </div>
 
@@ -227,41 +303,6 @@ function LandingPageContent() {
                   >
                     Go to Job Application Portal <ExternalLink className="w-4 h-4" />
                   </button>
-                </motion.div>
-              )}
-
-              {activeTab === 'recruiter' && (
-                <motion.div 
-                  key="recruiter-tab" 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="space-y-6 text-left"
-                >
-                  <div>
-                    <h3 className="text-lg font-black text-white">Recruiter Control Dashboard</h3>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Manage open positions, review proctor logs, and evaluate competency data</p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
-                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Visual Proctoring</span>
-                      <p className="text-xs font-black text-white">Neural Integrity Log</p>
-                      <p className="text-[10px] text-slate-500 leading-relaxed">Gaze analysis, visual warning tracking, and screen-sharing audits.</p>
-                    </div>
-                    <div className="p-4 bg-[#141417] border border-white/5 rounded-2xl space-y-1">
-                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Credentials</span>
-                      <p className="text-xs font-black text-white">Shareable Certificates</p>
-                      <p className="text-[10px] text-slate-500 leading-relaxed">Generated with verification hashes and tailored learning recommendations.</p>
-                    </div>
-                  </div>
-
-                  <Link 
-                    href="/recruiter"
-                    className="w-full py-4 bg-white text-black hover:bg-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg active:scale-98 transition-all"
-                  >
-                    Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
-                  </Link>
                 </motion.div>
               )}
             </AnimatePresence>

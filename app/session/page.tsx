@@ -27,7 +27,7 @@ function SessionContent() {
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>('simulation');
+  const [activeTab, setActiveTab] = useState<TabType>(track === 'DYNAMIC' ? 'simulation' : 'code');
   const [scenario, setScenario] = useState<any>(null);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -650,7 +650,7 @@ function SessionContent() {
         <div className="flex-1 flex flex-col bg-slate-950/20 overflow-hidden relative">
             {/* Tab Bar */}
             <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5 bg-slate-950/40">
-               {(['simulation', 'code'] as TabType[]).map(tab => (
+               {((track === 'DYNAMIC' ? ['simulation', 'code'] : ['code']) as TabType[]).map(tab => (
                  <button 
                    key={tab} 
                    onClick={() => setActiveTab(tab)}
