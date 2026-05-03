@@ -85,3 +85,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-03 14:38:51 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement candidate profile for updating documentation
 - 2026-05-03 16:25:04 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in multilingual logic when refactoring helper functions
 - 2026-05-03 16:51:25 | Ashish Rajput <ashish.rajput.tech@gmail.com> | refactor: restructure V8 garbage collector to support refactoring helper functions
+- 2026-05-03 18:17:57 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for learning path generator regarding fixing type errors
