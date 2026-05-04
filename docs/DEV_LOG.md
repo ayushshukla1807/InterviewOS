@@ -92,3 +92,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-04 09:33:29 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for HIPAA logger and fixing type errors
 - 2026-05-04 11:33:34 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement PDF resume parser for adding input validation
 - 2026-05-04 14:04:49 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: add 20-role categorised selector, personalised candidate profile form (projects/experience/certifications/education), role-aware AI question generation, and Syed persona that probes actual candidate background in every turn
+- 2026-05-04 17:54:16 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure feedback reporter to support cleaning up code
