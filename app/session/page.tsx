@@ -40,9 +40,13 @@ function SessionContent() {
   const [currentAdaptation, setCurrentAdaptation] = useState<string>('Optimizing assessment...');
   const [detectedSignals, setDetectedSignals] = useState<string[]>([]);
   const [isEvaluating, setIsEvaluating] = useState(false);
-  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(track === 'DYNAMIC');
+  // Treat as generating questions if DYNAMIC or if track is a custom roleId (not JS/DSA/ADA)
+  const standardTracks = ['JS', 'DSA', 'ADA', 'DYNAMIC'];
+  const isRoleTrack = !standardTracks.includes(track);
+  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(track === 'DYNAMIC' || isRoleTrack);
   const [startTime] = useState(new Date().toISOString());
   const [dynamicContext, setDynamicContext] = useState<any>(null);
+  const [candidateProfile, setCandidateProfile] = useState<any>(null);
   const [isMounted, setIsMounted] = useState(false);
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -132,6 +136,13 @@ function SessionContent() {
       setLanguage(activeScenario.language);
     }
 
+    // Load candidate profile (set from landing page role selector)
+    const savedProfile = localStorage.getItem('hyrte_candidate_profile');
+    if (savedProfile) {
+      const parsedProfile = JSON.parse(savedProfile);
+      setCandidateProfile(parsedProfile);
+    }
+
     if (track === 'DYNAMIC') {
       const savedCtx = localStorage.getItem('hyrte_candidate_context');
       if (savedCtx) {
@@ -149,13 +160,35 @@ function SessionContent() {
         })
         .catch(err => {
           console.error(err);
-          setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4)); // Fallback
+          setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4));
           setIsGeneratingQuestions(false);
         });
       } else {
         setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4));
         setIsGeneratingQuestions(false);
       }
+    } else if (isRoleTrack) {
+      // Role-specific question generation (e.g. track = 'fullstack', 'ai_ml_engineer', etc.)
+      const profileRaw = localStorage.getItem('hyrte_candidate_profile');
+      const profile = profileRaw ? JSON.parse(profileRaw) : {};
+      fetch('/api/generate-questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roleId: track,
+          candidateName: profile.candidateName || name,
+          resumeText: [profile.projects, profile.experience, profile.certifications, profile.education].filter(Boolean).join('\n'),
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        setQuestions(data.questions?.length ? data.questions : questionEngine.getQuestionsByTrack('JS').slice(0, 4));
+        setIsGeneratingQuestions(false);
+      })
+      .catch(() => {
+        setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4));
+        setIsGeneratingQuestions(false);
+      });
     } else {
       setQuestions(questionEngine.getQuestionsByTrack(track).slice(0, 4));
       setIsGeneratingQuestions(false);
@@ -388,7 +421,8 @@ function SessionContent() {
         body: JSON.stringify({
           messages: updated,
           track,
-          system: INTERVIEWER_PERSONA + systemCtx + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`,
+          candidateProfile: candidateProfile ? { ...candidateProfile, name } : null,
+          system: !candidateProfile ? (INTERVIEWER_PERSONA + systemCtx + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`) : undefined,
         }),
       });
       const data = await res.json();

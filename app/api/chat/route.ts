@@ -1,16 +1,36 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
+import { getRoleById } from '../../../lib/ai/roles';
+import { buildRoleInterviewPrompt, INTERVIEWER_PERSONA } from '../../../lib/ai/prompts';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { messages, track, system } = await req.json();
+    const { messages, track, system, candidateProfile } = await req.json();
 
-    const systemPrompt = system || `You are Ava, a Sentient AI Interviewer for Hyrte Intelligence.
-Always respond in JSON: {"content": "your message", "signals": ["signal1"], "adaptation": "action"}
-Be concise, professional, and probe technical depth. Detect: hesitation, evasion, weak understanding.
-Provide micro-encouragements when candidates struggle. Never hallucinate facts.`;
+    let systemPrompt: string;
+
+    // Build a role-aware system prompt if we have a roleId and candidate profile
+    const roleId = candidateProfile?.roleId || track;
+    const role = roleId ? getRoleById(roleId) : null;
+
+    if (role && candidateProfile) {
+      systemPrompt = buildRoleInterviewPrompt(role, {
+        name: candidateProfile.candidateName || candidateProfile.name || 'Candidate',
+        projects: candidateProfile.projects,
+        experience: candidateProfile.experience,
+        certifications: candidateProfile.certifications,
+        education: candidateProfile.education,
+        skills: candidateProfile.skills,
+        resumeText: candidateProfile.resumeText,
+      });
+    } else if (system) {
+      systemPrompt = system;
+    } else {
+      // Fallback default persona
+      systemPrompt = INTERVIEWER_PERSONA;
+    }
 
     const contents = messages.map((m: any) => ({
       role: m.role === 'assistant' || m.role === 'aura' ? 'model' : 'user',
@@ -29,7 +49,7 @@ Provide micro-encouragements when candidates struggle. Never hallucinate facts.`
     const raw = response.text || '{}';
     const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '');
     const data = JSON.parse(cleanRaw);
-    
+
     return NextResponse.json({
       content: data.content || "Let's move to the next topic.",
       signals: data.signals || [],
@@ -37,6 +57,10 @@ Provide micro-encouragements when candidates struggle. Never hallucinate facts.`
     });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ content: "I see. Let's continue — can you elaborate on that approach?", signals: [], adaptation: "Recovery mode" });
+    return NextResponse.json({
+      content: "I see. Let's continue — can you elaborate on that approach?",
+      signals: [],
+      adaptation: "Recovery mode"
+    });
   }
 }
