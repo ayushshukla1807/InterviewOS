@@ -92,7 +92,58 @@ function SessionContent() {
   const [language, setLanguage] = useState('javascript');
   const [consoleInput, setConsoleInput] = useState('');
   const [consoleOutput, setConsoleOutput] = useState('');
+  const [execTime, setExecTime] = useState<number | null>(null);
+  const [execSuccess, setExecSuccess] = useState<boolean | null>(null);
   const [isCodeRunning, setIsCodeRunning] = useState(false);
+
+  const handleRunCode = async () => {
+    const codeToRun = activeEditorTab === 'scratch' ? scratchpad : code;
+    if (!codeToRun.trim()) return;
+    setIsCodeRunning(true);
+    setExecSuccess(null);
+    setExecTime(null);
+    setConsoleOutput(`> Submitting to execution engine...\n> Language: ${language}\n> Running...\n`);
+    try {
+      const res = await fetch('/api/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: codeToRun, language, stdin: consoleInput }),
+      });
+      const data = await res.json();
+      const lines: string[] = [];
+      if (data.error) {
+        lines.push(`> ERROR: ${data.error}`);
+        setExecSuccess(false);
+      } else {
+        lines.push(`> Language: ${data.language} ${data.version}`);
+        if (data.runtime_ms !== null && data.runtime_ms !== undefined) {
+          lines.push(`> Runtime: ${data.runtime_ms}ms`);
+          setExecTime(data.runtime_ms);
+        }
+        lines.push(`> Exit Code: ${data.exit_code}`);
+        lines.push('');
+        if (data.stdout) {
+          lines.push('── OUTPUT ──────────────────────');
+          lines.push(data.stdout.trimEnd());
+        }
+        if (data.stderr) {
+          lines.push('');
+          lines.push('── ERROR ───────────────────────');
+          lines.push(data.stderr.trimEnd());
+        }
+        if (!data.stdout && !data.stderr) {
+          lines.push('(No output)');
+        }
+        setExecSuccess(data.success);
+      }
+      setConsoleOutput(lines.join('\n'));
+    } catch (err: any) {
+      setConsoleOutput(`> Network error: ${err.message}\n> Check your connection and try again.`);
+      setExecSuccess(false);
+    } finally {
+      setIsCodeRunning(false);
+    }
+  };
 
   // ─── AURA SUPPORT BOT STATE ──────────────────────────────────────────────
   const [isSupportOpen, setIsSupportOpen] = useState(false);
@@ -822,10 +873,16 @@ function SessionContent() {
                             <select 
                               value={language} onChange={e => setLanguage(e.target.value)}
                               className="bg-[#0e0e11] border border-white/10 rounded-lg px-3 py-1.5 text-[10px] font-black text-indigo-400 uppercase tracking-widest outline-none focus:border-indigo-500 transition-all">
-                               <option value="javascript">JavaScript (Node v20)</option>
-                               <option value="python">Python (v3.11)</option>
+                               <option value="javascript">JavaScript (Node 20)</option>
+                               <option value="typescript">TypeScript (5.0)</option>
+                               <option value="python">Python (3.11)</option>
                                <option value="cpp">C++ (GCC 13)</option>
                                <option value="java">Java (OpenJDK 21)</option>
+                               <option value="go">Go (1.16)</option>
+                               <option value="rust">Rust (1.50)</option>
+                               <option value="php">PHP (8.2)</option>
+                               <option value="ruby">Ruby (3.2)</option>
+                               <option value="csharp">C# (.NET 8)</option>
                             </select>
                             <div className="flex gap-1 bg-[#0e0e11] p-1 rounded-lg border border-white/10">
                                <button onClick={() => setActiveEditorTab('scratch')} 
@@ -839,19 +896,28 @@ function SessionContent() {
                             </div>
                          </div>
                          <div className="flex gap-2">
-                            <button onClick={() => { 
-                              setIsCodeRunning(true); 
-                              const hasInput = consoleInput.trim().length > 0;
-                              setConsoleOutput(`> Initializing ${language} kernel...\n> Loading test suites...\n${hasInput ? `> Injecting STDIN: "${consoleInput.slice(0, 20)}${consoleInput.length > 20 ? '...' : ''}"\n` : ''}> Running performance analysis...\n`);
-                              setTimeout(() => { 
-                                setConsoleOutput(prev => prev + `\n[RESULTS]\n> Compilation: SUCCESS\n> Unit Tests: 3/3 PASSED\n> Memory: 24.5MB\n> Runtime: 12ms\n\n> Output: ${hasInput ? `Processed input "${consoleInput.slice(0, 10)}..." successfully.` : 'Execution complete.'}\n`); 
-                                setIsCodeRunning(false); 
-                              }, 2000); 
-                            }}
-                              className="px-4 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all">
-                               {isCodeRunning ? <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" /> : <Play className="w-3 h-3 text-indigo-400" />}
-                               Run Code
-                            </button>
+                            <button 
+                               onClick={handleRunCode}
+                               disabled={isCodeRunning}
+                               className={`px-4 py-1.5 border rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${
+                                 isCodeRunning 
+                                   ? 'bg-white/5 border-white/10 text-slate-500 cursor-not-allowed'
+                                   : execSuccess === true
+                                   ? 'bg-emerald-600/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-600/20'
+                                   : execSuccess === false
+                                   ? 'bg-rose-600/10 border-rose-500/30 text-rose-400 hover:bg-rose-600/20'
+                                   : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                               }`}
+                             >
+                               {isCodeRunning 
+                                 ? <><div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Executing...</>
+                                 : execSuccess === true
+                                 ? <><CheckCircle className="w-3 h-3" /> Ran OK {execTime !== null ? `· ${execTime}ms` : ''}</>
+                                 : execSuccess === false
+                                 ? <><AlertCircle className="w-3 h-3" /> Run Code</>
+                                 : <><Play className="w-3 h-3 text-indigo-400" /> Run Code</>
+                               }
+                             </button>
                             <button onClick={handleFinish}
                               className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
                                <Send className="w-3 h-3" /> Submit Final Solution
@@ -900,12 +966,19 @@ function SessionContent() {
                               />
                            </div>
                            <div className="flex-1 flex flex-col bg-black/40">
-                              <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2">
-                                 <Monitor className="w-3 h-3 text-indigo-500" />
-                                 <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Execution Output</span>
+                              <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between">
+                                 <div className="flex items-center gap-2">
+                                   <Monitor className="w-3 h-3 text-indigo-500" />
+                                   <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Execution Output</span>
+                                 </div>
+                                 <div className="flex items-center gap-3">
+                                   {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
+                                   {execSuccess === true && <span className="text-[8px] font-black text-emerald-400">✓ OK</span>}
+                                   {execSuccess === false && <span className="text-[8px] font-black text-rose-400">✗ Error</span>}
+                                 </div>
                               </div>
-                              <div className="flex-1 p-4 text-[11px] font-mono text-emerald-400/80 whitespace-pre overflow-y-auto">
-                                 {consoleOutput || '> System idle. Awaiting code execution...'}
+                              <div className={`flex-1 p-4 text-[11px] font-mono whitespace-pre overflow-y-auto ${execSuccess === false ? 'text-rose-400/80' : 'text-emerald-400/80'}`}>
+                                 {consoleOutput || '> System idle. Write code and click Run.'}
                               </div>
                            </div>
                         </div>
