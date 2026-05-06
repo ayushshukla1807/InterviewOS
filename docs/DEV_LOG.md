@@ -99,3 +99,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-05 17:07:47 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of multilingual logic by resolving race conditions
 - 2026-05-05 18:14:19 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for V8 garbage collector and resolving race conditions
 - 2026-05-05 19:29:30 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement certificate builder for improving performance
+- 2026-05-06 16:01:43 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in proctoring panel when improving performance
