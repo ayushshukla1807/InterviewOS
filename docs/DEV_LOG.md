@@ -101,3 +101,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-05 19:29:30 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement certificate builder for improving performance
 - 2026-05-06 16:01:43 | Ashish Rajput <ashish.rajput.tech@gmail.com> | fix: resolve issue in proctoring panel when improving performance
 - 2026-05-06 17:24:03 | Ashish Rajput <ashish.rajput.tech@gmail.com> | refactor: restructure evaluation engine to support resolving race conditions
+- 2026-05-06 19:29:55 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement local native execution engines for JS, Python, C++, and Java via subprocess spawn and node VM, fully offline and auth-less
