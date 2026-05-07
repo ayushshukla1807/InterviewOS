@@ -103,3 +103,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-06 17:24:03 | Ashish Rajput <ashish.rajput.tech@gmail.com> | refactor: restructure evaluation engine to support resolving race conditions
 - 2026-05-06 19:29:55 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement local native execution engines for JS, Python, C++, and Java via subprocess spawn and node VM, fully offline and auth-less
 - 2026-05-06 19:35:32 | Ayush Shukla <ayush.shukla@adypu.edu.in> | test: add unit tests for rate limiter specifically improving performance
+- 2026-05-07 09:48:23 | Ayush Shukla <ayush.shukla@adypu.edu.in> | chore: configure PDF resume parser environment for enhancing user experience
