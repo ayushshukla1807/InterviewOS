@@ -47,16 +47,34 @@ export async function POST(req: Request) {
     });
 
     const raw = response.text || '{}';
-    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '');
-    const data = JSON.parse(cleanRaw);
+    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+    let data;
+    try {
+      data = JSON.parse(cleanRaw);
+    } catch (parseErr) {
+      // If parsing JSON fails, try to fallback to treating the raw text as content
+      console.warn("Failed to parse Gemini response as JSON:", raw);
+      data = { content: raw };
+    }
 
     return NextResponse.json({
-      content: data.content || "Let's move to the next topic.",
+      content: data.content || data.text || "Let's move to the next topic.",
       signals: data.signals || [],
       adaptation: data.adaptation || "Maintaining difficulty."
     });
-  } catch (err) {
-    console.error(err);
+  } catch (err: any) {
+    console.error("Error in /api/chat:", err);
+    
+    // Check if the error is related to API key validity
+    const errMsg = err.message || String(err);
+    if (errMsg.includes('API key not valid') || errMsg.includes('API_KEY_INVALID') || errMsg.includes('400')) {
+      return NextResponse.json({
+        content: "⚠️ [System Alert: Invalid Gemini API Key. Please update your GEMINI_API_KEY inside your .env.local file to resume live conversation with Ava.]",
+        signals: [],
+        adaptation: "Offline Recovery Mode"
+      });
+    }
+
     return NextResponse.json({
       content: "I see. Let's continue — can you elaborate on that approach?",
       signals: [],
