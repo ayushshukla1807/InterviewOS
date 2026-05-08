@@ -108,3 +108,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-07 13:20:10 | Ashish Rajput <ashish.rajput.tech@gmail.com> | style: format codebase for feedback reporter and handling edge cases
 - 2026-05-07 15:37:32 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement FHIR parser for enhancing user experience
 - 2026-05-07 21:44:03 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in chat component when enhancing user experience
+- 2026-05-08 14:40:54 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure vercel config to support handling edge cases
