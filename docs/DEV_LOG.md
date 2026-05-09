@@ -116,3 +116,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-08 21:49:34 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for evaluation engine and optimizing memory usage
 - 2026-05-08 22:43:55 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement tailwind tokens for reducing complexity
 - 2026-05-09 12:12:03 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in candidate profile when reducing complexity
+- 2026-05-09 13:01:43 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure multilingual logic to support updating documentation
