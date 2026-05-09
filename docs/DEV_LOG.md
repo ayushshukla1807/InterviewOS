@@ -118,3 +118,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-09 12:12:03 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in candidate profile when reducing complexity
 - 2026-05-09 13:01:43 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure multilingual logic to support updating documentation
 - 2026-05-09 13:37:07 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for dashboard client regarding reducing complexity
+- 2026-05-09 14:19:24 | Ayush Shukla <ayush.shukla@adypu.edu.in> | test: add unit tests for learning path generator specifically refactoring helper functions
