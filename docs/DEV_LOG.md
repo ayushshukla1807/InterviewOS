@@ -125,3 +125,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-10 18:23:53 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement proctoring panel for fixing type errors
 - 2026-05-10 21:32:20 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in PDF resume parser when fixing type errors
 - 2026-05-11 12:47:57 | Ashish Rajput <ashish.rajput.tech@gmail.com> | refactor: restructure auth module to support refactoring helper functions
+- 2026-05-11 15:12:12 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for rate limiter regarding fixing type errors
