@@ -124,3 +124,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-10 16:07:47 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement seamless offline local conversational engine fallback in /api/chat if Gemini API key fails, ensuring the system never breaks and runs 100% locally
 - 2026-05-10 18:23:53 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement proctoring panel for fixing type errors
 - 2026-05-10 21:32:20 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in PDF resume parser when fixing type errors
+- 2026-05-11 12:47:57 | Ashish Rajput <ashish.rajput.tech@gmail.com> | refactor: restructure auth module to support refactoring helper functions
