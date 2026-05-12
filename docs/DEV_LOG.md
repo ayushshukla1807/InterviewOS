@@ -130,3 +130,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-11 19:38:12 | Ayush Shukla <ayush.shukla@adypu.edu.in> | chore: configure tailwind tokens environment for adding input validation
 - 2026-05-11 20:04:12 | Ayush Shukla <ayush.shukla@adypu.edu.in> | perf: optimize execution speed of candidate profile by adding input validation
 - 2026-05-12 15:19:38 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for multilingual logic and cleaning up code
+- 2026-05-12 15:28:55 | Ayush Shukla <ayush.shukla@adypu.edu.in> | deploy: update render.yaml envVars to specify GEMINI_API_KEY
