@@ -132,3 +132,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-12 15:19:38 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for multilingual logic and cleaning up code
 - 2026-05-12 15:28:55 | Ayush Shukla <ayush.shukla@adypu.edu.in> | deploy: update render.yaml envVars to specify GEMINI_API_KEY
 - 2026-05-12 18:11:45 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in certificate builder when resolving race conditions
+- 2026-05-12 21:43:09 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure HIPAA logger to support cleaning up code
