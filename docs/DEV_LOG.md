@@ -139,3 +139,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-13 17:46:40 | Ashish Rajput <ashish.rajput.tech@gmail.com> | perf: optimize execution speed of PDF resume parser by improving performance
 - 2026-05-13 18:05:00 | Ayush Shukla <ayush.shukla@adypu.edu.in> | style: format codebase for auth module and resolving race conditions
 - 2026-05-13 21:21:15 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement candidate profile for improving performance
+- 2026-05-13 22:18:05 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in FHIR parser when improving performance
