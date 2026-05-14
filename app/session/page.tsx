@@ -463,7 +463,7 @@ function SessionContent() {
 
     try {
       const systemCtx = dynamicContext 
-        ? `\n\n[CONTEXT]: You are interviewing for the role of ${dynamicContext.jobTitle}.\nJOB DESCRIPTION: ${dynamicContext.jobDescription}\nCANDIDATE RESUME: ${dynamicContext.resumeText}\nAsk highly specific follow-up questions tailored to their resume experience vs job requirements.`
+        ? `\n\n[CONTEXT]: You are interviewing for the role of ${dynamicContext.jobTitle}.\nJOB DESCRIPTION: ${dynamicContext.jobDescription}\nCANDIDATE RESUME: ${dynamicContext.resumeText}\n${dynamicContext.blueprint ? `TEST BLUEPRINT (BEHAVIORAL SCENARIOS TO ADMINISTER):\n${JSON.stringify(dynamicContext.blueprint, null, 2)}\nYou MUST strictly administer the behavioral scenarios listed in this blueprint to evaluate their workplace situational judgment. Wait for their response to each scenario before moving to the next.` : `Ask highly specific follow-up questions tailored to their resume experience vs job requirements.`}`
         : '';
         
       const res = await fetch('/api/chat', {

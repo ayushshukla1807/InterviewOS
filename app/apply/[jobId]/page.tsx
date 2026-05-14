@@ -78,6 +78,7 @@ export default function ApplyPage() {
         jobId: job.id,
         jobTitle: job.title,
         jobDescription: job.description,
+        blueprint: job.blueprint,
         candidateName: name,
         candidateEmail: email,
         resumeText: data.text

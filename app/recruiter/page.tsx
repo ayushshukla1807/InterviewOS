@@ -9,6 +9,7 @@ export default function RecruiterDashboard() {
   const [apps, setApps] = useState<any[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [supportInsights, setSupportInsights] = useState<any[]>([]);
 
@@ -23,14 +24,31 @@ export default function RecruiterDashboard() {
     if (savedInsights) setSupportInsights(JSON.parse(savedInsights));
   }, []);
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !description) return;
+    
+    setIsGenerating(true);
+    let blueprint = null;
+    try {
+      const res = await fetch('/api/test-engine/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jd: description })
+      });
+      const data = await res.json();
+      if (data.blueprint) {
+        blueprint = data.blueprint;
+      }
+    } catch (err) {
+      console.error("Failed to generate test blueprint:", err);
+    }
     
     const newJob = {
       id: `REQ-${Math.floor(Math.random() * 10000)}`,
       title,
       description,
+      blueprint,
       createdAt: new Date().toISOString()
     };
     
@@ -39,6 +57,7 @@ export default function RecruiterDashboard() {
     localStorage.setItem('hyrte_jobs', JSON.stringify(updated));
     setTitle('');
     setDescription('');
+    setIsGenerating(false);
   };
 
   const copyLink = (id: string) => {
@@ -152,9 +171,18 @@ export default function RecruiterDashboard() {
                     required
                   />
                 </div>
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" 
-                  className="w-full py-5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
-                  <Zap className="w-4 h-4 fill-white" /> Generate Assessment Protocol
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit" disabled={isGenerating}
+                  className="w-full py-5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
+                  {isGenerating ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Analyzing JD & Generating Modules...
+                    </>
+                  ) : (
+                    <>
+                      <Zap className="w-4 h-4 fill-white" /> Generate Assessment Protocol
+                    </>
+                  )}
                 </motion.button>
               </form>
             </div>
