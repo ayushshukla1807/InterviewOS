@@ -141,3 +141,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-13 21:21:15 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: implement candidate profile for improving performance
 - 2026-05-13 22:18:05 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in FHIR parser when improving performance
 - 2026-05-14 21:15:14 | Ashish Rajput <ashish.rajput.tech@gmail.com> | feat: deeply integrate simulation engine into InterviewOS recruiter and session flows
+- 2026-05-14 22:11:56 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for vercel config regarding enhancing user experience
