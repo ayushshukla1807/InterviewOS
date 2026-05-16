@@ -149,3 +149,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-15 20:10:22 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement syed proctor for handling edge cases
 - 2026-05-15 22:43:00 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in tailwind tokens when optimizing memory usage
 - 2026-05-16 09:43:02 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure feedback reporter to support reducing complexity
+- 2026-05-16 09:56:46 | Ashish Rajput <ashish.rajput.tech@gmail.com> | docs: update developer guides for multilingual logic regarding reducing complexity
