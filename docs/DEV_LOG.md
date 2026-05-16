@@ -151,3 +151,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-16 09:43:02 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure feedback reporter to support reducing complexity
 - 2026-05-16 09:56:46 | Ashish Rajput <ashish.rajput.tech@gmail.com> | docs: update developer guides for multilingual logic regarding reducing complexity
 - 2026-05-16 10:00:56 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: upgrade AI interviewer with full multilingual (English/Hindi/Hinglish) support and ML behavioral logic
+- 2026-05-16 10:52:48 | Ashish Rajput <ashish.rajput.tech@gmail.com> | chore: configure candidate profile environment for reducing complexity
