@@ -27,39 +27,44 @@ function generateOfflineResponse(messages: any[], candidateProfile: any, roleNam
     }
   }
 
+  // Check if candidate used Hindi/Hinglish in their last message
+  const lastUserMessage = userMessages.length > 0 ? userMessages[userMessages.length - 1].content.toLowerCase() : '';
+  const usesHindi = /hai|haan|theek|lekin|kya|toh|nahi|acha/.test(lastUserMessage);
+
   switch (step) {
     case 0:
     case 1:
-      content = `Hello ${name}! Welcome to the technical interview session for the ${roleName} role. 
-      I went through your profile and noticed your work on "${firstProject}" using ${skills}. 
-      To kick things off, could you explain the architecture of this project and the most challenging technical hurdle you encountered while building it?`;
-      signals = ['Resume Analysis Checked', 'Communication Baseline Set'];
+      content = usesHindi 
+        ? `Hello ${name}! Welcome to the interview. Aapne jo "${firstProject}" pe kaam kiya hai using ${skills}, woh kafi interesting laga. Can you explain its architecture aur sabse bada challenge kya tha?`
+        : `Hello ${name}! Welcome to the technical interview session for the ${roleName} role. I went through your profile and noticed your work on "${firstProject}" using ${skills}. To kick things off, could you explain the architecture of this project and the most challenging technical hurdle you encountered?`;
+      signals = ['Resume Analysis Checked', 'Communication Baseline Set', usesHindi ? 'HINDI_SWITCH' : 'ENGLISH_DEFAULT'];
       break;
 
     case 2:
-      content = `That's a solid architectural overview. Since we are evaluating for a ${roleName} position, let's dive deeper into some core technical concepts.
-      Given your experience with ${skills.split(',')[0] || 'frontend development'}, how would you approach state management and caching to ensure high performance under heavy load?`;
+      content = usesHindi
+        ? `That's a solid overview. Since hum ${roleName} ke liye evaluate kar rahe hain, let's dive deeper. Agar high load handle karna ho, toh state management aur caching approach kya hogi?`
+        : `That's a solid architectural overview. Since we are evaluating for a ${roleName} position, let's dive deeper into some core technical concepts. Given your experience, how would you approach state management and caching to ensure high performance under heavy load?`;
       signals = ['Performance Deep Dive', 'Technical Probing'];
       break;
 
     case 3:
-      content = `Makes sense. Let's shift our focus to hands-on coding. 
-      I want you to write a clean, optimized function in the editor on your left. 
-      You can select your preferred language (JavaScript, Python, C++, or Java), write the solution, and click 'Run Code' to execute it. 
-      Once you are done, explain your approach to me.`;
+      content = usesHindi
+        ? `Makes sense. Chalo ab thoda hands-on coding karte hain. Editor mein apne preferred language mein ek clean aur optimized function likho, run karo, aur phir apna approach samjhao.`
+        : `Makes sense. Let's shift our focus to hands-on coding. I want you to write a clean, optimized function in the editor on your left. You can select your preferred language, write the solution, and click 'Run Code' to execute it. Once you are done, explain your approach to me.`;
       signals = ['Coding Assessment Triggered', 'Problem Solving Check'];
       break;
 
     case 4:
-      content = `Nice work running the code. I can see the execution output and runtime metrics in the console panel.
-      How would you optimize this code further for space complexity, and how would you write test cases to cover edge cases (like empty inputs or invalid formats)?`;
+      content = usesHindi
+        ? `Nice work. Output console pe dikh raha hai. Ise space complexity ke liye aur kaise optimize karoge? Aur edge cases (jaise empty inputs) ke liye test cases kaise likhoge?`
+        : `Nice work running the code. I can see the execution output and runtime metrics in the console panel. How would you optimize this code further for space complexity, and how would you write test cases to cover edge cases?`;
       signals = ['Optimization Evaluation', 'Testing Standard'];
       break;
 
     default:
-      content = `Thank you for sharing that. We've covered architectural choices, core language concepts, live coding, and optimization. 
-      This completes our core interview modules. Feel free to click "Exit Session" or "Submit Final Solution" to generate your comprehensive technical assessment report. 
-      Do you have any final questions for me about the role or the team?`;
+      content = usesHindi
+        ? `Thank you so much! Humne architecture, coding, aur optimization cover kar liya hai. Yeh session abhi yahan conclude hota hai. Koi questions hain aapke mere liye?`
+        : `Thank you for sharing that. We've covered architectural choices, core language concepts, live coding, and optimization. This completes our core interview modules. Do you have any final questions for me about the role or the team?`;
       signals = ['Wrap Up', 'Interview Complete'];
       break;
   }

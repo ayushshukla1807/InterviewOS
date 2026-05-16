@@ -424,9 +424,17 @@ function SessionContent() {
       const voices = window.speechSynthesis.getVoices();
       let preferred;
       if (isFemale) {
-        preferred = voices.find(v => /female|samantha|victoria|zira|karen/i.test(v.name)) || voices.find(v => /en/i.test(v.lang));
+        // Prefer Indian English / Hindi female voices for Hinglish support (e.g. Neerja, Veena, Lekha, Google हिन्दी)
+        preferred = voices.find(v => /neerja|veena|lekha/i.test(v.name)) || 
+                    voices.find(v => /hi-IN|en-IN/i.test(v.lang) && /female/i.test(v.name)) ||
+                    voices.find(v => /female|samantha|victoria|zira|karen/i.test(v.name)) || 
+                    voices.find(v => /en/i.test(v.lang));
       } else {
-        preferred = voices.find(v => /google uk english male|daniel|arthur|david|aaron/i.test(v.name)) || voices.find(v => /en/i.test(v.lang));
+        // Prefer Indian English / Hindi male voices for Hinglish support (e.g. Ravi, Rishi)
+        preferred = voices.find(v => /ravi|rishi/i.test(v.name)) || 
+                    voices.find(v => /hi-IN|en-IN/i.test(v.lang) && /male/i.test(v.name)) ||
+                    voices.find(v => /google uk english male|daniel|arthur|david|aaron/i.test(v.name)) || 
+                    voices.find(v => /en/i.test(v.lang));
       }
       
       if (preferred) utterance.voice = preferred;
