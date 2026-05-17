@@ -157,3 +157,4 @@ Tracked development updates for InterviewOS.
 - 2026-05-16 20:08:36 | Ayush Shukla <ayush.shukla@adypu.edu.in> | feat: implement eslint layout for updating documentation
 - 2026-05-17 09:27:54 | Ayush Shukla <ayush.shukla@adypu.edu.in> | fix: resolve issue in proctoring panel when refactoring helper functions
 - 2026-05-17 10:52:44 | Ayush Shukla <ayush.shukla@adypu.edu.in> | refactor: restructure evaluation engine to support updating documentation
+- 2026-05-17 14:20:45 | Ayush Shukla <ayush.shukla@adypu.edu.in> | docs: update developer guides for auth module regarding updating documentation
