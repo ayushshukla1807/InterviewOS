@@ -102,6 +102,24 @@ export const ROLES: RoleConfig[] = [
     ],
     initialGreeting: "Hey {name}! Syed here. Mobile is such a fascinating space — the constraints you work with are totally different from the web. To start us off, what's the most interesting mobile-specific challenge you had to solve, like dealing with poor networks, battery constraints, or platform quirks?",
   },
+  {
+    id: 'healthcare_ai',
+    title: 'Healthcare & EMR Integration Developer',
+    category: 'software_engineering',
+    categoryLabel: 'Software Development & Engineering',
+    icon: '🏥',
+    color: 'indigo',
+    description: 'Builds secure healthcare integrations (HL7/FHIR), EMR connections, and HIPAA-compliant patient communication systems.',
+    coreSkills: ['FHIR / HL7', 'EMR Integration', 'HIPAA & Security', 'Node.js/Python', 'AI Agents'],
+    questionFocus: [
+      'FHIR resource mapping and clinical workflow automation (Epic, Cerner)',
+      'Designing HIPAA-compliant message delivery and data storage pipelines',
+      'Implementing secure WhatsApp/SMS gateways for automated care reminders',
+      'LLM reasoning safety, hallucination prevention in clinical triage contexts',
+      'Database schema designs for patient scheduling and appointment booking',
+    ],
+    initialGreeting: "Hi {name}! I'm Syed. Digital health and EMR integrations are so critical — security and interoperability are super important when dealing with patient care. To kick off: tell me about a time you had to design a system with strict security or compliance constraints (like HIPAA) or integrate with a complex external API like an EMR. What was the toughest part?",
+  },
 
   // ── DATA & ANALYTICS ─────────────────────────────────────────────
   {
