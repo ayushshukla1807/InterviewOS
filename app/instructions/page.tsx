@@ -74,9 +74,9 @@ function InstructionsContent() {
   if (!isMounted || !interviewer || !invigilator) return null;
 
   return (
-    <div className="min-h-screen bg-[#050508] text-slate-200 flex flex-col font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 transition-colors" style={{ color: 'var(--text)' }}>
       {/* Header */}
-      <header className="flex items-center justify-between px-8 py-5 border-b border-white/5 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
+      <header className="flex items-center justify-between px-8 py-5 border-b backdrop-blur-md sticky top-0 z-50 transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
         <HyrteLogo />
         <div className="flex items-center gap-2">
            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Powered by</span>
@@ -88,16 +88,16 @@ function InstructionsContent() {
       </header>
 
       {/* Main Body */}
-      <main className="flex-1 max-w-[1200px] mx-auto w-full p-6 lg:p-12 flex flex-col lg:flex-row gap-8 items-start">
+      <main className="flex-1 max-w-[1200px] mx-auto w-full p-6 lg:p-12 flex flex-col lg:flex-row gap-8 items-start relative z-10">
         
         {/* Left Column: Team & Details */}
         <div className="w-full lg:w-[420px] space-y-6">
-          <div className="glass-card border border-white/5 bg-[#111111]/60 p-6 rounded-3xl space-y-8 shadow-2xl">
+          <div className="glass-card border p-6 rounded-3xl space-y-8 shadow-2xl transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 60%, transparent)', borderColor: 'var(--border-color)' }}>
             <div className="space-y-6">
-              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Interview Team</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Team</h3>
               <div className="space-y-4">
                 {/* Invigilator */}
-                <div className="p-4 bg-[#1a1a1a] rounded-2xl border border-white/5 flex items-center gap-4 group hover:border-indigo-500/20 transition-all">
+                <div className="p-4 rounded-2xl border flex items-center gap-4 group transition-all" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
                   <div className="w-12 h-12 rounded-full bg-amber-500/10 overflow-hidden border-2 border-amber-500/30 group-hover:border-amber-500/50 transition-all shrink-0">
                     <img src={invigilator.avatar} alt="Invigilator" className="w-full h-full object-cover" />
                   </div>
@@ -109,31 +109,31 @@ function InstructionsContent() {
                 </div>
 
                 {/* Technical Interviewer */}
-                <div className="p-4 bg-[#1a1a1a] rounded-2xl border border-white/5 flex items-center gap-4 group hover:border-indigo-500/20 transition-all">
-                  <div className="w-12 h-12 rounded-full bg-slate-800 overflow-hidden border-2 border-white/10 group-hover:border-indigo-500/40 transition-all shrink-0">
+                <div className="p-4 rounded-2xl border flex items-center gap-4 group transition-all" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 transition-all shrink-0" style={{ backgroundColor: 'var(--border-color)', borderColor: 'var(--border-color)' }}>
                     <img src={interviewer.avatar} alt="Interviewer" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">AI Interviewer</p>
-                    <p className="text-xs font-black text-white tracking-tight">{interviewer.name}</p>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase">{interviewer.role}</p>
+                    <p className="text-[8px] font-black uppercase tracking-widest mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>AI Interviewer</p>
+                    <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>{interviewer.name}</p>
+                    <p className="text-[10px] font-bold uppercase" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>{interviewer.role}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-white/5 space-y-6">
-              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2">Interview Details</h3>
+            <div className="pt-6 border-t space-y-6" style={{ borderColor: 'var(--border-color)' }}>
+              <h3 className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Details</h3>
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-4 bg-[#1a1a1a] rounded-2xl border border-white/5 text-center space-y-1">
-                  <Clock className="w-4 h-4 text-slate-500 mx-auto mb-1" />
-                  <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Duration</p>
-                  <p className="text-xs font-black text-white tracking-tight">{config.time}</p>
+                <div className="p-4 rounded-2xl border text-center space-y-1" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <Clock className="w-4 h-4 mx-auto mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }} />
+                  <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Duration</p>
+                  <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>{config.time}</p>
                 </div>
-                <div className="p-4 bg-[#1a1a1a] rounded-2xl border border-white/5 text-center space-y-1">
-                  <BrainCircuit className="w-4 h-4 text-slate-500 mx-auto mb-1" />
-                  <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Questions</p>
-                  <p className="text-xs font-black text-white tracking-tight">Adaptive</p>
+                <div className="p-4 rounded-2xl border text-center space-y-1" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <BrainCircuit className="w-4 h-4 mx-auto mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }} />
+                  <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Questions</p>
+                  <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>Adaptive</p>
                 </div>
               </div>
             </div>
@@ -144,10 +144,10 @@ function InstructionsContent() {
         <div className="flex-1 w-full space-y-8">
           <div className="space-y-10 px-4">
             <section className="space-y-4">
-              <h3 className="text-base font-black text-white tracking-tight uppercase">Instructions</h3>
+              <h3 className="text-base font-black tracking-tight uppercase" style={{ color: 'var(--text)' }}>Instructions</h3>
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <h4 className="text-sm font-black text-white/90">Before You Begin</h4>
+                  <h4 className="text-sm font-black" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>Before You Begin</h4>
                   <ul className="space-y-2">
                     {[
                       'Ensure a quiet environment. Use headphones if possible.',
@@ -155,16 +155,16 @@ function InstructionsContent() {
                       'Use a laptop/desktop. Mobile devices are not supported.',
                       'Stable Internet Required. Poor connection may affect experience.'
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-400 group">
-                        <div className="w-1 h-1 rounded-full bg-indigo-500 mt-2 shrink-0" />
-                        <span className="text-[13px] font-medium leading-relaxed group-hover:text-slate-300 transition-colors">{item}</span>
+                      <li key={i} className="flex items-start gap-3 group" style={{ color: 'color-mix(in srgb, var(--text) 70%, transparent)' }}>
+                        <div className="w-1 h-1 rounded-full mt-2 shrink-0" style={{ backgroundColor: 'var(--primary)' }} />
+                        <span className="text-[13px] font-medium leading-relaxed transition-colors group-hover:opacity-100 opacity-80">{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="text-sm font-black text-white/90">During the Interview</h4>
+                  <h4 className="text-sm font-black" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>During the Interview</h4>
                   <ul className="space-y-2">
                     {[
                       'Stay in Full Screen Mode. Do not exit or minimize.',
@@ -172,9 +172,9 @@ function InstructionsContent() {
                       'Your responses are recorded. Both code and speech are assessed.',
                       'Avoid external help. Violations lead to disqualification.'
                     ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-400 group">
-                        <div className="w-1 h-1 rounded-full bg-indigo-500 mt-2 shrink-0" />
-                        <span className="text-[13px] font-medium leading-relaxed group-hover:text-slate-300 transition-colors">{item}</span>
+                      <li key={i} className="flex items-start gap-3 group" style={{ color: 'color-mix(in srgb, var(--text) 70%, transparent)' }}>
+                        <div className="w-1 h-1 rounded-full mt-2 shrink-0" style={{ backgroundColor: 'var(--primary)' }} />
+                        <span className="text-[13px] font-medium leading-relaxed transition-colors group-hover:opacity-100 opacity-80">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -182,12 +182,12 @@ function InstructionsContent() {
               </div>
             </section>
 
-            <div className="pt-8 border-t border-white/5 space-y-6">
+            <div className="pt-8 border-t space-y-6" style={{ borderColor: 'var(--border-color)' }}>
               <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setAgreed(!agreed)}>
-                <div className={`w-5 h-5 rounded-md border transition-all flex items-center justify-center ${agreed ? 'bg-indigo-600 border-indigo-600' : 'border-white/20 bg-white/5'}`}>
+                <div className={`w-5 h-5 rounded-md border transition-all flex items-center justify-center`} style={{ backgroundColor: agreed ? 'var(--primary)' : 'var(--border-color)', borderColor: agreed ? 'var(--primary)' : 'var(--border-color)' }}>
                    {agreed && <CheckCircle className="w-3 h-3 text-white" />}
                 </div>
-                <p className="text-[11px] font-bold text-slate-400">I agree to <span className="text-indigo-400 underline underline-offset-4">Privacy Policy</span> and consent to the interview process</p>
+                <p className="text-[11px] font-bold" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>I agree to <span className="underline underline-offset-4" style={{ color: 'var(--primary)' }}>Privacy Policy</span> and consent to the interview process</p>
               </div>
 
               <div className="space-y-4">
