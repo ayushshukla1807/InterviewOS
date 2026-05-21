@@ -184,6 +184,69 @@ export function checkReplicationSync(clientClock: number[], replicaClock: number
   return true;
 }`,
     language: 'javascript'
+  },
+  healthcare_ai: {
+    id: 'SCENARIO-HEALTHCARE-AI-01',
+    title: 'EMR & Care Integration Pipeline',
+    subtitle: 'HIPAA-compliant patient data sync and automated care reminders',
+    company: '2care.ai',
+    role: 'Healthcare & EMR Integration Developer',
+    track: 'healthcare_ai',
+    difficulty: 'Advanced',
+    overview: 'At 2care.ai, security, compliance, and EMR integration are crucial for patient care workflows. You are tasked with designing and implementing a secure, HIPAA-compliant patient communication pipeline that syncs patient demographics with EMR databases (HL7/FHIR format) and fires automated, rate-limited WhatsApp notifications for chronic care management. You must also ensure that all logs are completely redacted of protected health information (PHI) to prevent HIPAA compliance leaks.',
+    tasks: [
+      { id: 't1', title: 'Map Database to FHIR Resource', description: 'Write an adapter that maps internal patient database objects to a standard HL7 FHIR Patient resource JSON structure.', status: 'pending' },
+      { id: 't2', title: 'HIPAA-Compliant PHI Redaction Logger', description: 'Create a logging utility that intercepts log strings and redacts sensitive Protected Health Information (PHI) such as patient names, emails, and phone numbers before writing to cloud log servers.', status: 'pending' },
+      { id: 't3', title: 'Sliding Window Rate Limiter', description: 'Implement an in-memory sliding window rate limiter for patient notifications (e.g. max 3 messages per 24 hours per patient) to prevent spamming.', status: 'pending' }
+    ],
+    skills: [
+      { name: 'FHIR / HL7 Standards', level: 'Senior', weight: 35, description: 'Interpreting and structure mapping clinical data onto standard HL7/FHIR formats.' },
+      { name: 'HIPAA & PHI Security', level: 'Expert', weight: 35, description: 'Redacting sensitive information, secure audit logs, and compliance mechanisms.' },
+      { name: 'API Rate Limiting', level: 'Mid-Senior', weight: 30, description: 'Sliding window, token bucket, and rate limiting algorithms.' }
+    ],
+    initialCode: `// 2CARE.AI - HEALTHCARE DATA INTEGRATION PROTOCOL
+// TODO: Implement the FHIR converter, the secure PHI logger, and the sliding window rate limiter.
+
+// Task 1: Map database record to FHIR Patient resource format
+export function convertToFHIRPatient(dbRecord: {
+  id: string;
+  fullName: string;
+  contactEmail: string;
+  phoneNumber: string;
+  birthDate: string;
+  genderCode: 'M' | 'F' | 'O';
+}): Record<string, any> {
+  // Return a valid HL7 FHIR Patient resource representation
+  return {};
+}
+
+// Task 2: Implement HIPAA-compliant PHI Redactor for logging
+export class PHISecureLogger {
+  // Redact Name (if matching words), Email patterns, and 10-digit Phone numbers
+  public static redact(message: string): string {
+    // Write redaction regex or processing logic here
+    return message;
+  }
+}
+
+// Task 3: Sliding window rate limiter for patient alerts
+export class PatientAlertRateLimiter {
+  private history: Map<string, number[]> = new Map(); // patientId -> timestamps (ms)
+  private maxAlerts: number;
+  private windowMs: number;
+
+  constructor(maxAlerts = 3, windowMs = 24 * 60 * 60 * 1000) {
+    this.maxAlerts = maxAlerts;
+    this.windowMs = windowMs;
+  }
+
+  // Returns true if the alert can be sent, false otherwise
+  public allowAlert(patientId: string, timestamp: number): boolean {
+    // Implement sliding window rate limit checks and clean up old entries
+    return true;
+  }
+}`,
+    language: 'javascript'
   }
 };
 
