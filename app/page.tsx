@@ -100,8 +100,12 @@ function LandingPageContent() {
 
       {/* Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:64px_64px]" />
+        <div 
+          className="absolute inset-0 opacity-[0.15] bg-cover bg-center bg-no-repeat" 
+          style={{ backgroundImage: 'url(/hero-bg.png)' }} 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/80 to-slate-50" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full" />
       </div>
 
       {/* Nav */}
