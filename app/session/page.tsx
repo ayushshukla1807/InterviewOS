@@ -277,7 +277,7 @@ function SessionContent() {
         `Hey ${name.split(' ')[0]}! I'm ${interviewer.name}. I'll be your lead interviewer today.`,
         `First of all, don't sweat it. We're just here to have a solid technical chat and see how you think.`,
         `I've got some interesting challenges lined up${jobTitle}.`,
-        `Whenever you're ready, let's dive into the first one. Sound good?`
+        `We have shared a coding question on your screen. Take your time to read the constraints. Whenever you're ready, let's dive into it. Sound good?`
       ];
       const fullGreeting = openingLines.join(' ');
       setMessages([{ role: 'assistant', content: fullGreeting }]);
@@ -395,14 +395,26 @@ function SessionContent() {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (SpeechRecognition) {
       recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = false;
+      recognitionRef.current.continuous = true; // DO NOT cut off automatically!
+      recognitionRef.current.interimResults = true;
       recognitionRef.current.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
-        setInput(transcript);
-        setIsListening(false);
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+        }
       };
-      recognitionRef.current.onend = () => setIsListening(false);
+      
+      // Auto-restart if it stops unexpectedly while we still want to be listening
+      recognitionRef.current.onend = () => {
+        if (isListening) {
+           try { recognitionRef.current.start(); } catch (e) {}
+        }
+      };
     }
 
     return () => {
@@ -424,16 +436,18 @@ function SessionContent() {
       const voices = window.speechSynthesis.getVoices();
       let preferred;
       if (isFemale) {
-        // Prefer Indian English / Hindi female voices for Hinglish support (e.g. Neerja, Veena, Lekha, Google हिन्दी)
-        preferred = voices.find(v => /neerja|veena|lekha/i.test(v.name)) || 
-                    voices.find(v => /hi-IN|en-IN/i.test(v.lang) && /female/i.test(v.name)) ||
-                    voices.find(v => /female|samantha|victoria|zira|karen/i.test(v.name)) || 
+        // Aggressively prefer premium natural voices (Google/Microsoft)
+        preferred = voices.find(v => /google us english/i.test(v.name)) ||
+                    voices.find(v => /google uk english female/i.test(v.name)) ||
+                    voices.find(v => /microsoft zira|microsoft aria|microsoft jenny/i.test(v.name)) ||
+                    voices.find(v => /samantha|victoria|karen/i.test(v.name)) || 
+                    voices.find(v => /female/i.test(v.name) && /en/i.test(v.lang)) ||
                     voices.find(v => /en/i.test(v.lang));
       } else {
-        // Prefer Indian English / Hindi male voices for Hinglish support (e.g. Ravi, Rishi)
-        preferred = voices.find(v => /ravi|rishi/i.test(v.name)) || 
-                    voices.find(v => /hi-IN|en-IN/i.test(v.lang) && /male/i.test(v.name)) ||
-                    voices.find(v => /google uk english male|daniel|arthur|david|aaron/i.test(v.name)) || 
+        preferred = voices.find(v => /google uk english male/i.test(v.name)) ||
+                    voices.find(v => /microsoft mark|microsoft guy|microsoft david/i.test(v.name)) ||
+                    voices.find(v => /daniel|arthur|aaron/i.test(v.name)) || 
+                    voices.find(v => /male/i.test(v.name) && /en/i.test(v.lang)) ||
                     voices.find(v => /en/i.test(v.lang));
       }
       
@@ -678,7 +692,7 @@ function SessionContent() {
   }
 
   return (
-    <div className="h-screen bg-[#050508] flex flex-col overflow-hidden text-slate-200 font-sans selection:bg-indigo-500/30">
+    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -740,7 +754,7 @@ function SessionContent() {
       <div className="flex-1 flex overflow-hidden">
         
         {/* Left: Code & Question */}
-        <div className="flex-1 flex flex-col bg-slate-950/20 overflow-hidden relative">
+        <div className="flex-1 flex flex-col bg-[var(--bg)] overflow-hidden relative">
             {/* Tab Bar */}
             <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5 bg-slate-950/40">
                {((track === 'DYNAMIC' ? ['simulation', 'code'] : ['code']) as TabType[]).map(tab => (
@@ -759,7 +773,7 @@ function SessionContent() {
                ))}
             </div>
 
-            <div className="flex-1 overflow-y-auto bg-slate-950/40 p-8 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto bg-[var(--bg)] p-8 custom-scrollbar">
                <AnimatePresence mode="wait">
                   {activeTab === 'simulation' ? (
                     <motion.div 
@@ -873,122 +887,152 @@ function SessionContent() {
                      key="c"
                      initial={{ opacity: 0 }}
                      animate={{ opacity: 1 }}
-                     className="h-full flex flex-col overflow-hidden"
+                     className="h-full flex overflow-hidden"
                    >
-                      {/* IDE Toolbar */}
-                      <div className="flex items-center justify-between bg-white/5 p-3 border-b border-white/5 rounded-t-3xl">
-                         <div className="flex gap-2">
-                            <select 
-                              value={language} onChange={e => setLanguage(e.target.value)}
-                              className="bg-[#0e0e11] border border-white/10 rounded-lg px-3 py-1.5 text-[10px] font-black text-indigo-400 uppercase tracking-widest outline-none focus:border-indigo-500 transition-all">
-                               <option value="javascript">JavaScript (Node 20)</option>
-                               <option value="typescript">TypeScript (5.0)</option>
-                               <option value="python">Python (3.11)</option>
-                               <option value="cpp">C++ (GCC 13)</option>
-                               <option value="java">Java (OpenJDK 21)</option>
-                               <option value="go">Go (1.16)</option>
-                               <option value="rust">Rust (1.50)</option>
-                               <option value="php">PHP (8.2)</option>
-                               <option value="ruby">Ruby (3.2)</option>
-                               <option value="csharp">C# (.NET 8)</option>
-                            </select>
-                            <div className="flex gap-1 bg-[#0e0e11] p-1 rounded-lg border border-white/10">
-                               <button onClick={() => setActiveEditorTab('scratch')} 
-                                 className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'scratch' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-white'}`}>
-                                 Scratchpad
-                               </button>
-                               <button onClick={() => setActiveEditorTab('final')} 
-                                 className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'final' ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:text-white'}`}>
-                                 Final Code
-                               </button>
-                            </div>
-                         </div>
-                         <div className="flex gap-2">
-                            <button 
-                               onClick={handleRunCode}
-                               disabled={isCodeRunning}
-                               className={`px-4 py-1.5 border rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${
-                                 isCodeRunning 
-                                   ? 'bg-white/5 border-white/10 text-slate-500 cursor-not-allowed'
-                                   : execSuccess === true
-                                   ? 'bg-emerald-600/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-600/20'
-                                   : execSuccess === false
-                                   ? 'bg-rose-600/10 border-rose-500/30 text-rose-400 hover:bg-rose-600/20'
-                                   : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
-                               }`}
-                             >
-                               {isCodeRunning 
-                                 ? <><div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Executing...</>
-                                 : execSuccess === true
-                                 ? <><CheckCircle className="w-3 h-3" /> Ran OK {execTime !== null ? `· ${execTime}ms` : ''}</>
-                                 : execSuccess === false
-                                 ? <><AlertCircle className="w-3 h-3" /> Run Code</>
-                                 : <><Play className="w-3 h-3 text-indigo-400" /> Run Code</>
-                               }
-                             </button>
-                            <button onClick={handleFinish}
-                              className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
-                               <Send className="w-3 h-3" /> Submit Final Solution
-                            </button>
-                         </div>
-                      </div>
-                      {/* Editor Split View */}
-                      <div className="flex-1 flex flex-col min-h-0 bg-[#050508]">
-                        <div className="flex-1 relative">
-                          {activeEditorTab === 'scratch' ? (
-                            <textarea
-                              value={scratchpad}
-                              onChange={e => setScratchpad(e.target.value)}
-                              className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-amber-300/80 focus:outline-none resize-none"
-                              spellCheck={false}
-                            />
-                          ) : (
-                            <textarea
-                              value={code}
-                              onChange={e => setCode(e.target.value)}
-                              className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-emerald-300/90 focus:outline-none resize-none"
-                              spellCheck={false}
-                              placeholder="// Write your final solution here..."
-                            />
-                          )}
-                          
-                          {/* Code Editor Status Bar */}
-                          <div className="absolute bottom-4 right-8 flex items-center gap-4 px-3 py-1.5 bg-white/5 rounded-full border border-white/5 backdrop-blur-md">
-                             <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">UTF-8</span>
-                             <div className="w-px h-2 bg-white/10" />
-                             <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Line {code.split('\n').length}, Col {code.length}</span>
-                          </div>
+                      {/* Left side: Problem Description */}
+                      <div className="w-1/3 border-r border-[var(--border-color)] bg-[var(--card-bg)] p-6 overflow-y-auto flex flex-col">
+                        <div className="flex items-center gap-3 mb-6">
+                           <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-violet-500/20">
+                              {question.difficulty || 'Hard'}
+                           </span>
+                           <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                              Time Limit: 60 mins
+                           </span>
                         </div>
+                        <h2 className="text-2xl font-black mb-6">{question.title || 'Coding Challenge'}</h2>
+                        <div className="prose prose-invert max-w-none text-sm space-y-4">
+                           {question.prompt?.split('\n').map((line: string, i: number) => (
+                              <p key={i} className="leading-relaxed text-[var(--text)] opacity-90">{line}</p>
+                           ))}
+                        </div>
+                        <div className="mt-8 space-y-4">
+                           {/* Placeholder for standard LeetCode style sections if not in prompt */}
+                           {question.prompt && !question.prompt.toLowerCase().includes('constraints') && (
+                             <div className="p-4 bg-white/5 rounded-xl border border-white/5">
+                                <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Constraints & Assumptions</h3>
+                                <ul className="list-disc pl-4 space-y-1 text-xs opacity-80">
+                                   <li>Optimize for Time Complexity O(N) where applicable.</li>
+                                   <li>Memory limits are enforced (256MB).</li>
+                                </ul>
+                             </div>
+                           )}
+                        </div>
+                      </div>
 
-                        {/* Console Area */}
-                        <div className="h-48 border-t border-white/5 bg-[#0a0a0c] flex overflow-hidden">
-                           <div className="flex-1 border-r border-white/5 flex flex-col">
-                              <div className="px-4 py-2 border-b border-white/5 flex items-center gap-2">
-                                 <Terminal className="w-3 h-3 text-slate-500" />
-                                 <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Input Console</span>
+                      {/* Right side: Editor & Console */}
+                      <div className="w-2/3 flex flex-col bg-[var(--bg)] overflow-hidden">
+                        {/* IDE Toolbar */}
+                        <div className="flex items-center justify-between bg-white/5 p-3 border-b border-white/5">
+                           <div className="flex gap-2">
+                              <select 
+                                value={language} onChange={e => setLanguage(e.target.value)}
+                                className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-[10px] font-black text-indigo-400 uppercase tracking-widest outline-none focus:border-indigo-500 transition-all">
+                                 <option value="javascript">JavaScript (Node 20)</option>
+                                 <option value="typescript">TypeScript (5.0)</option>
+                                 <option value="python">Python (3.11)</option>
+                                 <option value="cpp">C++ (GCC 13)</option>
+                                 <option value="java">Java (OpenJDK 21)</option>
+                                 <option value="go">Go (1.16)</option>
+                                 <option value="rust">Rust (1.50)</option>
+                              </select>
+                              <div className="flex gap-1 bg-[var(--card-bg)] p-1 rounded-lg border border-[var(--border-color)]">
+                                 <button onClick={() => setActiveEditorTab('scratch')} 
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'scratch' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   Scratchpad
+                                 </button>
+                                 <button onClick={() => setActiveEditorTab('final')} 
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'final' ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   Final Code
+                                 </button>
                               </div>
-                              <textarea 
-                                value={consoleInput} onChange={e => setConsoleInput(e.target.value)}
-                                placeholder="Provide standard input here..."
-                                className="flex-1 bg-transparent p-4 text-[11px] font-mono text-slate-400 outline-none resize-none"
+                           </div>
+                           <div className="flex gap-2">
+                              <button 
+                                 onClick={handleRunCode}
+                                 disabled={isCodeRunning}
+                                 className={`px-4 py-1.5 border rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${
+                                   isCodeRunning 
+                                     ? 'bg-white/5 border-white/10 text-slate-500 cursor-not-allowed'
+                                     : execSuccess === true
+                                     ? 'bg-emerald-600/10 border-emerald-500/30 text-emerald-400 hover:bg-emerald-600/20'
+                                     : execSuccess === false
+                                     ? 'bg-rose-600/10 border-rose-500/30 text-rose-400 hover:bg-rose-600/20'
+                                     : 'bg-white/5 border-white/10 hover:bg-white/10'
+                                 }`}
+                               >
+                                 {isCodeRunning 
+                                   ? <><div className="w-3 h-3 border-2 border-white/20 border-t-[var(--text)] rounded-full animate-spin" /> Executing...</>
+                                   : execSuccess === true
+                                   ? <><CheckCircle className="w-3 h-3" /> Ran OK {execTime !== null ? `· ${execTime}ms` : ''}</>
+                                   : execSuccess === false
+                                   ? <><AlertCircle className="w-3 h-3" /> Run Code</>
+                                   : <><Play className="w-3 h-3 text-indigo-400" /> Run Code</>
+                                 }
+                               </button>
+                              <button onClick={handleFinish}
+                                className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
+                                 <Send className="w-3 h-3" /> Submit Final Solution
+                              </button>
+                           </div>
+                        </div>
+                        {/* Editor Split View */}
+                        <div className="flex-1 flex flex-col min-h-0 bg-[var(--bg)]">
+                          <div className="flex-1 relative">
+                            {activeEditorTab === 'scratch' ? (
+                              <textarea
+                                value={scratchpad}
+                                onChange={e => setScratchpad(e.target.value)}
+                                className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-amber-300/80 focus:outline-none resize-none"
+                                spellCheck={false}
                               />
-                           </div>
-                           <div className="flex-1 flex flex-col bg-black/40">
-                              <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between">
-                                 <div className="flex items-center gap-2">
-                                   <Monitor className="w-3 h-3 text-indigo-500" />
-                                   <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Execution Output</span>
-                                 </div>
-                                 <div className="flex items-center gap-3">
-                                   {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
-                                   {execSuccess === true && <span className="text-[8px] font-black text-emerald-400">✓ OK</span>}
-                                   {execSuccess === false && <span className="text-[8px] font-black text-rose-400">✗ Error</span>}
-                                 </div>
-                              </div>
-                              <div className={`flex-1 p-4 text-[11px] font-mono whitespace-pre overflow-y-auto ${execSuccess === false ? 'text-rose-400/80' : 'text-emerald-400/80'}`}>
-                                 {consoleOutput || '> System idle. Write code and click Run.'}
-                              </div>
-                           </div>
+                            ) : (
+                              <textarea
+                                value={code}
+                                onChange={e => setCode(e.target.value)}
+                                className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-emerald-300/90 focus:outline-none resize-none"
+                                spellCheck={false}
+                                placeholder="// Write your final solution here..."
+                              />
+                            )}
+                            
+                            {/* Code Editor Status Bar */}
+                            <div className="absolute bottom-4 right-8 flex items-center gap-4 px-3 py-1.5 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)] backdrop-blur-md">
+                               <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">UTF-8</span>
+                               <div className="w-px h-2 bg-white/10" />
+                               <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Line {code.split('\n').length}, Col {code.length}</span>
+                            </div>
+                          </div>
+
+                          {/* Console Area */}
+                          <div className="h-48 border-t border-[var(--border-color)] bg-[var(--card-bg)] flex overflow-hidden">
+                             <div className="flex-1 border-r border-[var(--border-color)] flex flex-col">
+                                <div className="px-4 py-2 border-b border-[var(--border-color)] flex items-center gap-2">
+                                   <Terminal className="w-3 h-3 text-slate-500" />
+                                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Input Console</span>
+                                </div>
+                                <textarea 
+                                  value={consoleInput} onChange={e => setConsoleInput(e.target.value)}
+                                  placeholder="Provide standard input here..."
+                                  className="flex-1 bg-transparent p-4 text-[11px] font-mono opacity-80 outline-none resize-none"
+                                />
+                             </div>
+                             <div className="flex-1 flex flex-col bg-black/20">
+                                <div className="px-4 py-2 border-b border-[var(--border-color)] flex items-center justify-between">
+                                   <div className="flex items-center gap-2">
+                                     <Monitor className="w-3 h-3 text-indigo-500" />
+                                     <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Execution Output</span>
+                                   </div>
+                                   <div className="flex items-center gap-3">
+                                     {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
+                                     {execSuccess === true && <span className="text-[8px] font-black text-emerald-400">✓ OK</span>}
+                                     {execSuccess === false && <span className="text-[8px] font-black text-rose-400">✗ Error</span>}
+                                   </div>
+                                </div>
+                                <div className={`flex-1 p-4 text-[11px] font-mono whitespace-pre overflow-y-auto ${execSuccess === false ? 'text-rose-400/80' : 'text-emerald-400/80'}`}>
+                                   {consoleOutput || '> System idle. Write code and click Run.'}
+                                </div>
+                             </div>
+                          </div>
                         </div>
                       </div>
                    </motion.div>
