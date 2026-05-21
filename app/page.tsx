@@ -109,24 +109,24 @@ function LandingPageContent() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between bg-white/70 backdrop-blur-xl border-b border-slate-200 shadow-sm">
+      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between backdrop-blur-xl border-b shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 70%, transparent)', borderColor: 'var(--border-color)' }}>
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center shadow-sm">
-            <Shield className="w-5 h-5 text-indigo-600" />
+          <div className="w-10 h-10 border rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--primary) 10%, transparent)', borderColor: 'color-mix(in srgb, var(--primary) 20%, transparent)' }}>
+            <Shield className="w-5 h-5" style={{ color: 'var(--primary)' }} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-extrabold tracking-tight leading-none text-slate-900">Hyrte</span>
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Intelligence</span>
+            <span className="text-sm font-extrabold tracking-tight leading-none" style={{ color: 'var(--text)' }}>Hyrte</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Intelligence</span>
           </div>
         </motion.div>
 
         <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 border rounded-full" style={{ backgroundColor: 'color-mix(in srgb, #10b981 10%, transparent)', borderColor: 'color-mix(in srgb, #10b981 20%, transparent)' }}>
             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[9px] font-bold text-emerald-700 uppercase tracking-widest">Neural Core: Active</span>
+            <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Neural Core: Active</span>
           </div>
-          <Link href="/recruiter" className="text-[11px] font-bold text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-colors">Recruiter</Link>
-          <Link href="/candidate" className="text-[11px] font-bold text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-colors">Candidate</Link>
+          <Link href="/recruiter" className="text-[11px] font-bold uppercase tracking-widest transition-colors" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Recruiter</Link>
+          <Link href="/candidate" className="text-[11px] font-bold uppercase tracking-widest transition-colors" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Candidate</Link>
         </div>
       </nav>
 
@@ -138,17 +138,17 @@ function LandingPageContent() {
           transition={{ duration: 0.9, ease: 'circOut' }}
           className="max-w-4xl w-full text-center space-y-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200 rounded-full shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-            <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Behavioral Intelligence Platform</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 backdrop-blur-md border rounded-full shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 80%, transparent)', borderColor: 'var(--border-color)' }}>
+            <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--primary)' }} />
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 70%, transparent)' }}>Behavioral Intelligence Platform</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1]" style={{ color: 'var(--text)' }}>
             Master the <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(to right, var(--primary), #8b5cf6)' }}>
               Modern Tech Interview
             </span>
           </h1>
-          <p className="text-slate-700 font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+          <p className="font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>
             Evaluate real workplace behavior, adaptability, and decision-making under pressure through dynamic AI-driven simulations.
           </p>
         </motion.div>
@@ -158,10 +158,11 @@ function LandingPageContent() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
-          className="max-w-5xl w-full bg-white border border-slate-200 rounded-[32px] shadow-2xl shadow-slate-200/50 p-8 lg:p-10 space-y-8"
+          className="w-full max-w-5xl bg-white/70 backdrop-blur-3xl rounded-[2.5rem] p-6 lg:p-10 shadow-2xl flex flex-col gap-8 border"
+          style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 70%, transparent)', borderColor: 'var(--border-color)' }}
         >
-          {/* Tab bar */}
-          <div className="flex flex-col sm:flex-row bg-slate-100 p-1.5 rounded-2xl gap-1">
+          {/* Main navigation tabs */}
+          <div className="w-full p-2 rounded-2xl flex border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
             {[
               { id: 'tryout', icon: <Bot className="w-4 h-4" />, label: 'Practice Interview' },
               { id: 'candidate', icon: <GraduationCap className="w-4 h-4" />, label: 'My Workspace' },
@@ -172,8 +173,13 @@ function LandingPageContent() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 py-3 px-4 text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${
-                  activeTab === tab.id ? 'bg-white text-indigo-700 shadow-sm border border-slate-200/60' : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                  activeTab === tab.id ? 'shadow-sm border' : 'opacity-60 hover:opacity-100'
                 }`}
+                style={{
+                  backgroundColor: activeTab === tab.id ? 'var(--card-bg)' : 'transparent',
+                  borderColor: activeTab === tab.id ? 'var(--border-color)' : 'transparent',
+                  color: activeTab === tab.id ? 'var(--primary)' : 'var(--text)'
+                }}
               >
                 {tab.icon} {tab.label}
               </button>
@@ -193,8 +199,8 @@ function LandingPageContent() {
                 className="space-y-8 text-left"
               >
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">What is your target role?</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-1">
+                  <h3 className="text-xl font-bold" style={{ color: 'var(--text)' }}>What is your target role?</h3>
+                  <p className="text-[11px] font-semibold uppercase tracking-widest mt-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>
                     Select a role → fill your background → get a personalised AI mock interview
                   </p>
                 </div>
@@ -207,9 +213,10 @@ function LandingPageContent() {
                       onClick={() => setSelectedCategory(catId)}
                       className={`px-4 py-2 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all ${
                         selectedCategory === catId
-                          ? `${CAT_COLOR[catMeta.color]} border shadow-sm`
-                          : 'border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 bg-white'
+                          ? `${CAT_COLOR[catMeta.color]} shadow-sm`
+                          : 'border hover:opacity-80'
                       }`}
+                      style={selectedCategory !== catId ? { backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text)' } : {}}
                     >
                       {catMeta.label}
                     </button>
@@ -224,13 +231,14 @@ function LandingPageContent() {
                       onClick={() => setSelectedRole(role)}
                       className={`p-4 rounded-2xl border text-left transition-all space-y-2 ${
                         selectedRole?.id === role.id
-                          ? `bg-white ${CAT_RING[role.color]} border-2 shadow-md`
-                          : 'border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:shadow-md'
+                          ? `${CAT_RING[role.color]} border-2 shadow-md`
+                          : 'shadow-sm hover:shadow-md'
                       }`}
+                      style={{ backgroundColor: 'var(--card-bg)', borderColor: selectedRole?.id === role.id ? undefined : 'var(--border-color)' }}
                     >
                       <span className="text-2xl">{role.icon}</span>
-                      <p className="text-sm font-bold text-slate-900 leading-tight">{role.title}</p>
-                      <p className="text-[10px] text-slate-500 leading-relaxed">{role.description.slice(0, 60)}…</p>
+                      <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text)' }}>{role.title}</p>
+                      <p className="text-[10px] leading-relaxed" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>{role.description.slice(0, 60)}…</p>
                     </button>
                   ))}
                 </div>
