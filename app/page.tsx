@@ -101,10 +101,10 @@ function LandingPageContent() {
       {/* Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div 
-          className="absolute inset-0 opacity-40 bg-cover bg-center bg-no-repeat" 
+          className="absolute inset-0 opacity-50 bg-cover bg-center bg-no-repeat" 
           style={{ backgroundImage: 'url(/hero-bg.png)' }} 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/60 to-slate-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/70 to-slate-50" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full" />
       </div>
 
@@ -138,18 +138,17 @@ function LandingPageContent() {
           transition={{ duration: 0.9, ease: 'circOut' }}
           className="max-w-4xl w-full text-center space-y-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md border border-slate-200 rounded-full shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
             <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Behavioral Intelligence Platform</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
-            The Ultimate <br />
+            Master the <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-              Workplace Simulation
+              Modern Tech Interview
             </span>
-            <br /> Engine.
           </h1>
-          <p className="text-slate-600 text-sm md:text-base max-w-lg mx-auto leading-relaxed">
+          <p className="text-slate-700 font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed">
             Evaluate real workplace behavior, adaptability, and decision-making under pressure through dynamic AI-driven simulations.
           </p>
         </motion.div>
