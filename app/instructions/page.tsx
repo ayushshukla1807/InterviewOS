@@ -29,6 +29,7 @@ function InstructionsContent() {
   const router = useRouter();
   const [agreed, setAgreed] = useState(false);
   const [showPledgeModal, setShowPledgeModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [pledged, setPledged] = useState(false);
 
   const nameParam = searchParams.get('name') || 'Ayush Shukla';
@@ -187,7 +188,7 @@ function InstructionsContent() {
                 <div className={`w-5 h-5 rounded-md border transition-all flex items-center justify-center`} style={{ backgroundColor: agreed ? 'var(--primary)' : 'var(--border-color)', borderColor: agreed ? 'var(--primary)' : 'var(--border-color)' }}>
                    {agreed && <CheckCircle className="w-3 h-3 text-white" />}
                 </div>
-                <p className="text-[11px] font-bold" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>I agree to <span className="underline underline-offset-4" style={{ color: 'var(--primary)' }}>Privacy Policy</span> and consent to the interview process</p>
+                <p className="text-[11px] font-bold" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>I agree to <span className="underline underline-offset-4 hover:opacity-80 transition-opacity" onClick={(e) => { e.stopPropagation(); setShowPrivacyModal(true); }} style={{ color: 'var(--primary)' }}>Privacy Policy</span> and consent to the interview process</p>
               </div>
 
               <div className="space-y-4">
@@ -210,14 +211,73 @@ function InstructionsContent() {
       </main>
 
       {/* Footer */}
-      <footer className="p-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 bg-slate-950/20 backdrop-blur-sm">
-        <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+      <footer className="p-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 backdrop-blur-sm" style={{ borderColor: 'var(--border-color)', backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)' }}>
+        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>
           This interview is conducted on a secure platform. Final results are verified by the hiring team.
         </p>
         <div className="flex gap-8">
-          <Link href="#" className="text-[10px] font-black text-indigo-400 uppercase tracking-widest hover:text-indigo-300 transition-colors">View Privacy Policy</Link>
+          <button onClick={() => setShowPrivacyModal(true)} className="text-[10px] font-black uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: 'var(--primary)' }}>View Privacy Policy</button>
         </div>
       </footer>
+
+      {/* Privacy Policy Modal */}
+      <AnimatePresence>
+        {showPrivacyModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setShowPrivacyModal(false)}
+            />
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative w-full max-w-2xl rounded-3xl overflow-hidden flex flex-col shadow-2xl border"
+              style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+            >
+              <div className="p-8 space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'var(--primary)' }}>
+                    <Shield className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Data & Privacy Policy</h3>
+                </div>
+                
+                <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-4" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>
+                  <p className="text-sm font-medium leading-relaxed">
+                    By proceeding with this interview, you acknowledge and agree that this session will be recorded and analyzed by our AI models.
+                  </p>
+                  <p className="text-sm font-medium leading-relaxed">
+                    <strong>1. Audio & Video Recording:</strong> Your camera and microphone data are captured solely for the purpose of this assessment. 
+                  </p>
+                  <p className="text-sm font-medium leading-relaxed">
+                    <strong>2. Code & Speech Analysis:</strong> Your spoken responses and code submissions are processed in real-time to generate a comprehensive evaluation report for the hiring team.
+                  </p>
+                  <p className="text-sm font-medium leading-relaxed">
+                    <strong>3. Data Retention:</strong> All recordings and transcriptions are stored securely and automatically deleted in accordance with our data retention policy (typically 90 days after the interview).
+                  </p>
+                  <p className="text-sm font-medium leading-relaxed">
+                    <strong>4. Proctored Environment:</strong> The platform will monitor tab switches and window focus to ensure technical integrity.
+                  </p>
+                </div>
+
+                <div className="pt-6 border-t flex justify-end" style={{ borderColor: 'var(--border-color)' }}>
+                  <button 
+                    onClick={() => setShowPrivacyModal(false)}
+                    className="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all hover:opacity-90"
+                    style={{ backgroundColor: 'var(--primary)', color: 'white' }}
+                  >
+                    I Understand
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Pledge of Honesty Modal */}
       <AnimatePresence>
