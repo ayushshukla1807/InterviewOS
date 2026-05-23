@@ -70,7 +70,7 @@ export default function CandidateDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020204] text-slate-200 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-indigo-500/30">
       
       {/* Background Ambience */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
@@ -81,14 +81,14 @@ export default function CandidateDashboard() {
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
         
         {/* Navigation & Header */}
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-white/5">
+        <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-[var(--border-color)]">
           <div className="flex items-center gap-6">
             <Link href="/" className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.3)]">
               <Shield className="w-7 h-7 text-white" />
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-black text-white tracking-tighter uppercase">Candidate Dashboard</h1>
+                <h1 className="text-3xl font-black text-[var(--text)] tracking-tighter uppercase">Candidate Dashboard</h1>
                 <div className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
                    <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest">Profile: Active</span>
@@ -101,7 +101,7 @@ export default function CandidateDashboard() {
           <div className="flex items-center gap-4">
             <button 
               onClick={clearHistory}
-              className="px-5 py-3 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+              className="px-5 py-3 border border-[var(--border-color)] rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-[var(--text)] hover:bg-[var(--hover-bg)] transition-all flex items-center gap-2"
             >
               <RefreshCw className="w-3.5 h-3.5" /> Clear History
             </button>
@@ -120,25 +120,25 @@ export default function CandidateDashboard() {
           {/* Left Panel: Profile & Quick Tryout */}
           <div className="lg:col-span-1 space-y-8">
             {/* Candidate Metadata */}
-            <div className="bg-[#09090b]/80 border border-white/5 rounded-3xl p-8 space-y-6 backdrop-blur-xl">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 space-y-6 backdrop-blur-xl">
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Account Profile</h2>
               
-              <div className="flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+              <div className="flex items-center gap-4 p-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-sm">
                 <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold text-indigo-400 uppercase text-lg">
                   {candidateContext?.name?.[0] || 'C'}
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-white">{candidateContext?.name || 'Guest Candidate'}</h3>
+                  <h3 className="text-sm font-black text-[var(--text)]">{candidateContext?.name || 'Guest Candidate'}</h3>
                   <p className="text-[10px] text-slate-500">{candidateContext?.email || 'no-email@hyrte.ai'}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-4 bg-[#111113]/50 border border-white/5 rounded-2xl">
+                <div className="p-4 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl">
                   <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Completed</span>
-                  <p className="text-2xl font-black text-white mt-1">{pastInterviews.length}</p>
+                  <p className="text-2xl font-black text-[var(--text)] mt-1">{pastInterviews.length}</p>
                 </div>
-                <div className="p-4 bg-[#111113]/50 border border-white/5 rounded-2xl">
+                <div className="p-4 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl">
                   <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Avg Score</span>
                   <p className="text-2xl font-black text-emerald-400 mt-1">
                     {pastInterviews.length > 0 
@@ -150,7 +150,7 @@ export default function CandidateDashboard() {
             </div>
 
             {/* Quick Track Selection */}
-            <div className="bg-[#09090b]/80 border border-white/5 rounded-3xl p-8 space-y-6 backdrop-blur-xl">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 space-y-6 backdrop-blur-xl shadow-sm">
               <div>
                 <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Quick Practice Simulator</h2>
                 <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Launch a generic 4-question AI coding interview instantly</p>
@@ -159,44 +159,44 @@ export default function CandidateDashboard() {
               <div className="space-y-3">
                 <Link 
                   href="/instructions?track=JS"
-                  className="w-full p-4 bg-[#111113] hover:bg-white/5 border border-white/5 hover:border-indigo-500/20 rounded-2xl flex items-center justify-between group transition-all"
+                  className="w-full p-4 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] hover:border-indigo-500/20 rounded-2xl flex items-center justify-between group transition-all"
                 >
                   <div className="flex items-center gap-3">
                     <Code2 className="w-5 h-5 text-indigo-400" />
                     <div className="text-left">
-                      <p className="text-xs font-black text-white">JavaScript & UI Stacks</p>
+                      <p className="text-xs font-black text-[var(--text)]">JavaScript & UI Stacks</p>
                       <p className="text-[9px] text-slate-500">Node, React internals, Optimization</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-white transition-all" />
+                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-indigo-400 transition-all" />
                 </Link>
 
                 <Link 
                   href="/instructions?track=DSA"
-                  className="w-full p-4 bg-[#111113] hover:bg-white/5 border border-white/5 hover:border-emerald-500/20 rounded-2xl flex items-center justify-between group transition-all"
+                  className="w-full p-4 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] hover:border-emerald-500/20 rounded-2xl flex items-center justify-between group transition-all"
                 >
                   <div className="flex items-center gap-3">
                     <BrainCircuit className="w-5 h-5 text-emerald-400" />
                     <div className="text-left">
-                      <p className="text-xs font-black text-white">Data Structures & Algo</p>
+                      <p className="text-xs font-black text-[var(--text)]">Data Structures & Algo</p>
                       <p className="text-[9px] text-slate-500">Big-O, DP, Graphs, Logic Trees</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-white transition-all" />
+                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-emerald-400 transition-all" />
                 </Link>
 
                 <Link 
                   href="/instructions?track=ADA"
-                  className="w-full p-4 bg-[#111113] hover:bg-white/5 border border-white/5 hover:border-violet-500/20 rounded-2xl flex items-center justify-between group transition-all"
+                  className="w-full p-4 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] hover:border-violet-500/20 rounded-2xl flex items-center justify-between group transition-all"
                 >
                   <div className="flex items-center gap-3">
                     <Briefcase className="w-5 h-5 text-violet-400" />
                     <div className="text-left">
-                      <p className="text-xs font-black text-white">Distributed Architectures</p>
+                      <p className="text-xs font-black text-[var(--text)]">Distributed Architectures</p>
                       <p className="text-[9px] text-slate-500">Scalability, caching, microservices</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-white transition-all" />
+                  <ArrowRight className="w-4 h-4 text-slate-600 group-hover:translate-x-1 group-hover:text-violet-400 transition-all" />
                 </Link>
               </div>
             </div>
@@ -206,12 +206,12 @@ export default function CandidateDashboard() {
           <div className="lg:col-span-2 space-y-8">
             
             {/* Past Interview Sessions */}
-            <div className="bg-[#09090b]/80 border border-white/5 rounded-3xl p-8 space-y-6 backdrop-blur-xl">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 space-y-6 backdrop-blur-xl shadow-sm">
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Completed Assessments</h2>
               
               <div className="space-y-4">
                 {pastInterviews.map((record, idx) => (
-                  <div key={record.id} className="p-6 bg-white/[0.01] border border-white/5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-white/10 transition-all">
+                  <div key={record.id} className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-indigo-500/30 transition-all">
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
                         <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 text-[8px] font-black uppercase tracking-widest rounded border border-indigo-500/20">
@@ -221,27 +221,27 @@ export default function CandidateDashboard() {
                           <Calendar className="w-3.5 h-3.5" /> {record.date}
                         </span>
                       </div>
-                      <h3 className="text-base font-black text-white">{record.jobTitle}</h3>
+                      <h3 className="text-base font-black text-[var(--text)]">{record.jobTitle}</h3>
                       
                       <div className="flex flex-wrap gap-2 pt-1">
                         {Object.entries(record.skills).map(([skill, val]: any) => (
-                          <span key={skill} className="text-[9px] bg-slate-900 border border-white/5 px-2.5 py-1 rounded-lg text-slate-400 font-bold uppercase">
-                            {skill}: <strong className="text-white">{val}%</strong>
+                          <span key={skill} className="text-[9px] bg-slate-900 border border-[var(--border-color)] px-2.5 py-1 rounded-lg text-slate-400 font-bold uppercase">
+                            {skill}: <strong className="text-[var(--text)]">{val}%</strong>
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-6 shrink-0 self-stretch md:self-auto justify-between border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
+                    <div className="flex items-center gap-6 shrink-0 self-stretch md:self-auto justify-between border-t border-[var(--border-color)] md:border-t-0 pt-4 md:pt-0">
                       <div className="text-right">
                         <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Merit Score</span>
-                        <p className="text-2xl font-black text-white">{record.score}%</p>
+                        <p className="text-2xl font-black text-[var(--text)]">{record.score}%</p>
                       </div>
 
                       <div className="flex gap-2">
                         <Link 
                           href={record.feedbackUrl}
-                          className="px-4 py-3 bg-[#111113] hover:bg-white/5 border border-white/5 rounded-xl text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5"
+                          className="px-4 py-3 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] rounded-xl text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5"
                         >
                           Feedback <ClipboardList className="w-3.5 h-3.5" />
                         </Link>
@@ -259,7 +259,7 @@ export default function CandidateDashboard() {
             </div>
 
             {/* AI Curated Learning Paths */}
-            <div className="bg-[#09090b]/80 border border-white/5 rounded-3xl p-8 space-y-6 backdrop-blur-xl">
+            <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 space-y-6 backdrop-blur-xl shadow-sm">
               <div>
                 <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Customized AI Learning Path</h2>
                 <p className="text-[9px] text-slate-500 mt-1 uppercase tracking-wider">Dynamic development checklist generated from your assessment metrics</p>
@@ -268,11 +268,11 @@ export default function CandidateDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 
                 {/* JS Roadmap */}
-                <div className="p-6 bg-white/[0.01] border border-white/5 rounded-2xl space-y-4">
+                <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4 text-indigo-400" />
-                      <h3 className="text-xs font-black text-white uppercase tracking-wider">React & Core V8 Engine</h3>
+                      <h3 className="text-xs font-black text-[var(--text)] uppercase tracking-wider">React & Core V8 Engine</h3>
                     </div>
                     <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/20 rounded">
                       In Progress
@@ -296,11 +296,11 @@ export default function CandidateDashboard() {
                 </div>
 
                 {/* System Roadmap */}
-                <div className="p-6 bg-white/[0.01] border border-white/5 rounded-2xl space-y-4">
+                <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-emerald-400" />
-                      <h3 className="text-xs font-black text-white uppercase tracking-wider">Scalability & Algorithms</h3>
+                      <h3 className="text-xs font-black text-[var(--text)] uppercase tracking-wider">Scalability & Algorithms</h3>
                     </div>
                     <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded">
                       Assigned
