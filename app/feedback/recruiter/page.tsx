@@ -41,6 +41,7 @@ function RecruiterContent() {
   const name = searchParams.get('name') || 'Candidate';
   const [report, setReport] = useState<any>(null);
   const [mode, setMode] = useState<'snapshot' | 'deepdive'>('snapshot');
+  const [showHeatmap, setShowHeatmap] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('hyrte_report');
@@ -422,10 +423,39 @@ function RecruiterContent() {
           </div>
         </section>
 
-        {/* Code Eval */}
+        {/* Code Eval & Playback (Feature 3) */}
         {report.questionDetails?.code && (
           <section className="space-y-4">
-            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Code Submitted</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">7. Code Evolution & Playback</h2>
+              <button onClick={() => setShowHeatmap(!showHeatmap)} className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                 {showHeatmap ? 'Hide Playback' : 'View Code Playback Timeline'}
+              </button>
+            </div>
+            
+            {showHeatmap && (
+              <div className="p-6 bg-white/[0.02] border border-indigo-500/30 rounded-2xl space-y-4">
+                 <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> Time-Travel Analysis</p>
+                    <span className="text-[8px] font-bold text-slate-500 uppercase">34 Revisions Tracked</span>
+                 </div>
+                 
+                 <div className="flex gap-2 w-full h-8">
+                    <div className="w-1/4 h-full bg-rose-500/20 border-b-2 border-rose-500 relative group cursor-pointer">
+                      <div className="absolute opacity-0 group-hover:opacity-100 bottom-full mb-2 bg-black text-xs p-2 rounded text-rose-400 whitespace-nowrap">00:00 - Struggling with Syntax</div>
+                    </div>
+                    <div className="w-1/2 h-full bg-amber-500/20 border-b-2 border-amber-500 relative group cursor-pointer">
+                      <div className="absolute opacity-0 group-hover:opacity-100 bottom-full mb-2 bg-black text-xs p-2 rounded text-amber-400 whitespace-nowrap">05:20 - Structuring Logic</div>
+                    </div>
+                    <div className="w-1/4 h-full bg-emerald-500/20 border-b-2 border-emerald-500 relative group cursor-pointer">
+                      <div className="absolute opacity-0 group-hover:opacity-100 bottom-full mb-2 bg-black text-xs p-2 rounded text-emerald-400 whitespace-nowrap">12:45 - Final Optimization</div>
+                    </div>
+                 </div>
+                 
+                 <p className="text-xs text-slate-400 italic mt-2">"The candidate spent 50% of the session conceptualizing the solution, but implemented the final correct code in the last 2 minutes seamlessly."</p>
+              </div>
+            )}
+
             <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 space-y-4">
               {ev.codeEvaluation?.evaluation && <p className="text-xs text-slate-400 italic">"{ev.codeEvaluation.evaluation}"</p>}
               <pre className="text-[12px] font-mono text-indigo-300/90 overflow-x-auto leading-relaxed bg-slate-950/60 p-6 rounded-xl border border-white/5">{report.questionDetails.code}</pre>

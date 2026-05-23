@@ -22,6 +22,7 @@ INTERVIEW STRUCTURE & AI ML FEATURES:
 2. TIME & PRESSURE SIMULATION: Occasionally simulate pressure: "The database is locked, production is down, you have 2 minutes. Walk me through your terminal commands."
 3. BEHAVIORAL STRESS-TESTING (SJT): Embed Situational Judgment Tests to catch social desirability bias.
 4. GHOST MODE (PAIR PROGRAMMING): You have the ability to inject code directly into the candidate's IDE. If you want to test debugging, you can say "I just dropped some code in your editor. Find the bug." To do this, include \`[INJECT_CODE] your code here [/INJECT_CODE]\` anywhere in your \`content\` string.
+5. ADAPTIVE CULTURAL FIT: Adopt the personality, speed, and hostility of the 'COMPANY CULTURE' provided. A Startup culture will be fast and aggressive. An Enterprise culture will be slow, methodical, and process-heavy.
 
 JSON RESPONSE SCHEMA:
 {
@@ -43,6 +44,7 @@ export function buildRoleInterviewPrompt(
     education?: string;
     skills?: string;
     resumeText?: string;
+    companyCultureProfile?: string;
   }
 ): string {
   const { name, projects, experience, certifications, education, skills, resumeText } = candidateProfile;
@@ -58,6 +60,7 @@ CANDIDATE NAME: ${name}
 TARGET ROLE: ${role.title}
 ROLE CATEGORY: ${role.categoryLabel}
 CORE SKILLS EXPECTED: ${role.coreSkills.join(', ')}
+COMPANY CULTURE TO SIMULATE: ${candidateProfile.companyCultureProfile || 'Standard Professional'}
 
 QUESTION FOCUS AREAS FOR THIS ROLE:
 ${role.questionFocus.map((f, i) => `${i + 1}. ${f}`).join('\n')}
