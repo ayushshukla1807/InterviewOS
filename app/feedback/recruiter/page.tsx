@@ -2,7 +2,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Shield, TrendingUp, AlertCircle, CheckCircle, ChevronLeft, Award, Zap, Clock, User, BarChart3, AlertTriangle, XCircle } from 'lucide-react';
+import { Shield, TrendingUp, AlertCircle, CheckCircle, ChevronLeft, Award, Zap, Clock, User, BarChart3, AlertTriangle, XCircle, ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 
 function ScoreBar({ value, color = 'indigo' }: { value: number; color?: string }) {
