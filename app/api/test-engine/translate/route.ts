@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     // Fallback blueprint so the UI can still be tested even if the Gemini API is overloaded (503)
     const mockBlueprint = {
       role: "Senior Software Engineer (Simulated)",
+      companyCultureProfile: "High-Pressure Tech Startup (Fast-paced, demanding)",
       weights: { cognitive: 40, behavioral: 40, communication: 10, integrity: 10 },
       modules: [
         {

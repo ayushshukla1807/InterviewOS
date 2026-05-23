@@ -12,6 +12,7 @@ Analyze the inputs and return a strictly valid JSON object exactly matching this
 
 {
   "role": "string (The precise role name extracted or inferred)",
+  "companyCultureProfile": "string (Infer the company's culture from the JD. e.g., 'Aggressive Startup', 'Corporate Enterprise', 'Research & Academic')",
   "evaluationWeights": {
     "cognitive": "number (0-100)",
     "communication": "number (0-100)",
@@ -60,11 +61,8 @@ Analyze the inputs and return a strictly valid JSON object exactly matching this
   }
 }
 
-INSTRUCTIONS:
-1. Translate the JD deeply: If it's "Sales", weight communication/integrity heavily. If it's "Developer", weight cognitive/logic heavily.
-2. Question Intelligence: Every cognitive question MUST have a 'trapLogic' to detect guessing.
-3. SJT Emphasis: Generate at least 2 high-pressure Situational Judgment Test (SJT) scenarios designed to catch social desirability bias (candidates choosing what sounds good vs. what is honest).
-4. No Generic Questions: Every question must feel custom-tailored to the specific industry and role described in the JD.
-5. Generate a total of exactly 4 modules/questions (mix of cognitive and behavioral) unless instructed otherwise.
+5. Generate a total of exactly 4 modules/questions (mix of cognitive and behavioral).
+6. ADAPTIVE CULTURAL FIT (Feature 7): Map the 'companyCultureProfile' based on keywords in the JD. The AI interviewer will use this to adapt its hostility and speed.
+7. SURPRISE NEGOTIATION MODULE (Feature 9): The FINAL module you generate MUST be of type 'behavioral' with title 'Surprise Negotiation & EQ'. The scenario must simulate an awkward salary negotiation, a sudden rescinded offer, or a toxic client confrontation to test pure EQ and assertiveness.
 `;
 
