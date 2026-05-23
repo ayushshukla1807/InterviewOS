@@ -466,6 +466,7 @@ export default function RecruiterDashboard() {
                         <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] font-black text-emerald-400 uppercase tracking-widest">6x Cheaper</div>
                         <div className="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">2x Faster</div>
                      </div>
+              </div>
                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
                         <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
                            <p className="text-4xl font-black text-white tracking-tighter">20,000+</p>
@@ -583,7 +584,7 @@ export default function RecruiterDashboard() {
                       <User className="w-5 h-5 text-indigo-400" />
                       <h3 className="text-lg font-black text-white tracking-tight">Custom AI Interviewer Studio</h3>
                    </div>
-                   <p className="text-xs font-medium text-slate-400">Clone your best interviewer's persona and voice for the AI avatars.</p>
+                   <p className="text-xs font-medium text-slate-400">Clone your best interviewer&apos;s persona and voice for the AI avatars.</p>
                    <div className="flex items-center gap-4">
                       <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/20 border-dashed">
                          <Plus className="w-6 h-6 text-slate-400" />
