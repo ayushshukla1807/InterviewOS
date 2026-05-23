@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Plus, Copy, CheckCircle, Briefcase, FileText, User, ShieldAlert, ArrowRight, Zap, Target, Search, Filter, Headphones } from 'lucide-react';
+import { Shield, Plus, Copy, CheckCircle, Briefcase, FileText, User, ShieldAlert, ArrowRight, Zap, Target, Search, Filter, Headphones, Users, Layers, BarChart, Link2, DownloadCloud } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RecruiterDashboard() {
@@ -12,6 +12,7 @@ export default function RecruiterDashboard() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [supportInsights, setSupportInsights] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'candidates' | 'templates' | 'integrations' | 'analytics'>('candidates');
 
   useEffect(() => {
     const savedJobs = localStorage.getItem('hyrte_jobs');
@@ -141,6 +142,22 @@ export default function RecruiterDashboard() {
           );
         })()}
 
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-2 border-b border-white/5 pb-4 mb-8 overflow-x-auto">
+          {[
+            { id: 'candidates', label: 'Pipeline', icon: <Users className="w-4 h-4" /> },
+            { id: 'templates', label: 'Template Library (3000+)', icon: <Layers className="w-4 h-4" /> },
+            { id: 'analytics', label: 'ROI & Analytics', icon: <BarChart className="w-4 h-4" /> },
+            { id: 'integrations', label: 'ATS Integrations', icon: <Link2 className="w-4 h-4" /> },
+          ].map(tab => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
+              className={`px-6 py-3 rounded-xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab.id ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'}`}>
+              {tab.icon} {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'candidates' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Sidebar Area */}
@@ -385,6 +402,146 @@ export default function RecruiterDashboard() {
             </div>
           </div>
         </div>
+        )}
+
+        {activeTab === 'templates' && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tighter">AI Interview Templates</h2>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">Built on 3000+ Industry Questions · Tailored for every Role</p>
+                </div>
+                <button className="px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-white transition-all flex items-center gap-2">
+                   <Plus className="w-3.5 h-3.5" /> Create Custom
+                </button>
+             </div>
+             
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { role: 'AI Engineer', group: 'Tech / IT', color: 'from-blue-500 to-indigo-600' },
+                  { role: 'Software Engineer 1', group: 'Tech / IT', color: 'from-indigo-500 to-violet-600' },
+                  { role: 'BDE (Sales)', group: 'Sales', color: 'from-emerald-500 to-teal-600' },
+                  { role: 'Performance Marketer', group: 'Marketing', color: 'from-amber-500 to-orange-600' },
+                  { role: 'Product Manager', group: 'Product', color: 'from-fuchsia-500 to-pink-600' },
+                  { role: 'Growth Associate', group: 'Marketing', color: 'from-rose-500 to-red-600' },
+                  { role: 'Customer Service', group: 'Sales', color: 'from-cyan-500 to-blue-600' },
+                  { role: 'Data Analyst', group: 'Tech / IT', color: 'from-violet-500 to-purple-600' },
+                ].map((tpl, i) => (
+                  <div key={i} className="group bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 rounded-3xl p-6 transition-all duration-300 relative overflow-hidden">
+                     <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${tpl.color} opacity-10 blur-[40px] group-hover:opacity-30 transition-opacity`} />
+                     <div className="flex flex-col h-full justify-between gap-8 relative z-10">
+                        <div>
+                           <div className="px-2.5 py-1 bg-white/5 rounded-md inline-block text-[7px] font-black text-slate-400 uppercase tracking-widest mb-4">
+                              {tpl.group}
+                           </div>
+                           <h3 className="text-sm font-black text-white uppercase tracking-tight">{tpl.role}</h3>
+                        </div>
+                        <button onClick={() => { setTitle(tpl.role); setDescription(`Standard ${tpl.role} requirements and evaluation matrix.`); setActiveTab('candidates'); window.scrollTo(0, 0); }} className="w-full py-3 bg-white/5 hover:bg-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-300 hover:text-white transition-all">
+                           Use Template
+                        </button>
+                     </div>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
+
+        {activeTab === 'analytics' && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="text-center space-y-4 max-w-2xl mx-auto py-12">
+                <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Fewer Steps. Faster Decisions.</h2>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">What our numbers say</p>
+                <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                   <div className="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-400 uppercase tracking-widest">9x Lesser Manpower</div>
+                   <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] font-black text-emerald-400 uppercase tracking-widest">6x Cheaper</div>
+                   <div className="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">2x Faster</div>
+                </div>
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                   <p className="text-4xl font-black text-white tracking-tighter">20,000+</p>
+                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Interviews</p>
+                </div>
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                   <p className="text-4xl font-black text-emerald-400 tracking-tighter">60%</p>
+                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Reduction in Cost</p>
+                </div>
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                   <p className="text-4xl font-black text-indigo-400 tracking-tighter">80+</p>
+                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Parameter Scoring</p>
+                </div>
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                   <p className="text-4xl font-black text-fuchsia-400 tracking-tighter">115+</p>
+                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Candidates Hired</p>
+                </div>
+             </div>
+             
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 space-y-6">
+                   <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Without HYRTE</h3>
+                   <div className="space-y-4">
+                      <div className="flex justify-between text-xs font-bold text-slate-400"><span className="uppercase tracking-widest">Resume Shortlist</span> <span>1 day</span></div>
+                      <div className="flex justify-between text-xs font-bold text-slate-400"><span className="uppercase tracking-widest">Screening Call</span> <span>4 days</span></div>
+                      <div className="flex justify-between text-xs font-bold text-rose-400"><span className="uppercase tracking-widest">Round 1 (60 Interviews)</span> <span>12 days</span></div>
+                      <div className="flex justify-between text-xs font-bold text-slate-400"><span className="uppercase tracking-widest">Further Rounds</span> <span>10 days</span></div>
+                      <div className="pt-4 border-t border-white/5 flex justify-between text-sm font-black text-white"><span className="uppercase tracking-widest">Total TAT</span> <span>29 DAYS</span></div>
+                   </div>
+                </div>
+                <div className="bg-indigo-600/[0.05] border border-indigo-500/20 rounded-3xl p-8 space-y-6">
+                   <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">With HYRTE</h3>
+                   <div className="space-y-4">
+                      <div className="flex justify-between text-xs font-bold text-slate-300"><span className="uppercase tracking-widest">Resume Shortlist</span> <span>1 day</span></div>
+                      <div className="flex justify-between text-xs font-bold text-emerald-400"><span className="uppercase tracking-widest">Screening + Round 1</span> <span>1 day</span></div>
+                      <div className="flex justify-between text-xs font-bold text-slate-300"><span className="uppercase tracking-widest">Further Rounds</span> <span>10 days</span></div>
+                      <div className="flex justify-between text-xs font-bold text-slate-300"><span className="uppercase tracking-widest">Offer & Negotiation</span> <span>2 days</span></div>
+                      <div className="pt-4 border-t border-indigo-500/20 flex justify-between text-sm font-black text-emerald-400"><span className="uppercase tracking-widest">Total TAT</span> <span>14 DAYS</span></div>
+                   </div>
+                </div>
+             </div>
+          </div>
+        )}
+
+        {activeTab === 'integrations' && (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+             <div className="text-center space-y-4 max-w-2xl mx-auto py-12">
+                <h2 className="text-3xl font-black text-white uppercase tracking-tighter">ATS Integrations</h2>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">Integrate Effortlessly with your Hiring Workflow</p>
+             </div>
+
+             <div className="flex items-center justify-center gap-12 py-12 border-y border-white/5 mb-12">
+                <div className="px-8 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-xl font-black tracking-tight text-white shadow-[0_0_30px_rgba(255,255,255,0.05)]">HYRTE</div>
+                <div className="flex flex-col items-center gap-2">
+                   <ArrowRight className="w-6 h-6 text-indigo-500" />
+                   <ArrowRight className="w-6 h-6 text-emerald-500 rotate-180" />
+                </div>
+                <div className="px-8 py-4 bg-indigo-600/10 border border-indigo-500/30 rounded-2xl text-xl font-black tracking-tight text-indigo-400 shadow-[0_0_30px_rgba(99,102,241,0.1)]">Your ATS</div>
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[
+                  { name: 'Workday', status: 'Connected', icon: 'W' },
+                  { name: 'Greenhouse', status: 'Connect', icon: 'G' },
+                  { name: 'Lever', status: 'Connect', icon: 'L' },
+                  { name: 'Ashby', status: 'Connect', icon: 'A' },
+                  { name: 'BambooHR', status: 'Connect', icon: 'B' },
+                  { name: 'SmartRecruiters', status: 'Connect', icon: 'S' },
+                ].map((ats, i) => (
+                  <div key={i} className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 flex items-center justify-between group hover:border-white/20 transition-all">
+                     <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-xl font-black text-white">
+                           {ats.icon}
+                        </div>
+                        <h3 className="text-sm font-black text-white tracking-tight">{ats.name}</h3>
+                     </div>
+                     <button className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${ats.status === 'Connected' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'}`}>
+                        {ats.status}
+                     </button>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
       </div>
     </div>
   );
