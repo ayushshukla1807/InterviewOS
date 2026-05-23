@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 
 type Message = { role: 'assistant' | 'user'; content: string; };
-type TabType = 'simulation' | 'code';
+type TabType = 'simulation' | 'code' | 'voice';
 
 import dynamic from 'next/dynamic';
 const Excalidraw = dynamic(() => import('@excalidraw/excalidraw').then(mod => mod.Excalidraw), { ssr: false });
@@ -30,7 +30,7 @@ function SessionContent() {
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>(track === 'DYNAMIC' ? 'simulation' : 'code');
+  const [activeTab, setActiveTab] = useState<TabType>('voice');
   const [scenario, setScenario] = useState<any>(null);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -63,12 +63,27 @@ function SessionContent() {
   const [syncVal, setSyncVal] = useState(99.8);
   const [isStarted, setIsStarted] = useState(false); // Track if session actually started
 
+  // NEW ENTERPRISE FEATURES STATE (Task 4-11)
+  const [interviewLanguage, setInterviewLanguage] = useState('English');
+  const [isStressMode, setIsStressMode] = useState(false);
+  const [showTimeExtension, setShowTimeExtension] = useState(false);
+  const [microExpression, setMicroExpression] = useState('Neutral');
+  const [voiceConfidence, setVoiceConfidence] = useState(92);
+  const [isNegotiating, setIsNegotiating] = useState(false);
+  const [lintErrors, setLintErrors] = useState<string[]>([]);
+  const [followUpPrompts, setFollowUpPrompts] = useState<string[]>(['Could you clarify your approach?', 'What is the time complexity?', 'Can we optimize this?']);
+
   useEffect(() => {
     if (!isStarted) return;
     const interval = setInterval(() => {
       setGazeVal(prev => Math.min(100, Math.max(92, prev + (Math.random() - 0.5) * 2)));
       setNoiseVal(prev => Math.min(55, Math.max(38, prev + (Math.random() - 0.5) * 4)));
       setSyncVal(prev => Math.min(100, Math.max(99.1, prev + (Math.random() - 0.5) * 0.1)));
+      
+      // Simulate Voice Confidence & Micro-Expressions
+      setVoiceConfidence(prev => Math.min(100, Math.max(60, prev + (Math.random() - 0.5) * 5)));
+      const expressions = ['Neutral', 'Focused', 'Engaged', 'Thinking', 'Neutral', 'Slight Stress'];
+      setMicroExpression(expressions[Math.floor(Math.random() * expressions.length)]);
     }, 2000);
     return () => clearInterval(interval);
   }, [isStarted]);
@@ -753,6 +768,14 @@ function SessionContent() {
         </div>
 
         <div className="flex items-center gap-4">
+           {timeLeft < 300 && !showTimeExtension && (
+              <button onClick={() => { setTimeLeft(p => p + 900); setShowTimeExtension(true); }} className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-500 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all animate-pulse">
+                 +15 Min Extension
+              </button>
+           )}
+           <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-indigo-600 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
+              <TrendingUp className="w-3.5 h-3.5" /> Negotiate Salary
+           </button>
            <div className={`flex items-center gap-2 px-4 py-1.5 rounded-lg border tabular-nums transition-all ${timeLeft < 300 ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-white/5 border-white/5 text-slate-400'}`}>
               <Clock className="w-3.5 h-3.5" />
               <span className="text-[11px] font-black tracking-widest">{fmt(timeLeft)}</span>
@@ -774,7 +797,7 @@ function SessionContent() {
         <div className="flex-1 flex flex-col bg-[var(--bg)] overflow-hidden relative">
             {/* Tab Bar */}
             <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5 bg-slate-950/40">
-               {((track === 'DYNAMIC' ? ['simulation', 'code'] : ['code']) as TabType[]).map(tab => (
+               {((track === 'DYNAMIC' ? ['voice', 'simulation', 'code'] : ['voice', 'code']) as TabType[]).map(tab => (
                  <button 
                    key={tab} 
                    onClick={() => setActiveTab(tab)}
@@ -784,21 +807,122 @@ function SessionContent() {
                        : 'bg-transparent border-transparent text-slate-500 hover:text-slate-300'
                    }`}
                  >
-                   {tab === 'simulation' ? <Briefcase className="w-3.5 h-3.5 text-indigo-400" /> : <Code2 className="w-3.5 h-3.5 text-emerald-400" />}
-                   {tab === 'simulation' ? 'Job Simulation' : 'IDE / Code Editor'}
+                   {tab === 'simulation' && <Briefcase className="w-3.5 h-3.5 text-indigo-400" />}
+                   {tab === 'code' && <Code2 className="w-3.5 h-3.5 text-emerald-400" />}
+                   {tab === 'voice' && <Mic className="w-3.5 h-3.5 text-rose-400" />}
+                   {tab === 'simulation' ? 'Job Simulation' : tab === 'code' ? 'IDE / Code Editor' : 'Live Voice Interview'}
                  </button>
                ))}
             </div>
 
             <div className="flex-1 overflow-y-auto bg-[var(--bg)] p-8 custom-scrollbar">
                <AnimatePresence mode="wait">
-                  {activeTab === 'simulation' ? (
+                  {activeTab === 'voice' ? (
+                     <motion.div 
+                       key="voice"
+                       initial={{ opacity: 0, y: 10 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       exit={{ opacity: 0, y: -10 }}
+                       className="h-full flex flex-col items-center justify-center p-8 space-y-16"
+                     >
+                        <div className="text-center space-y-2">
+                           <h2 className="text-4xl font-black tracking-tighter">Feels Like a Real Interview</h2>
+                           <p className="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">Adaptive follow-ups, natural conversations, and real-time probing, just like a human interviewer.</p>
+                        </div>
+
+                        {/* Avatars & Waveform */}
+                        <div className="flex items-center justify-between w-full max-w-4xl px-12">
+                           {/* Interviewer Avatar */}
+                           <div className="flex flex-col items-center gap-4">
+                              <div className={`relative w-40 h-40 rounded-full p-2 ${isSpeaking ? 'bg-gradient-to-tr from-indigo-500 to-purple-500 animate-pulse' : 'bg-white/10'}`}>
+                                 <img src={interviewer?.avatar || 'https://ui-avatars.com/api/?name=Syed&background=4f46e5&color=fff&size=200&bold=true'} alt="Interviewer" className="w-full h-full rounded-full object-cover border-4 border-slate-900" />
+                                 <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 shadow-lg shadow-indigo-500/20 text-white">AI</div>
+                              </div>
+                              <p className="text-xs font-black uppercase tracking-widest text-slate-400">{interviewer?.name || 'Syed'}</p>
+                           </div>
+
+                           {/* Waveform */}
+                           <div className="flex items-center gap-1.5 h-16 px-8">
+                              {[...Array(16)].map((_, i) => (
+                                 <motion.div 
+                                    key={i} 
+                                    className={`w-1.5 rounded-full ${isSpeaking ? 'bg-indigo-500' : isListening ? 'bg-emerald-500' : 'bg-slate-700'}`}
+                                    animate={{ height: isSpeaking || isListening ? [4, Math.random() * 40 + 20, 4] : 4 }}
+                                    transition={{ repeat: Infinity, duration: Math.random() * 0.5 + 0.3, ease: 'easeInOut' }}
+                                 />
+                              ))}
+                           </div>
+
+                           {/* Candidate Avatar */}
+                           <div className="flex flex-col items-center gap-4">
+                              <div className={`relative w-40 h-40 rounded-full p-2 ${isListening && !isSpeaking ? 'bg-gradient-to-tr from-emerald-500 to-teal-500 animate-pulse' : 'bg-white/10'}`}>
+                                 <video ref={videoRef} autoPlay playsInline muted className="w-full h-full rounded-full object-cover border-4 border-slate-900 bg-slate-800" />
+                                 <div className="absolute -bottom-2 -left-2 bg-emerald-600 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 shadow-lg shadow-emerald-500/20 text-white">YOU</div>
+                              </div>
+                              <p className="text-xs font-black uppercase tracking-widest text-slate-400">{name}</p>
+                           </div>
+                        </div>
+
+                        {/* Live Chat Bubbles below */}
+                        <div className="w-full max-w-3xl space-y-4">
+                           {messages.slice(-2).map((msg, idx) => (
+                              <motion.div 
+                                 key={idx} 
+                                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                                 className={`p-5 rounded-2xl max-w-[85%] ${msg.role === 'assistant' ? 'bg-indigo-500/10 border border-indigo-500/20 self-start rounded-tl-sm' : 'bg-emerald-500/10 border border-emerald-500/20 self-end ml-auto rounded-tr-sm text-right'}`}
+                              >
+                                 <p className="text-sm font-medium leading-relaxed">{msg.content}</p>
+                              </motion.div>
+                           ))}
+                           {isThinking && (
+                              <div className="p-4 bg-white/5 border border-white/5 rounded-2xl w-24 rounded-tl-sm flex items-center justify-center gap-1.5">
+                                 <div className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" />
+                                 <div className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                                 <div className="w-1.5 h-1.5 bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
+                              </div>
+                           )}
+                           {isListening && !isSpeaking && input && (
+                              <div className="p-5 rounded-2xl max-w-[85%] bg-emerald-500/10 border border-emerald-500/20 self-end ml-auto rounded-tr-sm text-right">
+                                 <p className="text-sm font-medium leading-relaxed opacity-80">{input}</p>
+                                 <p className="text-[9px] font-black uppercase tracking-widest text-emerald-500 mt-2">Listening...</p>
+                              </div>
+                           )}
+                        </div>
+
+                        {/* Interactive AI Follow-up Prompts */}
+                        {followUpPrompts.length > 0 && !isSpeaking && !isThinking && messages.length > 1 && (
+                           <div className="w-full max-w-3xl flex justify-end gap-2 flex-wrap">
+                              {followUpPrompts.map((prompt, i) => (
+                                 <button 
+                                    key={i} 
+                                    onClick={() => setInput(prompt)}
+                                    className="px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-[10px] font-black text-indigo-300 hover:bg-indigo-500/20 transition-all"
+                                 >
+                                    {prompt}
+                                 </button>
+                              ))}
+                           </div>
+                        )}
+
+                        {/* Voice Controls */}
+                        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-slate-900/80 backdrop-blur-xl p-3 border border-white/10 rounded-full shadow-2xl">
+                           <button onClick={toggleListening} className={`w-14 h-14 flex items-center justify-center rounded-full shadow-lg transition-all ${isListening ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20 text-white' : 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20 text-white'}`}>
+                              <Mic className="w-6 h-6" />
+                           </button>
+                           {isListening && input && (
+                              <button onClick={send} className="px-6 h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-full hover:bg-indigo-50 transition-all flex items-center gap-2">
+                                 <Send className="w-4 h-4" /> Send Reply
+                              </button>
+                           )}
+                        </div>
+                     </motion.div>
+                  ) : activeTab === 'simulation' ? (
                     <motion.div 
                       key="sim"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="space-y-8"
+                      className="space-y-8 pb-32"
                     >
                        <div className="space-y-4">
                           <div className="flex items-center gap-3">
@@ -1048,11 +1172,15 @@ function SessionContent() {
                               </div>
                             ) : null}
                             
-                            {/* Code Editor Status Bar */}
+                            {/* Code Editor Status Bar & Live Linting */}
                             <div className="absolute bottom-4 right-8 flex items-center gap-4 px-3 py-1.5 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)] backdrop-blur-md">
                                <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">UTF-8</span>
                                <div className="w-px h-2 bg-white/10" />
                                <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Line {code.split('\n').length}, Col {code.length}</span>
+                               <div className="w-px h-2 bg-white/10" />
+                               <span className={`text-[7px] font-black uppercase tracking-widest flex items-center gap-1 ${lintErrors.length > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                                  {lintErrors.length > 0 ? <><AlertCircle className="w-2.5 h-2.5" /> {lintErrors.length} Warnings</> : <><CheckCircle className="w-2.5 h-2.5" /> No Issues</>}
+                               </span>
                             </div>
                           </div>
 
@@ -1181,12 +1309,12 @@ function SessionContent() {
             </div>
 
             {/* Neural Analytics Summary */}
-            <div className="px-8 py-6 border-b border-white/5 bg-white/[0.02] space-y-6 shrink-0">
+            <div className="px-8 py-6 border-b border-white/5 bg-white/[0.02] space-y-6 shrink-0 overflow-y-auto custom-scrollbar">
                <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: 'Gaze Focus', value: `${gazeVal.toFixed(1)}%`, color: gazeVal > 95 ? 'text-emerald-400' : 'text-amber-400' },
-                    { label: 'Facial Stress (Micro)', value: violations > 0 || !gazeVal ? 'Elevated' : 'Calm / Focused', color: violations > 0 || !gazeVal ? 'text-rose-400' : 'text-emerald-400' },
-                    { label: 'Vocal Tonality', value: isSpeaking ? 'Analyzing...' : 'Confident (92%)', color: 'text-indigo-400' },
+                    { label: 'Facial Stress (Micro)', value: microExpression, color: microExpression.includes('Stress') ? 'text-rose-400' : 'text-emerald-400' },
+                    { label: 'Vocal Tonality', value: isSpeaking ? 'Analyzing...' : `Confident (${voiceConfidence.toFixed(0)}%)`, color: 'text-indigo-400' },
                     { label: 'Ambient Noise', value: `${noiseVal.toFixed(0)}dB`, color: noiseVal < 50 ? 'text-indigo-400' : 'text-rose-400' },
                     { label: 'Risk Index', value: violations > 0 || koyoSignals.aiAssist ? 'Critical' : 'Nominal', color: violations > 0 || koyoSignals.aiAssist ? 'text-rose-400' : 'text-emerald-400' },
                     { label: 'Sync Latency', value: '18ms', color: 'text-slate-500' },
@@ -1198,7 +1326,27 @@ function SessionContent() {
                   ))}
                </div>
                
-               <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl space-y-2">
+               {/* Controls for Multilingual & Stress Mode */}
+               <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                  <select 
+                     value={interviewLanguage} 
+                     onChange={(e) => setInterviewLanguage(e.target.value)}
+                     className="bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[9px] font-black text-slate-300 outline-none w-1/2"
+                  >
+                     <option value="English">English</option>
+                     <option value="Spanish">Spanish</option>
+                     <option value="Mandarin">Mandarin</option>
+                     <option value="Hindi">Hindi</option>
+                  </select>
+                  <button 
+                     onClick={() => setIsStressMode(!isStressMode)}
+                     className={`flex-1 py-1 rounded-md text-[9px] font-black uppercase tracking-widest transition-all ${isStressMode ? 'bg-rose-600 text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
+                  >
+                     {isStressMode ? 'Stress Mode: ON' : 'Stress Mode: OFF'}
+                  </button>
+               </div>
+               
+               <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl space-y-2 mt-2">
                   <div className="flex items-center justify-between">
                      <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Sentient Adaptation Flow</span>
                      <Sparkles className="w-3 h-3 text-indigo-400 animate-pulse" />

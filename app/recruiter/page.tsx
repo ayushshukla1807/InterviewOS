@@ -235,7 +235,17 @@ export default function RecruiterDashboard() {
           <div className="lg:col-span-8 space-y-10">
             {/* Search & Filter Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-               <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Hiring Intelligence Tracker</h2>
+               <div className="flex items-center gap-4">
+                  <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Hiring Intelligence Tracker</h2>
+                  {/* Feature 16: Real-Time Bias Mitigation Filters */}
+                  <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full">
+                     <Shield className="w-3 h-3 text-indigo-400" />
+                     <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Bias Mitigation: Active</span>
+                     <div className="w-6 h-3 bg-indigo-500/20 rounded-full relative ml-2">
+                        <div className="absolute top-0.5 right-0.5 w-2 h-2 bg-indigo-500 rounded-full" />
+                     </div>
+                  </div>
+               </div>
                <div className="flex items-center gap-3">
                   <div className="relative group">
                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
@@ -451,31 +461,56 @@ export default function RecruiterDashboard() {
              <div className="text-center space-y-4 max-w-2xl mx-auto py-12">
                 <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Fewer Steps. Faster Decisions.</h2>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em]">What our numbers say</p>
-                <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-                   <div className="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-400 uppercase tracking-widest">9x Lesser Manpower</div>
-                   <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] font-black text-emerald-400 uppercase tracking-widest">6x Cheaper</div>
-                   <div className="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">2x Faster</div>
-                </div>
-             </div>
-
-             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
-                   <p className="text-4xl font-black text-white tracking-tighter">20,000+</p>
-                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Interviews</p>
-                </div>
-                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
-                   <p className="text-4xl font-black text-emerald-400 tracking-tighter">60%</p>
-                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Reduction in Cost</p>
-                </div>
-                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
-                   <p className="text-4xl font-black text-indigo-400 tracking-tighter">80+</p>
-                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Parameter Scoring</p>
-                </div>
-                <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
-                   <p className="text-4xl font-black text-fuchsia-400 tracking-tighter">115+</p>
-                   <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Candidates Hired</p>
-                </div>
-             </div>
+                     <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                        <div className="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-400 uppercase tracking-widest">9x Lesser Manpower</div>
+                        <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] font-black text-emerald-400 uppercase tracking-widest">6x Cheaper</div>
+                        <div className="px-4 py-2 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">2x Faster</div>
+                     </div>
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+                        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                           <p className="text-4xl font-black text-white tracking-tighter">20,000+</p>
+                           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Interviews</p>
+                        </div>
+                        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                           <p className="text-4xl font-black text-emerald-400 tracking-tighter">60%</p>
+                           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Reduction in Cost</p>
+                        </div>
+                        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                           <p className="text-4xl font-black text-indigo-400 tracking-tighter">80+</p>
+                           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Parameter Scoring</p>
+                        </div>
+                        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 text-center space-y-2">
+                           <p className="text-4xl font-black text-fuchsia-400 tracking-tighter">115+</p>
+                           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Candidates Hired</p>
+                        </div>
+                     </div>
+                     
+                     {/* Feature 15: Interview Drop-Off Analytics */}
+                     <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 mt-6">
+                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Pipeline Drop-Off Analytics</h3>
+                        <div className="flex flex-col md:flex-row items-center gap-6">
+                           <div className="flex-1 space-y-4 w-full">
+                              {[
+                                { step: 'Applied', count: 1240, percent: 100, color: 'bg-slate-500' },
+                                { step: 'Assessment Started', count: 980, percent: 79, color: 'bg-indigo-500' },
+                                { step: 'Assessment Completed', count: 620, percent: 50, color: 'bg-emerald-500' },
+                                { step: 'Shortlisted', count: 110, percent: 8, color: 'bg-amber-500' }
+                              ].map((stage, i) => (
+                                 <div key={i} className="flex items-center gap-4">
+                                    <div className="w-32 text-right text-[10px] font-black uppercase tracking-widest text-slate-400">{stage.step}</div>
+                                    <div className="flex-1 h-3 bg-white/5 rounded-full overflow-hidden">
+                                       <div className={`h-full ${stage.color}`} style={{ width: `${stage.percent}%` }} />
+                                    </div>
+                                    <div className="w-16 text-[10px] font-black text-white">{stage.percent}%</div>
+                                 </div>
+                              ))}
+                           </div>
+                           <div className="w-48 h-48 rounded-full border-4 border-white/5 flex flex-col items-center justify-center shrink-0">
+                              <p className="text-3xl font-black text-rose-400">21%</p>
+                              <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-1 text-center">Avg Drop-off Rate<br/>Before Completion</p>
+                           </div>
+                        </div>
+                     </div>
              
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 space-y-6">
@@ -539,6 +574,49 @@ export default function RecruiterDashboard() {
                      </button>
                   </div>
                 ))}
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
+                {/* Feature 19: Custom Company Avatar Builder */}
+                <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-3xl p-8 space-y-6">
+                   <div className="flex items-center gap-3 mb-2">
+                      <User className="w-5 h-5 text-indigo-400" />
+                      <h3 className="text-lg font-black text-white tracking-tight">Custom AI Interviewer Studio</h3>
+                   </div>
+                   <p className="text-xs font-medium text-slate-400">Clone your best interviewer's persona and voice for the AI avatars.</p>
+                   <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/20 border-dashed">
+                         <Plus className="w-6 h-6 text-slate-400" />
+                      </div>
+                      <div className="flex-1 space-y-2">
+                         <button className="w-full py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg">
+                            Upload Voice Sample
+                         </button>
+                         <button className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                            Configure Personality
+                         </button>
+                      </div>
+                   </div>
+                </div>
+
+                {/* Feature 18: Automated Reference Checking Portal */}
+                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-3xl p-8 space-y-6">
+                   <div className="flex items-center gap-3 mb-2">
+                      <CheckCircle className="w-5 h-5 text-emerald-400" />
+                      <h3 className="text-lg font-black text-white tracking-tight">Automated Reference Checks</h3>
+                   </div>
+                   <p className="text-xs font-medium text-slate-400">Trigger AI voice-calls or emails to automatically verify candidate references via our integrations.</p>
+                   <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                         <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Email Verification</span>
+                         <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded text-[8px] font-black uppercase">Active</span>
+                      </div>
+                      <div className="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                         <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Voice Call AI Verification</span>
+                         <button className="px-3 py-1 bg-white/10 text-slate-300 hover:text-white rounded text-[8px] font-black uppercase transition-all">Enable</button>
+                      </div>
+                   </div>
+                </div>
              </div>
           </div>
         )}
