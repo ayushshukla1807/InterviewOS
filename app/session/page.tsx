@@ -116,6 +116,10 @@ function SessionContent() {
   const [execSuccess, setExecSuccess] = useState<boolean | null>(null);
   const [isCodeRunning, setIsCodeRunning] = useState(false);
 
+  const triggerCodingQuestionAnnouncement = () => {
+    speak("We have shared a coding question on the right panel. Please read it carefully and write your solution in the editor.");
+  };
+
   const handleRunCode = async () => {
     const codeToRun = activeEditorTab === 'scratch' ? scratchpad : code;
     if (!codeToRun.trim()) return;
@@ -288,8 +292,20 @@ function SessionContent() {
     }
   }, [isMounted]);
 
+  const isTerminalSession = status === 'completed' || status === 'error';
   const question = questions[currentQ];
 
+  useEffect(() => {
+    // Only trigger once when the first question loads and starts
+    if (question && !isGeneratingQuestions && isStarted && timeLeft > 0) {
+      if (!window.sessionStorage.getItem('hyrte_coding_announced')) {
+        setTimeout(() => triggerCodingQuestionAnnouncement(), 2000);
+        window.sessionStorage.setItem('hyrte_coding_announced', 'true');
+      }
+    }
+  }, [question, isGeneratingQuestions, isStarted, timeLeft]);
+
+  // Handle Fullscreen & Anti-Cheating
   useEffect(() => {
     if (isMounted && question && messages.length === 0 && interviewer) {
       const jobTitle = dynamicContext?.jobTitle ? ` for the ${dynamicContext.jobTitle} position` : '';
@@ -394,6 +410,8 @@ function SessionContent() {
   const fmt = (s: number) => `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 
   const [isListening, setIsListening] = useState(false);
+  const isListeningRef = useRef(false);
+  useEffect(() => { isListeningRef.current = isListening; }, [isListening]);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const recognitionRef = useRef<any>(null);
@@ -431,7 +449,7 @@ function SessionContent() {
       
       // Auto-restart if it stops unexpectedly while we still want to be listening
       recognitionRef.current.onend = () => {
-        if (isListening) {
+        if (isListeningRef.current) {
            try { recognitionRef.current.start(); } catch (e) {}
         }
       };
@@ -457,16 +475,16 @@ function SessionContent() {
       let preferred;
       if (isFemale) {
         // Aggressively prefer premium natural voices (Google/Microsoft)
-        preferred = voices.find(v => /google us english/i.test(v.name)) ||
-                    voices.find(v => /google uk english female/i.test(v.name)) ||
-                    voices.find(v => /microsoft zira|microsoft aria|microsoft jenny/i.test(v.name)) ||
-                    voices.find(v => /samantha|victoria|karen/i.test(v.name)) || 
+        preferred = voices.find(v => v.name.includes('Google US English')) ||
+                    voices.find(v => v.name.includes('Google UK English Female')) ||
+                    voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen')) ||
+                    voices.find(v => v.name.includes('Microsoft Zira') || v.name.includes('Microsoft Jenny')) ||
                     voices.find(v => /female/i.test(v.name) && /en/i.test(v.lang)) ||
                     voices.find(v => /en/i.test(v.lang));
       } else {
-        preferred = voices.find(v => /google uk english male/i.test(v.name)) ||
-                    voices.find(v => /microsoft mark|microsoft guy|microsoft david/i.test(v.name)) ||
-                    voices.find(v => /daniel|arthur|aaron/i.test(v.name)) || 
+        preferred = voices.find(v => v.name.includes('Google UK English Male')) ||
+                    voices.find(v => v.name.includes('Microsoft Mark') || v.name.includes('Microsoft Guy')) ||
+                    voices.find(v => v.name.includes('Daniel') || v.name.includes('Arthur')) ||
                     voices.find(v => /male/i.test(v.name) && /en/i.test(v.lang)) ||
                     voices.find(v => /en/i.test(v.lang));
       }
@@ -654,7 +672,7 @@ function SessionContent() {
 
   if (isEvaluating) {
     return (
-      <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -678,7 +696,7 @@ function SessionContent() {
 
   if (isGeneratingQuestions || !question) {
     return (
-      <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
         <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-8" />
         <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Matching Profile to Job Description</p>
         <p className="text-indigo-400 font-bold uppercase tracking-widest text-[9px] mt-2 animate-pulse">Generating Custom Interview Protocol...</p>
@@ -689,7 +707,7 @@ function SessionContent() {
   // ─── TERMINATED SCREEN ─────────────────────────────────────────────
   if (terminated) {
     return (
-      <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center p-6 text-center space-y-8">
+      <div className="min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
         <div className="w-20 h-20 rounded-full bg-rose-500/10 border-2 border-rose-500/30 flex items-center justify-center">
           <ShieldAlert className="w-10 h-10 text-rose-500" />
         </div>
@@ -707,24 +725,24 @@ function SessionContent() {
   // ─── FULLSCREEN GATE ────────────────────────────────────────────────
   if (!isFullscreen) {
     return (
-      <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center p-6 text-center space-y-8">
+      <div className="min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
         <div className="w-20 h-20 rounded-full bg-indigo-600/10 border-2 border-indigo-500/30 flex items-center justify-center">
           <Maximize2 className="w-10 h-10 text-indigo-400" />
         </div>
         <div className="space-y-4">
-          <h1 className="text-2xl font-black text-white tracking-tighter">Fullscreen Required</h1>
+          <h1 className="text-2xl font-black text-[var(--text)] tracking-tighter">Fullscreen Required</h1>
           <p className="text-slate-400 text-sm font-medium max-w-sm mx-auto leading-relaxed">This interview must be conducted in fullscreen mode. Exiting fullscreen will be logged as a violation.</p>
         </div>
         <button onClick={enterFullscreen} className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-3">
           <Maximize2 className="w-4 h-4" /> Enter Fullscreen & Start Interview
         </button>
-        <p className="text-slate-600 text-[9px] font-bold uppercase tracking-widest">Tab switching, window changes & copy-paste are blocked during the session.</p>
+        <p className="text-slate-500 text-[9px] font-bold uppercase tracking-widest">Tab switching, window changes & copy-paste are blocked during the session.</p>
       </div>
     );
   }
 
   return (
-    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30">
+    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -1031,7 +1049,7 @@ function SessionContent() {
                      className="h-full flex overflow-hidden"
                    >
                       {/* Left side: Problem Description */}
-                      <div className="w-1/3 border-r border-[var(--border-color)] bg-[var(--card-bg)] p-6 overflow-y-auto flex flex-col">
+                      <div className="w-1/4 border-r border-[var(--border-color)] bg-[var(--card-bg)] p-6 overflow-y-auto flex flex-col">
                         <div className="flex items-center gap-3 mb-6">
                            <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-violet-500/20">
                               {question.difficulty || 'Hard'}
@@ -1061,7 +1079,7 @@ function SessionContent() {
                       </div>
 
                       {/* Right side: Editor & Console */}
-                      <div className="w-2/3 flex flex-col bg-[var(--bg)] overflow-hidden">
+                      <div className="w-3/4 flex flex-col bg-[var(--bg)] overflow-hidden">
                         {/* IDE Toolbar */}
                         <div className="flex items-center justify-between bg-white/5 p-3 border-b border-white/5">
                            <div className="flex gap-2">

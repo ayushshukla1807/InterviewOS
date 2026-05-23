@@ -69,7 +69,7 @@ export default function RecruiterDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020204] text-slate-200 font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] selection:bg-indigo-500/30 font-sans p-4 md:p-8 transition-colors duration-500">
       
       {/* Background Ambience */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
