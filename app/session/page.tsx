@@ -14,6 +14,9 @@ import {
 type Message = { role: 'assistant' | 'user'; content: string; };
 type TabType = 'simulation' | 'code';
 
+import dynamic from 'next/dynamic';
+const Excalidraw = dynamic(() => import('@excalidraw/excalidraw').then(mod => mod.Excalidraw), { ssr: false });
+
 import { questionEngine } from '../../lib/db/questions';
 import { INTERVIEWER_PERSONA } from '../../lib/ai/prompts';
 import { getScenarioByTrack } from '../../lib/db/scenarios';
@@ -88,7 +91,9 @@ function SessionContent() {
 
   // ─── SCRATCHPAD & IDE STATE ──────────────────────────────────────────────
   const [scratchpad, setScratchpad] = useState('// Neural Scratchpad: Draft your logic here before final submission...');
-  const [activeEditorTab, setActiveEditorTab] = useState<'scratch' | 'final'>('scratch');
+  const [activeEditorTab, setActiveEditorTab] = useState<'scratch' | 'final' | 'terminal' | 'canvas'>('scratch');
+  const [terminalLogs, setTerminalLogs] = useState<string[]>(['> Sandbox initialized.', '> run `npm start` to begin.']);
+  const [terminalInput, setTerminalInput] = useState('');
   const [language, setLanguage] = useState('javascript');
   const [consoleInput, setConsoleInput] = useState('');
   const [consoleOutput, setConsoleOutput] = useState('');
@@ -503,10 +508,22 @@ function SessionContent() {
       const signals: string[] = data.signals || [];
       const adaptation = data.adaptation || 'Maintaining current depth.';
       
-      setMessages(p => [...p, { role: 'assistant', content }]);
+      let spokenContent = content;
+      const codeInjectionMatch = content.match(/\[INJECT_CODE\]([\s\S]*?)\[\/INJECT_CODE\]/);
+      
+      if (codeInjectionMatch) {
+        const injectedCode = codeInjectionMatch[1].trim();
+        spokenContent = content.replace(/\[INJECT_CODE\][\s\S]*?\[\/INJECT_CODE\]/, '').trim();
+        
+        // Inject into the IDE
+        setCode(prev => prev + `\n\n// --- [AI COLLAB INJECTION] ---\n// Your interviewer just injected this code block.\n// Find the bug and fix it!\n${injectedCode}\n// -----------------------------\n`);
+        setActiveEditorTab('final'); // Switch them to final code to see it
+      }
+      
+      setMessages(p => [...p, { role: 'assistant', content: spokenContent }]);
       setDetectedSignals(signals.filter(s => s !== 'NEXT_QUESTION'));
       setCurrentAdaptation(adaptation);
-      speak(content); 
+      speak(spokenContent); 
 
       if (signals.includes('NEXT_QUESTION') && currentQ < questions.length - 1) {
         setTimeout(() => setCurrentQ(p => p + 1), 3000);
@@ -944,6 +961,14 @@ function SessionContent() {
                                    className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'final' ? 'bg-emerald-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
                                    Final Code
                                  </button>
+                                 <button onClick={() => setActiveEditorTab('terminal')} 
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1 ${activeEditorTab === 'terminal' ? 'bg-rose-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   <Terminal className="w-3 h-3" /> Sandbox
+                                 </button>
+                                 <button onClick={() => setActiveEditorTab('canvas')} 
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1 ${activeEditorTab === 'canvas' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   <LayoutDashboard className="w-3 h-3" /> Canvas
+                                 </button>
                               </div>
                            </div>
                            <div className="flex gap-2">
@@ -985,7 +1010,7 @@ function SessionContent() {
                                 className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-amber-300/80 focus:outline-none resize-none"
                                 spellCheck={false}
                               />
-                            ) : (
+                            ) : activeEditorTab === 'final' ? (
                               <textarea
                                 value={code}
                                 onChange={e => setCode(e.target.value)}
@@ -993,7 +1018,35 @@ function SessionContent() {
                                 spellCheck={false}
                                 placeholder="// Write your final solution here..."
                               />
-                            )}
+                            ) : activeEditorTab === 'terminal' ? (
+                              <div className="w-full h-full bg-black/50 p-6 flex flex-col font-mono text-[12px]">
+                                <div className="flex-1 overflow-y-auto space-y-1">
+                                  {terminalLogs.map((log, i) => (
+                                    <div key={i} className={log.includes('Error') || log.includes('Exception') ? 'text-rose-400' : 'text-slate-300'}>{log}</div>
+                                  ))}
+                                </div>
+                                <div className="mt-4 flex items-center gap-2 border-t border-white/10 pt-4">
+                                  <span className="text-emerald-500 font-black">~/sandbox $</span>
+                                  <input 
+                                    type="text" 
+                                    value={terminalInput}
+                                    onChange={e => setTerminalInput(e.target.value)}
+                                    onKeyDown={e => {
+                                      if (e.key === 'Enter' && terminalInput.trim()) {
+                                        setTerminalLogs(prev => [...prev, `~/sandbox $ ${terminalInput}`, `Error: Cannot execute '${terminalInput}'. Sandbox environment disconnected.`]);
+                                        setTerminalInput('');
+                                      }
+                                    }}
+                                    className="flex-1 bg-transparent outline-none text-white font-mono"
+                                    placeholder="Enter terminal command..."
+                                  />
+                                </div>
+                              </div>
+                            ) : activeEditorTab === 'canvas' ? (
+                              <div className="w-full h-full bg-white relative">
+                                 <Excalidraw />
+                              </div>
+                            ) : null}
                             
                             {/* Code Editor Status Bar */}
                             <div className="absolute bottom-4 right-8 flex items-center gap-4 px-3 py-1.5 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)] backdrop-blur-md">
@@ -1132,6 +1185,8 @@ function SessionContent() {
                <div className="grid grid-cols-2 gap-4">
                   {[
                     { label: 'Gaze Focus', value: `${gazeVal.toFixed(1)}%`, color: gazeVal > 95 ? 'text-emerald-400' : 'text-amber-400' },
+                    { label: 'Facial Stress (Micro)', value: violations > 0 || !gazeVal ? 'Elevated' : 'Calm / Focused', color: violations > 0 || !gazeVal ? 'text-rose-400' : 'text-emerald-400' },
+                    { label: 'Vocal Tonality', value: isSpeaking ? 'Analyzing...' : 'Confident (92%)', color: 'text-indigo-400' },
                     { label: 'Ambient Noise', value: `${noiseVal.toFixed(0)}dB`, color: noiseVal < 50 ? 'text-indigo-400' : 'text-rose-400' },
                     { label: 'Risk Index', value: violations > 0 || koyoSignals.aiAssist ? 'Critical' : 'Nominal', color: violations > 0 || koyoSignals.aiAssist ? 'text-rose-400' : 'text-emerald-400' },
                     { label: 'Sync Latency', value: '18ms', color: 'text-slate-500' },
