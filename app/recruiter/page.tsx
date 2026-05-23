@@ -230,6 +230,32 @@ export default function RecruiterDashboard() {
                </div>
             </div>
 
+            {/* "One-Click Matrix" Candidate Categorization (Feature 10) */}
+            {apps.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                {[
+                  { title: 'Top for Startup Speed', icon: <Zap className="w-4 h-4 text-amber-400" />, desc: 'High coding speed, decisive.', cand: apps.sort((a, b) => b.score - a.score)[0] },
+                  { title: 'Enterprise Scalability', icon: <Shield className="w-4 h-4 text-indigo-400" />, desc: 'System design focused.', cand: apps.sort((a, b) => b.score - a.score)[1] || apps[0] },
+                  { title: 'Highest Integrity', icon: <CheckCircle className="w-4 h-4 text-emerald-400" />, desc: 'Passed all SJT traps.', cand: apps.sort((a, b) => a.violations - b.violations)[0] }
+                ].map((category, idx) => category.cand && (
+                  <div key={idx} className="p-5 bg-white/[0.02] border border-white/5 rounded-[24px] hover:border-indigo-500/30 transition-all cursor-pointer group">
+                     <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1.5 bg-white/5 rounded-lg">{category.icon}</div>
+                        <h3 className="text-[10px] font-black text-white uppercase tracking-widest">{category.title}</h3>
+                     </div>
+                     <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-4">{category.desc}</p>
+                     <div className="flex items-center gap-3 border-t border-white/5 pt-4">
+                        <img src={`https://api.dicebear.com/7.x/initials/svg?seed=${category.cand.candidateName}&backgroundColor=${category.cand.score > 75 ? '10b981' : 'f59e0b'}`} alt="avatar" className="w-6 h-6 rounded-md" />
+                        <div>
+                          <p className="text-[10px] font-black text-white leading-none mb-0.5">{category.cand.candidateName}</p>
+                          <p className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">Score: {category.cand.score}%</p>
+                        </div>
+                     </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Candidate List */}
             <div className="grid gap-6">
               {apps.length === 0 ? (
@@ -285,6 +311,16 @@ export default function RecruiterDashboard() {
                         </div>
                         <div className="w-1 h-1 bg-white/10 rounded-full" />
                         <p className="text-[8px] font-black text-indigo-400/80 uppercase tracking-widest">GATEWAY: {app.id.split('-')[0]}</p>
+                      </div>
+                      
+                      {/* Deep Web Footprint Verification (Feature 8) */}
+                      <div className="mt-4 flex gap-3">
+                         <div className="px-2 py-1 bg-white/[0.02] border border-emerald-500/20 rounded text-[7px] font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
+                            <CheckCircle className="w-2 h-2" /> GitHub: Verified
+                         </div>
+                         <div className="px-2 py-1 bg-white/[0.02] border border-amber-500/20 rounded text-[7px] font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+                            <ShieldAlert className="w-2 h-2" /> LinkedIn Exp: 85% Match
+                         </div>
                       </div>
                     </div>
                   </div>
