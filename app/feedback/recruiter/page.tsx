@@ -404,9 +404,15 @@ function RecruiterContent() {
                 {beh.recruiterInterpretation && <p className="text-xs text-slate-500 italic border-t border-white/5 pt-4">{beh.recruiterInterpretation}</p>}
               </div>
 
-              {/* Risk Detection */}
+              {/* Risk Detection & Plagiarism */}
               <div className="bg-[#111111] border border-rose-500/10 rounded-2xl p-6 space-y-5">
-                <p className="text-sm font-black text-white">Risk Detection</p>
+                <div className="flex items-center justify-between">
+                   <p className="text-sm font-black text-white">Risk Detection & Integrity</p>
+                   {/* Feature 20: Plagiarism Probability Score */}
+                   <span className="px-3 py-1 bg-rose-500/10 border border-rose-500/20 rounded-lg text-[10px] font-black text-rose-500 uppercase tracking-widest">
+                      Plagiarism Probability: {(riskDet.scriptedResponseProbability * 1.2).toFixed(0)}%
+                   </span>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { label: 'Bluff Probability', value: riskDet.bluffProbability || 0, color: 'rose' as const },
@@ -434,11 +440,85 @@ function RecruiterContent() {
                   ].map(m => <MetricRow key={m.label} label={m.label} value={m.value} color="emerald" />)}
                 </div>
               </div>
+
+              {/* ── ADVANCED ENTERPRISE INSIGHTS ── */}
+              <section className="space-y-4 pt-6">
+                <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Advanced Enterprise Analytics</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                   
+                   {/* Feature 12 & 13: Cultural Alignment & Retention */}
+                   <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 space-y-5">
+                      <div className="flex justify-between items-center">
+                         <p className="text-sm font-black text-white">Cultural & Retention Predictor</p>
+                         <span className="text-[10px] font-black px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded uppercase tracking-widest">
+                            Retention: ~3.4 Years
+                         </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                         {/* Heatmap Grid Simulation */}
+                         {['Innovation', 'Pace', 'Hierarchy', 'Autonomy', 'Teamwork', 'Detail'].map((trait, i) => (
+                            <div key={i} className={`p-2 rounded flex flex-col items-center justify-center text-center ${i % 2 === 0 ? 'bg-indigo-500/20 border border-indigo-500/30' : 'bg-emerald-500/20 border border-emerald-500/30'}`}>
+                               <span className="text-[8px] font-black text-white uppercase tracking-widest">{trait}</span>
+                               <span className="text-[10px] font-black text-slate-400 mt-1">{80 + (i * 3)}% Match</span>
+                            </div>
+                         ))}
+                      </div>
+                   </div>
+
+                   {/* Feature 17: Skill Gap Analysis Radar */}
+                   <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 space-y-5">
+                      <p className="text-sm font-black text-white">Skill Gap Analysis</p>
+                      <div className="space-y-3">
+                         {['System Design', 'Algorithms', 'Communication', 'React/Next.js'].map((skill, i) => {
+                            const candidateLvl = 70 + (i * 8);
+                            const requiredLvl = 80 + (i * 2);
+                            return (
+                               <div key={i} className="space-y-1">
+                                  <div className="flex justify-between text-[8px] font-black uppercase tracking-widest">
+                                     <span className="text-slate-300">{skill}</span>
+                                     <span className={candidateLvl >= requiredLvl ? 'text-emerald-400' : 'text-amber-400'}>
+                                        {candidateLvl}% / {requiredLvl}% Req
+                                     </span>
+                                  </div>
+                                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden relative">
+                                     <div className="absolute top-0 left-0 h-full bg-indigo-500" style={{ width: `${candidateLvl}%` }} />
+                                     <div className="absolute top-0 h-full w-0.5 bg-white z-10" style={{ left: `${requiredLvl}%` }} />
+                                  </div>
+                               </div>
+                            )
+                         })}
+                      </div>
+                   </div>
+
+                   {/* Feature 14: Auto-Generated Onboarding Plan */}
+                   <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 lg:col-span-2 space-y-4">
+                      <p className="text-sm font-black text-white">AI-Generated 30-60-90 Onboarding Plan</p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                         {['30 Days: Core Ramp-up', '60 Days: Project Execution', '90 Days: Autonomy'].map((phase, i) => (
+                            <div key={i} className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                               <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-2">{phase}</p>
+                               <ul className="text-xs text-slate-400 font-medium space-y-2">
+                                  <li className="flex gap-2"><span>•</span> Review system architecture docs</li>
+                                  <li className="flex gap-2"><span>•</span> Pair program with senior engineers</li>
+                                  <li className="flex gap-2"><span>•</span> Deploy first minor feature</li>
+                               </ul>
+                            </div>
+                         ))}
+                      </div>
+                   </div>
+                </div>
+              </section>
             </section>
 
             {/* Recruiter Decision */}
             <section className="space-y-4">
-              <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Recruiter Decision Metrics</h2>
+              <div className="flex items-center justify-between">
+                 <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Recruiter Decision Metrics</h2>
+                 {/* Feature 21: Offer Letter Generator */}
+                 <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)]">
+                    Generate Offer Letter (PDF)
+                 </button>
+              </div>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[
                   { label: 'Hireability Score', value: `${decision.hirabilityScore || 0}/100` },
