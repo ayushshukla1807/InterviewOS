@@ -172,8 +172,65 @@ function RecruiterContent() {
                </div>
             </div>
           </div>
-        </section>
 
+          {/* Advanced Anti-Cheating Timeline Player (Feature Parity) */}
+          <div className="bg-[#111111] border border-white/5 rounded-3xl p-8 space-y-6">
+             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/5 pb-4">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight">Proctoring Timeline Review</h3>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-1">100% Anti-Cheating Flag Visualization</p>
+                </div>
+                <div className="px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl flex items-center gap-2">
+                   <ShieldAlert className="w-4 h-4 text-rose-500" />
+                   <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">{report.violations || 0} Flags Detected</span>
+                </div>
+             </div>
+             
+             {/* Simulated Timeline Player */}
+             <div className="space-y-4">
+                <div className="w-full h-64 bg-[#0a0a0c] border border-white/5 rounded-2xl flex items-center justify-center relative overflow-hidden group">
+                   <img src={`https://api.dicebear.com/7.x/initials/svg?seed=${report.candidateName}&backgroundColor=111111`} alt="candidate" className="w-full h-full object-cover opacity-20 blur-sm" />
+                   <div className="absolute inset-0 flex items-center justify-center">
+                      <button className="w-16 h-16 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 transition-all shadow-[0_0_40px_rgba(255,255,255,0.1)] group-hover:scale-110">
+                         <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[14px] border-l-white border-b-[8px] border-b-transparent ml-2" />
+                      </button>
+                   </div>
+                   {/* Flag Indicator Tooltip */}
+                   {report.violations > 0 && (
+                     <div className="absolute top-4 right-4 px-3 py-1.5 bg-rose-500/90 text-white text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-[0_0_20px_rgba(244,63,94,0.4)]">
+                        <AlertTriangle className="w-3 h-3" /> Suspicious Eye Movement Logged
+                     </div>
+                   )}
+                </div>
+
+                <div className="flex items-center gap-4">
+                   <span className="text-[9px] font-black text-slate-500 tabular-nums">00:00</span>
+                   <div className="flex-1 relative group/timeline cursor-pointer">
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                         <div className="h-full w-1/3 bg-indigo-500" />
+                      </div>
+                      {/* Timeline Markers */}
+                      {report.violations > 0 && (
+                        <>
+                          <div className="absolute top-1/2 -translate-y-1/2 left-[15%] w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="Tab Switched" />
+                          <div className="absolute top-1/2 -translate-y-1/2 left-[45%] w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="Eye Movement" />
+                        </>
+                      )}
+                      {report.koyoSignals?.aiAssist && (
+                        <div className="absolute top-1/2 -translate-y-1/2 left-[70%] w-3 h-3 bg-amber-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(245,158,11,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="AI Assist Suspected" />
+                      )}
+                      {report.koyoSignals?.secondVoice && (
+                        <div className="absolute top-1/2 -translate-y-1/2 left-[85%] w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="Multiple Voices Detected" />
+                      )}
+                      
+                      {/* Scrub handle */}
+                      <div className="absolute top-1/2 -translate-y-1/2 left-1/3 w-4 h-4 bg-white rounded-full shadow-lg border border-slate-200" />
+                   </div>
+                   <span className="text-[9px] font-black text-slate-500 tabular-nums">45:00</span>
+                </div>
+             </div>
+          </div>
+        </section>
         {/* ── KEY RECRUITER INSIGHTS ── */}
         <section className="space-y-4">
           <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">2. Key Recruiter Insights</h2>
