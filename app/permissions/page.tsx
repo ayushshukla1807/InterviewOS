@@ -80,7 +80,7 @@ function PermissionsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050508] text-slate-200 flex flex-col font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-transparent text-[var(--text)] flex flex-col font-sans selection:bg-indigo-500/30 transition-colors duration-500">
       
       {/* Top Banner */}
       <div className="text-center py-12 px-6">
@@ -273,15 +273,10 @@ function PermissionsContent() {
   );
 }
 
-export default function PermissionsPage() {
+export default function PermissionsGuard() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#050508] flex items-center justify-center text-slate-500 text-[10px] font-black uppercase tracking-widest animate-pulse">Initializing Security Layer...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-transparent flex items-center justify-center text-[var(--text)] text-[10px] font-black uppercase tracking-widest animate-pulse transition-colors duration-500">Initializing Security Layer...</div>}>
       <PermissionsContent />
     </Suspense>
   );
 }
-
-
-
-
-
