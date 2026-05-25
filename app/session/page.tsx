@@ -898,9 +898,9 @@ function SessionContent() {
                 value={interviewLanguage} onChange={e => setInterviewLanguage(e.target.value)}
                 className="bg-transparent border-none text-[9px] font-black uppercase tracking-widest text-slate-500 outline-none focus:ring-0 cursor-pointer"
               >
-                <option value="English">English</option>
-                <option value="Spanish">Spanish</option>
-                <option value="Mandarin">Mandarin</option>
+                <option value="English(UK)">English(UK)</option>
+                <option value="English(US)">English(US)</option>
+                <option value="Hindi">Hindi</option>
               </select>
            </div>
 
@@ -1528,9 +1528,8 @@ function SessionContent() {
                      onChange={(e) => setInterviewLanguage(e.target.value)}
                      className="bg-white/5 border border-white/10 rounded-md px-2 py-1 text-[9px] font-black text-slate-300 outline-none w-1/2"
                   >
-                     <option value="English">English</option>
-                     <option value="Spanish">Spanish</option>
-                     <option value="Mandarin">Mandarin</option>
+                     <option value="English(UK)">English(UK)</option>
+                     <option value="English(US)">English(US)</option>
                      <option value="Hindi">Hindi</option>
                   </select>
                   <button 
