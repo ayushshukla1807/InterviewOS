@@ -30,11 +30,16 @@
 }
 
 [data-theme="multicolor"] {
-  --bg: #000000;
+  --bg: #090014;
   --text: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.05);
   --border-color: rgba(255, 255, 255, 0.15);
   --primary: #f472b6;
+}
+body[data-theme="multicolor"] {
+  background: linear-gradient(-45deg, #2a0845, #6441A5, #120A38);
+  background-size: 400% 400%;
+  animation: aurora 15s ease infinite;
 }
 
 [data-theme="skynight"] {
@@ -43,6 +48,9 @@
   --card-bg: rgba(10, 15, 30, 0.6);
   --border-color: rgba(100, 149, 237, 0.2);
   --primary: #60a5fa;
+}
+body[data-theme="skynight"] {
+  background: radial-gradient(circle at 50% 0%, #1a1a3a, #050510 70%);
 }
 
 /* Animations for themes */
