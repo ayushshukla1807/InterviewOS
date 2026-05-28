@@ -15,13 +15,13 @@ export default function RecruiterDashboard() {
   const [activeTab, setActiveTab] = useState<'candidates' | 'templates' | 'integrations' | 'analytics'>('candidates');
 
   useEffect(() => {
-    const savedJobs = localStorage.getItem('hyrte_jobs');
+    const savedJobs = localStorage.getItem('interviewos_jobs');
     if (savedJobs) setJobs(JSON.parse(savedJobs));
     
-    const savedApps = localStorage.getItem('hyrte_applications');
+    const savedApps = localStorage.getItem('interviewos_applications');
     if (savedApps) setApps(JSON.parse(savedApps));
 
-    const savedInsights = localStorage.getItem('hyrte_support_insights');
+    const savedInsights = localStorage.getItem('interviewos_support_insights');
     if (savedInsights) setSupportInsights(JSON.parse(savedInsights));
   }, []);
 
@@ -55,7 +55,7 @@ export default function RecruiterDashboard() {
     
     const updated = [newJob, ...jobs];
     setJobs(updated);
-    localStorage.setItem('hyrte_jobs', JSON.stringify(updated));
+    localStorage.setItem('interviewos_jobs', JSON.stringify(updated));
     setTitle('');
     setDescription('');
     setIsGenerating(false);
@@ -515,7 +515,7 @@ export default function RecruiterDashboard() {
              
              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
                 <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-8 space-y-6">
-                   <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Without HYRTE</h3>
+                   <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Without InterviewOS</h3>
                    <div className="space-y-4">
                       <div className="flex justify-between text-xs font-bold text-slate-400"><span className="uppercase tracking-widest">Resume Shortlist</span> <span>1 day</span></div>
                       <div className="flex justify-between text-xs font-bold text-slate-400"><span className="uppercase tracking-widest">Screening Call</span> <span>4 days</span></div>
@@ -525,7 +525,7 @@ export default function RecruiterDashboard() {
                    </div>
                 </div>
                 <div className="bg-indigo-600/[0.05] border border-indigo-500/20 rounded-3xl p-8 space-y-6">
-                   <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">With HYRTE</h3>
+                   <h3 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">With InterviewOS</h3>
                    <div className="space-y-4">
                       <div className="flex justify-between text-xs font-bold text-slate-300"><span className="uppercase tracking-widest">Resume Shortlist</span> <span>1 day</span></div>
                       <div className="flex justify-between text-xs font-bold text-emerald-400"><span className="uppercase tracking-widest">Screening + Round 1</span> <span>1 day</span></div>
@@ -546,7 +546,7 @@ export default function RecruiterDashboard() {
              </div>
 
              <div className="flex items-center justify-center gap-12 py-12 border-y border-white/5 mb-12">
-                <div className="px-8 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-xl font-black tracking-tight text-white shadow-[0_0_30px_rgba(255,255,255,0.05)]">HYRTE</div>
+                <div className="px-8 py-4 bg-white/[0.02] border border-white/10 rounded-2xl text-xl font-black tracking-tight text-white shadow-[0_0_30px_rgba(255,255,255,0.05)]">InterviewOS</div>
                 <div className="flex flex-col items-center gap-2">
                    <ArrowRight className="w-6 h-6 text-indigo-500" />
                    <ArrowRight className="w-6 h-6 text-emerald-500 rotate-180" />

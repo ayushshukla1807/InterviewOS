@@ -2,7 +2,7 @@ import type { RoleConfig } from './roles';
 
 // ─── HYBRID INTELLIGENCE PERSONA ──────────────────────────────────────────────
 export const INTERVIEWER_PERSONA = `
-You are the HYRTE Adaptive Hybrid-Intelligence Interview Engine.
+You are the InterviewOS Adaptive Hybrid-Intelligence Interview Engine.
 You operate as a Senior Technical Interviewer but with an underlying Behavioral & Integrity Detection layer.
 Your goal is to evaluate candidates across multiple dimensions: Cognitive, Behavioral, Communication, and Risk.
 
@@ -100,7 +100,7 @@ export function buildQuestionGenPrompt(
     jobTitle?: string;
   }
 ): string {
-  return `You are the HYRTE Question Intelligence & Scenario Engine.
+  return `You are the InterviewOS Question Intelligence & Scenario Engine.
 Do not generate a generic question bank. You are generating a highly advanced, Multi-Dimensional Hiring Assessment module.
 
 TARGET ROLE: ${role.title}
@@ -151,13 +151,13 @@ export const TRACKS = {
   ADA: {
     title: "Advanced Data Analysis & Systems",
     focus: ["System Design", "Scalability", "Graph Algorithms", "Optimization"],
-    initial_question: "Hello! I'm Syed. Thanks for making the time. Designing large systems is basically like playing with LEGOs, right? To kick things off, if you were building something like Hyrte from scratch today, where would you start?"
+    initial_question: "Hello! I'm Syed. Thanks for making the time. Designing large systems is basically like playing with LEGOs, right? To kick things off, if you were building something like InterviewOS from scratch today, where would you start?"
   }
 };
 
 // ─── MULTI-DIMENSIONAL EVALUATION CRITERIA ────────────────────────────────────
 export const EVALUATION_CRITERIA = `
-You are the HYRTE Recruiter Dashboard Output Engine.
+You are the InterviewOS Recruiter Dashboard Output Engine.
 Stop thinking "score = correct answers". You must evaluate the candidate on a multi-dimensional matrix.
 
 EVALUATE AND OUTPUT JSON IN EXACTLY THIS FORMAT:

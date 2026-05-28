@@ -12,7 +12,7 @@ function FeedbackGateway() {
   const [report, setReport] = useState<any>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('hyrte_report');
+    const saved = localStorage.getItem('interviewos_report');
     if (saved) setReport(JSON.parse(saved));
   }, []);
 
@@ -38,7 +38,7 @@ function FeedbackGateway() {
           <Shield className="w-4 h-4 text-white" />
         </div>
         <div>
-          <p className="text-[11px] font-black text-white uppercase tracking-widest">Hyrte — Assessment Complete</p>
+          <p className="text-[11px] font-black text-white uppercase tracking-widest">InterviewOS — Assessment Complete</p>
           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{name} · {track} Track · {meta.durationMinutes || 0} minutes</p>
         </div>
       </header>
@@ -113,7 +113,7 @@ function FeedbackGateway() {
       </main>
 
       <footer className="px-8 py-4 border-t border-white/5 text-center">
-        <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Powered by Hyrte Intelligence · Secure Assessment Platform</p>
+        <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Powered by InterviewOS Intelligence · Secure Assessment Platform</p>
       </footer>
     </div>
   );

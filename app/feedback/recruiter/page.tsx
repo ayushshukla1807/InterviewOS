@@ -44,7 +44,7 @@ function RecruiterContent() {
   const [showHeatmap, setShowHeatmap] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('hyrte_report');
+    const saved = localStorage.getItem('interviewos_report');
     if (saved) setReport(JSON.parse(saved));
   }, []);
 
@@ -85,7 +85,7 @@ function RecruiterContent() {
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-white uppercase tracking-widest">Hyrte — Recruiter Report</p>
+            <p className="text-[10px] font-black text-white uppercase tracking-widest">InterviewOS — Recruiter Report</p>
             <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{name} · {meta.track || 'JS'} Track</p>
           </div>
         </div>

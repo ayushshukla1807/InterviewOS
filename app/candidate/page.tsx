@@ -17,13 +17,13 @@ export default function CandidateDashboard() {
 
   useEffect(() => {
     // Get candidate info
-    const savedContext = localStorage.getItem('hyrte_candidate_context');
+    const savedContext = localStorage.getItem('interviewos_candidate_context');
     if (savedContext) {
       setCandidateContext(JSON.parse(savedContext));
     }
 
     // Get completed applications to simulate past interview scores
-    const savedApps = localStorage.getItem('hyrte_applications') || '[]';
+    const savedApps = localStorage.getItem('interviewos_applications') || '[]';
     const parsedApps = JSON.parse(savedApps);
     
     // Fallback default test records if none taken yet, to showcase dashboards UI
@@ -65,7 +65,7 @@ export default function CandidateDashboard() {
   }, []);
 
   const clearHistory = () => {
-    localStorage.removeItem('hyrte_applications');
+    localStorage.removeItem('interviewos_applications');
     window.location.reload();
   };
 
@@ -129,7 +129,7 @@ export default function CandidateDashboard() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black text-[var(--text)]">{candidateContext?.name || 'Guest Candidate'}</h3>
-                  <p className="text-[10px] text-slate-500">{candidateContext?.email || 'no-email@hyrte.ai'}</p>
+                  <p className="text-[10px] text-slate-500">{candidateContext?.email || 'no-email@interviewos.ai'}</p>
                 </div>
               </div>
 

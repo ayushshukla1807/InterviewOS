@@ -10,14 +10,14 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-function HyrteLogo() {
+function InterviewOSLogo() {
   return (
     <div className="flex items-center gap-3">
       <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
         <Shield className="w-5 h-5 text-white" />
       </div>
       <div>
-        <div className="text-[11px] font-black text-white uppercase tracking-widest leading-none">Hyrte</div>
+        <div className="text-[11px] font-black text-white uppercase tracking-widest leading-none">InterviewOS</div>
         <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Intelligence</div>
       </div>
     </div>
@@ -37,10 +37,10 @@ function InstructionsContent() {
   const mockParam = searchParams.get('mock') === 'true';
   
   const trackConfig: Record<string, { title: string; time: string; questions: number | string; invigilator: string }> = {
-    JS: { title: 'Hyrte JavaScript Engineering Interview', time: '60 mins', questions: 4, invigilator: 'Syed' },
-    DSA: { title: 'Hyrte Algorithms & Data Structures', time: '60 mins', questions: 4, invigilator: 'Syed' },
-    ADA: { title: 'Hyrte Advanced Systems Analysis', time: '90 mins', questions: 3, invigilator: 'Sathvik' },
-    DYNAMIC: { title: 'Hyrte Custom Role Assessment', time: '60 mins', questions: 'Adaptive', invigilator: 'Syed' },
+    JS: { title: 'InterviewOS JavaScript Engineering Interview', time: '60 mins', questions: 4, invigilator: 'Syed' },
+    DSA: { title: 'InterviewOS Algorithms & Data Structures', time: '60 mins', questions: 4, invigilator: 'Syed' },
+    ADA: { title: 'InterviewOS Advanced Systems Analysis', time: '90 mins', questions: 3, invigilator: 'Sathvik' },
+    DYNAMIC: { title: 'InterviewOS Custom Role Assessment', time: '60 mins', questions: 'Adaptive', invigilator: 'Syed' },
   };
 
   const config = trackConfig[trackParam] || trackConfig.DYNAMIC;
@@ -53,22 +53,22 @@ function InstructionsContent() {
   useEffect(() => {
     setIsMounted(true);
     
-    const savedInterviewer = localStorage.getItem('hyrte_active_interviewer');
+    const savedInterviewer = localStorage.getItem('interviewos_active_interviewer');
     if (savedInterviewer) {
       setInterviewer(JSON.parse(savedInterviewer));
     } else {
       const randomInt = INTERVIEWERS[Math.floor(Math.random() * INTERVIEWERS.length)];
       setInterviewer(randomInt);
-      localStorage.setItem('hyrte_active_interviewer', JSON.stringify(randomInt));
+      localStorage.setItem('interviewos_active_interviewer', JSON.stringify(randomInt));
     }
 
-    const savedInvigilator = localStorage.getItem('hyrte_active_invigilator');
+    const savedInvigilator = localStorage.getItem('interviewos_active_invigilator');
     if (savedInvigilator) {
       setInvigilator(JSON.parse(savedInvigilator));
     } else {
       const randomInv = INVIGILATORS[Math.floor(Math.random() * INVIGILATORS.length)];
       setInvigilator(randomInv);
-      localStorage.setItem('hyrte_active_invigilator', JSON.stringify(randomInv));
+      localStorage.setItem('interviewos_active_invigilator', JSON.stringify(randomInv));
     }
   }, []);
 
@@ -78,7 +78,7 @@ function InstructionsContent() {
     <div className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 transition-colors" style={{ color: 'var(--text)' }}>
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-5 border-b backdrop-blur-md sticky top-0 z-50 transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-        <HyrteLogo />
+        <InterviewOSLogo />
         <div className="flex items-center gap-2">
            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Powered by</span>
            <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-full border border-white/10">
@@ -337,9 +337,9 @@ function InstructionsContent() {
                   <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>
                       <p className="text-sm font-black text-slate-900">Permanent Ban</p>
-                      <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">From Hyrte Ecosystem</p>
+                      <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">From InterviewOS Ecosystem</p>
                     </div>
-                    <HyrteLogo />
+                    <InterviewOSLogo />
                   </div>
                   <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>

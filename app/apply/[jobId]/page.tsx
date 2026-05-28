@@ -35,7 +35,7 @@ export default function ApplyPage() {
       }
     ];
 
-    const savedJobs = localStorage.getItem('hyrte_jobs');
+    const savedJobs = localStorage.getItem('interviewos_jobs');
     let parsed = savedJobs ? JSON.parse(savedJobs) : [];
     
     // Merge default jobs if not already exists in saved jobs
@@ -45,7 +45,7 @@ export default function ApplyPage() {
         merged.push(dj);
       }
     });
-    localStorage.setItem('hyrte_jobs', JSON.stringify(merged));
+    localStorage.setItem('interviewos_jobs', JSON.stringify(merged));
 
     const found = merged.find((j: any) => j.id === jobId);
     if (found) {
@@ -84,7 +84,7 @@ export default function ApplyPage() {
         resumeText: data.text
       };
 
-      localStorage.setItem('hyrte_candidate_context', JSON.stringify(context));
+      localStorage.setItem('interviewos_candidate_context', JSON.stringify(context));
       
       // Redirect to the main instructions page, passing the track as 'DYNAMIC'
       router.push(`/?name=${encodeURIComponent(name)}&track=DYNAMIC`);
@@ -122,7 +122,7 @@ export default function ApplyPage() {
           <Shield className="w-4 h-4 text-white" />
         </div>
         <div>
-          <p className="text-[11px] font-black text-white uppercase tracking-widest">Hyrte Candidate Portal</p>
+          <p className="text-[11px] font-black text-white uppercase tracking-widest">InterviewOS Candidate Portal</p>
           <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Job Requisition: {job.id}</p>
         </div>
       </header>

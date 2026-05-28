@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ["latin"], variable: '--font-outfit' });
 
 export const metadata: Metadata = {
-  title: "Hyrte | Sentient AI Recruitment",
-  description: "Experience the next decade of hiring intelligence with Hyrte's sentient AI interviewing platform.",
+  title: "InterviewOS | Sentient AI Recruitment",
+  description: "Experience the next decade of hiring intelligence with InterviewOS's sentient AI interviewing platform.",
 };
 
 export default function RootLayout({

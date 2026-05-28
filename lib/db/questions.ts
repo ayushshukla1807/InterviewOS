@@ -9,7 +9,7 @@ export type Question = {
   tags: string[];
 };
 
-class HyrteQuestionEngine {
+class InterviewOSQuestionEngine {
   private bank: Question[] = [];
 
   constructor() {
@@ -89,4 +89,4 @@ class HyrteQuestionEngine {
   }
 }
 
-export const questionEngine = new HyrteQuestionEngine();
+export const questionEngine = new InterviewOSQuestionEngine();

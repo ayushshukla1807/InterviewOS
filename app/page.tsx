@@ -79,7 +79,7 @@ function LandingPageContent() {
   const handleLaunchTryout = () => {
     if (!selectedRole) return;
     // Save profile to localStorage so the session page can use it
-    localStorage.setItem('hyrte_candidate_profile', JSON.stringify({
+    localStorage.setItem('interviewos_candidate_profile', JSON.stringify({
       ...profile,
       roleId: selectedRole.id,
       roleTitle: selectedRole.title,
@@ -115,7 +115,7 @@ function LandingPageContent() {
             <Shield className="w-5 h-5" style={{ color: 'var(--primary)' }} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-extrabold tracking-tight leading-none" style={{ color: 'var(--text)' }}>Hyrte</span>
+            <span className="text-sm font-extrabold tracking-tight leading-none" style={{ color: 'var(--text)' }}>InterviewOS</span>
             <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Intelligence</span>
           </div>
         </motion.div>
@@ -461,7 +461,7 @@ function LandingPageContent() {
             <Cpu className="w-4 h-4 text-slate-600" />
             <span className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.3em]">System Version 5.0 // Sentient Core</span>
           </div>
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">© 2026 Hyrte Intelligence Inc. All rights reserved.</p>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">© 2026 InterviewOS Intelligence Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>
