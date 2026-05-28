@@ -21,8 +21,6 @@ export default function SimulationLanding() {
 
       const data = await res.json();
       
-      // In a real app, we'd save this to a DB and get an ID. 
-      // For MVP, we pass the generated blueprint via sessionStorage
       if (data.blueprint) {
         const sessionId = Math.random().toString(36).substring(7);
         sessionStorage.setItem(`simulation_${sessionId}`, JSON.stringify(data.blueprint));
@@ -37,21 +35,51 @@ export default function SimulationLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center p-6 font-outfit">
-      <div className="max-w-2xl w-full space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">
-            HYRTE Workplace Simulator
+    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center p-6 font-outfit relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/3 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-2xl w-full space-y-8 relative z-10">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-violet-500/10 border border-violet-500/20 rounded-full text-xs text-violet-300 font-medium mb-2">
+            <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+            Powered by AI Behavioral Intelligence
+          </div>
+          <h1 className="text-5xl font-bold">
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">HYRTE</span>
+            <span className="text-gray-300"> Workplace</span>
           </h1>
-          <p className="text-gray-400">
-            Paste a Job Description to auto-generate a multi-dimensional behavioral test engine.
+          <p className="text-gray-400 text-base max-w-lg mx-auto leading-relaxed">
+            Drop candidates into a real workplace crisis. Watch how they handle Slack fires, angry clients, and impossible deadlines — not just MCQs.
           </p>
         </div>
 
-        <div className="bg-[#111] p-6 rounded-xl border border-gray-800 shadow-2xl space-y-4">
-          <label className="block text-sm font-medium text-gray-300">Job Description (JD)</label>
+        {/* Feature Cards */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { icon: '💬', title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
+            { icon: '📧', title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
+            { icon: '📋', title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
+          ].map(f => (
+            <div key={f.title} className="bg-[#111113] border border-gray-800/50 rounded-xl p-4 space-y-2 hover:border-indigo-500/30 transition-all">
+              <span className="text-2xl">{f.icon}</span>
+              <h3 className="text-sm font-semibold text-gray-200">{f.title}</h3>
+              <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-[#111113] p-6 rounded-2xl border border-gray-800/50 shadow-2xl space-y-4">
+          <div className="flex items-center justify-between">
+            <label className="block text-sm font-medium text-gray-300">Paste Job Description</label>
+            <span className="text-xs text-gray-600">{jd.length} chars</span>
+          </div>
           <textarea
-            className="w-full h-64 bg-black border border-gray-700 rounded-lg p-4 text-sm font-inter text-gray-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none resize-none"
+            className="w-full h-48 bg-[#0e0e10] border border-gray-800/50 rounded-xl p-4 text-sm font-inter text-gray-200 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 outline-none resize-none placeholder-gray-600"
             placeholder="e.g. We are looking for a Senior Product Manager who can lead cross-functional teams, manage high-stakes client escalations, and handle sudden priority shifts..."
             value={jd}
             onChange={(e) => setJd(e.target.value)}
@@ -60,18 +88,24 @@ export default function SimulationLanding() {
           <button
             onClick={handleGenerateTest}
             disabled={loading || !jd.trim()}
-            className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40"
           >
             {loading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Translating JD to Test...
+                Generating Workplace Simulation...
               </>
             ) : (
-              'Generate Simulation Engine'
+              <>
+                🚀 Launch Simulation Engine
+              </>
             )}
           </button>
         </div>
+
+        <p className="text-center text-xs text-gray-600">
+          Evaluates: Prioritization • Communication • Emotional Control • Stakeholder Management • Integrity
+        </p>
       </div>
     </div>
   );

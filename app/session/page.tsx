@@ -529,10 +529,7 @@ function SessionContent() {
     };
   }, []);
 
-  const speak = (text: string) => {
-    window.speechSynthesis.cancel();
-    if (voiceMuted) return;
-    
+  const fallbackSpeak = (text: string) => {
     const play = () => {
       const utterance = new SpeechSynthesisUtterance(text);
       const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe'));
@@ -543,7 +540,6 @@ function SessionContent() {
       const voices = window.speechSynthesis.getVoices();
       let preferred;
       if (isFemale) {
-        // Aggressively prefer premium natural voices (Google/Microsoft)
         preferred = voices.find(v => v.name.includes('Google US English')) ||
                     voices.find(v => v.name.includes('Google UK English Female')) ||
                     voices.find(v => v.name.includes('Samantha') || v.name.includes('Karen')) ||
@@ -569,6 +565,44 @@ function SessionContent() {
       window.speechSynthesis.onvoiceschanged = play;
     } else {
       play();
+    }
+  };
+
+  const speak = async (text: string) => {
+    window.speechSynthesis.cancel();
+    if (voiceMuted) return;
+
+    try {
+      setIsSpeaking(true);
+      const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe'));
+      const voice = isFemale ? 'nova' : 'alloy';
+
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, voice })
+      });
+
+      if (!res.ok) throw new Error('TTS API failed');
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(url);
+      };
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(url);
+        fallbackSpeak(text);
+      };
+      
+      await audio.play();
+    } catch (err) {
+      console.warn("OpenAI TTS failed, falling back to browser synthesis:", err);
+      fallbackSpeak(text);
     }
   };
 
