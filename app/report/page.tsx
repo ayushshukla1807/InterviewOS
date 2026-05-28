@@ -353,7 +353,7 @@ function ReportContent() {
         {/* Footer CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-white/5 no-print">
           <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.4em]">
-            © 2026 InterviewOS Intelligence · Sentient Assessment Engine v4.0
+            © 2026 InterviewOS · Sentient Assessment Engine v4.0
           </p>
           <div className="flex gap-4">
             <Link href="/recruiter" className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[9px] font-black text-slate-400 hover:text-white uppercase tracking-widest transition-all">
