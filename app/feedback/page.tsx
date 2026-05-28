@@ -113,7 +113,7 @@ function FeedbackGateway() {
       </main>
 
       <footer className="px-8 py-4 border-t border-white/5 text-center">
-        <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Powered by InterviewOS Intelligence · Secure Assessment Platform</p>
+        <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Powered by InterviewOS · Secure Assessment Platform</p>
       </footer>
     </div>
   );

@@ -18,7 +18,7 @@ function InterviewOSLogo() {
       </div>
       <div>
         <div className="text-[11px] font-black text-white uppercase tracking-widest leading-none">InterviewOS</div>
-        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Intelligence</div>
+        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">AI Platform</div>
       </div>
     </div>
   );
