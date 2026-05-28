@@ -50,7 +50,7 @@ export default function SimulationLanding() {
             Powered by AI Behavioral Intelligence
           </div>
           <h1 className="text-5xl font-bold">
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">HYRTE</span>
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">InterviewOS</span>
             <span className="text-gray-300"> Workplace</span>
           </h1>
           <p className="text-gray-400 text-base max-w-lg mx-auto leading-relaxed">

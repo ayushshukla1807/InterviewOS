@@ -22,7 +22,7 @@ function PermissionsContent() {
 
   useEffect(() => {
     setIsMounted(true);
-    const saved = localStorage.getItem('hyrte_active_interviewer');
+    const saved = localStorage.getItem('interviewos_active_interviewer');
     if (saved) {
       setInterviewer(JSON.parse(saved));
     }
@@ -224,7 +224,7 @@ function PermissionsContent() {
           <div className="pt-8 flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
              <Info className="w-4 h-4 text-indigo-400 shrink-0" />
              <p className="text-[9px] font-bold text-slate-400 leading-relaxed uppercase tracking-wider">
-               By proceeding, you agree to Hyrte's <span className="text-white">Sentient Proctoring Protocol</span>. AI will monitor gaze, environmental audio, and screen integrity to ensure a fair assessment for all candidates.
+               By proceeding, you agree to InterviewOS's <span className="text-white">Sentient Proctoring Protocol</span>. AI will monitor gaze, environmental audio, and screen integrity to ensure a fair assessment for all candidates.
              </p>
           </div>
 

@@ -19,7 +19,7 @@ function CandidateContent() {
   const [mode, setMode] = useState<'snapshot' | 'deepdive'>('snapshot');
 
   useEffect(() => {
-    const saved = localStorage.getItem('hyrte_report');
+    const saved = localStorage.getItem('interviewos_report');
     if (saved) setReport(JSON.parse(saved));
   }, []);
 

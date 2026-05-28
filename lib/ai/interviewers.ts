@@ -32,13 +32,13 @@ export const INTERVIEWERS = [
 export const INVIGILATORS = [
   {
     name: 'Ayush Shukla',
-    org: 'Hyrte AI',
+    org: 'InterviewOS AI',
     avatar: 'https://ui-avatars.com/api/?name=AyushShukla&background=f59e0b&color=fff&size=200&bold=true&font-size=0.4',
     message: 'Ayush Shukla will watch your complete interview recording'
   },
   {
     name: 'Rohan',
-    org: 'Hyrte Trust & Safety',
+    org: 'InterviewOS Trust & Safety',
     avatar: 'https://ui-avatars.com/api/?name=Rohan&background=0ea5e9&color=fff&size=200&bold=true&font-size=0.4',
     message: 'Rohan is monitoring this session for technical integrity'
   },

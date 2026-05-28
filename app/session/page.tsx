@@ -219,14 +219,14 @@ function SessionContent() {
     }
 
     // Load candidate profile (set from landing page role selector)
-    const savedProfile = localStorage.getItem('hyrte_candidate_profile');
+    const savedProfile = localStorage.getItem('interviewos_candidate_profile');
     if (savedProfile) {
       const parsedProfile = JSON.parse(savedProfile);
       setCandidateProfile(parsedProfile);
     }
 
     if (track === 'DYNAMIC') {
-      const savedCtx = localStorage.getItem('hyrte_candidate_context');
+      const savedCtx = localStorage.getItem('interviewos_candidate_context');
       if (savedCtx) {
         const ctx = JSON.parse(savedCtx);
         setDynamicContext(ctx);
@@ -251,7 +251,7 @@ function SessionContent() {
       }
     } else if (isRoleTrack) {
       // Role-specific question generation (e.g. track = 'fullstack', 'ai_ml_engineer', etc.)
-      const profileRaw = localStorage.getItem('hyrte_candidate_profile');
+      const profileRaw = localStorage.getItem('interviewos_candidate_profile');
       const profile = profileRaw ? JSON.parse(profileRaw) : {};
       fetch('/api/generate-questions', {
         method: 'POST',
@@ -281,20 +281,20 @@ function SessionContent() {
 
   useEffect(() => {
     if (isMounted) {
-      const saved = localStorage.getItem('hyrte_active_interviewer');
+      const saved = localStorage.getItem('interviewos_active_interviewer');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.avatar?.includes('ui-avatars')) {
           const colors: Record<string, string> = { Syed: '4f46e5', Ava: 'db2777', Sathvik: '059669', Zoe: '7c3aed' };
           parsed.avatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${parsed.name}&backgroundColor=${colors[parsed.name] || '4f46e5'}`;
-          localStorage.setItem('hyrte_active_interviewer', JSON.stringify(parsed));
+          localStorage.setItem('interviewos_active_interviewer', JSON.stringify(parsed));
         }
         setInterviewer(parsed);
       } else {
         const { INTERVIEWERS } = require('../../lib/ai/interviewers');
         const random = INTERVIEWERS[Math.floor(Math.random() * INTERVIEWERS.length)];
         setInterviewer(random);
-        localStorage.setItem('hyrte_active_interviewer', JSON.stringify(random));
+        localStorage.setItem('interviewos_active_interviewer', JSON.stringify(random));
       }
     }
   }, [isMounted]);
@@ -305,9 +305,9 @@ function SessionContent() {
   useEffect(() => {
     // Only trigger once when the first question loads and starts
     if (question && !isGeneratingQuestions && isStarted && timeLeft > 0) {
-      if (!window.sessionStorage.getItem('hyrte_coding_announced')) {
+      if (!window.sessionStorage.getItem('interviewos_coding_announced')) {
         setTimeout(() => triggerCodingQuestionAnnouncement(), 2000);
-        window.sessionStorage.setItem('hyrte_coding_announced', 'true');
+        window.sessionStorage.setItem('interviewos_coding_announced', 'true');
       }
     }
   }, [question, isGeneratingQuestions, isStarted, timeLeft]);
@@ -761,7 +761,7 @@ function SessionContent() {
         }
       };
 
-      localStorage.setItem('hyrte_report', JSON.stringify(reportPayload));
+      localStorage.setItem('interviewos_report', JSON.stringify(reportPayload));
       
       // PERSIST SUPPORT LOGS FOR PLATFORM BETTERMENT
       const supportLogs = {
@@ -769,17 +769,17 @@ function SessionContent() {
         sessionTime: new Date().toISOString(),
         interactions: supportMessages
       };
-      const existingLogs = JSON.parse(localStorage.getItem('hyrte_support_insights') || '[]');
-      localStorage.setItem('hyrte_support_insights', JSON.stringify([supportLogs, ...existingLogs]));
+      const existingLogs = JSON.parse(localStorage.getItem('interviewos_support_insights') || '[]');
+      localStorage.setItem('interviewos_support_insights', JSON.stringify([supportLogs, ...existingLogs]));
 
       // PERSISTENT APPLICATIONS LIST FOR RECRUITERS
-      const savedApps = localStorage.getItem('hyrte_applications');
+      const savedApps = localStorage.getItem('interviewos_applications');
       const apps = savedApps ? JSON.parse(savedApps) : [];
       const newApp = {
         id: `APP-${Math.floor(Math.random() * 10000)}`,
         jobId: dynamicContext?.jobId || 'GENERAL',
         candidateName: name,
-        candidateEmail: dynamicContext?.candidateEmail || 'unknown@hyrte.com',
+        candidateEmail: dynamicContext?.candidateEmail || 'unknown@interviewos.com',
         score: reportPayload.score,
         track: track,
         violations: violations, // PERSIST INTEGRITY DATA
@@ -788,7 +788,7 @@ function SessionContent() {
         simulation: reportPayload.simulation, // NEW: PERSIST SIMULATION DETAILS
         report: reportPayload
       };
-      localStorage.setItem('hyrte_applications', JSON.stringify([newApp, ...apps]));
+      localStorage.setItem('interviewos_applications', JSON.stringify([newApp, ...apps]));
 
       router.push(`/feedback?name=${encodeURIComponent(name)}&track=${track}`);
     } catch (err) {
@@ -1583,7 +1583,7 @@ function SessionContent() {
                            animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
                            transition={{ repeat: Infinity, duration: 2 }} />
                          <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest leading-none">
-                           {isSpeaking ? `${interviewer?.name || 'SYED'} IS SPEAKING...` : isThinking ? `${interviewer?.name || 'SYED'} IS THINKING...` : `${interviewer?.role || 'SENIOR INTERVIEWER'} · HYRTE`}
+                           {isSpeaking ? `${interviewer?.name || 'SYED'} IS SPEAKING...` : isThinking ? `${interviewer?.name || 'SYED'} IS THINKING...` : `${interviewer?.role || 'SENIOR INTERVIEWER'} · InterviewOS`}
                          </p>
                       </div>
                    </div>

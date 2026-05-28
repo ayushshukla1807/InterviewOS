@@ -160,7 +160,7 @@ export default function InterviewPage() {
                 <div className={`max-w-2xl p-6 rounded-3xl ${m.role === 'assistant' ? 'glass-card text-slate-200' : 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20'}`}>
                   <div className="flex items-center gap-3 mb-3 opacity-50">
                     {m.role === 'assistant' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    <span className="text-[9px] font-black uppercase tracking-widest">{m.role === 'assistant' ? 'HYRTE AI' : 'Candidate'}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest">{m.role === 'assistant' ? 'InterviewOS AI' : 'Candidate'}</span>
                   </div>
                   <p className="text-sm leading-relaxed font-medium">{m.content}</p>
                 </div>
