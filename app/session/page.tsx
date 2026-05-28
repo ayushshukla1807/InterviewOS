@@ -10,6 +10,7 @@ import {
   Maximize2, Play, Power, Volume2, VolumeX, ShieldAlert, Headphones, X, Terminal, Monitor,
   Briefcase, ListTodo, CheckCircle2, Cpu, FileCode, Check, AlertTriangle, RefreshCw, Activity
 } from 'lucide-react';
+import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
 
 type Message = { role: 'assistant' | 'user'; content: string; };
 type TabType = 'simulation' | 'code' | 'voice';
@@ -422,13 +423,75 @@ function SessionContent() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const recognitionRef = useRef<any>(null);
 
+  // ML Trackers
+  const initMLTrackers = async (mediaStream: MediaStream, videoElement: HTMLVideoElement) => {
+    try {
+      // 1. Audio Anomaly Detection (Background noise)
+      const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const analyzer = audioCtx.createAnalyser();
+      const source = audioCtx.createMediaStreamSource(mediaStream);
+      source.connect(analyzer);
+      analyzer.fftSize = 256;
+      const dataArray = new Uint8Array(analyzer.frequencyBinCount);
+      
+      setInterval(() => {
+         analyzer.getByteFrequencyData(dataArray);
+         const avgNoise = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+         setNoiseVal(Math.min(100, Math.round(avgNoise)));
+      }, 2000);
+
+      // 2. Computer Vision (Gaze & Face)
+      const vision = await FilesetResolver.forVisionTasks(
+         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+      const faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
+         baseOptions: {
+            modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+            delegate: "GPU"
+         },
+         outputFaceBlendshapes: true,
+         runningMode: "VIDEO",
+         numFaces: 1
+      });
+
+      let lastVideoTime = -1;
+      const detectFace = () => {
+         if (videoElement.readyState >= 2) {
+            if (videoElement.currentTime !== lastVideoTime) {
+               const results = faceLandmarker.detectForVideo(videoElement, performance.now());
+               if (results.faceBlendshapes && results.faceBlendshapes.length > 0) {
+                  // Eye tracking logic (simplified)
+                  const shapes = results.faceBlendshapes[0].categories;
+                  const eyeBlink = shapes.find(s => s.categoryName === 'eyeBlinkLeft')?.score || 0;
+                  // If blink is too high or face missing, drop gaze value
+                  setGazeVal(Math.max(40, 100 - (eyeBlink * 100)));
+               } else {
+                  // No face detected
+                  setGazeVal(10);
+               }
+               lastVideoTime = videoElement.currentTime;
+            }
+         }
+         requestAnimationFrame(detectFace);
+      };
+      detectFace();
+
+    } catch (e) {
+      console.warn("ML Trackers failed to init (expected in strict environments):", e);
+    }
+  };
+
   // Initialize Hardware
   useEffect(() => {
     const initHardware = async () => {
       try {
         const s = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setStream(s);
-        if (videoRef.current) videoRef.current.srcObject = s;
+        if (videoRef.current) {
+           videoRef.current.srcObject = s;
+           videoRef.current.play();
+           initMLTrackers(s, videoRef.current);
+        }
       } catch (err) {
         console.error("Hardware access denied:", err);
       }
@@ -583,6 +646,23 @@ function SessionContent() {
     const transcript = messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n\n');
 
     try {
+      // 1. Fetch ML Code Originality
+      let originalityScore = null;
+      if (code && code.trim()) {
+         try {
+            const ogRes = await fetch('/api/ml/originality', {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({ code })
+            });
+            const ogData = await ogRes.json();
+            originalityScore = ogData.originalityScore;
+         } catch (e) {
+            console.error("Originality ML failed:", e);
+         }
+      }
+
+      // 2. Fetch Final Evaluation
       const res = await fetch('/api/evaluate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -590,7 +670,14 @@ function SessionContent() {
           transcript,
           code,
           questionTitle: question.title,
-          track
+          track,
+          originalityScore,
+          proctoringStats: {
+             finalGaze: gazeVal,
+             finalNoise: noiseVal,
+             voiceConfidence: voiceConfidence,
+             koyoViolations: violations
+          }
         })
       });
       const evaluationData = await res.json();
@@ -1066,48 +1153,46 @@ function SessionContent() {
                            {/* Confidence Score */}
                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 space-y-4">
                               <div className="flex justify-between items-center">
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Confidence Match</span>
-                                 <span className="text-xs font-black text-emerald-400">87%</span>
+                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Voice Confidence</span>
+                                 <span className="text-xs font-black text-emerald-400">{Math.round(voiceConfidence)}%</span>
                               </div>
                               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                                 <motion.div className="h-full bg-emerald-500 rounded-full" initial={{ width: 0 }} animate={{ width: '87%' }} transition={{ duration: 1 }} />
+                                 <motion.div className="h-full bg-emerald-500 rounded-full" initial={{ width: 0 }} animate={{ width: `${voiceConfidence}%` }} transition={{ duration: 1 }} />
                               </div>
                            </div>
 
                            {/* Sentiment Analyzer */}
                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 space-y-4">
                               <div className="flex justify-between items-center">
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Vocal Sentiment</span>
-                                 <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">Positive</span>
+                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Micro Expression</span>
+                                 <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">{microExpression}</span>
                               </div>
                               <div className="flex gap-1 h-8 items-end">
                                  {[40, 60, 30, 80, 50, 70, 90, 40].map((val, i) => (
-                                    <motion.div key={i} className="flex-1 bg-indigo-500/50 rounded-t-sm" animate={{ height: `${val}%` }} transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse', delay: i * 0.1 }} />
+                                    <motion.div key={i} className="flex-1 bg-indigo-500/50 rounded-t-sm" animate={{ height: `${Math.random() * 100}%` }} transition={{ duration: 0.5 }} />
                                  ))}
                               </div>
                            </div>
 
-                           {/* Stress Level */}
+                           {/* Noise & Acoustic Anomaly */}
                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 space-y-4">
                               <div className="flex justify-between items-center">
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Cognitive Load</span>
-                                 <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">Nominal</span>
+                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Acoustic Load (Noise)</span>
+                                 <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">{noiseVal}%</span>
                               </div>
                               <div className="h-2 bg-white/10 rounded-full overflow-hidden flex">
-                                 <div className="h-full bg-emerald-500 w-1/3" />
-                                 <div className="h-full bg-amber-500 w-1/3 opacity-20" />
-                                 <div className="h-full bg-rose-500 w-1/3 opacity-20" />
+                                 <motion.div className="h-full bg-amber-500" animate={{ width: `${noiseVal}%` }} />
                               </div>
-                              <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest text-center mt-2">Stress Level: LOW</p>
+                              <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest text-center mt-2">Anomaly: {noiseVal > 70 ? 'DETECTED' : 'LOW'}</p>
                            </div>
 
-                           {/* Eye Tracking Mock */}
+                           {/* Gaze Tracking ML */}
                            <div className="mt-auto bg-slate-900/50 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
                               <div className="flex items-center gap-3">
-                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                 <div className={`w-2 h-2 rounded-full animate-pulse ${gazeVal < 50 ? 'bg-rose-500' : 'bg-emerald-500'}`} />
                                  <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Gaze Tracking</span>
                               </div>
-                              <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Locked</span>
+                              <span className={`text-[9px] font-black uppercase tracking-widest ${gazeVal < 50 ? 'text-rose-500' : 'text-emerald-500'}`}>{gazeVal < 50 ? 'Deviated' : 'Locked'}</span>
                            </div>
                         </div>
                      </motion.div>
