@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { transcript, code, questionTitle, track } = await req.json();
+    const { transcript, code, questionTitle, track, originalityScore, proctoringStats } = await req.json();
 
     const systemPrompt = `You are a Senior Hiring Lead at a top-tier company. Evaluate this candidate interview with extreme rigor and zero tolerance for vague answers.
 
@@ -112,6 +112,11 @@ Analyze the FULL interview transcript and code. Return EXACTLY this JSON with NO
   "codeEvaluation": {
     "score": <0-100>,
     "evaluation": "<Specific detailed analysis of their code approach. Mention exact architectural choices, missing edge cases, and improvement areas.>"
+  },
+  "machineLearningInsights": {
+    "predictedHiringProbability": <0-100>,
+    "originalityImpact": "<How did their code originality score impact the decision?>",
+    "proctoringImpact": "<How did their gaze/noise tracking impact the trust score?>"
   }
 }
 
@@ -124,7 +129,7 @@ STRICT RULES:
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: [
-        { role: 'user', parts: [{ text: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nFull Interview Transcript:\n${transcript}` }] }
+        { role: 'user', parts: [{ text: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nCode Originality ML Score: ${originalityScore || 'Unknown'}%\nProctoring ML Stats (Gaze, Noise, Confidence): ${JSON.stringify(proctoringStats || {})}\n\nFull Interview Transcript:\n${transcript}` }] }
       ],
       config: {
         systemInstruction: systemPrompt,
