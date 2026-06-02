@@ -5,11 +5,13 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function POST(req: Request) {
   try {
-    const { transcript, code, questionTitle, track, originalityScore, proctoringStats } = await req.json();
+    const { transcript, code, questionTitle, track, originalityScore, proctoringStats, simulationSummary, simulationGraph } = await req.json();
 
     const systemPrompt = `You are a Senior Hiring Lead at a top-tier company. Evaluate this candidate interview with extreme rigor and zero tolerance for vague answers.
+    
+If a workplace simulation was provided, you MUST analyze their simulation behavior deeply and synthesize it into the overall behavioral scores.
 
-Analyze the FULL interview transcript and code. Return EXACTLY this JSON with NO extra commentary:
+Analyze the FULL interview transcript, code, and simulation data. Return EXACTLY this JSON with NO extra commentary:
 
 {
   "overallScore": <0-100>,
@@ -117,6 +119,17 @@ Analyze the FULL interview transcript and code. Return EXACTLY this JSON with NO
     "predictedHiringProbability": <0-100>,
     "originalityImpact": "<How did their code originality score impact the decision?>",
     "proctoringImpact": "<How did their gaze/noise tracking impact the trust score?>"
+  },
+
+  "simulationBehavioralGraph": {
+    "pressureResponse": <0-100>,
+    "decisionConsistency": <0-100>,
+    "leadershipSignals": <0-100>,
+    "conflictStyle": "Collaborative" | "Aggressive" | "Avoidant" | "Passive Aggressive" | "Diplomatic",
+    "accountability": <0-100>,
+    "stakeholderManagement": <0-100>,
+    "ambiguityTolerance": <0-100>,
+    "graphSummary": "<3 sentences specifically on how they managed the simulated workplace chaos, ignoring emails, escalating, etc.>"
   }
 }
 
@@ -129,7 +142,7 @@ STRICT RULES:
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: [
-        { role: 'user', parts: [{ text: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nCode Originality ML Score: ${originalityScore || 'Unknown'}%\nProctoring ML Stats (Gaze, Noise, Confidence): ${JSON.stringify(proctoringStats || {})}\n\nFull Interview Transcript:\n${transcript}` }] }
+        { role: 'user', parts: [{ text: `Track: ${track}\nQuestion: ${questionTitle}\n\nCode Written by Candidate:\n\`\`\`\n${code}\n\`\`\`\n\nCode Originality ML Score: ${originalityScore || 'Unknown'}%\nProctoring ML Stats (Gaze, Noise, Confidence): ${JSON.stringify(proctoringStats || {})}\n\nSimulation Behavior Summary:\n${simulationSummary || 'No simulation completed.'}\n\nSimulation Raw Metrics:\n${JSON.stringify(simulationGraph || {})}\n\nFull Interview Transcript:\n${transcript}` }] }
       ],
       config: {
         systemInstruction: systemPrompt,

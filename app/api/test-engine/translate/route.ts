@@ -1,186 +1,195 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { JD_TRANSLATOR_SYSTEM_PROMPT } from '../../../../lib/ai/test-engine-prompts';
+import type { SimulationBlueprint } from '../../../../lib/simulation/types';
+import { generateRandomName, getInitials, getAvatarColor, NAME_POOL } from '../../../../lib/simulation/characters';
 
 export const dynamic = 'force-dynamic';
 
+// ─── Fallback Blueprint (for when AI is unavailable) ──────────────────────────
+function buildFallbackBlueprint(): SimulationBlueprint {
+  return {
+    role: 'Product Manager',
+    workspace: 'product_manager',
+    companyCultureProfile: 'Aggressive Scale-up',
+    company: 'NovaTech',
+    stakeholders: [
+      {
+        id: 's1', name: 'Arjun Mehta', role: 'VP Engineering', department: 'Engineering',
+        avatar: 'AM', avatarColor: '#ef4444', personality: 'overbearing_executive',
+        trust: 100, frustration: 0, cooperation: 70, escalationLevel: 0,
+        interactionHistory: [], isManager: true,
+        photoUrl: 'https://randomuser.me/api/portraits/men/32.jpg'
+      },
+      {
+        id: 's2', name: 'Priya Singh', role: 'Lead Designer', department: 'Design',
+        avatar: 'PS', avatarColor: '#8b5cf6', personality: 'passive_aggressive',
+        trust: 100, frustration: 0, cooperation: 80, escalationLevel: 0,
+        interactionHistory: [], isManager: false, reportsTo: 's1',
+        photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg'
+      },
+      {
+        id: 's3', name: 'Sarah Chen', role: 'Enterprise Client', department: 'External',
+        avatar: 'SC', avatarColor: '#f97316', personality: 'difficult_client',
+        trust: 100, frustration: 0, cooperation: 60, escalationLevel: 0,
+        interactionHistory: [], isManager: false,
+        photoUrl: 'https://randomuser.me/api/portraits/women/68.jpg'
+      },
+      {
+        id: 's4', name: 'Marcus Williams', role: 'Senior Engineer', department: 'Engineering',
+        avatar: 'MW', avatarColor: '#22c55e', personality: 'lazy_contributor',
+        trust: 100, frustration: 0, cooperation: 85, escalationLevel: 0,
+        interactionHistory: [], isManager: false, reportsTo: 's1',
+        photoUrl: 'https://randomuser.me/api/portraits/men/54.jpg'
+      },
+    ],
+    acts: [
+      {
+        act: 1,
+        title: 'Act 1: Normal Day',
+        description: 'Sprint planning day. Three things land at once.',
+        durationSeconds: 600,
+        initialEvents: [
+          {
+            id: 'evt-a1-1', type: 'slack', fromStakeholderId: 's2',
+            channel: '#product-design', subject: undefined,
+            message: "Hey, can we jump on a quick call? The new onboarding flow designs are ready for your sign-off. Been waiting since yesterday tbh.",
+            priority: 'MEDIUM', requiresResponse: true, revealAt: 0, isRead: false, isAnswered: false,
+          },
+          {
+            id: 'evt-a1-2', type: 'email', fromStakeholderId: 's3',
+            channel: undefined, subject: 'Feature request — Dashboard export',
+            message: "Hi,\n\nFollowing up on our call last Thursday. Our team urgently needs the CSV export feature in the dashboard. Our board presentation is next Friday and we committed to showing this.\n\nCan you confirm a delivery date?\n\nBest,\nSarah Chen\nCTO, GlobalOps Ltd.",
+            priority: 'HIGH', requiresResponse: true, revealAt: 15, isRead: false, isAnswered: false,
+          },
+          {
+            id: 'evt-a1-3', type: 'task', fromStakeholderId: 's1',
+            channel: undefined, subject: undefined,
+            message: 'Q2 Roadmap deck needs to be ready for board review by 3pm today. Arjun added you as owner.',
+            priority: 'CRITICAL', requiresResponse: false, revealAt: 45, isRead: false, isAnswered: false,
+          },
+        ],
+        challenge: {
+          id: 'ch-1',
+          type: 'priority_decision',
+          prompt: "You have 3 things competing for your attention right now:\n\n1. Priya's design sign-off (she's been waiting since yesterday)\n2. Sarah Chen's urgent feature request (board presentation next Friday)\n3. The Q2 Roadmap deck Arjun needs by 3pm today\n\nHow do you handle the next 2 hours? Walk through your prioritization logic, who you respond to first, what you say, and what gets deprioritized. Be specific.",
+          relatedEventIds: ['evt-a1-1', 'evt-a1-2', 'evt-a1-3'],
+          evaluationCriteria: ['Prioritization logic', 'Stakeholder communication', 'Deadline awareness', 'Clarity of response'],
+        },
+      },
+      {
+        act: 2,
+        title: 'Act 2: Crisis Hits',
+        description: 'The client escalates. Engineering is blocked. Leadership is watching.',
+        durationSeconds: 1200,
+        initialEvents: [
+          {
+            id: 'evt-a2-1', type: 'email', fromStakeholderId: 's3',
+            channel: undefined, subject: 'RE: Feature request — URGENT',
+            message: "I sent this 2 hours ago and have heard nothing. This is completely unacceptable. We are a paying enterprise customer. I need a response NOW or I'm escalating to your CEO.",
+            priority: 'CRITICAL', requiresResponse: true, revealAt: 0, isRead: false, isAnswered: false,
+          },
+          {
+            id: 'evt-a2-2', type: 'slack', fromStakeholderId: 's4',
+            channel: '#engineering', subject: undefined,
+            message: "Hey, the CSV export is actually a bigger lift than we thought. Minimum 3 weeks. Might be able to do a basic version in 1.5 weeks but it'll be rough. What do you want me to do?",
+            priority: 'HIGH', requiresResponse: true, revealAt: 30, isRead: false, isAnswered: false,
+          },
+          {
+            id: 'evt-a2-3', type: 'notification', fromStakeholderId: 's1',
+            channel: undefined, subject: undefined,
+            message: '⚠️ Board Deck Review in 45 minutes. Arjun expects the roadmap in Notion now.',
+            priority: 'CRITICAL', requiresResponse: false, revealAt: 90, isRead: false, isAnswered: false,
+          },
+        ],
+        challenge: {
+          id: 'ch-2',
+          type: 'open_ended_reply',
+          prompt: "Write the email you'd send to Sarah Chen (the enterprise client) right now. You know:\n- Feature will take 3 weeks minimum (or 1.5 weeks for a rough version)\n- She's already angry\n- She threatened to escalate to your CEO\n- You haven't spoken to your CEO yet\n\nBe specific. Your actual words matter — this is a real client relationship.",
+          relatedEventIds: ['evt-a2-1', 'evt-a2-2'],
+          evaluationCriteria: ['Communication clarity', 'Accountability', 'Expectation management', 'Tone under pressure', 'Solution orientation'],
+        },
+      },
+      {
+        act: 3,
+        title: 'Act 3: Leadership Steps In',
+        description: 'The CEO is now involved. You need to navigate upward and resolve.',
+        durationSeconds: 600,
+        initialEvents: [
+          {
+            id: 'evt-a3-1', type: 'email', fromStakeholderId: 's1',
+            channel: undefined, subject: 'GlobalOps situation — what happened?',
+            message: "Sarah Chen just emailed me directly. What's the situation? I need a full briefing in 15 minutes. Why did this escalate without my knowledge?",
+            priority: 'CRITICAL', requiresResponse: true, revealAt: 0, isRead: false, isAnswered: false,
+          },
+          {
+            id: 'evt-a3-2', type: 'slack', fromStakeholderId: 's2',
+            channel: '#general', subject: undefined,
+            message: "Btw I still haven't gotten your sign-off on the designs. Design review is tomorrow morning. Just putting this here since you didn't respond earlier.",
+            priority: 'LOW', requiresResponse: false, revealAt: 60, isRead: false, isAnswered: false,
+          },
+        ],
+        challenge: {
+          id: 'ch-3',
+          type: 'stakeholder_negotiation',
+          prompt: "Arjun (VP Engineering / your manager) wants a briefing in 15 minutes about the GlobalOps situation. You need to:\n1. Explain what happened without making yourself look incompetent\n2. Present a concrete resolution plan\n3. Manage the fact that you didn't loop him in earlier\n\nWrite what you'd say in that 15-minute briefing. Be honest about the mistakes, clear about the plan, and specific about next steps.",
+          relatedEventIds: ['evt-a3-1'],
+          evaluationCriteria: ['Accountability under pressure', 'Upward communication', 'Problem ownership', 'Plan quality', 'Honesty vs self-protection'],
+        },
+      },
+    ],
+    benchmarks: { expectedScore: 72, criticalSkills: ['Prioritization', 'Client communication', 'Upward management'] },
+  };
+}
+
+// ─── Main Route ───────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const { jd } = await req.json();
+    const { jd, candidateName } = await req.json();
 
-    if (!jd) {
-      return NextResponse.json({ error: 'JD is required' }, { status: 400 });
+    if (!jd?.trim()) {
+      return NextResponse.json({ blueprint: buildFallbackBlueprint() });
     }
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: [{ role: 'user', parts: [{ text: `Here is the Job Description:\n\n${jd}` }] }],
-      config: {
-        systemInstruction: JD_TRANSLATOR_SYSTEM_PROMPT,
-        responseMimeType: 'application/json',
-      }
+      contents: [
+        { role: 'user', parts: [{ text: JD_TRANSLATOR_SYSTEM_PROMPT }] },
+        { role: 'user', parts: [{ text: `JD: ${jd}\n\nCandidate Name: ${candidateName ?? 'The Candidate'}` }] },
+      ],
+      config: { responseMimeType: 'application/json' },
     });
 
-    const raw = response.text || '{}';
-    const cleanRaw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
-    
-    let blueprint;
+    const raw = (response.text ?? '').replace(/```json/g, '').replace(/```/g, '').trim();
+    let blueprint: SimulationBlueprint;
+
     try {
-      blueprint = JSON.parse(cleanRaw);
-    } catch (parseErr) {
-      return NextResponse.json({ error: 'Failed to parse AI response into JSON' }, { status: 500 });
+      blueprint = JSON.parse(raw);
+      if (candidateName) blueprint.candidateName = candidateName;
+
+      // Inject photorealistic profile URLs
+      const femaleNames = ['priya', 'sarah', 'zoe', 'elena', 'neha', 'aisha', 'kavya', 'fatima', 'ananya', 'ava'];
+      blueprint.stakeholders = blueprint.stakeholders.map((s, index) => {
+        const firstName = s.name.split(' ')[0].toLowerCase();
+        const isFemale = femaleNames.includes(firstName) || s.avatarColor === '#8b5cf6' || s.avatarColor === '#ec4899';
+        const gender = isFemale ? 'women' : 'men';
+        const photoId = ((index * 23 + 15) % 95) + 1;
+        return {
+          ...s,
+          photoUrl: `https://randomuser.me/api/portraits/${gender}/${photoId}.jpg`
+        };
+      });
+    } catch {
+      console.error('Blueprint parse failed, using fallback');
+      blueprint = buildFallbackBlueprint();
     }
 
     return NextResponse.json({ blueprint });
-  } catch (err: any) {
-    console.warn("API Error in JD Translation Engine (falling back to mock blueprint):", err.message);
-    
-    // Fallback blueprint so the UI can still be tested even if the Gemini API is overloaded (503)
-    const mockBlueprint = {
-      role: "Senior Software Engineer (Simulated)",
-      companyCultureProfile: "High-Pressure Tech Startup (Fast-paced, demanding)",
-      evaluationWeights: { cognitive: 30, communication: 20, integrity: 25, risk: 25 },
-      modules: [
-        {
-          type: "cognitive",
-          title: "Technical Aptitude",
-          questions: [
-            {
-              id: "COG-1",
-              q: "How would you optimize a slow database query causing timeouts in a production microservice?",
-              options: ["Add an index on the WHERE clause columns", "Rewrite the query using raw SQL", "Scale the DB instances vertically", "Implement a caching layer (Redis) with TTL invalidation"],
-              answer: "Implement a caching layer (Redis) with TTL invalidation",
-              difficulty: "medium",
-              skillTag: "System Design",
-              trapLogic: "Adding an index helps but doesn't solve read-heavy load patterns that caching handles."
-            },
-            {
-              id: "COG-2",
-              q: "A Kubernetes pod is crash-looping with OOMKilled status. Your service handles image processing. What is the MOST effective long-term fix?",
-              options: ["Increase the pod memory limit to 8Gi", "Add a horizontal pod autoscaler", "Implement streaming/chunked processing to reduce peak memory", "Restart the deployment"],
-              answer: "Implement streaming/chunked processing to reduce peak memory",
-              difficulty: "hard",
-              skillTag: "Infrastructure & DevOps",
-              trapLogic: "Increasing limits masks the problem. Streaming fixes the root cause of high peak memory."
-            }
-          ]
-        },
-        {
-          type: "behavioral",
-          title: "Workplace Scenario (SJT)",
-          questions: [
-            {
-              id: "SJT-1",
-              scenario: "A critical production deployment fails 10 minutes before an investor demo. Your junior engineer pushed the breaking code. What do you do?",
-              options: [
-                "Immediately rollback the deployment, inform stakeholders calmly, and shield the junior from blame.",
-                "Wait and hope the issue resolves itself before the demo starts.",
-                "Publicly call out the junior engineer in the team channel so leadership knows it wasn't your fault.",
-                "Cancel the demo entirely and escalate to your manager in a panic."
-              ],
-              idealBehavior: "Rollbacks ensure stability quickly. Shielding the junior shows leadership and ownership.",
-              riskFlag: "Blaming others or panicking indicates low emotional control and poor leadership."
-            },
-            {
-              id: "SJT-2",
-              scenario: "You discover that a senior colleague has been taking credit for your team's work in executive presentations. A promotion cycle is coming up. How do you handle this?",
-              options: [
-                "Privately discuss it with the colleague first, then document your contributions for the next review cycle.",
-                "Do nothing and hope your work speaks for itself.",
-                "Publicly confront them in the next team meeting to expose the behavior.",
-                "Immediately escalate to HR without talking to the colleague first."
-              ],
-              idealBehavior: "Direct private conversation shows maturity. Documentation shows strategic thinking.",
-              riskFlag: "Passive avoidance or aggressive confrontation both indicate poor conflict resolution skills."
-            }
-          ]
-        },
-        {
-          type: "workplace_simulation",
-          title: "Dynamic Workplace Environment",
-          scenario: {
-            context: "It is 10:15 AM on a Monday morning. Your startup just launched v2.0 of your payment platform over the weekend. You are at your desk with coffee, and suddenly your laptop starts blowing up with notifications.",
-            slackMessages: [
-              {
-                id: "slack-1",
-                from: "Riya Kapoor - VP Engineering",
-                avatar: "RK",
-                avatarColor: "#ef4444",
-                time: "10:16 AM",
-                message: "🚨 @channel Payment processing is DOWN for EU customers. Stripe webhooks returning 502. Revenue impact is ~$12K/hour. Need someone on this NOW.",
-                channel: "#incidents"
-              },
-              {
-                id: "slack-2",
-                from: "Arjun Mehta - Product Manager",
-                avatar: "AM",
-                avatarColor: "#6366f1",
-                time: "10:18 AM",
-                message: "Hey, the CEO just pinged me. BigCorp (our largest client) is threatening to churn if payments aren't fixed by noon. Can you give me an ETA I can share? Also the board deck is due at 2 PM and I need the Q2 metrics from your service.",
-                channel: "#product"
-              },
-              {
-                id: "slack-3",
-                from: "Neha Sharma - Junior Engineer",
-                avatar: "NS",
-                avatarColor: "#22c55e",
-                time: "10:20 AM",
-                message: "I think I might have caused this... I merged a config change to the webhook handler on Friday and didn't run the EU test suite because it was timing out. I'm really sorry. Should I try to revert it?",
-                channel: "#incidents"
-              }
-            ],
-            emails: [
-              {
-                id: "email-1",
-                from: "David Chen <david.chen@bigcorp.io>",
-                subject: "URGENT: Payment failures affecting our operations - Immediate response required",
-                receivedAt: "10:22 AM",
-                body: "Hi, we are seeing widespread payment failures on our end since this morning. Our finance team has already escalated this to our CTO. We need a written incident report and a confirmed fix timeline within the next 2 hours, or we will need to begin evaluating alternative providers. This is not acceptable for a Tier-1 vendor relationship.",
-                isUnread: true
-              }
-            ],
-            tasks: [
-              {
-                id: "task-1",
-                title: "PROD-911: Stripe webhook 502s for EU payment processing",
-                priority: "CRITICAL",
-                assignedTo: "You",
-                dueIn: "30 minutes",
-                description: "EU payment webhooks returning 502. Likely related to Friday's config merge. Revenue impact: $12K/hr."
-              },
-              {
-                id: "task-2",
-                title: "REPORT-42: Q2 platform metrics for board deck",
-                priority: "HIGH",
-                assignedTo: "You",
-                dueIn: "3 hours",
-                description: "PM needs Q2 transaction volume, uptime %, and latency metrics for the 2 PM board presentation."
-              }
-            ]
-          },
-          challenges: [
-            {
-              id: "ws-challenge-1",
-              type: "priority_decision",
-              prompt: "You have a critical production incident, a panicked junior engineer, a board deck deadline, and an angry enterprise client. Rank your next 3 actions in order of priority and explain your reasoning.",
-              evaluationCriteria: ["Prioritization", "Reasoning Under Pressure", "Leadership", "Composure"]
-            },
-            {
-              id: "ws-challenge-2",
-              type: "open_ended_reply",
-              prompt: "Draft a professional email reply to David Chen (BigCorp) that acknowledges the issue, provides a realistic timeline, and maintains the client relationship—without over-promising.",
-              evaluationCriteria: ["Communication Clarity", "Emotional Control", "Stakeholder Management", "Accountability", "Honesty"]
-            }
-          ]
-        }
-      ],
-      benchmarks: {
-        expectedScore: 82,
-        criticalSkills: ["Incident Response", "Stakeholder Communication", "System Design", "Leadership Under Pressure"]
-      }
-    };
 
-    return NextResponse.json({ blueprint: mockBlueprint });
+  } catch (err: any) {
+    console.error('Translate route error:', err);
+    return NextResponse.json({ blueprint: buildFallbackBlueprint() });
   }
 }

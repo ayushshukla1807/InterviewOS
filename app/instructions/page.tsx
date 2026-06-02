@@ -35,6 +35,7 @@ function InstructionsContent() {
   const nameParam = searchParams.get('name') || 'Ayush Shukla';
   const trackParam = searchParams.get('track') || 'JS';
   const mockParam = searchParams.get('mock') === 'true';
+  const simulationSessionId = searchParams.get('simulationSessionId') || '';
   
   const trackConfig: Record<string, { title: string; time: string; questions: number | string; invigilator: string }> = {
     JS: { title: 'InterviewOS JavaScript Engineering Interview', time: '60 mins', questions: 4, invigilator: 'Syed' },
@@ -365,7 +366,7 @@ function InstructionsContent() {
                   </label>
 
                   <button 
-                    onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}`)}
+                    onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`)}
                     disabled={!pledged}
                     className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${
                       pledged ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20 hover:bg-indigo-500' : 'bg-slate-100 text-slate-400 cursor-not-allowed'

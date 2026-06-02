@@ -17,6 +17,7 @@ type TabType = 'simulation' | 'code' | 'voice';
 
 import dynamic from 'next/dynamic';
 const Excalidraw = dynamic(() => import('@excalidraw/excalidraw').then(mod => mod.Excalidraw), { ssr: false });
+import CodeChallenge from '../components/CodeChallenge';
 
 import { questionEngine } from '../../lib/db/questions';
 import { INTERVIEWER_PERSONA } from '../../lib/ai/prompts';
@@ -28,6 +29,17 @@ function SessionContent() {
   const name = searchParams.get('name') || 'Candidate';
   const track = (searchParams.get('track') || 'JS');
   const isMock = searchParams.get('mock') === 'true'; // controls hint visibility
+  const simulationSessionId = searchParams.get('simulationSessionId') || '';
+  const [simulationSummary, setSimulationSummary] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (simulationSessionId) {
+      const summary = sessionStorage.getItem(`simulation_summary_${simulationSessionId}`) || localStorage.getItem(`simulation_summary_${simulationSessionId}`);
+      if (summary) {
+        setSimulationSummary(summary);
+      }
+    }
+  }, [simulationSessionId]);
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
@@ -421,6 +433,7 @@ function SessionContent() {
   useEffect(() => { isListeningRef.current = isListening; }, [isListening]);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRefMirror = useRef<HTMLVideoElement>(null);
   const recognitionRef = useRef<any>(null);
 
   // ML Trackers
@@ -491,6 +504,10 @@ function SessionContent() {
            videoRef.current.srcObject = s;
            videoRef.current.play();
            initMLTrackers(s, videoRef.current);
+        }
+        if (videoRefMirror.current) {
+           videoRefMirror.current.srcObject = s;
+           videoRefMirror.current.play();
         }
       } catch (err) {
         console.error("Hardware access denied:", err);
@@ -637,6 +654,7 @@ function SessionContent() {
           messages: updated,
           track,
           candidateProfile: candidateProfile ? { ...candidateProfile, name } : null,
+          simulationSummary: simulationSummary,
           system: !candidateProfile ? (INTERVIEWER_PERSONA + systemCtx + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`) : undefined,
         }),
       });
@@ -1129,7 +1147,7 @@ function SessionContent() {
                                  <div className={`absolute -inset-4 rounded-full border-2 border-emerald-500/20 ${isListening && !isSpeaking ? 'animate-[spin_4s_linear_infinite]' : ''}`} style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
                                  <div className={`absolute -inset-2 rounded-full border-2 border-teal-500/30 ${isListening && !isSpeaking ? 'animate-[spin_3s_linear_infinite_reverse]' : ''}`} style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
                                  <div className={`relative w-40 h-40 rounded-full p-2 z-10 ${isListening && !isSpeaking ? 'bg-gradient-to-tr from-emerald-500 to-teal-500 shadow-[0_0_60px_rgba(16,185,129,0.5)]' : 'bg-white/10'}`}>
-                                    <video ref={videoRef} autoPlay playsInline muted className="w-full h-full rounded-full object-cover border-4 border-[#0a0a0c] bg-slate-800 scale-x-[-1]" />
+                                    <video ref={videoRefMirror} autoPlay playsInline muted className="w-full h-full rounded-full object-cover border-4 border-[#0a0a0c] bg-slate-800 scale-x-[-1]" />
                                     <div className="absolute -bottom-2 -left-2 bg-emerald-600 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 shadow-lg shadow-emerald-500/20 text-white">YOU</div>
                                  </div>
                                  <p className="text-xs font-black uppercase tracking-widest text-slate-400">{name}</p>
@@ -1449,12 +1467,15 @@ function SessionContent() {
                                 spellCheck={false}
                               />
                             ) : activeEditorTab === 'final' ? (
-                              <textarea
-                                value={code}
-                                onChange={e => setCode(e.target.value)}
-                                className="w-full h-full bg-transparent p-8 text-[13px] font-mono text-emerald-300/90 focus:outline-none resize-none"
-                                spellCheck={false}
-                                placeholder="// Write your final solution here..."
+                              <CodeChallenge 
+                                question="Solve the problem discussed with the AI Interviewer."
+                                initialCode={code}
+                                language={language}
+                                onSubmit={(newCode, newLang) => {
+                                  setCode(newCode);
+                                  setLanguage(newLang);
+                                  handleFinish();
+                                }}
                               />
                             ) : activeEditorTab === 'terminal' ? (
                               <div className="w-full h-full bg-black/50 p-6 flex flex-col font-mono text-[12px]">
@@ -1741,10 +1762,10 @@ function SessionContent() {
             {/* Response Protocol */}
             <div className="p-8 bg-slate-950/80 border-t border-white/5 relative shrink-0 backdrop-blur-md">
                
-               {/* Neural Mirror Feed */}
-               <motion.div drag dragConstraints={{ left: -300, right: 0, top: -400, bottom: 0 }}
-                 className="absolute -top-32 right-8 w-28 h-28 rounded-[24px] overflow-hidden border border-white/10 shadow-2xl z-50 cursor-move bg-slate-900 ring-4 ring-black/40">
-                  {stream ? <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" /> : <div className="w-full h-full flex items-center justify-center"><User className="text-slate-700 w-8 h-8" /></div>}
+               {/* Neural Mirror Feed (Face PiP) */}
+               <motion.div drag dragConstraints={{ left: -800, right: 0, top: -800, bottom: 0 }}
+                 className="fixed bottom-8 right-8 w-40 h-40 rounded-[24px] overflow-hidden border border-white/10 shadow-2xl z-50 cursor-move bg-slate-900 ring-4 ring-black/40">
+                  {stream ? <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" /> : <div className="w-full h-full flex items-center justify-center"><User className="text-slate-700 w-12 h-12" /></div>}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5">
                      <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />

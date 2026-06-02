@@ -15,6 +15,7 @@ function PermissionsContent() {
   const name = searchParams.get('name') || 'Ayush Shukla';
   const track = searchParams.get('track') || 'JS';
   const isMock = searchParams.get('mock') === 'true';
+  const simulationSessionId = searchParams.get('simulationSessionId') || '';
   const username = name.toLowerCase().replace(' ', '_');
   
   const [isMounted, setIsMounted] = useState(false);
@@ -74,7 +75,7 @@ function PermissionsContent() {
       setIsInitializing(true);
       // Artificial sentient delay for high-fidelity feel
       setTimeout(() => {
-        router.push(`/session?name=${encodeURIComponent(name)}&track=${track}${isMock ? '&mock=true' : ''}`);
+        router.push(`/session?name=${encodeURIComponent(name)}&track=${track}${isMock ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`);
       }, 1500);
     }
   };

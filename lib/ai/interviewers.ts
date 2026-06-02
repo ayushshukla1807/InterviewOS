@@ -3,28 +3,28 @@ export const INTERVIEWERS = [
     id: 'syed',
     name: 'Syed',
     role: 'Senior Technical AI',
-    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Syed&backgroundColor=4f46e5',
+    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=256&h=256&q=80',
     persona: 'Professional, senior-level, focus on system design and logic.'
   },
   {
     id: 'ava',
     name: 'Ava',
     role: 'Lead AI Architect',
-    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Ava&backgroundColor=db2777',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&h=256&q=80',
     persona: 'Sharp, inquisitive, focus on scalability and modern patterns.'
   },
   {
     id: 'sathvik',
     name: 'Sathvik',
     role: 'Systems AI Engineer',
-    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Sathvik&backgroundColor=059669',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=256&h=256&q=80',
     persona: 'Direct, technical, focus on performance and efficiency.'
   },
   {
     id: 'zoe',
     name: 'Zoe',
     role: 'Frontend Protocol AI',
-    avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Zoe&backgroundColor=7c3aed',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&h=256&q=80',
     persona: 'Creative, detail-oriented, focus on user experience and clean code.'
   }
 ];

@@ -75,7 +75,7 @@ function generateOfflineResponse(messages: any[], candidateProfile: any, roleNam
 // ─── Main Route ──────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
-    const { messages, track, system, candidateProfile } = await req.json();
+    const { messages, track, system, candidateProfile, simulationSummary } = await req.json();
 
     let systemPrompt: string;
 
@@ -97,6 +97,15 @@ export async function POST(req: Request) {
       systemPrompt = system;
     } else {
       systemPrompt = INTERVIEWER_PERSONA;
+    }
+    
+    // Cross-questioning context integration (Phase 4)
+    if (simulationSummary) {
+      systemPrompt += `\n\nCRITICAL CONTEXT FOR THIS INTERVIEW:
+The candidate just completed a 30-minute immersive workplace simulation. Here is how they behaved:
+${simulationSummary}
+
+INSTRUCTION: During this technical interview, you MUST ask at least one behavioral cross-question referencing their specific actions in the simulation. For example, if they ignored a client email, ask them why and how they handle competing priorities.`;
     }
 
     const contents = messages.map((m: any) => ({
