@@ -781,7 +781,8 @@ function SessionContent() {
           durationMinutes: Math.floor(durationSeconds / 60),
           track,
           candidateName: name
-        }
+        },
+        proctoringLogs: proctoringLogs
       };
 
       localStorage.setItem('interviewos_report', JSON.stringify(reportPayload));
@@ -807,6 +808,7 @@ function SessionContent() {
         track: track,
         violations: violations, // PERSIST INTEGRITY DATA
         koyoSignals: koyoSignals, // NEW: PERSIST KOYO DATA
+        proctoringLogs: proctoringLogs, // NEW: EXACT TIMESTAMPS
         timestamp: new Date().toISOString(),
         simulation: reportPayload.simulation, // NEW: PERSIST SIMULATION DETAILS
         report: reportPayload

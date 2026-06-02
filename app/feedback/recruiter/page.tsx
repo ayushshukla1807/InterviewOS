@@ -195,10 +195,25 @@ function RecruiterContent() {
                          <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[14px] border-l-white border-b-[8px] border-b-transparent ml-2" />
                       </button>
                    </div>
-                   {/* Flag Indicator Tooltip */}
-                   {report.violations > 0 && (
+                   {/* Real Proctoring Logs Tooltip / UI */}
+                   {report.proctoringLogs && report.proctoringLogs.length > 0 ? (
+                     <div className="absolute top-4 right-4 max-w-[250px] space-y-2">
+                       {report.proctoringLogs.slice(-3).map((log: any, idx: number) => (
+                         <div key={idx} className="px-3 py-2 bg-rose-500/90 backdrop-blur-md border border-rose-500 text-white text-[9px] font-black uppercase tracking-widest rounded-lg flex items-start gap-2 shadow-[0_0_20px_rgba(244,63,94,0.4)]">
+                            <AlertTriangle className="w-3 h-3 mt-0.5 shrink-0" /> 
+                            <div>
+                               <p className="opacity-70 text-[7px] mb-0.5">{log.time}</p>
+                               <p className="leading-tight">{log.event}</p>
+                            </div>
+                         </div>
+                       ))}
+                       {report.proctoringLogs.length > 3 && (
+                          <div className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 rounded-lg text-center text-[8px] font-black text-white">+{report.proctoringLogs.length - 3} more flags logged</div>
+                       )}
+                     </div>
+                   ) : report.violations > 0 && (
                      <div className="absolute top-4 right-4 px-3 py-1.5 bg-rose-500/90 text-white text-[9px] font-black uppercase tracking-widest rounded-lg flex items-center gap-2 shadow-[0_0_20px_rgba(244,63,94,0.4)]">
-                        <AlertTriangle className="w-3 h-3" /> Suspicious Eye Movement Logged
+                        <AlertTriangle className="w-3 h-3" /> Integrity Violation Logged
                      </div>
                    )}
                 </div>
@@ -210,7 +225,12 @@ function RecruiterContent() {
                          <div className="h-full w-1/3 bg-indigo-500" />
                       </div>
                       {/* Timeline Markers */}
-                      {report.violations > 0 && (
+                      {report.proctoringLogs && report.proctoringLogs.length > 0 ? (
+                        report.proctoringLogs.map((log: any, idx: number) => {
+                          const percent = Math.min(95, 10 + (idx * 25)); // Visual spread
+                          return <div key={idx} className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" style={{ left: `${percent}%` }} title={`${log.time} - ${log.event}`} />
+                        })
+                      ) : report.violations > 0 && (
                         <>
                           <div className="absolute top-1/2 -translate-y-1/2 left-[15%] w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="Tab Switched" />
                           <div className="absolute top-1/2 -translate-y-1/2 left-[45%] w-3 h-3 bg-rose-500 border-2 border-[#111111] rounded-full shadow-[0_0_10px_rgba(244,63,94,0.8)] opacity-70 group-hover/timeline:opacity-100 transition-opacity" title="Eye Movement" />
