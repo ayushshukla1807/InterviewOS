@@ -34,7 +34,20 @@ export default function CodeChallenge({ question, initialCode = '', language = '
         <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">{question}</p>
       </div>
       
-      <div className="flex-1 relative">
+      <div 
+        className="flex-1 relative"
+        onPaste={(e) => {
+          e.preventDefault();
+          alert("⚠️ Pasting code is strictly prohibited during this proctored assessment.");
+        }}
+        onCopy={(e) => {
+          e.preventDefault();
+          alert("⚠️ Copying code is disabled.");
+        }}
+        onCut={(e) => {
+          e.preventDefault();
+        }}
+      >
         <Editor
           height="100%"
           language={lang}

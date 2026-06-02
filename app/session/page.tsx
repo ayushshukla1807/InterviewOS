@@ -113,6 +113,7 @@ function SessionContent() {
   const [warningMsg, setWarningMsg] = useState('');
   const [terminated, setTerminated] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [proctoringLogs, setProctoringLogs] = useState<{time: string, event: string}[]>([]);
   const [koyoSignals, setKoyoSignals] = useState({
     aiAssist: false,
     secondVoice: false,
@@ -344,11 +345,12 @@ function SessionContent() {
   // ─── PROCTORING ENGINE ─────────────────────────────────────────────
   useEffect(() => {
     const triggerViolation = (msg: string) => {
+      setProctoringLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), event: msg }]);
       setViolations(prev => {
         const next = prev + 1;
-        setWarningMsg(msg);
+        setWarningMsg(`${msg} (Warning ${next}/${MAX_VIOLATIONS})`);
         setShowWarning(true);
-        setTimeout(() => setShowWarning(false), 4000);
+        setTimeout(() => setShowWarning(false), 5000);
         if (next >= MAX_VIOLATIONS) {
           setTerminated(true);
           setIsRunning(false);
@@ -511,6 +513,9 @@ function SessionContent() {
         }
       } catch (err) {
         console.error("Hardware access denied:", err);
+        setTerminated(true);
+        setIsRunning(false);
+        setWarningMsg("FATAL: Camera and Microphone permissions are strictly required for this proctored interview. Please allow access and refresh the page.");
       }
     };
     initHardware();
