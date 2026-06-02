@@ -1244,86 +1244,189 @@ function SessionContent() {
                               </div>
                               <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest text-center mt-2">Anomaly: {noiseVal > 70 ? 'DETECTED' : 'LOW'}</p>
                            </div>
-
-                           {/* Gaze Tracking ML */}
-                           <div className="mt-auto bg-slate-900/50 border border-slate-700 rounded-2xl p-4 flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                 <div className={`w-2 h-2 rounded-full animate-pulse ${gazeVal < 50 ? 'bg-rose-500' : 'bg-emerald-500'}`} />
-                                 <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Gaze Tracking</span>
-                              </div>
-                              <span className={`text-[9px] font-black uppercase tracking-widest ${gazeVal < 50 ? 'text-rose-500' : 'text-emerald-500'}`}>{gazeVal < 50 ? 'Deviated' : 'Locked'}</span>
-                           </div>
                         </div>
                      </motion.div>
                   ) : activeTab === 'simulation' ? (
                     <motion.div 
                       key="sim"
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
+                      exit={{ opacity: 0, y: -15 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
                       className="space-y-8 pb-32"
                     >
+                       {/* 1. Header: Mission Control Hub */}
+                       <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/40 p-6 backdrop-blur-md shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                          {/* Ambient glow backing */}
+                          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+                          <div className="absolute -left-20 -bottom-20 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
+                          
+                          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                             <div className="space-y-3 flex-1">
+                                <div className="flex flex-wrap items-center gap-2 text-[9px] font-black tracking-widest uppercase">
+                                   <span className="text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-md">
+                                      {scenario?.company || 'Corporate Client'}
+                                   </span>
+                                   <span className="text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-md">
+                                      {scenario?.role || 'Developer'} Track
+                                   </span>
+                                   <span className="text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2.5 py-1 rounded-md">
+                                      {scenario?.difficulty || 'Advanced'}
+                                   </span>
+                                </div>
+                                
+                                <h2 className="text-3xl font-extrabold text-white tracking-tight leading-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text">
+                                   {scenario?.title || 'Interactive Job Simulator'}
+                                </h2>
+                                
+                                <p className="text-[10px] font-bold text-slate-400 tracking-wider uppercase flex items-center gap-1.5">
+                                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                                   {scenario?.subtitle}
+                                </p>
+                             </div>
+
+                             {/* System Diagnostic Panel */}
+                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex items-center gap-3 bg-black/40 border border-white/5 rounded-2xl p-4 min-w-[280px]">
+                                <div className="text-left pr-4 border-r border-white/5">
+                                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Environment</p>
+                                   <p className="text-[10px] font-black text-emerald-400 flex items-center gap-1 mt-0.5">
+                                      <Terminal className="w-3 h-3" />
+                                      SANDBOX_ACTIVE
+                                   </p>
+                                </div>
+                                <div className="text-left pr-4 border-r border-white/5">
+                                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">SLA Threshold</p>
+                                   <p className="text-[10px] font-black text-indigo-400 flex items-center gap-1 mt-0.5">
+                                      <Clock className="w-3 h-3" />
+                                      &lt; 50ms
+                                   </p>
+                                </div>
+                                <div className="text-left col-span-2 sm:col-span-1">
+                                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Instance Signature</p>
+                                   <p className="text-[9px] font-mono text-slate-400 mt-0.5">{scenario?.id || 'SYS-ID-01'}</p>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+
+                       {/* 2. Simulation Background: Operational Briefing File */}
+                       <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-slate-950/20 p-6 shadow-inner group hover:border-white/10 transition-all duration-300">
+                          {/* Vertical Accent Glow Bar */}
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 via-cyan-500 to-transparent group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300" />
+                          
+                          <div className="space-y-4">
+                             <div className="flex items-center justify-between">
+                                <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                                   <Briefcase className="w-4 h-4 text-indigo-400" />
+                                   Operational Parameters & Briefing
+                                </h3>
+                                <span className="text-[8px] font-black text-slate-500 tracking-widest uppercase">CLASSIFIED // B2B SIMULATION</span>
+                             </div>
+                             
+                             <p className="text-slate-300 leading-relaxed text-xs font-medium whitespace-pre-wrap pl-2 select-text">
+                                {scenario?.overview}
+                             </p>
+                          </div>
+                       </div>
+
+                       {/* 3. Mapped Skills: Core Competency Diagnostics */}
                        <div className="space-y-4">
-                          <div className="flex items-center gap-3">
-                             <span className="text-[9px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full uppercase tracking-widest">
-                                {scenario?.company || 'Corporate Client'} · {scenario?.role || 'Developer'} Track
-                             </span>
-                             <div className="h-px flex-1 bg-white/5" />
-                             <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-[8px] font-black uppercase tracking-widest rounded-full border border-violet-500/20">
-                                {scenario?.difficulty || 'Advanced'}
-                             </span>
-                          </div>
-                          <h2 className="text-3xl font-black text-white tracking-tighter leading-tight">{scenario?.title || 'Interactive Job Simulator'}</h2>
-                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{scenario?.subtitle}</p>
-                       </div>
-
-                       <div className="p-6 bg-white/[0.02] border border-white/5 rounded-3xl space-y-3">
-                          <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
-                             <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
-                             Simulation Background
-                          </h3>
-                          <p className="text-slate-400 leading-relaxed text-xs font-medium whitespace-pre-wrap">
-                             {scenario?.overview}
-                          </p>
-                       </div>
-
-                       {/* Mapped Skills */}
-                       <div className="space-y-3">
-                          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Target Skills Evaluated</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                             {scenario?.skills?.map((skill: any, idx: number) => (
-                               <div key={idx} className="p-4 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-2 hover:border-indigo-500/20 transition-all">
-                                  <div>
-                                     <p className="text-[10px] font-black text-white leading-tight">{skill.name}</p>
-                                     <p className="text-[8px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{skill.level} Level</p>
-                                  </div>
-                                  <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden mt-1">
-                                     <div className="h-full bg-indigo-500" style={{ width: `${skill.weight}%` }} />
-                                  </div>
-                                  <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">Weight: {skill.weight}%</span>
-                               </div>
-                             ))}
-                          </div>
-                       </div>
-
-                       {/* Project Checklist */}
-                       <div className="space-y-4 pt-4 border-t border-white/5">
-                          <div className="flex items-center justify-between">
-                             <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
-                                <ListTodo className="w-3.5 h-3.5 text-indigo-400" />
-                                Project Checklist & Tasks
-                             </h3>
-                             <span className="text-[9px] font-black text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full">
-                                {completedTasks.length} / {scenario?.tasks?.length || 0} Completed
-                             </span>
+                          <div className="flex items-center gap-2">
+                             <Activity className="w-4 h-4 text-cyan-400" />
+                             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Core Competency Diagnostics</h3>
                           </div>
                           
-                          <div className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                             {scenario?.skills?.map((skill: any, idx: number) => {
+                               // Calculate segments for the visual bar (10 segments)
+                               const totalSegments = 10;
+                               const filledSegments = Math.round((skill.weight / 100) * totalSegments);
+                               
+                               return (
+                                 <motion.div 
+                                   key={idx}
+                                   whileHover={{ y: -4, scale: 1.01 }}
+                                   className="relative p-5 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-indigo-500/20 hover:shadow-[0_0_25px_rgba(99,102,241,0.05)] transition-all duration-300 group"
+                                 >
+                                    <div className="space-y-1">
+                                       <div className="flex items-center justify-between">
+                                          <p className="text-xs font-bold text-white leading-tight group-hover:text-indigo-300 transition-colors">{skill.name}</p>
+                                          <span className="text-[7px] font-black bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded uppercase">
+                                             {skill.level}
+                                          </span>
+                                       </div>
+                                       <p className="text-[10px] font-medium text-slate-500 leading-relaxed">
+                                          {skill.description || 'Evaluating runtime execution and optimization metrics.'}
+                                       </p>
+                                    </div>
+                                    
+                                    <div className="space-y-2">
+                                       <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400">
+                                          <span>Evaluation Weight</span>
+                                          <span className="text-indigo-400">{skill.weight}%</span>
+                                       </div>
+                                       
+                                       {/* Segmented hardware-style visualization bar */}
+                                       <div className="flex gap-1 h-2 w-full">
+                                          {Array.from({ length: totalSegments }).map((_, segmentIdx) => {
+                                             const isFilled = segmentIdx < filledSegments;
+                                             return (
+                                                <div 
+                                                   key={segmentIdx} 
+                                                   className={`h-full flex-1 rounded-sm transition-all duration-500 ${
+                                                      isFilled 
+                                                         ? 'bg-gradient-to-t from-indigo-600 to-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]' 
+                                                         : 'bg-white/5'
+                                                   }`}
+                                                />
+                                             );
+                                          })}
+                                       </div>
+                                    </div>
+                                 </motion.div>
+                               );
+                             })}
+                          </div>
+                       </div>
+
+                       {/* 4. Project Checklist: System Integration Tasks */}
+                       <div className="space-y-4 pt-6 border-t border-white/5">
+                          <div className="flex items-center justify-between">
+                             <div className="flex items-center gap-2">
+                                <ListTodo className="w-4 h-4 text-emerald-400" />
+                                <h3 className="text-[10px] font-black text-white uppercase tracking-widest">
+                                   Integration Checklist & Tasks
+                                </h3>
+                             </div>
+                             
+                             <div className="flex items-center gap-3">
+                                {/* Visual progress meter */}
+                                <div className="hidden sm:flex items-center gap-1 bg-black/40 border border-white/5 rounded-full px-3 py-1 text-[9px] font-mono text-slate-400">
+                                   <span>PROGRESS:</span>
+                                   <div className="w-16 h-1.5 bg-white/5 rounded-full overflow-hidden inline-block mx-1">
+                                      <div 
+                                         className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500" 
+                                         style={{ width: `${scenario?.tasks?.length ? (completedTasks.length / scenario.tasks.length) * 100 : 0}%` }}
+                                      />
+                                   </div>
+                                   <span className="text-emerald-400 font-bold">
+                                      {scenario?.tasks?.length ? Math.round((completedTasks.length / scenario.tasks.length) * 100) : 0}%
+                                   </span>
+                                </div>
+                                
+                                <span className="text-[9px] font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full uppercase tracking-widest">
+                                   {completedTasks.length} / {scenario?.tasks?.length || 0} Operational
+                                </span>
+                             </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-1 gap-3">
                              {scenario?.tasks?.map((task: any) => {
                                const isDone = completedTasks.includes(task.id);
                                return (
-                                 <div 
+                                 <motion.div 
                                    key={task.id}
+                                   whileHover={{ x: 4 }}
                                    onClick={() => {
                                      if (isDone) {
                                        setCompletedTasks(prev => prev.filter(id => id !== task.id));
@@ -1331,33 +1434,84 @@ function SessionContent() {
                                        setCompletedTasks(prev => [...prev, task.id]);
                                      }
                                    }}
-                                   className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
+                                   className={`group p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-4 ${
                                      isDone 
-                                       ? 'bg-emerald-500/5 border-emerald-500/20 hover:border-emerald-500/30' 
-                                       : 'bg-[#111113] border-white/5 hover:border-white/10'
+                                       ? 'bg-emerald-950/20 border-emerald-500/30 hover:border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.02)]' 
+                                       : 'bg-[#0a0a0c] border-white/5 hover:border-white/10 hover:bg-[#111115]'
                                    }`}
                                  >
-                                    <div className={`mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-all ${
-                                      isDone ? 'bg-emerald-600 border-emerald-600' : 'border-white/20 bg-white/5'
+                                    {/* High-tech animated checkbox */}
+                                    <div className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-all ${
+                                      isDone 
+                                         ? 'bg-emerald-500 border-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.4)]' 
+                                         : 'border-white/20 bg-white/5 group-hover:border-white/40'
                                     }`}>
-                                       {isDone && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                                       {isDone ? (
+                                          <Check className="w-3.5 h-3.5 text-black stroke-[3px]" />
+                                       ) : (
+                                          <div className="w-1.5 h-1.5 rounded-full bg-transparent group-hover:bg-white/20 transition-all" />
+                                       )}
                                     </div>
-                                    <div className="flex-1">
-                                       <p className={`text-xs font-black transition-all ${isDone ? 'text-emerald-400 line-through' : 'text-white'}`}>{task.title}</p>
-                                       <p className="text-[11px] font-medium text-slate-500 mt-1 leading-relaxed">{task.description}</p>
+                                    
+                                    <div className="flex-1 space-y-1">
+                                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                                          <p className={`text-xs font-bold tracking-tight transition-all duration-300 ${
+                                             isDone ? 'text-emerald-400/80 line-through' : 'text-white'
+                                          }`}>
+                                             {task.title}
+                                          </p>
+                                          
+                                          <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md self-start sm:self-center transition-all ${
+                                             isDone 
+                                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                                                : 'bg-white/5 text-slate-500 border border-transparent'
+                                          }`}>
+                                             {isDone ? 'VERIFIED' : 'PENDING'}
+                                          </span>
+                                       </div>
+                                       
+                                       <p className={`text-[10px] font-medium leading-relaxed transition-colors ${
+                                          isDone ? 'text-slate-500' : 'text-slate-400'
+                                       }`}>
+                                          {task.description}
+                                       </p>
                                     </div>
-                                 </div>
+                                 </motion.div>
                                );
                              })}
                           </div>
                        </div>
 
+                       {/* 5. Direct Uplink to Technical Lead */}
                        {isMock && (
-                          <div className="pt-4 border-t border-white/5">
-                             <button onClick={() => setInput("Can you give me a hint on this simulation task? I'm a bit stuck on implementation.")} 
-                               className="group flex items-center gap-2 px-4 py-2 bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/20 rounded-xl transition-all">
-                                <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:animate-pulse" />
-                                <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Request Hint from {interviewer?.name || 'Syed'}</span>
+                          <div className="pt-6 border-t border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                             <div className="flex items-center gap-3">
+                                <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                                <div className="text-left">
+                                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Architect Uplink Channel</p>
+                                   <p className="text-[10px] font-bold text-slate-300 uppercase tracking-wider">
+                                      Connected to: {interviewer?.name || 'Syed'} ({interviewer?.role || 'Lead Architect'})
+                                   </p>
+                                </div>
+                             </div>
+                             
+                             <button 
+                                onClick={() => setInput("Can you give me a hint on this simulation task? I'm a bit stuck on implementation.")} 
+                                className="group relative overflow-hidden flex items-center justify-center gap-2.5 px-6 py-2.5 bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/25 hover:border-amber-500/40 rounded-xl transition-all duration-300 shadow-[0_0_15px_rgba(245,158,11,0.05)] cursor-pointer"
+                             >
+                                <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-12 transition-transform duration-300" />
+                                <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">
+                                   Request Architectural Assist
+                                </span>
+                                {/* Hover sweep highlight */}
+                                <div className="absolute inset-0 overflow-hidden rounded-xl pointer-events-none">
+                                   <motion.div
+                                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                                      initial={{ x: '-100%' }}
+                                      whileHover={{ x: '100%' }}
+                                      transition={{ repeat: Infinity, repeatType: "loop", duration: 1.2, ease: "easeInOut" }}
+                                   />
+                                </div>
                              </button>
                           </div>
                        )}
