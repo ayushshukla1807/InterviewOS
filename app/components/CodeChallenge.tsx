@@ -38,11 +38,11 @@ export default function CodeChallenge({ question, initialCode = '', language = '
         className="flex-1 relative"
         onPaste={(e) => {
           e.preventDefault();
-          alert("⚠️ Pasting code is strictly prohibited during this proctored assessment.");
+          alert("Warning: Pasting code is strictly prohibited during this proctored assessment.");
         }}
         onCopy={(e) => {
           e.preventDefault();
-          alert("⚠️ Copying code is disabled.");
+          alert("Warning: Copying code is disabled.");
         }}
         onCut={(e) => {
           e.preventDefault();

@@ -10,6 +10,7 @@ import {
   StakeholderState
 } from '../../../lib/simulation/types';
 import CodeChallenge from '../../components/CodeChallenge';
+import { MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles, User, Terminal } from 'lucide-react';
 
 export default function LivingWorkplaceSimulation() {
   const { sessionId } = useParams();
@@ -366,8 +367,8 @@ export default function LivingWorkplaceSimulation() {
         
         <div className="flex gap-4 items-center">
           {tabSwitches > 0 && (
-            <div className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-full text-xs font-semibold border border-red-500/20 animate-pulse">
-              ⚠ Focus Lost ({tabSwitches})
+            <div className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-full text-xs font-semibold border border-red-500/20 animate-pulse flex items-center gap-1">
+              <ShieldAlert className="w-3.5 h-3.5 text-red-400" /> Focus Lost ({tabSwitches})
             </div>
           )}
           <div className={`text-xl font-mono px-3 py-1.5 rounded-lg ${timeLeft < 300 ? 'bg-red-500/10 text-red-400 animate-pulse' : 'bg-[#1a1a1c] text-gray-300'}`}>
@@ -386,10 +387,10 @@ export default function LivingWorkplaceSimulation() {
         {/* ─── Sidebar Navigation ─── */}
         <div className="w-16 bg-[#111113] border-r border-gray-800/50 flex flex-col items-center py-4 gap-2 shrink-0">
           {[
-            { key: 'slack' as const, icon: '💬', count: runtime.eventStream.filter(e => e.type === 'slack' && !e.isRead).length },
-            { key: 'email' as const, icon: '📧', count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
-            { key: 'tasks' as const, icon: '📋', count: runtime.eventStream.filter(e => e.type === 'task' && !e.isRead).length },
-            { key: 'calendar' as const, icon: '📅', count: 0 }
+            { key: 'slack' as const, icon: <MessageSquare className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'slack' && !e.isRead).length },
+            { key: 'email' as const, icon: <Mail className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
+            { key: 'tasks' as const, icon: <ClipboardCheck className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'task' && !e.isRead).length },
+            { key: 'calendar' as const, icon: <Calendar className="w-5 h-5" />, count: 0 }
           ].map(tab => (
             <button
               key={tab.key}
@@ -430,7 +431,7 @@ export default function LivingWorkplaceSimulation() {
                       </div>
                     )
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-xs text-gray-400 shrink-0 mt-0.5">🤖</div>
+                    <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-xs text-gray-400 shrink-0 mt-0.5"><Cpu className="w-4 h-4 text-slate-400" /></div>
                   )}
 
                   <div className="flex-1 min-w-0">
@@ -503,7 +504,7 @@ export default function LivingWorkplaceSimulation() {
                     onClick={() => setShowSandbox(prev => !prev)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${showSandbox ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' : 'bg-[#111113] text-gray-400 border-gray-800/80 hover:text-gray-200 hover:border-gray-700'}`}
                   >
-                    💻 {showSandbox ? 'Close Coding Editor' : 'Open Coding Editor'}
+                    <Terminal className="w-3.5 h-3.5" /> {showSandbox ? 'Close Coding Editor' : 'Open Coding Editor'}
                   </button>
                 </div>
                 
@@ -626,10 +627,10 @@ export default function LivingWorkplaceSimulation() {
       {/* ─── Senior Hint Assistant Chatbot Float Button ─── */}
       <button
         onClick={() => setIsAssistantOpen(prev => !prev)}
-        className="fixed bottom-36 right-4 w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center shadow-xl shadow-indigo-600/30 text-lg transition-all z-40"
+        className="fixed bottom-36 right-4 w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center shadow-xl shadow-indigo-600/30 text-white transition-all z-40"
         title="Consult Colleague"
       >
-        💬
+        <MessageSquare className="w-5 h-5" />
       </button>
 
       {/* ─── Senior Hint Colleague Chatbot Window ─── */}
@@ -637,13 +638,13 @@ export default function LivingWorkplaceSimulation() {
         <div className="fixed bottom-4 right-20 w-80 h-[420px] bg-[#111113] border border-gray-800 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden font-outfit">
           <div className="bg-[#1a1a1c] border-b border-gray-800 p-4 flex justify-between items-center shrink-0">
             <div className="flex items-center gap-2">
-              <span className="text-xl">🧑‍💻</span>
+              <User className="w-5 h-5 text-gray-300" />
               <div>
                 <p className="text-xs font-bold text-gray-200">Senior Colleague (AURA)</p>
                 <p className="text-[9px] text-gray-500">Ask for a subtle hint or nudge</p>
               </div>
             </div>
-            <button onClick={() => setIsAssistantOpen(false)} className="text-gray-400 hover:text-white text-sm">✕</button>
+            <button onClick={() => setIsAssistantOpen(false)} className="text-gray-400 hover:text-white text-sm">X</button>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0e0e10]">
@@ -679,7 +680,7 @@ export default function LivingWorkplaceSimulation() {
       {showSubmitModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center font-outfit p-6">
           <div className="bg-[#111113] border border-gray-800 rounded-[32px] max-w-lg w-full p-8 text-center space-y-6 shadow-2xl">
-            <div className="w-16 h-16 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto text-3xl">🚀</div>
+            <div className="w-16 h-16 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto"><Sparkles className="w-8 h-8 text-indigo-400" /></div>
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-gray-100">Workplace Simulation Complete!</h2>
               <p className="text-sm text-gray-400 leading-relaxed">

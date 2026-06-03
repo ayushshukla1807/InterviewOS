@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { MessageSquare, Mail, ClipboardCheck, ShieldCheck } from 'lucide-react';
 
 export default function SimulationLanding() {
   const [jd, setJd] = useState('');
@@ -58,15 +59,15 @@ export default function SimulationLanding() {
           </p>
         </div>
 
-        {/* Feature Cards */}
+// Feature Cards
         <div className="grid grid-cols-3 gap-3">
           {[
-            { icon: '💬', title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
-            { icon: '📧', title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
-            { icon: '📋', title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
+            { icon: <MessageSquare className="w-6 h-6 text-violet-400" />, title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
+            { icon: <Mail className="w-6 h-6 text-indigo-400" />, title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
+            { icon: <ClipboardCheck className="w-6 h-6 text-cyan-400" />, title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
           ].map(f => (
-            <div key={f.title} className="bg-[#111113] border border-gray-800/50 rounded-xl p-4 space-y-2 hover:border-indigo-500/30 transition-all">
-              <span className="text-2xl">{f.icon}</span>
+            <div key={f.title} className="bg-[#111113] border border-gray-800/50 rounded-xl p-4 space-y-2 hover:border-indigo-500/30 transition-all flex flex-col items-start">
+              <div className="mb-1">{f.icon}</div>
               <h3 className="text-sm font-semibold text-gray-200">{f.title}</h3>
               <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
             </div>
@@ -97,7 +98,7 @@ export default function SimulationLanding() {
               </>
             ) : (
               <>
-                🚀 Launch Simulation Engine
+                <ShieldCheck className="w-4 h-4" /> Launch Simulation Engine
               </>
             )}
           </button>

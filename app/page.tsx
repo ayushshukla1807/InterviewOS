@@ -423,7 +423,7 @@ function LandingPageContent() {
                 </div>
                 <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
                   <p className="text-[13px] text-emerald-800 leading-relaxed font-medium">
-                    📄 You will land on the job application page, enter your details, and upload a <strong>PDF Resume</strong>. The AI parses your resume, matches it against the JD requirements, and generates a personalised 4-question technical assessment covering exactly the intersection of your skills and the role's needs.
+                    You will land on the job application page, enter your details, and upload a <strong>PDF Resume</strong>. The AI parses your resume, matches it against the JD requirements, and generates a personalised 4-question technical assessment covering exactly the intersection of your skills and the role's needs.
                   </p>
                 </div>
                 <button

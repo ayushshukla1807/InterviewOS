@@ -205,6 +205,10 @@ function SessionContent() {
     receptiveness: 4,
   });
 
+  const [faceCount, setFaceCount] = useState(1);
+  const [phoneDetected, setPhoneDetected] = useState(false);
+  const [secondPersonDetected, setSecondPersonDetected] = useState(false);
+
   useEffect(() => {
     if (!isStarted) return;
     const interval = setInterval(() => {
@@ -475,7 +479,7 @@ function SessionContent() {
     // Tab/window switch detection
     const handleVisibility = () => {
       if (document.hidden) {
-        triggerViolation('⚠️ Tab switch detected. Do not leave the interview window.');
+        triggerViolation('Warning: Tab switch detected. Do not leave the interview window.');
       }
     };
 
@@ -484,14 +488,14 @@ function SessionContent() {
       const inFs = !!document.fullscreenElement;
       setIsFullscreen(inFs);
       if (!inFs) {
-        triggerViolation('⚠️ Fullscreen exited. Please remain in fullscreen during the interview.');
+        triggerViolation('Warning: Fullscreen exited. Please remain in fullscreen during the interview.');
       }
     };
 
     // Blur = candidate switched app/window — only fire after grace period
     const handleBlur = () => {
       if (proctorReadyRef.current) {
-        triggerViolation('⚠️ Window lost focus. Switching windows is not allowed.');
+        triggerViolation('Warning: Window lost focus. Switching windows is not allowed.');
       }
     };
 
@@ -507,7 +511,7 @@ function SessionContent() {
     const noKeys = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && ['c','v','x','u','s'].includes(e.key.toLowerCase())) {
         e.preventDefault();
-        triggerViolation('⚠️ Keyboard shortcut blocked. External help is not allowed.');
+        triggerViolation('Warning: Keyboard shortcut blocked. External help is not allowed.');
       }
       // Block F12, DevTools
       if (e.key === 'F12') { e.preventDefault(); }
@@ -579,7 +583,7 @@ function SessionContent() {
          },
          outputFaceBlendshapes: true,
          runningMode: "VIDEO",
-         numFaces: 1
+         numFaces: 4
       });
 
       let lastVideoTime = -1;
@@ -588,6 +592,9 @@ function SessionContent() {
             if (videoElement.currentTime !== lastVideoTime) {
                const results = faceLandmarker.detectForVideo(videoElement, performance.now());
                if (results.faceBlendshapes && results.faceBlendshapes.length > 0) {
+                  const count = results.faceBlendshapes.length;
+                  setFaceCount(count);
+                  setSecondPersonDetected(count > 1);
                   // Eye tracking logic (simplified)
                   const shapes = results.faceBlendshapes[0].categories;
                   const eyeBlink = shapes.find(s => s.categoryName === 'eyeBlinkLeft')?.score || 0;
@@ -595,7 +602,9 @@ function SessionContent() {
                   setGazeVal(Math.max(40, 100 - (eyeBlink * 100)));
                } else {
                   // No face detected
+                  setFaceCount(0);
                   setGazeVal(10);
+                  setSecondPersonDetected(false);
                }
                lastVideoTime = videoElement.currentTime;
             }
@@ -1827,8 +1836,8 @@ function SessionContent() {
                                    </div>
                                    <div className="flex items-center gap-3">
                                      {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
-                                     {execSuccess === true && <span className="text-[8px] font-black text-emerald-400">✓ OK</span>}
-                                     {execSuccess === false && <span className="text-[8px] font-black text-rose-400">✗ Error</span>}
+                                     {execSuccess === true && <span className="text-[8px] font-black text-emerald-400">OK</span>}
+                                     {execSuccess === false && <span className="text-[8px] font-black text-rose-400">Error</span>}
                                    </div>
                                 </div>
                                 <div className={`flex-1 p-4 text-[11px] font-mono whitespace-pre overflow-y-auto ${execSuccess === false ? 'text-rose-400/80' : 'text-emerald-400/80'}`}>
@@ -2157,16 +2166,6 @@ function SessionContent() {
             {/* Response Protocol */}
             <div className="p-8 bg-slate-950/80 border-t border-white/5 relative shrink-0 backdrop-blur-md">
                
-               {/* Neural Mirror Feed (Face PiP) */}
-               <motion.div drag dragConstraints={{ left: -800, right: 0, top: -800, bottom: 0 }}
-                 className="fixed bottom-8 right-8 w-40 h-40 rounded-[24px] overflow-hidden border border-white/10 shadow-2xl z-50 cursor-move bg-slate-900 ring-4 ring-black/40">
-                  {stream ? <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" /> : <div className="w-full h-full flex items-center justify-center"><User className="text-slate-700 w-12 h-12" /></div>}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5">
-                     <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
-                     <span className="text-[6px] font-black text-white uppercase tracking-widest">Neural Feed: Live</span>
-                  </div>
-               </motion.div>
                <div className="flex gap-4 items-center">
                   <div className="flex-1 relative">
                      {isListening && (
@@ -2382,6 +2381,125 @@ function SessionContent() {
                  )}
               </AnimatePresence>
            </motion.button>
+        </div>
+
+        {/* Global Neural Proctoring Dashboard Card */}
+        <div className="fixed bottom-8 right-8 z-[150] w-64 rounded-[24px] overflow-hidden border border-white/10 bg-[#070709]/95 backdrop-blur-md shadow-2xl flex flex-col">
+           {/* Video Feed */}
+           <div className="relative w-full h-36 bg-slate-900 border-b border-white/5">
+              {stream ? (
+                 <video 
+                    ref={videoRef} 
+                    autoPlay 
+                    playsInline 
+                    muted 
+                    className="w-full h-full object-cover scale-x-[-1]" 
+                 />
+              ) : (
+                 <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/50">
+                    <User className="text-slate-700 w-10 h-10 animate-pulse" />
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-1">Connecting Stream...</p>
+                 </div>
+              )}
+              {/* Pulsing indicator overlay */}
+              <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 bg-black/60 rounded-full border border-white/5">
+                 <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                    (phoneDetected || faceCount !== 1 || violations > 0) ? 'bg-rose-500' : 'bg-emerald-500'
+                 }`} />
+                 <span className="text-[7px] font-black tracking-widest text-slate-300 uppercase">
+                    {(phoneDetected || faceCount !== 1 || violations > 0) ? 'Alert Mode' : 'Secure Pilot'}
+                 </span>
+              </div>
+              
+              <div className="absolute bottom-3 left-3 text-[7px] font-bold text-white/70 uppercase tracking-widest bg-black/40 px-2 py-0.5 rounded-md">
+                 Feed: Candidate Camera
+              </div>
+           </div>
+
+           {/* Telemetry Board */}
+           <div className="p-4 space-y-3.5">
+              <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                 <div className="flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                    <span className="text-[9px] font-black text-white uppercase tracking-widest">AI Proctoring Pilot</span>
+                 </div>
+                 <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest font-mono">Telemetry v5.0</span>
+              </div>
+
+              <div className="space-y-2 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                 {/* Face/Person Count */}
+                 <div className="flex justify-between items-center bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
+                    <span>Person In Frame</span>
+                    <span className={faceCount === 1 ? 'text-emerald-400' : 'text-rose-400 animate-pulse font-black'}>
+                       {faceCount === 1 ? '1 Candidate' : faceCount > 1 ? `Multiple (${faceCount})` : 'None Detected'}
+                    </span>
+                 </div>
+
+                 {/* Phone Usage */}
+                 <div className="flex justify-between items-center bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
+                    <span>Mobile Phone</span>
+                    <span className={phoneDetected ? 'text-rose-500 animate-pulse font-black' : 'text-emerald-400'}>
+                       {phoneDetected ? 'DETECTED' : 'None Detected'}
+                    </span>
+                 </div>
+
+                 {/* Gaze Direction */}
+                 <div className="flex justify-between items-center bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
+                    <span>Gaze Tracking</span>
+                    <span className={gazeVal > 75 ? 'text-emerald-400' : 'text-rose-400 animate-pulse font-black'}>
+                       {gazeVal > 75 ? `Focus (${gazeVal.toFixed(0)}%)` : `Eye Shift (${gazeVal.toFixed(0)}%)`}
+                    </span>
+                 </div>
+
+                 {/* Tab switches */}
+                 <div className="flex justify-between items-center bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
+                    <span>Tab Switches</span>
+                    <span className={violations > 0 ? 'text-rose-400 font-black' : 'text-slate-500'}>
+                       {violations} / 3 Warnings
+                    </span>
+                 </div>
+              </div>
+
+              {/* Alert Status Banner */}
+              <div className={`p-2.5 rounded-xl border text-center text-[8px] font-black uppercase tracking-widest transition-all ${
+                 (phoneDetected || faceCount !== 1 || violations > 0)
+                    ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.15)]'
+                    : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+              }`}>
+                 {(phoneDetected || faceCount !== 1 || violations > 0) ? 'WARNING: INTEGRITY THREAT DETECTED' : 'INTEGRITY STATUS: SECURE'}
+              </div>
+
+              {/* Developer Simulated controls (Mock mode only) */}
+              {isMock && (
+                 <div className="border-t border-white/5 pt-3 space-y-1.5">
+                    <p className="text-[7px] font-black text-slate-500 uppercase tracking-widest text-center">Simulate Proctor Traps</p>
+                    <div className="grid grid-cols-2 gap-1.5">
+                       <button 
+                          onClick={() => setPhoneDetected(!phoneDetected)}
+                          className={`py-1 rounded text-[7px] font-black uppercase tracking-widest border transition-all ${
+                             phoneDetected ? 'bg-rose-600 border-rose-500 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
+                          }`}
+                       >
+                          {phoneDetected ? 'Clear Phone' : 'Trigger Phone'}
+                       </button>
+                       <button 
+                          onClick={() => {
+                             if (faceCount === 1) {
+                                setFaceCount(2);
+                             } else {
+                                setFaceCount(1);
+                             }
+                          }}
+                          className={`py-1 rounded text-[7px] font-black uppercase tracking-widest border transition-all ${
+                             faceCount > 1 ? 'bg-rose-600 border-rose-500 text-white' : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10'
+                          }`}
+                       >
+                          {faceCount > 1 ? 'Clear Crowd' : 'Trigger Crowd'}
+                       </button>
+                    </div>
+                 </div>
+              )}
+           </div>
         </div>
 
       <style jsx global>{`

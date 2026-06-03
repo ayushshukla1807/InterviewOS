@@ -98,7 +98,7 @@ function buildFallbackBlueprint(): SimulationBlueprint {
           {
             id: 'evt-a2-3', type: 'notification', fromStakeholderId: 's1',
             channel: undefined, subject: undefined,
-            message: '⚠️ Board Deck Review in 45 minutes. Arjun expects the roadmap in Notion now.',
+            message: 'Warning: Board Deck Review in 45 minutes. Arjun expects the roadmap in Notion now.',
             priority: 'CRITICAL', requiresResponse: false, revealAt: 90, isRead: false, isAnswered: false,
           },
         ],
