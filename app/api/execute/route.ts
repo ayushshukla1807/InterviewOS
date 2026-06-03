@@ -234,13 +234,112 @@ async function executeJava(code: string, stdin: string) {
   return { ...execRes, runtime_ms };
 }
 
+// ─── Native TypeScript Execution (Transpiled) ────────────────────────────────
+async function executeTypeScript(code: string, stdin: string) {
+  ensureTempDir();
+  const fileId = Math.random().toString(36).substring(7);
+  const tsPath = path.join(TEMP_DIR, `run_${fileId}.ts`);
+  const jsPath = path.join(TEMP_DIR, `run_${fileId}.js`);
+
+  fs.writeFileSync(tsPath, code);
+
+  const start = Date.now();
+  // Compile using npx tsc
+  const compileRes = await runLocalProcess('npx', ['tsc', tsPath, '--outFile', jsPath, '--target', 'es2020', '--module', 'commonjs', '--noEmitOnError', 'false', '--skipLibCheck', 'true'], '', 10000);
+  
+  if (!fs.existsSync(jsPath)) {
+    try { fs.unlinkSync(tsPath); } catch {}
+    return {
+      stdout: '',
+      stderr: `TypeScript Compilation Error:\n${compileRes.stderr || 'Failed to transpile code. Ensure syntax is correct.'}`,
+      success: false,
+      runtime_ms: Date.now() - start,
+    };
+  }
+
+  // Read compiled JS and execute it in VM
+  const compiledJs = fs.readFileSync(jsPath, 'utf8');
+  const vmRes = executeJavaScript(compiledJs, stdin);
+  const runtime_ms = Date.now() - start;
+
+  // Cleanup
+  try { fs.unlinkSync(tsPath); } catch {}
+  try { fs.unlinkSync(jsPath); } catch {}
+
+  return { ...vmRes, runtime_ms };
+}
+
+// ─── Native Rust Execution ───────────────────────────────────────────────────
+async function executeRust(code: string, stdin: string) {
+  ensureTempDir();
+  const fileId = Math.random().toString(36).substring(7);
+  const sourcePath = path.join(TEMP_DIR, `run_${fileId}.rs`);
+  const binPath = path.join(TEMP_DIR, `run_${fileId}.out`);
+
+  fs.writeFileSync(sourcePath, code);
+
+  const start = Date.now();
+
+  // Compile using rustc
+  const rustcPath = '/Users/ayushshukla/.cargo/bin/rustc';
+  const compileRes = await runLocalProcess(rustcPath, [sourcePath, '-o', binPath], '', 8000);
+  if (!compileRes.success) {
+    try { fs.unlinkSync(sourcePath); } catch {}
+    return {
+      stdout: '',
+      stderr: `Rust Compilation Error:\n${compileRes.stderr}`,
+      success: false,
+      runtime_ms: Date.now() - start,
+    };
+  }
+
+  // Execute binary
+  const execRes = await runLocalProcess(binPath, [], stdin);
+  const runtime_ms = Date.now() - start;
+
+  // Cleanup
+  try { fs.unlinkSync(sourcePath); } catch {}
+  try { fs.unlinkSync(binPath); } catch {}
+
+  return { ...execRes, runtime_ms };
+}
+
+// ─── Native Go Execution (Fallback to local warning if binary not present) ────
+async function executeGo(code: string, stdin: string) {
+  ensureTempDir();
+  const fileId = Math.random().toString(36).substring(7);
+  const sourcePath = path.join(TEMP_DIR, `run_${fileId}.go`);
+
+  fs.writeFileSync(sourcePath, code);
+
+  const start = Date.now();
+  const res = await runLocalProcess('go', ['run', sourcePath], stdin, 6000);
+  const runtime_ms = Date.now() - start;
+
+  try { fs.unlinkSync(sourcePath); } catch {}
+
+  // If go is not found, show helpful instructions
+  if (res.stderr.includes('spawn go ENOENT') || res.stderr.includes('not found') || res.stderr.includes('go: not found')) {
+    return {
+      stdout: '',
+      stderr: 'Language "Go" is not installed on the local runner. Please install the Go compiler (Golang) on your machine to execute Go code in this sandbox.',
+      success: false,
+      runtime_ms: 0
+    };
+  }
+
+  return { ...res, runtime_ms };
+}
+
 // ─── Language details ────────────────────────────────────────────────────────
 const LANG_DISPLAY: Record<string, string> = {
   javascript: 'JavaScript (Node.js VM)',
-  typescript: 'TypeScript (Simulated)',
+  typescript: 'TypeScript (Transpiled Node VM)',
   python: 'Python (Local 3.14)',
   cpp: 'C++ (Local Apple Clang)',
   java: 'Java (Local OpenJDK 22)',
+  rust: 'Rust (Local Cargo compiler)',
+  go: 'Go (Local compiler)',
 };
 
 export async function POST(req: Request) {
@@ -263,17 +362,23 @@ export async function POST(req: Request) {
 
     if (language === 'javascript') {
       result = executeJavaScript(code, stdin || '');
+    } else if (language === 'typescript') {
+      result = await executeTypeScript(code, stdin || '');
     } else if (language === 'python') {
       result = await executePython(code, stdin || '');
     } else if (language === 'cpp') {
       result = await executeCpp(code, stdin || '');
     } else if (language === 'java') {
       result = await executeJava(code, stdin || '');
+    } else if (language === 'rust') {
+      result = await executeRust(code, stdin || '');
+    } else if (language === 'go') {
+      result = await executeGo(code, stdin || '');
     } else {
       return NextResponse.json({
         success: false,
         stdout: '',
-        stderr: `Language "${language}" is not supported locally. Supported: JavaScript, Python, C++, Java.`,
+        stderr: `Language "${language}" is not supported locally. Supported: JavaScript, TypeScript, Python, C++, Java, Rust, Go.`,
         exit_code: 1,
         runtime_ms: 0,
         language,

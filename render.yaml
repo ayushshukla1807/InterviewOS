@@ -1,11 +1,31 @@
 services:
+  # 1. Express API Backend Service
   - type: web
-    name: InterviewOS
+    name: interviewos-backend
+    env: node
+    buildCommand: npm install --prefix server
+    startCommand: node server/server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false # Set this to your MongoDB Atlas connection string in the Render Dashboard
+      - key: JWT_SECRET
+        generateValue: true # Generates a random secret key automatically
+      - key: BACKEND_PORT
+        value: 5001
+
+  # 2. Next.js Frontend Service
+  - type: web
+    name: interviewos-frontend
     env: node
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
       - key: GEMINI_API_KEY
-        sync: false
+        sync: false # Set your Gemini API key in the Render Dashboard
       - key: NEXT_PUBLIC_APP_NAME
         value: HYRTE
+      - key: NEXT_PUBLIC_BACKEND_URL
+        fromService:
+          type: web
+          name: interviewos-backend
+          property: url

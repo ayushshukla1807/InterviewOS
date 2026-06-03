@@ -937,6 +937,26 @@ function SessionContent() {
       };
       localStorage.setItem('interviewos_applications', JSON.stringify([newApp, ...apps]));
 
+      // PERSIST REPORT TO MONGODB API
+      try {
+        const token = localStorage.getItem('interviewos_token');
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json'
+        };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001';
+        await fetch(`${backendUrl}/api/reports`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(newApp)
+        });
+        console.log('Successfully saved report to MongoDB database.');
+      } catch (dbErr) {
+        console.error('Failed to save report to MongoDB:', dbErr);
+      }
+
       router.push(`/feedback?name=${encodeURIComponent(name)}&track=${track}`);
     } catch (err) {
       console.error(err);

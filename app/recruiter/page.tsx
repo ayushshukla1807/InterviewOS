@@ -23,6 +23,30 @@ export default function RecruiterDashboard() {
 
     const savedInsights = localStorage.getItem('interviewos_support_insights');
     if (savedInsights) setSupportInsights(JSON.parse(savedInsights));
+
+    // Fetch reports from MongoDB database via Express
+    const fetchReports = async () => {
+      try {
+        const token = localStorage.getItem('interviewos_token');
+        if (!token) return;
+
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001';
+        const res = await fetch(`${backendUrl}/api/reports`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const dbApps = await res.json();
+          if (Array.isArray(dbApps)) {
+            setApps(dbApps);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load candidate reports from MongoDB:', err);
+      }
+    };
+    fetchReports();
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {

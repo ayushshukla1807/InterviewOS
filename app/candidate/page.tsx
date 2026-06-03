@@ -16,17 +16,27 @@ export default function CandidateDashboard() {
   const [pastInterviews, setPastInterviews] = useState<any[]>([]);
 
   useEffect(() => {
-    // Get candidate info
-    const savedContext = localStorage.getItem('interviewos_candidate_context');
-    if (savedContext) {
-      setCandidateContext(JSON.parse(savedContext));
+    // Get candidate info from database auth token if exists
+    let candidateName = 'Guest Candidate';
+    let candidateEmail = 'no-email@interviewos.ai';
+
+    const savedUser = localStorage.getItem('interviewos_user');
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      candidateName = user.name;
+      candidateEmail = user.email;
+      setCandidateContext(user);
+    } else {
+      const savedContext = localStorage.getItem('interviewos_candidate_context');
+      if (savedContext) {
+        const context = JSON.parse(savedContext);
+        candidateName = context.name || candidateName;
+        candidateEmail = context.email || candidateEmail;
+        setCandidateContext(context);
+      }
     }
 
-    // Get completed applications to simulate past interview scores
-    const savedApps = localStorage.getItem('interviewos_applications') || '[]';
-    const parsedApps = JSON.parse(savedApps);
-    
-    // Fallback default test records if none taken yet, to showcase dashboards UI
+    // Default test records as fallback
     const defaultPastRecords = [
       {
         id: 'INT-9021',
@@ -48,20 +58,70 @@ export default function CandidateDashboard() {
       }
     ];
 
-    if (parsedApps.length > 0) {
-      const formatted = parsedApps.map((a: any, idx: number) => ({
-        id: `INT-${1000 + idx}`,
-        jobTitle: a.jobTitle || 'AI Fullstack & System Engineer',
-        date: new Date(a.appliedAt || Date.now()).toISOString().split('T')[0],
-        score: a.evalScore || Math.floor(Math.random() * 20) + 75,
-        status: 'Completed',
-        feedbackUrl: `/feedback/candidate?name=${encodeURIComponent(a.name)}&track=${a.track || 'DYNAMIC'}`,
-        skills: { JS: 85, DSA: 80, System: 88, Communication: 92 }
-      }));
-      setPastInterviews(formatted);
-    } else {
-      setPastInterviews(defaultPastRecords);
-    }
+    // Try fetching reports from MongoDB backend via Express
+    const fetchReports = async () => {
+      try {
+        const token = localStorage.getItem('interviewos_token');
+        if (!token) {
+          // If guest, fall back to local storage
+          const savedApps = localStorage.getItem('interviewos_applications') || '[]';
+          const parsedApps = JSON.parse(savedApps);
+          loadLocalStorageRecords(parsedApps);
+          return;
+        }
+
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001';
+        const res = await fetch(`${backendUrl}/api/reports`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const dbApps = await res.json();
+          if (Array.isArray(dbApps) && dbApps.length > 0) {
+            const formatted = dbApps.map((a: any, idx: number) => ({
+              id: a.id || `INT-${1000 + idx}`,
+              jobTitle: a.jobTitle || a.simulation?.title || 'AI Fullstack & System Engineer',
+              date: new Date(a.timestamp || Date.now()).toISOString().split('T')[0],
+              score: a.score,
+              status: 'Completed',
+              feedbackUrl: `/feedback/candidate?name=${encodeURIComponent(a.candidateName)}&track=${a.track || 'DYNAMIC'}`,
+              skills: { JS: a.score, DSA: a.score - 5 > 0 ? a.score - 5 : 60, System: a.score + 2 <= 100 ? a.score + 2 : 98, Communication: 90 }
+            }));
+            setPastInterviews(formatted);
+          } else {
+            setPastInterviews(defaultPastRecords);
+          }
+        } else {
+          // Fallback if request is not ok
+          const savedApps = localStorage.getItem('interviewos_applications') || '[]';
+          loadLocalStorageRecords(JSON.parse(savedApps));
+        }
+      } catch (err) {
+        console.error('Failed to load candidate reports from MongoDB API:', err);
+        const savedApps = localStorage.getItem('interviewos_applications') || '[]';
+        loadLocalStorageRecords(JSON.parse(savedApps));
+      }
+    };
+
+    const loadLocalStorageRecords = (parsedApps: any[]) => {
+      if (parsedApps.length > 0) {
+        const formatted = parsedApps.map((a: any, idx: number) => ({
+          id: a.id || `INT-${1000 + idx}`,
+          jobTitle: a.jobTitle || 'AI Fullstack & System Engineer',
+          date: new Date(a.timestamp || Date.now()).toISOString().split('T')[0],
+          score: a.score,
+          status: 'Completed',
+          feedbackUrl: `/feedback/candidate?name=${encodeURIComponent(a.candidateName || a.name)}&track=${a.track || 'DYNAMIC'}`,
+          skills: { JS: 85, DSA: 80, System: 88, Communication: 92 }
+        }));
+        setPastInterviews(formatted);
+      } else {
+        setPastInterviews(defaultPastRecords);
+      }
+    };
+
+    fetchReports();
   }, []);
 
   const clearHistory = () => {

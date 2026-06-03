@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 
 interface CodeChallengeProps {
@@ -13,6 +13,16 @@ interface CodeChallengeProps {
 export default function CodeChallenge({ question, initialCode = '', language = 'javascript', onSubmit }: CodeChallengeProps) {
   const [code, setCode] = useState(initialCode);
   const [lang, setLang] = useState(language);
+
+  // Sync language selection from parent configurations
+  useEffect(() => {
+    setLang(language);
+  }, [language]);
+
+  // Sync initial code layout when loading new tracks or scenarios
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
 
   return (
     <div className="flex flex-col h-full bg-[#0a0a0c] border-l border-gray-800">
