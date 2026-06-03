@@ -23,6 +23,109 @@ import { questionEngine } from '../../lib/db/questions';
 import { INTERVIEWER_PERSONA } from '../../lib/ai/prompts';
 import { getScenarioByTrack } from '../../lib/db/scenarios';
 
+const getPrampCompanionData = (trackId: string) => {
+  const data: Record<string, { targetTime: string; targetSpace: string; hints: string[]; solution: string }> = {
+    JS: {
+      targetTime: "O(N) batch operations",
+      targetSpace: "O(1) auxiliary",
+      hints: [
+        "First, draft a simple queue mapping. What are the V8 garbage collector risks of retaining high-frequency events in closure arrays?",
+        "Avoid allocating new objects during the iteration loops to prevent heap memory churn and Scavenger collection overhead.",
+        "Implement a debounce timeout that invalidates its closure scope variables completely upon execution to avoid V8 memory leaks."
+      ],
+      solution: `// OPTIMAL V8-COMPLIANT JS BATCH ENGINE
+class TransactionAggregator {
+  constructor() {
+    this.transactions = [];
+  }
+  public push(tx) {
+    this.transactions.push(tx);
+    // Batch aggregate under memory-safe scopes
+  }
+  public getAggregatedSum() {
+    let sum = 0;
+    for (let i = 0; i < this.transactions.length; i++) {
+      sum += this.transactions[i].amount;
+    }
+    return sum;
+  }
+}`
+    },
+    DSA: {
+      targetTime: "O((V + E) log V)",
+      targetSpace: "O(V + E) network map",
+      hints: [
+        "Represent the routing network as an Adjacency List Map to ensure O(1) neighbor relaxations.",
+        "Implement the Min-Heap priority queue using array-based binary trees. Avoid sorting the vertex list on every iteration.",
+        "Ensure Dijkstra relaxation checks if the new path weight is strictly less than the existing node distance before insertion."
+      ],
+      solution: `// OPTIMAL DIJKSTRA ROUTING PATHFINDER
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
+  public insert(node, weight) {
+    this.heap.push({ node, weight });
+    this.bubbleUp();
+  }
+  public extractMin() {
+    if (this.heap.length === 0) return null;
+    const min = this.heap[0];
+    const end = this.heap.pop();
+    if (this.heap.length > 0) {
+      this.heap[0] = end;
+      this.sinkDown();
+    }
+    return min;
+  }
+}`
+    },
+    ADA: {
+      targetTime: "O(1) read/write caching",
+      targetSpace: "O(Capacity) node memory",
+      hints: [
+        "Combine a Hash Map with a Doubly Linked List to secure O(1) lookup and O(1) node re-ordering operations.",
+        "Evict nodes from the tail of the Doubly Linked List when size exceeds capacity. Insert fresh nodes at the head.",
+        "Ensure concurrent operations use lock-free checks or minimal mutex sections to avoid lock overhead bottlenecks."
+      ],
+      solution: `// OPTIMAL O(1) CACHE SYNC ENGINE
+class LRUNode {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+    this.prev = null;
+    this.next = null;
+  }
+}
+class BidCache {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.cache = new Map();
+  }
+}`
+    },
+    healthcare_ai: {
+      targetTime: "O(N) sanitization",
+      targetSpace: "O(W) sliding window bounds",
+      hints: [
+        "Convert patient attributes into standard FHIR resource structures mapping identifiers, names, and contacts.",
+        "Use high-efficiency regular expressions to intercept log outputs and sanitize PHI attributes (names, emails, 10-digit digits).",
+        "Implement sliding window rate limiting by pruning timestamps older than the evaluation window before adding a new event."
+      ],
+      solution: `// OPTIMAL SECURE FHIR LOGGER & LIMITER
+export class PHISecureLogger {
+  public static redact(message) {
+    // Redact 10-digit phone numbers and email formats
+    return message
+      .replace(/\\b\\d{10}\\b/g, '[REDACTED_PHONE]')
+      .replace(/[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}/g, '[REDACTED_EMAIL]');
+  }
+}`
+    }
+  };
+  return data[trackId] || data.JS;
+};
+
 function SessionContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -91,6 +194,16 @@ function SessionContent() {
 
   const [lintErrors, setLintErrors] = useState<string[]>([]);
   const [followUpPrompts, setFollowUpPrompts] = useState<string[]>(['Could you clarify your approach?', 'What is the time complexity?', 'Can we optimize this?']);
+  
+  // Pramp practice companion states
+  const [showPrampDeck, setShowPrampDeck] = useState(false);
+  const [prampHintsRevealed, setPrampHintsRevealed] = useState<number[]>([]);
+  const [prampRatings, setPrampRatings] = useState({
+    communication: 4,
+    cleanliness: 4,
+    dsaMastery: 4,
+    receptiveness: 4,
+  });
 
   useEffect(() => {
     if (!isStarted) return;
@@ -1554,7 +1667,7 @@ function SessionContent() {
                       </div>
 
                       {/* Right side: Editor & Console */}
-                      <div className="w-3/4 flex flex-col bg-[var(--bg)] overflow-hidden">
+                      <div className={`${showPrampDeck ? 'flex-1' : 'w-3/4'} flex flex-col bg-[var(--bg)] overflow-hidden`}>
                         {/* IDE Toolbar */}
                         <div className="flex items-center justify-between bg-white/5 p-3 border-b border-white/5">
                            <div className="flex gap-2">
@@ -1587,6 +1700,19 @@ function SessionContent() {
                                    <LayoutDashboard className="w-3 h-3" /> Canvas
                                  </button>
                               </div>
+                              {isMock && (
+                                 <button 
+                                    onClick={() => setShowPrampDeck(!showPrampDeck)}
+                                    className={`px-3 py-1 border rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${
+                                       showPrampDeck 
+                                          ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
+                                          : 'bg-white/5 border-white/5 text-slate-500 hover:text-white'
+                                    }`}
+                                 >
+                                    <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
+                                    Pramp Deck
+                                 </button>
+                              )}
                            </div>
                            <div className="flex gap-2">
                               <button 
@@ -1711,6 +1837,114 @@ function SessionContent() {
                              </div>
                           </div>
                         </div>
+                         {showPrampDeck && (
+                            <div className="w-[320px] shrink-0 border-l border-white/10 bg-[#0e0e12] p-5 overflow-y-auto flex flex-col gap-6 relative z-10">
+                               {/* Header */}
+                               <div className="space-y-1">
+                                  <div className="flex items-center justify-between">
+                                     <h3 className="text-[10px] font-black uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+                                       <Activity className="w-3.5 h-3.5" /> Pramp Companion
+                                     </h3>
+                                     <button onClick={() => setShowPrampDeck(false)} className="text-slate-500 hover:text-white transition-all">
+                                        <X className="w-4 h-4" />
+                                     </button>
+                                  </div>
+                                  <p className="text-[8px] font-bold uppercase tracking-wider text-slate-500">COLLABORATIVE MOCK WORKSPACE</p>
+                               </div>
+
+                               {/* 1. Rubrics */}
+                               <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-4">
+                                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Interviewer Rubric Checklist</p>
+                                  <div className="space-y-3">
+                                     {Object.entries(prampRatings).map(([key, val]) => (
+                                        <div key={key} className="space-y-1">
+                                           <div className="flex justify-between items-center text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                              <span>{key.replace(/([A-Z])/g, ' $1')}</span>
+                                              <span className="text-cyan-400 font-mono">{val}/5</span>
+                                           </div>
+                                           <input 
+                                              type="range" min="1" max="5" value={val} 
+                                              onChange={e => setPrampRatings(prev => ({ ...prev, [key]: parseInt(e.target.value) }))}
+                                              className="w-full accent-cyan-500 bg-white/5 h-1 rounded-full outline-none cursor-pointer"
+                                           />
+                                        </div>
+                                     ))}
+                                  </div>
+                               </div>
+
+                               {/* 2. Complexity Targets */}
+                               {(() => {
+                                  const prampData = getPrampCompanionData(track);
+                                  return (
+                                    <>
+                                      <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3">
+                                         <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Optimal Complexity Metrics</p>
+                                         <div className="grid grid-cols-2 gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                            <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                                               <span className="text-[7px] text-slate-500 block mb-0.5">Target Time</span>
+                                               <span className="text-indigo-400 text-xs font-mono lowercase">{prampData.targetTime}</span>
+                                            </div>
+                                            <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
+                                               <span className="text-[7px] text-slate-500 block mb-0.5">Target Space</span>
+                                               <span className="text-violet-400 text-xs font-mono lowercase">{prampData.targetSpace}</span>
+                                            </div>
+                                         </div>
+                                      </div>
+
+                                      {/* 3. Hint Disclosure Tree */}
+                                      <div className="space-y-2">
+                                         <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Hint Disclosure Pipeline</p>
+                                         <div className="space-y-2">
+                                            {prampData.hints.map((hint, idx) => {
+                                               const isRevealed = prampHintsRevealed.includes(idx);
+                                               return (
+                                                  <div key={idx} className={`border rounded-2xl p-3.5 transition-all ${
+                                                     isRevealed ? 'bg-[#0a0a0d] border-cyan-500/20' : 'bg-black/20 border-white/5'
+                                                  }`}>
+                                                     <div className="flex items-center justify-between">
+                                                        <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Hint #{idx + 1}</span>
+                                                        {!isRevealed && (
+                                                           <button 
+                                                              onClick={() => setPrampHintsRevealed(prev => [...prev, idx])}
+                                                              className="text-[8px] font-black text-cyan-400 hover:text-cyan-300 uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md"
+                                                           >
+                                                              Reveal Hint
+                                                           </button>
+                                                        )}
+                                                     </div>
+                                                     {isRevealed && (
+                                                        <p className="text-[10px] text-slate-400 mt-2 leading-relaxed font-medium transition-all animate-fadeIn">
+                                                           {hint}
+                                                        </p>
+                                                     )}
+                                                  </div>
+                                               );
+                                            })}
+                                         </div>
+                                      </div>
+
+                                      {/* 4. Model Solution Cheat Code */}
+                                      <div className="border border-white/5 rounded-2xl bg-black/40 overflow-hidden">
+                                         <button 
+                                            onClick={() => setPrampHintsRevealed(prev => prev.includes(99) ? prev.filter(x => x !== 99) : [...prev, 99])}
+                                            className="w-full px-4 py-3 bg-white/5 flex items-center justify-between text-[9px] font-black text-slate-300 uppercase tracking-widest hover:bg-white/10 transition-all"
+                                         >
+                                            <span>Interviewer Model Solution</span>
+                                            <span className="text-cyan-400 font-mono">{prampHintsRevealed.includes(99) ? 'HIDE' : 'SHOW'}</span>
+                                         </button>
+                                         {prampHintsRevealed.includes(99) && (
+                                            <div className="p-3 bg-[#050508] border-t border-white/5">
+                                               <pre className="text-[8px] font-mono text-emerald-400 overflow-x-auto whitespace-pre-wrap leading-relaxed select-text">
+                                                  {prampData.solution}
+                                               </pre>
+                                            </div>
+                                         )}
+                                      </div>
+                                    </>
+                                  );
+                               })()}
+                            </div>
+                         )}
                       </div>
                    </motion.div>
                  )}
