@@ -25,8 +25,7 @@ export default function SignupPage() {
     setError('');
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001';
-      const res = await fetch(`${backendUrl}/api/auth/register`, {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -44,13 +43,18 @@ export default function SignupPage() {
         throw new Error(data.message || 'Registration failed');
       }
 
+      // Auto-login: save token and redirect directly to dashboard
+      localStorage.setItem('interviewos_token', data.token);
+      localStorage.setItem('interviewos_user', JSON.stringify(data.user));
       setSuccess(true);
       setTimeout(() => {
-        router.push('/login');
-      }, 2000);
+        if (data.user.role === 'candidate') router.push('/candidate');
+        else router.push('/recruiter');
+      }, 1200);
 
-    } catch (err: any) {
-      setError(err.message || 'Connection to database failed.');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Registration failed';
+      setError(message);
     } finally {
       setIsLoading(false);
     }

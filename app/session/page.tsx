@@ -17,7 +17,7 @@ type TabType = 'simulation' | 'code' | 'voice';
 
 import dynamic from 'next/dynamic';
 const Excalidraw = dynamic(() => import('@excalidraw/excalidraw').then(mod => mod.Excalidraw), { ssr: false });
-import CodeChallenge from '../components/CodeChallenge';
+import CodeIDE from '../components/CodeIDE';
 
 import { questionEngine } from '../../lib/db/questions';
 import { INTERVIEWER_PERSONA } from '../../lib/ai/prompts';
@@ -1790,10 +1790,12 @@ function SessionContent() {
                                 spellCheck={false}
                               />
                             ) : activeEditorTab === 'final' ? (
-                              <CodeChallenge 
-                                question="Solve the problem discussed with the AI Interviewer."
-                                initialCode={code}
+                              <CodeIDE
+                                problem="Solve the problem discussed with the AI Interviewer. Apply the approach you described in your answers."
+                                difficulty="Medium"
                                 language={language}
+                                initialCode={code}
+                                tags={['Interview', 'Live Coding']}
                                 onSubmit={(newCode, newLang) => {
                                   setCode(newCode);
                                   setLanguage(newLang);

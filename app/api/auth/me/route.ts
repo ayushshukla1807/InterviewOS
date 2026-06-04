@@ -1,0 +1,37 @@
+import { NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import { connectDB } from '../../../../lib/db/mongoose';
+import User from '../../../../lib/db/models/User';
+
+const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_secret_2026';
+
+export async function GET(req: Request) {
+  try {
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ message: 'No token' }, { status: 401 });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
+
+    await connectDB();
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      user: {
+        id: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        organization: user.organization,
+      }
+    });
+
+  } catch {
+    return NextResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
+  }
+}

@@ -11,6 +11,7 @@ import {
 } from '../../../lib/simulation/types';
 import CodeChallenge from '../../components/CodeChallenge';
 import { MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles, User, Terminal, Palette, Check } from 'lucide-react';
+import CodeIDE from '../../components/CodeIDE';
 
 // ─── Theme System ─────────────────────────────────────────────────────────────
 type SimThemeKey = 'noir' | 'terminal' | 'corporate' | 'sunset' | 'arctic';
@@ -808,17 +809,19 @@ export default function LivingWorkplaceSimulation() {
             )}
           </div>
 
-          {/* Right Side: Monaco IDE Sandbox */}
+          {/* Right Side: CodeIDE Sandbox */}
           {showSandbox && (
-            <div className="w-1/2 flex flex-col h-full bg-[#0a0a0c] border-l border-gray-800/80">
-              <CodeChallenge
-                question={runtime.currentChallenge?.prompt || "Analyze the current situation and write your code proposal or resolution scripts here."}
-                initialCode={sandboxCode}
+            <div className="w-1/2 flex flex-col h-full border-l" style={{ borderColor: t.border }}>
+              <CodeIDE
+                problem={runtime.currentChallenge?.prompt || 'Analyze the situation and write your code solution or resolution script here.'}
+                difficulty="Medium"
                 language={sandboxLang}
+                initialCode={sandboxCode}
+                tags={['Simulation', 'Live Coding']}
+                theme={t}
                 onSubmit={(code, lang) => {
                   setSandboxCode(code);
                   setSandboxLang(lang);
-                  // Update challenge response in runtime state
                   setRuntime(prev => {
                     if (!prev) return prev;
                     const challengeId = prev.currentChallenge?.id || 'ch-sandbox';
@@ -831,7 +834,6 @@ export default function LivingWorkplaceSimulation() {
                     }
                     return { ...prev, challengeResponses: newResponses };
                   });
-                  alert('Code draft saved successfully to your simulation progress!');
                 }}
               />
             </div>
