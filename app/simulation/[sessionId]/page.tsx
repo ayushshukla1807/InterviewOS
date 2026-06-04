@@ -10,7 +10,114 @@ import {
   StakeholderState
 } from '../../../lib/simulation/types';
 import CodeChallenge from '../../components/CodeChallenge';
-import { MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles, User, Terminal } from 'lucide-react';
+import { MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles, User, Terminal, Palette, Check } from 'lucide-react';
+
+// ─── Theme System ─────────────────────────────────────────────────────────────
+type SimThemeKey = 'noir' | 'terminal' | 'corporate' | 'sunset' | 'arctic';
+
+const THEMES: Record<SimThemeKey, {
+  label: string;
+  preview: string;  // accent hex for preview swatch
+  bg: string;       // page background
+  surface: string;  // panels / cards
+  surfaceAlt: string; // slightly lighter surface
+  border: string;   // border colors
+  textPrimary: string;
+  textSecondary: string;
+  textMuted: string;
+  accent: string;   // interactive accent
+  accentText: string;
+  accentBg: string;
+  accentBorder: string;
+  accentHover: string;
+  fontFamily: string;
+}> = {
+  noir: {
+    label: 'Noir',
+    preview: '#6366f1',
+    bg: '#0e0e10',
+    surface: '#111113',
+    surfaceAlt: '#1a1a1c',
+    border: 'rgba(255,255,255,0.06)',
+    textPrimary: '#f1f5f9',
+    textSecondary: '#94a3b8',
+    textMuted: '#475569',
+    accent: '#6366f1',
+    accentText: '#a5b4fc',
+    accentBg: 'rgba(99,102,241,0.12)',
+    accentBorder: 'rgba(99,102,241,0.3)',
+    accentHover: '#4f46e5',
+    fontFamily: 'Outfit, sans-serif',
+  },
+  terminal: {
+    label: 'Terminal',
+    preview: '#22c55e',
+    bg: '#020b02',
+    surface: '#051005',
+    surfaceAlt: '#0a1f0a',
+    border: 'rgba(34,197,94,0.15)',
+    textPrimary: '#86efac',
+    textSecondary: '#4ade80',
+    textMuted: '#166534',
+    accent: '#22c55e',
+    accentText: '#86efac',
+    accentBg: 'rgba(34,197,94,0.1)',
+    accentBorder: 'rgba(34,197,94,0.3)',
+    accentHover: '#16a34a',
+    fontFamily: '"Fira Code", "JetBrains Mono", monospace',
+  },
+  corporate: {
+    label: 'Corporate',
+    preview: '#3b82f6',
+    bg: '#f0f4f8',
+    surface: '#ffffff',
+    surfaceAlt: '#f8fafc',
+    border: 'rgba(0,0,0,0.08)',
+    textPrimary: '#1e293b',
+    textSecondary: '#475569',
+    textMuted: '#94a3b8',
+    accent: '#3b82f6',
+    accentText: '#1d4ed8',
+    accentBg: 'rgba(59,130,246,0.08)',
+    accentBorder: 'rgba(59,130,246,0.25)',
+    accentHover: '#2563eb',
+    fontFamily: 'Inter, system-ui, sans-serif',
+  },
+  sunset: {
+    label: 'Sunset',
+    preview: '#f97316',
+    bg: '#120a00',
+    surface: '#1c1008',
+    surfaceAlt: '#271608',
+    border: 'rgba(251,146,60,0.12)',
+    textPrimary: '#fed7aa',
+    textSecondary: '#fdba74',
+    textMuted: '#92400e',
+    accent: '#f97316',
+    accentText: '#fed7aa',
+    accentBg: 'rgba(249,115,22,0.12)',
+    accentBorder: 'rgba(249,115,22,0.3)',
+    accentHover: '#ea580c',
+    fontFamily: 'Outfit, sans-serif',
+  },
+  arctic: {
+    label: 'Arctic',
+    preview: '#06b6d4',
+    bg: '#030f1a',
+    surface: '#061525',
+    surfaceAlt: '#0a2035',
+    border: 'rgba(6,182,212,0.12)',
+    textPrimary: '#cffafe',
+    textSecondary: '#67e8f9',
+    textMuted: '#164e63',
+    accent: '#06b6d4',
+    accentText: '#cffafe',
+    accentBg: 'rgba(6,182,212,0.1)',
+    accentBorder: 'rgba(6,182,212,0.3)',
+    accentHover: '#0891b2',
+    fontFamily: 'Outfit, sans-serif',
+  },
+};
 
 export default function LivingWorkplaceSimulation() {
   const { sessionId } = useParams();
@@ -47,6 +154,11 @@ export default function LivingWorkplaceSimulation() {
   // Anti-cheat & Timer
   const [timeLeft, setTimeLeft] = useState(2400); // 40 mins
   const [tabSwitches, setTabSwitches] = useState(0);
+
+  // Theme
+  const [themeKey, setThemeKey] = useState<SimThemeKey>('noir');
+  const [showThemePicker, setShowThemePicker] = useState(false);
+  const t = THEMES[themeKey];
 
   // Camera initialization for Face PiP
   useEffect(() => {
@@ -342,41 +454,114 @@ export default function LivingWorkplaceSimulation() {
   const selectedEvent = runtime.eventStream.find(e => e.id === selectedEventId);
 
   return (
-    <div className="min-h-screen bg-[#0e0e10] text-white flex flex-col font-outfit relative">
-      
+    <div
+      className="min-h-screen flex flex-col relative"
+      style={{
+        backgroundColor: t.bg,
+        color: t.textPrimary,
+        fontFamily: t.fontFamily,
+        transition: 'background-color 0.35s, color 0.35s',
+      }}
+    >
       {/* ─── Top Bar: Progress & Status ─── */}
-      <div className="border-b border-gray-800/50 bg-[#111113] px-6 py-3 flex justify-between items-center z-20">
+      <div
+        className="border-b px-6 py-3 flex justify-between items-center z-20"
+        style={{ backgroundColor: t.surface, borderColor: t.border }}
+      >
         <div className="flex items-center gap-6">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-xs font-bold shadow-lg shadow-indigo-500/20">OS</div>
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shadow-lg"
+            style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})`, color: '#fff' }}
+          >OS</div>
           <div>
-            <h1 className="text-base font-semibold text-gray-100">{blueprint.company} Workspace</h1>
-            <p className="text-xs text-gray-500">{blueprint.role}</p>
+            <h1 className="text-base font-semibold" style={{ color: t.textPrimary }}>{blueprint.company} Workspace</h1>
+            <p className="text-xs" style={{ color: t.textMuted }}>{blueprint.role}</p>
           </div>
-          
+
           {/* Act Progress Bar */}
-          <div className="flex items-center gap-2 ml-8 bg-[#1a1a1c] px-3 py-1.5 rounded-full border border-gray-800">
+          <div
+            className="flex items-center gap-2 ml-8 px-3 py-1.5 rounded-full border"
+            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}
+          >
             {[1, 2, 3].map(act => (
               <div key={act} className="flex items-center">
-                <div className={`w-2 h-2 rounded-full ${runtime.currentAct >= act ? 'bg-indigo-500' : 'bg-gray-700'}`} />
-                <span className={`text-xs ml-2 mr-3 font-medium ${runtime.currentAct >= act ? 'text-indigo-200' : 'text-gray-600'}`}>Act {act}</span>
-                {act < 3 && <div className="w-4 h-[1px] bg-gray-800 mr-3" />}
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: runtime.currentAct >= act ? t.accent : t.textMuted }}
+                />
+                <span
+                  className="text-xs ml-2 mr-3 font-medium"
+                  style={{ color: runtime.currentAct >= act ? t.accentText : t.textMuted }}
+                >Act {act}</span>
+                {act < 3 && <div className="w-4 h-[1px] mr-3" style={{ backgroundColor: t.border }} />}
               </div>
             ))}
           </div>
         </div>
-        
-        <div className="flex gap-4 items-center">
+
+        <div className="flex gap-3 items-center">
           {tabSwitches > 0 && (
             <div className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-full text-xs font-semibold border border-red-500/20 animate-pulse flex items-center gap-1">
-              <ShieldAlert className="w-3.5 h-3.5 text-red-400" /> Focus Lost ({tabSwitches})
+              <ShieldAlert className="w-3.5 h-3.5" /> Focus Lost ({tabSwitches})
             </div>
           )}
-          <div className={`text-xl font-mono px-3 py-1.5 rounded-lg ${timeLeft < 300 ? 'bg-red-500/10 text-red-400 animate-pulse' : 'bg-[#1a1a1c] text-gray-300'}`}>
+
+          <div
+            className={`text-xl font-mono px-3 py-1.5 rounded-lg ${timeLeft < 300 ? 'text-red-400 animate-pulse' : ''}`}
+            style={{
+              backgroundColor: timeLeft < 300 ? 'rgba(239,68,68,0.1)' : t.surfaceAlt,
+              color: timeLeft < 300 ? '#f87171' : t.textSecondary,
+              border: `1px solid ${t.border}`,
+            }}
+          >
             {formatTime(timeLeft)}
           </div>
-          <button 
+
+          {/* ─── Theme Picker ─── */}
+          <div className="relative">
+            <button
+              onClick={() => setShowThemePicker(p => !p)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all"
+              style={{
+                backgroundColor: t.accentBg,
+                color: t.accentText,
+                borderColor: t.accentBorder,
+              }}
+            >
+              <Palette className="w-3.5 h-3.5" />
+              {t.label}
+            </button>
+            {showThemePicker && (
+              <div
+                className="absolute right-0 top-10 w-44 rounded-xl border shadow-2xl z-50 overflow-hidden"
+                style={{ backgroundColor: t.surface, borderColor: t.border }}
+              >
+                {(Object.keys(THEMES) as SimThemeKey[]).map(key => (
+                  <button
+                    key={key}
+                    onClick={() => { setThemeKey(key); setShowThemePicker(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium transition-all"
+                    style={{
+                      color: themeKey === key ? THEMES[key].accent : t.textSecondary,
+                      backgroundColor: themeKey === key ? THEMES[key].accentBg : 'transparent',
+                    }}
+                  >
+                    <div
+                      className="w-3.5 h-3.5 rounded-full shrink-0"
+                      style={{ backgroundColor: THEMES[key].preview }}
+                    />
+                    {THEMES[key].label}
+                    {themeKey === key && <Check className="w-3 h-3 ml-auto" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
             onClick={handleSubmitTest}
-            className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-black uppercase tracking-wider"
+            className="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider text-white"
+            style={{ backgroundColor: t.accent }}
           >
             Submit Simulation
           </button>
@@ -385,7 +570,10 @@ export default function LivingWorkplaceSimulation() {
 
       <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* ─── Sidebar Navigation ─── */}
-        <div className="w-16 bg-[#111113] border-r border-gray-800/50 flex flex-col items-center py-4 gap-2 shrink-0">
+        <div
+          className="w-16 border-r flex flex-col items-center py-4 gap-2 shrink-0"
+          style={{ backgroundColor: t.surface, borderColor: t.border }}
+        >
           {[
             { key: 'slack' as const, icon: <MessageSquare className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'slack' && !e.isRead).length },
             { key: 'email' as const, icon: <Mail className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
@@ -395,11 +583,19 @@ export default function LivingWorkplaceSimulation() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`relative w-12 h-12 rounded-xl flex flex-col items-center justify-center text-lg transition-all ${activeTab === tab.key ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 shadow-lg shadow-indigo-500/10' : 'text-gray-500 hover:bg-[#1a1a1c] hover:text-gray-300'}`}
+              className="relative w-12 h-12 rounded-xl flex flex-col items-center justify-center transition-all"
+              style={activeTab === tab.key ? {
+                backgroundColor: t.accentBg,
+                color: t.accentText,
+                border: `1px solid ${t.accentBorder}`,
+              } : {
+                color: t.textMuted,
+                border: '1px solid transparent',
+              }}
             >
               {tab.icon}
               {tab.count > 0 && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-lg shadow-red-500/20">
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                   {tab.count}
                 </div>
               )}
@@ -408,43 +604,50 @@ export default function LivingWorkplaceSimulation() {
         </div>
 
         {/* ─── Inbox / List View ─── */}
-        <div className="w-[380px] border-r border-gray-800/50 bg-[#111113] flex flex-col shrink-0 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-800/50 flex justify-between items-center">
-            <h2 className="text-sm font-semibold text-gray-300 capitalize">{activeTab}</h2>
+        <div
+          className="w-[380px] border-r flex flex-col shrink-0 overflow-hidden"
+          style={{ backgroundColor: t.surface, borderColor: t.border }}
+        >
+          <div className="px-4 py-3 border-b flex justify-between items-center" style={{ borderColor: t.border }}>
+            <h2 className="text-sm font-semibold capitalize" style={{ color: t.textPrimary }}>{activeTab}</h2>
           </div>
           <div className="flex-1 overflow-y-auto">
             {activeEvents.map(event => {
               const stakeholder = runtime.stakeholderStates[event.fromStakeholderId];
+              const isSelected = selectedEventId === event.id;
               return (
                 <button
                   key={event.id}
                   onClick={() => setSelectedEventId(event.id)}
-                  className={`w-full text-left p-4 border-b border-gray-800/30 transition-colors flex gap-3 items-start ${selectedEventId === event.id ? 'bg-[#1a1a1c]' : 'hover:bg-[#151517]'}`}
+                  className="w-full text-left p-4 border-b flex gap-3 items-start transition-all"
+                  style={{
+                    borderColor: t.border,
+                    backgroundColor: isSelected ? t.surfaceAlt : 'transparent',
+                  }}
                 >
-                  {/* Photo avatar */}
                   {stakeholder ? (
                     stakeholder.photoUrl ? (
-                      <img src={stakeholder.photoUrl} alt={stakeholder.name} className="w-9 h-9 rounded-full object-cover shrink-0 border border-gray-800 mt-0.5" />
+                      <img src={stakeholder.photoUrl} alt={stakeholder.name} className="w-9 h-9 rounded-full object-cover shrink-0 border mt-0.5" style={{ borderColor: t.border }} />
                     ) : (
                       <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black text-white uppercase shrink-0 mt-0.5" style={{ backgroundColor: stakeholder.avatarColor }}>
                         {stakeholder.avatar}
                       </div>
                     )
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-xs text-gray-400 shrink-0 mt-0.5"><Cpu className="w-4 h-4 text-slate-400" /></div>
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5" style={{ backgroundColor: t.surfaceAlt, color: t.textMuted }}><Cpu className="w-4 h-4" /></div>
                   )}
 
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <span className="font-medium text-sm text-gray-200 truncate">
+                      <span className="font-medium text-sm truncate" style={{ color: t.textPrimary }}>
                         {stakeholder ? stakeholder.name : 'System'}
                       </span>
-                      {event.priority === 'CRITICAL' && <span className="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded font-bold shrink-0">URGENT</span>}
+                      {event.priority === 'CRITICAL' && <span className="text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 bg-red-500/20 text-red-400">URGENT</span>}
                     </div>
-                    <div className="text-xs text-gray-500 mb-2 truncate">
+                    <div className="text-xs mb-2 truncate" style={{ color: t.textMuted }}>
                       {event.subject || event.channel || 'Direct Message'}
                     </div>
-                    <p className="text-sm text-gray-400 line-clamp-2">
+                    <p className="text-sm line-clamp-2" style={{ color: t.textSecondary }}>
                       {event.message}
                     </p>
                     {event.isAnswered && (
@@ -457,7 +660,7 @@ export default function LivingWorkplaceSimulation() {
               );
             })}
             {activeEvents.length === 0 && (
-              <div className="p-8 text-center text-gray-500 text-sm">
+              <div className="p-8 text-center text-sm" style={{ color: t.textMuted }}>
                 No active items here.
               </div>
             )}
@@ -465,10 +668,13 @@ export default function LivingWorkplaceSimulation() {
         </div>
 
         {/* ─── Reading Pane & Monaco Code IDE Split Pane ─── */}
-        <div className="flex-1 bg-[#0a0a0c] flex min-h-0">
-          
+        <div className="flex-1 flex min-h-0" style={{ backgroundColor: t.bg }}>
+
           {/* Left Side: Message View */}
-          <div className={`flex-1 flex flex-col relative min-h-0 overflow-y-auto ${showSandbox ? 'w-1/2 border-r border-gray-800/50' : 'w-full'}`}>
+          <div
+            className={`flex-1 flex flex-col relative min-h-0 overflow-y-auto ${showSandbox ? 'w-1/2 border-r' : 'w-full'}`}
+            style={{ borderColor: t.border }}
+          >
             {selectedEvent ? (
               <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-8 min-h-0">
                 <div className="flex justify-between items-start w-full mb-8">
@@ -502,13 +708,25 @@ export default function LivingWorkplaceSimulation() {
                   {/* Monaco IDE Sandbox Toggle */}
                   <button
                     onClick={() => setShowSandbox(prev => !prev)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${showSandbox ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30' : 'bg-[#111113] text-gray-400 border-gray-800/80 hover:text-gray-200 hover:border-gray-700'}`}
+                    className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all"
+                    style={showSandbox ? {
+                      backgroundColor: t.accentBg,
+                      color: t.accentText,
+                      borderColor: t.accentBorder,
+                    } : {
+                      backgroundColor: t.surface,
+                      color: t.textMuted,
+                      borderColor: t.border,
+                    }}
                   >
                     <Terminal className="w-3.5 h-3.5" /> {showSandbox ? 'Close Coding Editor' : 'Open Coding Editor'}
                   </button>
                 </div>
                 
-                <div className="bg-[#111113] border border-gray-800 rounded-xl p-6 mb-8 text-gray-300 leading-relaxed whitespace-pre-wrap shadow-lg shrink-0">
+                <div
+                  className="rounded-xl p-6 mb-8 leading-relaxed whitespace-pre-wrap shadow-lg shrink-0 border"
+                  style={{ backgroundColor: t.surface, borderColor: t.border, color: t.textSecondary }}
+                >
                   {selectedEvent.message}
                 </div>
 
@@ -518,32 +736,39 @@ export default function LivingWorkplaceSimulation() {
                       value={replyText}
                       onChange={e => setReplyText(e.target.value)}
                       placeholder="Draft your response..."
-                      className="w-full h-32 bg-[#111113] border border-gray-800 rounded-xl p-4 text-sm text-gray-200 focus:outline-none focus:border-indigo-500/50 resize-none"
+                      className="w-full h-32 rounded-xl p-4 text-sm focus:outline-none resize-none border"
+                      style={{
+                        backgroundColor: t.surface,
+                        borderColor: t.border,
+                        color: t.textPrimary,
+                      }}
                     />
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleAction('ignored', selectedEvent.id)}
                           disabled={isProcessingAction}
-                          className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-red-500/10 hover:text-red-400"
+                          style={{ color: t.textMuted }}
                         >
                           Ignore & Archive
                         </button>
-                        
-                        {/* Clarification Button */}
+
                         <button
                           onClick={() => handleAction('asked_clarification', selectedEvent.id)}
                           disabled={isProcessingAction || !replyText.trim()}
-                          className="px-4 py-2 rounded-lg text-sm font-medium text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 transition-colors border border-amber-500/20"
+                          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors border"
+                          style={{ color: '#f59e0b', borderColor: 'rgba(245,158,11,0.25)' }}
                         >
                           Ask Clarification
                         </button>
                       </div>
-                      
+
                       <button
                         onClick={() => handleAction('responded', selectedEvent.id)}
                         disabled={isProcessingAction || !replyText.trim()}
-                        className="px-6 py-2 rounded-lg text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-50"
+                        className="px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-50"
+                        style={{ backgroundColor: t.accent }}
                       >
                         {isProcessingAction ? 'Sending...' : 'Send Response'}
                       </button>
@@ -559,15 +784,22 @@ export default function LivingWorkplaceSimulation() {
             
             {/* ─── Challenge Overlay ─── */}
             {runtime.currentChallenge && (
-              <div className="absolute top-4 right-4 w-80 bg-[#111113] border border-indigo-500/30 rounded-xl shadow-2xl shadow-indigo-500/10 overflow-hidden z-30">
-                <div className="bg-indigo-500/10 px-4 py-2 border-b border-indigo-500/20 flex justify-between items-center">
-                  <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Current Objective</span>
+              <div
+                className="absolute top-4 right-4 w-80 rounded-xl shadow-2xl overflow-hidden z-30 border"
+                style={{ backgroundColor: t.surface, borderColor: t.accentBorder }}
+              >
+                <div
+                  className="px-4 py-2 border-b flex justify-between items-center"
+                  style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}
+                >
+                  <span className="text-xs font-bold uppercase tracking-wider" style={{ color: t.accentText }}>Current Objective</span>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-gray-300 mb-4">{runtime.currentChallenge.prompt}</p>
+                  <p className="text-xs mb-4" style={{ color: t.textSecondary }}>{runtime.currentChallenge.prompt}</p>
                   <button
                     onClick={handleAdvanceAct}
-                    className="w-full py-2 bg-indigo-600/20 text-indigo-300 border border-indigo-500/30 rounded-lg text-xs font-medium hover:bg-indigo-600 hover:text-white transition-colors"
+                    className="w-full py-2 rounded-lg text-xs font-medium transition-colors border"
+                    style={{ backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder }}
                   >
                     Complete Objective & Advance
                   </button>
@@ -608,51 +840,64 @@ export default function LivingWorkplaceSimulation() {
         </div>
 
         {/* ─── Real-Time Progress Analysis Panel ─── */}
-        <div className="w-72 bg-[#0d0d0f] border-l border-gray-800/50 flex flex-col overflow-y-auto shrink-0">
+        <div
+          className="w-72 border-l flex flex-col overflow-y-auto shrink-0"
+          style={{ backgroundColor: t.bg, borderColor: t.border }}
+        >
           {/* Header */}
-          <div className="px-4 py-3 border-b border-gray-800/50 bg-[#111113] shrink-0">
+          <div
+            className="px-4 py-3 border-b shrink-0"
+            style={{ backgroundColor: t.surface, borderColor: t.border }}
+          >
             <div className="flex items-center gap-2 mb-0.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <p className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">Live Behavioral Monitor</p>
+              <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: t.accent }} />
+              <p className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: t.accent }}>Live Behavioral Monitor</p>
             </div>
-            <p className="text-[9px] text-gray-600 uppercase tracking-widest">Real-time progress analysis</p>
+            <p className="text-[9px] uppercase tracking-widest" style={{ color: t.textMuted }}>Real-time progress analysis</p>
           </div>
 
           <div className="flex-1 p-3 space-y-4 overflow-y-auto">
 
             {/* Session Vitals */}
-            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-2">
-              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Session Vitals</p>
+            <div className="rounded-xl p-3 space-y-2 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Session Vitals</p>
               <div className="grid grid-cols-2 gap-2">
-                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
-                  <p className="text-lg font-black text-indigo-400">{runtime.currentAct}/3</p>
-                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Act</p>
+                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
+                  <p className="text-lg font-black" style={{ color: t.accent }}>{runtime.currentAct}/3</p>
+                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Act</p>
                 </div>
-                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
                   <p className="text-lg font-black text-rose-400">{runtime.behavioralSignals.ignoredEventIds?.length || 0}</p>
-                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Ignored</p>
+                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Ignored</p>
                 </div>
-                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
                   <p className="text-lg font-black text-amber-400">{runtime.behavioralSignals.clarificationCount || 0}</p>
-                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Clarified</p>
+                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Clarified</p>
                 </div>
-                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
-                  <p className="text-lg font-black text-slate-400">{tabSwitches}</p>
-                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Focus Lost</p>
+                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
+                  <p className="text-lg font-black" style={{ color: t.textSecondary }}>{tabSwitches}</p>
+                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Focus Lost</p>
                 </div>
               </div>
             </div>
 
             {/* Stakeholder Trust & Frustration Monitor */}
-            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-3">
-              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Stakeholder Monitor</p>
+            <div className="rounded-xl p-3 space-y-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: t.textMuted }}>Stakeholder Monitor</p>
               {Object.values(runtime.stakeholderStates).map((s: StakeholderState) => {
                 const frustrationLevel = s.frustration || 0;
                 const trustLevel = s.trust !== undefined ? s.trust : 100;
                 const isCritical = frustrationLevel >= 70 || trustLevel <= 30;
                 const isWarning = frustrationLevel >= 40 || trustLevel <= 60;
                 return (
-                  <div key={s.id} className={`p-2.5 rounded-lg border transition-all ${isCritical ? 'border-rose-500/30 bg-rose-500/5' : isWarning ? 'border-amber-500/20 bg-amber-500/5' : 'border-gray-800/50 bg-[#0e0e10]'}`}>
+                  <div
+                    key={s.id}
+                    className="p-2.5 rounded-lg border transition-all"
+                    style={{
+                      borderColor: isCritical ? 'rgba(239,68,68,0.3)' : isWarning ? 'rgba(245,158,11,0.2)' : t.border,
+                      backgroundColor: isCritical ? 'rgba(239,68,68,0.05)' : isWarning ? 'rgba(245,158,11,0.05)' : t.bg,
+                    }}
+                  >
                     <div className="flex items-center gap-2 mb-2">
                       <div
                         className="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-black text-white shrink-0"
@@ -661,8 +906,8 @@ export default function LivingWorkplaceSimulation() {
                         {s.avatar}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold text-gray-200 truncate">{s.name}</p>
-                        <p className="text-[8px] text-gray-600 truncate">{s.role}</p>
+                        <p className="text-[10px] font-bold truncate" style={{ color: t.textPrimary }}>{s.name}</p>
+                        <p className="text-[8px] truncate" style={{ color: t.textMuted }}>{s.role}</p>
                       </div>
                       {isCritical && (
                         <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shrink-0" />
@@ -727,10 +972,10 @@ export default function LivingWorkplaceSimulation() {
             </div>
 
             {/* Candidate Action Log */}
-            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3">
-              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Action Log</p>
+            <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Action Log</p>
               {runtime.candidateActions.length === 0 ? (
-                <p className="text-[9px] text-gray-700 text-center py-3">No actions recorded yet</p>
+                <p className="text-[9px] text-center py-3" style={{ color: t.textMuted }}>No actions recorded yet</p>
               ) : (
                 <div className="space-y-1.5 max-h-48 overflow-y-auto">
                   {[...runtime.candidateActions].reverse().map((action, i) => {
@@ -747,7 +992,7 @@ export default function LivingWorkplaceSimulation() {
                         <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${color}`}>
                           {action.type === 'asked_clarification' ? 'CLARIFY' : action.type.toUpperCase()}
                         </span>
-                        <p className="text-[8px] text-gray-500 leading-relaxed">{stName} — {action.responseTimeSeconds}s</p>
+                        <p className="text-[8px] leading-relaxed" style={{ color: t.textMuted }}>{stName} — {action.responseTimeSeconds}s</p>
                       </div>
                     );
                   })}
@@ -767,8 +1012,8 @@ export default function LivingWorkplaceSimulation() {
               if (tabSwitches >= 2) alerts.push({ label: `${tabSwitches} focus losses detected`, color: 'border-amber-500/20 bg-amber-500/5 text-amber-400' });
               if (alerts.length === 0) return null;
               return (
-                <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-2">
-                  <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Active Alerts</p>
+                <div className="rounded-xl p-3 space-y-2 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                  <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: t.textMuted }}>Active Alerts</p>
                   {alerts.map((al, i) => (
                     <div key={i} className={`text-[9px] font-bold px-2.5 py-1.5 rounded-lg border ${al.color}`}>
                       {al.label}
@@ -784,13 +1029,16 @@ export default function LivingWorkplaceSimulation() {
       </div>
 
       {/* ─── Face PiP (Micro proctoring camera feed) ─── */}
-      <div className="fixed bottom-4 right-4 w-40 h-28 bg-[#111113] border border-gray-800 rounded-xl overflow-hidden shadow-2xl z-50">
-        <video 
-          ref={videoRef} 
-          autoPlay 
-          playsInline 
-          muted 
-          className="w-full h-full object-cover scale-x-[-1]" 
+      <div
+        className="fixed bottom-4 right-4 w-40 h-28 rounded-xl overflow-hidden shadow-2xl z-50 border"
+        style={{ backgroundColor: t.surface, borderColor: t.border }}
+      >
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          className="w-full h-full object-cover scale-x-[-1]"
         />
         <div className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-0.5 bg-black/60 rounded-full border border-white/5">
           <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
@@ -801,7 +1049,8 @@ export default function LivingWorkplaceSimulation() {
       {/* ─── Senior Hint Assistant Chatbot Float Button ─── */}
       <button
         onClick={() => setIsAssistantOpen(prev => !prev)}
-        className="fixed bottom-36 right-4 w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-full flex items-center justify-center shadow-xl shadow-indigo-600/30 text-white transition-all z-40"
+        className="fixed bottom-36 right-4 w-12 h-12 rounded-full flex items-center justify-center shadow-xl text-white transition-all z-40"
+        style={{ backgroundColor: t.accent }}
         title="Consult Colleague"
       >
         <MessageSquare className="w-5 h-5" />
@@ -809,40 +1058,57 @@ export default function LivingWorkplaceSimulation() {
 
       {/* ─── Senior Hint Colleague Chatbot Window ─── */}
       {isAssistantOpen && (
-        <div className="fixed bottom-4 right-20 w-80 h-[420px] bg-[#111113] border border-gray-800 rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden font-outfit">
-          <div className="bg-[#1a1a1c] border-b border-gray-800 p-4 flex justify-between items-center shrink-0">
+        <div
+          className="fixed bottom-4 right-20 w-80 h-[420px] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border"
+          style={{ backgroundColor: t.surface, borderColor: t.border, fontFamily: t.fontFamily }}
+        >
+          <div
+            className="border-b p-4 flex justify-between items-center shrink-0"
+            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}
+          >
             <div className="flex items-center gap-2">
-              <User className="w-5 h-5 text-gray-300" />
+              <User className="w-5 h-5" style={{ color: t.textSecondary }} />
               <div>
-                <p className="text-xs font-bold text-gray-200">Senior Colleague (AURA)</p>
-                <p className="text-[9px] text-gray-500">Ask for a subtle hint or nudge</p>
+                <p className="text-xs font-bold" style={{ color: t.textPrimary }}>Senior Colleague (AURA)</p>
+                <p className="text-[9px]" style={{ color: t.textMuted }}>Ask for a subtle hint or nudge</p>
               </div>
             </div>
             <button onClick={() => setIsAssistantOpen(false)} className="text-gray-400 hover:text-white text-sm">X</button>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#0e0e10]">
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ backgroundColor: t.bg }}>
             {assistantLogs.map((log, i) => (
               <div key={i} className={`flex flex-col ${log.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${log.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-[#1a1a1c] text-gray-300'}`}>
+                <div
+                  className="max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed"
+                  style={log.role === 'user'
+                    ? { backgroundColor: t.accent, color: '#fff' }
+                    : { backgroundColor: t.surfaceAlt, color: t.textSecondary }
+                  }
+                >
                   {log.content}
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="p-3 bg-[#111113] border-t border-gray-800 flex gap-2 shrink-0">
+          <div
+            className="p-3 border-t flex gap-2 shrink-0"
+            style={{ backgroundColor: t.surface, borderColor: t.border }}
+          >
             <input
               type="text"
               value={assistantInput}
               onChange={e => setAssistantInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAskAssistant()}
               placeholder="Ask a question..."
-              className="flex-1 bg-[#1a1a1c] border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-indigo-500"
+              className="flex-1 rounded-xl px-3 py-2 text-xs focus:outline-none border"
+              style={{ backgroundColor: t.surfaceAlt, borderColor: t.border, color: t.textPrimary }}
             />
             <button
               onClick={handleAskAssistant}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-2 rounded-xl text-xs font-medium shrink-0"
+              className="text-white px-3 py-2 rounded-xl text-xs font-medium shrink-0"
+              style={{ backgroundColor: t.accent }}
             >
               Send
             </button>
@@ -852,17 +1118,28 @@ export default function LivingWorkplaceSimulation() {
 
       {/* ─── Submit Transition Modal ─── */}
       {showSubmitModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center font-outfit p-6">
-          <div className="bg-[#111113] border border-gray-800 rounded-[32px] max-w-lg w-full p-8 text-center space-y-6 shadow-2xl">
-            <div className="w-16 h-16 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto"><Sparkles className="w-8 h-8 text-indigo-400" /></div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-6">
+          <div
+            className="rounded-[32px] max-w-lg w-full p-8 text-center space-y-6 shadow-2xl border"
+            style={{ backgroundColor: t.surface, borderColor: t.border, fontFamily: t.fontFamily }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto border"
+              style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}
+            >
+              <Sparkles className="w-8 h-8" style={{ color: t.accentText }} />
+            </div>
             <div className="space-y-2">
-              <h2 className="text-2xl font-bold text-gray-100">Workplace Simulation Complete!</h2>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <h2 className="text-2xl font-bold" style={{ color: t.textPrimary }}>Workplace Simulation Complete!</h2>
+              <p className="text-sm leading-relaxed" style={{ color: t.textSecondary }}>
                 Your actions, code solutions, communication tone, and stakeholder trust scores have been recorded.
               </p>
             </div>
-            
-            <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl text-left space-y-1 text-xs text-indigo-300">
+
+            <div
+              className="p-4 rounded-2xl text-left space-y-1 text-xs border"
+              style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder, color: t.accentText }}
+            >
               <p className="font-bold">Summary Metrics Captured:</p>
               <ul className="list-disc pl-4 space-y-1 mt-2">
                 <li>Ignored Actions: {runtime?.behavioralSignals.ignoredEventIds?.length || 0}</li>
@@ -871,10 +1148,11 @@ export default function LivingWorkplaceSimulation() {
                 <li>Stakeholders Escalation Flags: {Object.values(runtime?.stakeholderStates || {}).filter(s => s.escalationLevel > 1).length}</li>
               </ul>
             </div>
-            
+
             <button
               onClick={handleProceedToInterview}
-              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold tracking-wider hover:shadow-lg transition-all"
+              className="w-full py-3.5 text-white rounded-xl text-sm font-semibold tracking-wider transition-all"
+              style={{ backgroundColor: t.accent }}
             >
               Proceed to Phase 2: Live AI Voice Interview
             </button>
