@@ -360,18 +360,22 @@ function SessionContent() {
       if (savedCtx) {
         const ctx = JSON.parse(savedCtx);
         setDynamicContext(ctx);
+        // Pull simulation summary from storage (may already be in state via simulationSummary)
+        const simSummary = simulationSessionId
+          ? (sessionStorage.getItem(`simulation_summary_${simulationSessionId}`) || localStorage.getItem(`simulation_summary_${simulationSessionId}`) || null)
+          : null;
         fetch('/api/generate-questions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(ctx)
+          body: JSON.stringify({ ...ctx, simulationSummary: simSummary })
         })
         .then(res => res.json())
         .then(data => {
-          setQuestions(data.questions || []);
+          setQuestions(data.questions?.length ? data.questions : questionEngine.getQuestionsByTrack('JS').slice(0, 4));
           setIsGeneratingQuestions(false);
         })
         .catch(err => {
-          console.error(err);
+          console.error('[generate-questions DYNAMIC]', err);
           setQuestions(questionEngine.getQuestionsByTrack('JS').slice(0, 4));
           setIsGeneratingQuestions(false);
         });
@@ -415,7 +419,7 @@ function SessionContent() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.avatar?.includes('ui-avatars')) {
-          const colors: Record<string, string> = { Syed: '4f46e5', Ava: 'db2777', Sathvik: '059669', Zoe: '7c3aed' };
+          const colors: Record<string, string> = { Syed: '4f46e5', Zara: '06b6d4', Ava: 'db2777', Sathvik: '059669', Zoe: '7c3aed' };
           parsed.avatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${parsed.name}&backgroundColor=${colors[parsed.name] || '4f46e5'}`;
           localStorage.setItem('interviewos_active_interviewer', JSON.stringify(parsed));
         }
@@ -676,7 +680,7 @@ function SessionContent() {
   const fallbackSpeak = (text: string) => {
     const play = () => {
       const utterance = new SpeechSynthesisUtterance(text);
-      const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe'));
+      const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe' || interviewer?.name === 'Zara'));
       
       utterance.rate = voiceSpeed;
       utterance.pitch = isFemale ? 1.2 : 0.9;
@@ -718,7 +722,7 @@ function SessionContent() {
 
     try {
       setIsSpeaking(true);
-      const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe'));
+      const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe' || interviewer?.name === 'Zara'));
       const voice = isFemale ? 'nova' : 'alloy';
 
       const res = await fetch('/api/tts', {
@@ -780,9 +784,11 @@ function SessionContent() {
         body: JSON.stringify({
           messages: updated,
           track,
-          candidateProfile: candidateProfile ? { ...candidateProfile, name } : null,
+          candidateProfile: candidateProfile 
+            ? { ...candidateProfile, name, interviewerName: interviewer?.name, interviewerPersona: interviewer?.persona } 
+            : { name, interviewerName: interviewer?.name, interviewerPersona: interviewer?.persona },
           simulationSummary: simulationSummary,
-          system: !candidateProfile ? (INTERVIEWER_PERSONA + systemCtx + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`) : undefined,
+          system: !candidateProfile ? (INTERVIEWER_PERSONA.replace(/Syed/gi, interviewer?.name || 'Syed') + systemCtx.replace(/Syed/gi, interviewer?.name || 'Syed') + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`) : undefined,
         }),
       });
       const data = await res.json();
@@ -856,7 +862,8 @@ function SessionContent() {
              finalNoise: noiseVal,
              voiceConfidence: voiceConfidence,
              koyoViolations: violations
-          }
+          },
+          simulationSummary
         })
       });
       const evaluationData = await res.json();

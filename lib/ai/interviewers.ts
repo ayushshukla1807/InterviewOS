@@ -7,6 +7,13 @@ export const INTERVIEWERS = [
     persona: 'Professional, senior-level, focus on system design and logic.'
   },
   {
+    id: 'zara',
+    name: 'Zara',
+    role: 'Lead AI Recruiter',
+    avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=256&h=256&q=80',
+    persona: 'Sharp, conversational, focus on behavioral insights, technical architecture, and communication structure.'
+  },
+  {
     id: 'ava',
     name: 'Ava',
     role: 'Lead AI Architect',

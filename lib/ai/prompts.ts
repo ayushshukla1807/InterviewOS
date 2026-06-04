@@ -52,12 +52,26 @@ export function buildRoleInterviewPrompt(
     skills?: string;
     resumeText?: string;
     companyCultureProfile?: string;
+    interviewerName?: string;
+    interviewerPersona?: string;
   }
 ): string {
   const { name, projects, experience, certifications, education, skills, resumeText } = candidateProfile;
+  const interviewerName = candidateProfile.interviewerName || 'Syed';
+  const interviewerPersona = candidateProfile.interviewerPersona || 'Professional, senior-level, focus on system design and logic.';
+
+  const customizedPersona = INTERVIEWER_PERSONA.replace(/Syed/gi, interviewerName);
+  const rawGreeting = role.initialGreeting.replace('{name}', name.split(' ')[0]);
+  const greeting = rawGreeting.replace(/Syed/gi, interviewerName);
 
   return `
-${INTERVIEWER_PERSONA}
+${customizedPersona}
+
+═══════════════════════════════════════
+INTERVIEWER PROFILE
+═══════════════════════════════════════
+YOUR NAME: ${interviewerName}
+YOUR PERSONA & STYLE: ${interviewerPersona}
 
 ═══════════════════════════════════════
 INTERVIEW CONTEXT
@@ -85,7 +99,7 @@ ${resumeText ? `FULL RESUME:\n${resumeText}` : ''}
 
 ═══════════════════════════════════════
 OPENING GREETING (use this for the first message):
-${role.initialGreeting.replace('{name}', name.split(' ')[0])}
+${greeting}
 ═══════════════════════════════════════
 
 YOUR MANDATE:

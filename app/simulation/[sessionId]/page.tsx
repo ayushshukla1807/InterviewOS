@@ -607,6 +607,180 @@ export default function LivingWorkplaceSimulation() {
 
         </div>
 
+        {/* ─── Real-Time Progress Analysis Panel ─── */}
+        <div className="w-72 bg-[#0d0d0f] border-l border-gray-800/50 flex flex-col overflow-y-auto shrink-0">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-gray-800/50 bg-[#111113] shrink-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <p className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">Live Behavioral Monitor</p>
+            </div>
+            <p className="text-[9px] text-gray-600 uppercase tracking-widest">Real-time progress analysis</p>
+          </div>
+
+          <div className="flex-1 p-3 space-y-4 overflow-y-auto">
+
+            {/* Session Vitals */}
+            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-2">
+              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Session Vitals</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                  <p className="text-lg font-black text-indigo-400">{runtime.currentAct}/3</p>
+                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Act</p>
+                </div>
+                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                  <p className="text-lg font-black text-rose-400">{runtime.behavioralSignals.ignoredEventIds?.length || 0}</p>
+                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Ignored</p>
+                </div>
+                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                  <p className="text-lg font-black text-amber-400">{runtime.behavioralSignals.clarificationCount || 0}</p>
+                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Clarified</p>
+                </div>
+                <div className="bg-[#0e0e10] rounded-lg p-2 text-center">
+                  <p className="text-lg font-black text-slate-400">{tabSwitches}</p>
+                  <p className="text-[8px] text-gray-600 uppercase tracking-wider">Focus Lost</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Stakeholder Trust & Frustration Monitor */}
+            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-3">
+              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Stakeholder Monitor</p>
+              {Object.values(runtime.stakeholderStates).map((s: StakeholderState) => {
+                const frustrationLevel = s.frustration || 0;
+                const trustLevel = s.trust !== undefined ? s.trust : 100;
+                const isCritical = frustrationLevel >= 70 || trustLevel <= 30;
+                const isWarning = frustrationLevel >= 40 || trustLevel <= 60;
+                return (
+                  <div key={s.id} className={`p-2.5 rounded-lg border transition-all ${isCritical ? 'border-rose-500/30 bg-rose-500/5' : isWarning ? 'border-amber-500/20 bg-amber-500/5' : 'border-gray-800/50 bg-[#0e0e10]'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-black text-white shrink-0"
+                        style={{ backgroundColor: s.avatarColor || '#4f46e5' }}
+                      >
+                        {s.avatar}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-bold text-gray-200 truncate">{s.name}</p>
+                        <p className="text-[8px] text-gray-600 truncate">{s.role}</p>
+                      </div>
+                      {isCritical && (
+                        <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shrink-0" />
+                      )}
+                    </div>
+
+                    {/* Trust Bar */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Trust</span>
+                        <span className={`text-[8px] font-black ${
+                          trustLevel > 60 ? 'text-emerald-400' : trustLevel > 30 ? 'text-amber-400' : 'text-rose-400'
+                        }`}>{trustLevel}</span>
+                      </div>
+                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${
+                            trustLevel > 60 ? 'bg-emerald-500' : trustLevel > 30 ? 'bg-amber-500' : 'bg-rose-500'
+                          }`}
+                          style={{ width: `${trustLevel}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Frustration Bar */}
+                    <div className="space-y-1 mt-1.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Frustration</span>
+                        <span className={`text-[8px] font-black ${
+                          frustrationLevel < 30 ? 'text-emerald-400' : frustrationLevel < 60 ? 'text-amber-400' : 'text-rose-400'
+                        }`}>{frustrationLevel}</span>
+                      </div>
+                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${
+                            frustrationLevel < 30 ? 'bg-emerald-500' : frustrationLevel < 60 ? 'bg-amber-500' : 'bg-rose-500'
+                          }`}
+                          style={{ width: `${frustrationLevel}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Escalation Badge */}
+                    {(s.escalationLevel || 0) > 0 && (
+                      <div className="mt-2 flex items-center gap-1">
+                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Escalation:</span>
+                        <div className="flex gap-0.5">
+                          {[1, 2, 3].map(lvl => (
+                            <div
+                              key={lvl}
+                              className={`w-2.5 h-1.5 rounded-sm ${
+                                (s.escalationLevel || 0) >= lvl ? 'bg-rose-500' : 'bg-gray-800'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Candidate Action Log */}
+            <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3">
+              <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">Action Log</p>
+              {runtime.candidateActions.length === 0 ? (
+                <p className="text-[9px] text-gray-700 text-center py-3">No actions recorded yet</p>
+              ) : (
+                <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                  {[...runtime.candidateActions].reverse().map((action, i) => {
+                    const stName = runtime.stakeholderStates[action.stakeholderId]?.name || 'System';
+                    const typeColors: Record<string, string> = {
+                      responded: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+                      ignored: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
+                      escalated: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
+                      asked_clarification: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
+                    };
+                    const color = typeColors[action.type] || 'text-gray-400 bg-white/5 border-white/10';
+                    return (
+                      <div key={i} className="flex items-start gap-1.5">
+                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${color}`}>
+                          {action.type === 'asked_clarification' ? 'CLARIFY' : action.type.toUpperCase()}
+                        </span>
+                        <p className="text-[8px] text-gray-500 leading-relaxed">{stName} — {action.responseTimeSeconds}s</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Active Alerts */}
+            {(() => {
+              const alerts: { label: string; color: string }[] = [];
+              const ignoredCount = runtime.behavioralSignals.ignoredEventIds?.length || 0;
+              const escalatedCount = runtime.behavioralSignals.escalatedEventIds?.length || 0;
+              const criticalStakeholders = Object.values(runtime.stakeholderStates).filter(s => (s.frustration || 0) >= 70);
+              if (ignoredCount >= 2) alerts.push({ label: `${ignoredCount} ignored — stakeholders may escalate`, color: 'border-rose-500/20 bg-rose-500/5 text-rose-400' });
+              if (escalatedCount >= 1) alerts.push({ label: `${escalatedCount} escalation(s) flagged`, color: 'border-amber-500/20 bg-amber-500/5 text-amber-400' });
+              criticalStakeholders.forEach(s => alerts.push({ label: `${s.name} frustration critical`, color: 'border-rose-500/20 bg-rose-500/5 text-rose-400' }));
+              if (tabSwitches >= 2) alerts.push({ label: `${tabSwitches} focus losses detected`, color: 'border-amber-500/20 bg-amber-500/5 text-amber-400' });
+              if (alerts.length === 0) return null;
+              return (
+                <div className="bg-[#111113] border border-gray-800/50 rounded-xl p-3 space-y-2">
+                  <p className="text-[9px] font-black text-gray-500 uppercase tracking-widest">Active Alerts</p>
+                  {alerts.map((al, i) => (
+                    <div key={i} className={`text-[9px] font-bold px-2.5 py-1.5 rounded-lg border ${al.color}`}>
+                      {al.label}
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+
+          </div>
+        </div>
+
       </div>
 
       {/* ─── Face PiP (Micro proctoring camera feed) ─── */}

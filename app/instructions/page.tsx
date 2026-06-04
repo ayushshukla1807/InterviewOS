@@ -110,15 +110,38 @@ function InstructionsContent() {
                   </div>
                 </div>
 
-                {/* Technical Interviewer */}
-                <div className="p-4 rounded-2xl border flex items-center gap-4 group transition-all" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 transition-all shrink-0" style={{ backgroundColor: 'var(--border-color)', borderColor: 'var(--border-color)' }}>
-                    <img src={interviewer.avatar} alt="Interviewer" className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-[8px] font-black uppercase tracking-widest mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>AI Interviewer</p>
-                    <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>{interviewer.name}</p>
-                    <p className="text-[10px] font-bold uppercase" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>{interviewer.role}</p>
+                {/* AI Interviewer Selector */}
+                <div className="space-y-3 pt-2">
+                  <p className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Choose AI Interviewer</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {INTERVIEWERS.map((int: any) => {
+                      const isSelected = interviewer.id === int.id;
+                      return (
+                        <button
+                          key={int.id}
+                          onClick={() => {
+                            setInterviewer(int);
+                            localStorage.setItem('interviewos_active_interviewer', JSON.stringify(int));
+                          }}
+                          className={`p-3 rounded-2xl border text-left flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
+                            isSelected 
+                              ? 'border-indigo-600 bg-indigo-600/10 shadow-[0_0_15px_rgba(79,70,229,0.15)]' 
+                              : 'border-white/5 bg-white/5 hover:bg-white/10'
+                          }`}
+                        >
+                          <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shrink-0 transition-all ${isSelected ? 'border-indigo-500' : 'border-white/10'}`}>
+                            <img src={int.avatar} alt={int.name} className="w-full h-full object-cover" />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-[11px] font-black text-white">{int.name}</p>
+                            <p className="text-[8px] font-bold text-slate-500 uppercase tracking-tight mt-0.5 leading-none">{int.role}</p>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-indigo-500 rounded-full" />
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -180,6 +203,70 @@ function InstructionsContent() {
                       </li>
                     ))}
                   </ul>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-4 pt-6 border-t" style={{ borderColor: 'var(--border-color)' }}>
+              <h3 className="text-base font-black tracking-tight uppercase" style={{ color: 'var(--text)' }}>AI Interview Guide & Rubrics</h3>
+              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Learn how the AI recruiter evaluates your performance across multiple core dimensions.</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Rubric 1 */}
+                <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Technical Probing (60%)</h4>
+                  <ul className="space-y-2 text-[12px] font-medium text-slate-400">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Brute Force & Optimization: Asked to explain basic approaches before implementing high-performance solutions.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Space & Time Complexity: Evaluated on defining exact Big-O complexities and defending structural choices.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Hands-on Code Quality: Tested on syntax accuracy, memory limits, and handling obscure edge cases.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Rubric 2 */}
+                <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Communication & Persona (40%)</h4>
+                  <ul className="space-y-2 text-[12px] font-medium text-slate-400">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Clarity & Structure: Checked for concise explanations, avoidance of buzzword bloat, and structured presentation.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Situational Judgment: Evaluated via case scenarios analyzing decision consistency and ownership under stress.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
+                      <span>Language Agility: Support for multiple languages, fluidly translating concepts to explain trade-offs.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Rubric 3 */}
+                <div className="p-5 rounded-2xl border md:col-span-2" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Sentient Integrity Protocol</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-medium text-slate-400 mt-3">
+                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Gaze Check</p>
+                      <span>Webcam feed tracks focus vectors to flag candidate posture and document-reading triggers.</span>
+                    </div>
+                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Sandbox Lock</p>
+                      <span>Full screen constraint tracks window switching and unfocus events during programming rounds.</span>
+                    </div>
+                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Audio Signature</p>
+                      <span>Acoustic sensors measure environmental noise and secondary voice occurrences to verify identity.</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>

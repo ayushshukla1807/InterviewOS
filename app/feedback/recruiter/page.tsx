@@ -340,6 +340,78 @@ function RecruiterContent() {
                   </div>
                 </div>
               )}
+
+              {/* Behavioral & Crisis Response Analysis */}
+              {ev.simulationBehavioralGraph && (
+                <div className="space-y-4 pt-6 border-t border-white/5">
+                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Behavioral & Crisis Response Metrics</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-slate-950/60 p-5 rounded-2xl border border-white/5 space-y-3">
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Simulation Stress & Crisis Profile</p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span>Pressure Stability</span>
+                          <span className="text-white font-black">{ev.simulationBehavioralGraph.pressureResponse}/100</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500" style={{ width: `${ev.simulationBehavioralGraph.pressureResponse}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span>Decision Consistency</span>
+                          <span className="text-white font-black">{ev.simulationBehavioralGraph.decisionConsistency}/100</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500" style={{ width: `${ev.simulationBehavioralGraph.decisionConsistency}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span>Ambiguity Tolerance</span>
+                          <span className="text-white font-black">{ev.simulationBehavioralGraph.ambiguityTolerance}/100</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500" style={{ width: `${ev.simulationBehavioralGraph.ambiguityTolerance}%` }} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-950/60 p-5 rounded-2xl border border-white/5 space-y-3">
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Stakeholder & Escalation Performance</p>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span>Stakeholder Management</span>
+                          <span className="text-white font-black">{ev.simulationBehavioralGraph.stakeholderManagement}/100</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500" style={{ width: `${ev.simulationBehavioralGraph.stakeholderManagement}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <span>Accountability & Ownership</span>
+                          <span className="text-white font-black">{ev.simulationBehavioralGraph.accountability}/100</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                          <div className="h-full bg-indigo-500" style={{ width: `${ev.simulationBehavioralGraph.accountability}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-wider pt-1">
+                        <span>Conflict Recovery Style</span>
+                        <span className="text-emerald-400 font-black">{ev.simulationBehavioralGraph.conflictStyle}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 italic mt-2">"{ev.simulationBehavioralGraph.graphSummary}"</p>
+                </div>
+              )}
             </div>
           </section>
         )}
