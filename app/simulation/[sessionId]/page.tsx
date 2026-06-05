@@ -1,123 +1,46 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   SimulationBlueprint,
   SimulationRuntimeState,
   SimulationEvent,
   CandidateActionType,
-  StakeholderState
+  StakeholderState,
+  HyrteSkillScore,
+  HyrtePhase,
+  EmbeddedChallenge,
 } from '../../../lib/simulation/types';
-import CodeChallenge from '../../components/CodeChallenge';
-import { MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles, User, Terminal, Palette, Check } from 'lucide-react';
+import {
+  MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles,
+  Terminal, Palette, Check, Zap, AlertTriangle, RotateCcw, ChevronRight,
+  TrendingUp, Clock, Users, Target, Award, Brain, Eye, EyeOff, Send,
+  ChevronDown, ChevronUp, Activity
+} from 'lucide-react';
 import CodeIDE from '../../components/CodeIDE';
 
 // ─── Theme System ─────────────────────────────────────────────────────────────
 type SimThemeKey = 'noir' | 'terminal' | 'corporate' | 'sunset' | 'arctic';
 
 const THEMES: Record<SimThemeKey, {
-  label: string;
-  preview: string;  // accent hex for preview swatch
-  bg: string;       // page background
-  surface: string;  // panels / cards
-  surfaceAlt: string; // slightly lighter surface
-  border: string;   // border colors
-  textPrimary: string;
-  textSecondary: string;
-  textMuted: string;
-  accent: string;   // interactive accent
-  accentText: string;
-  accentBg: string;
-  accentBorder: string;
-  accentHover: string;
+  label: string; preview: string; bg: string; surface: string; surfaceAlt: string;
+  border: string; textPrimary: string; textSecondary: string; textMuted: string;
+  accent: string; accentText: string; accentBg: string; accentBorder: string; accentHover: string;
   fontFamily: string;
 }> = {
-  noir: {
-    label: 'Noir',
-    preview: '#6366f1',
-    bg: '#0e0e10',
-    surface: '#111113',
-    surfaceAlt: '#1a1a1c',
-    border: 'rgba(255,255,255,0.06)',
-    textPrimary: '#f1f5f9',
-    textSecondary: '#94a3b8',
-    textMuted: '#475569',
-    accent: '#6366f1',
-    accentText: '#a5b4fc',
-    accentBg: 'rgba(99,102,241,0.12)',
-    accentBorder: 'rgba(99,102,241,0.3)',
-    accentHover: '#4f46e5',
-    fontFamily: 'Outfit, sans-serif',
-  },
-  terminal: {
-    label: 'Terminal',
-    preview: '#22c55e',
-    bg: '#020b02',
-    surface: '#051005',
-    surfaceAlt: '#0a1f0a',
-    border: 'rgba(34,197,94,0.15)',
-    textPrimary: '#86efac',
-    textSecondary: '#4ade80',
-    textMuted: '#166534',
-    accent: '#22c55e',
-    accentText: '#86efac',
-    accentBg: 'rgba(34,197,94,0.1)',
-    accentBorder: 'rgba(34,197,94,0.3)',
-    accentHover: '#16a34a',
-    fontFamily: '"Fira Code", "JetBrains Mono", monospace',
-  },
-  corporate: {
-    label: 'Corporate',
-    preview: '#3b82f6',
-    bg: '#f0f4f8',
-    surface: '#ffffff',
-    surfaceAlt: '#f8fafc',
-    border: 'rgba(0,0,0,0.08)',
-    textPrimary: '#1e293b',
-    textSecondary: '#475569',
-    textMuted: '#94a3b8',
-    accent: '#3b82f6',
-    accentText: '#1d4ed8',
-    accentBg: 'rgba(59,130,246,0.08)',
-    accentBorder: 'rgba(59,130,246,0.25)',
-    accentHover: '#2563eb',
-    fontFamily: 'Inter, system-ui, sans-serif',
-  },
-  sunset: {
-    label: 'Sunset',
-    preview: '#f97316',
-    bg: '#120a00',
-    surface: '#1c1008',
-    surfaceAlt: '#271608',
-    border: 'rgba(251,146,60,0.12)',
-    textPrimary: '#fed7aa',
-    textSecondary: '#fdba74',
-    textMuted: '#92400e',
-    accent: '#f97316',
-    accentText: '#fed7aa',
-    accentBg: 'rgba(249,115,22,0.12)',
-    accentBorder: 'rgba(249,115,22,0.3)',
-    accentHover: '#ea580c',
-    fontFamily: 'Outfit, sans-serif',
-  },
-  arctic: {
-    label: 'Arctic',
-    preview: '#06b6d4',
-    bg: '#030f1a',
-    surface: '#061525',
-    surfaceAlt: '#0a2035',
-    border: 'rgba(6,182,212,0.12)',
-    textPrimary: '#cffafe',
-    textSecondary: '#67e8f9',
-    textMuted: '#164e63',
-    accent: '#06b6d4',
-    accentText: '#cffafe',
-    accentBg: 'rgba(6,182,212,0.1)',
-    accentBorder: 'rgba(6,182,212,0.3)',
-    accentHover: '#0891b2',
-    fontFamily: 'Outfit, sans-serif',
-  },
+  noir: { label:'Noir', preview:'#6366f1', bg:'#0e0e10', surface:'#111113', surfaceAlt:'#1a1a1c', border:'rgba(255,255,255,0.06)', textPrimary:'#f1f5f9', textSecondary:'#94a3b8', textMuted:'#475569', accent:'#6366f1', accentText:'#a5b4fc', accentBg:'rgba(99,102,241,0.12)', accentBorder:'rgba(99,102,241,0.3)', accentHover:'#4f46e5', fontFamily:'Outfit, sans-serif' },
+  terminal: { label:'Terminal', preview:'#22c55e', bg:'#020b02', surface:'#051005', surfaceAlt:'#0a1f0a', border:'rgba(34,197,94,0.15)', textPrimary:'#86efac', textSecondary:'#4ade80', textMuted:'#166534', accent:'#22c55e', accentText:'#86efac', accentBg:'rgba(34,197,94,0.1)', accentBorder:'rgba(34,197,94,0.3)', accentHover:'#16a34a', fontFamily:'"Fira Code","JetBrains Mono",monospace' },
+  corporate: { label:'Corporate', preview:'#3b82f6', bg:'#f0f4f8', surface:'#ffffff', surfaceAlt:'#f8fafc', border:'rgba(0,0,0,0.08)', textPrimary:'#1e293b', textSecondary:'#475569', textMuted:'#94a3b8', accent:'#3b82f6', accentText:'#1d4ed8', accentBg:'rgba(59,130,246,0.08)', accentBorder:'rgba(59,130,246,0.25)', accentHover:'#2563eb', fontFamily:'Inter,system-ui,sans-serif' },
+  sunset: { label:'Sunset', preview:'#f97316', bg:'#120a00', surface:'#1c1008', surfaceAlt:'#271608', border:'rgba(251,146,60,0.12)', textPrimary:'#fed7aa', textSecondary:'#fdba74', textMuted:'#92400e', accent:'#f97316', accentText:'#fed7aa', accentBg:'rgba(249,115,22,0.12)', accentBorder:'rgba(249,115,22,0.3)', accentHover:'#ea580c', fontFamily:'Outfit, sans-serif' },
+  arctic: { label:'Arctic', preview:'#06b6d4', bg:'#030f1a', surface:'#061525', surfaceAlt:'#0a2035', border:'rgba(6,182,212,0.12)', textPrimary:'#cffafe', textSecondary:'#67e8f9', textMuted:'#164e63', accent:'#06b6d4', accentText:'#cffafe', accentBg:'rgba(6,182,212,0.1)', accentBorder:'rgba(6,182,212,0.3)', accentHover:'#0891b2', fontFamily:'Outfit, sans-serif' },
+};
+
+// ─── Skill dimension labels ───────────────────────────────────────────────────
+const DIM_LABELS: Record<string, string> = {
+  communication: 'Communication', adaptability: 'Adaptability', conflictHandling: 'Conflict Handling',
+  stakeholderManagement: 'Stakeholder Mgmt', prioritization: 'Prioritization',
+  accountability: 'Accountability', pressureResponse: 'Pressure Response', decisionQuality: 'Decision Quality',
 };
 
 export default function LivingWorkplaceSimulation() {
@@ -126,151 +49,202 @@ export default function LivingWorkplaceSimulation() {
 
   const [blueprint, setBlueprint] = useState<SimulationBlueprint | null>(null);
   const [runtime, setRuntime] = useState<SimulationRuntimeState | null>(null);
-  
-  // UI State
-  const [activeTab, setActiveTab] = useState<'slack' | 'email' | 'tasks' | 'calendar' | 'notifications'>('slack');
+
+  // ── HYRTE Phase ──────────────────────────────────────────────────────────
+  const [phase, setPhase] = useState<HyrtePhase>('pre_skill');
+  const [preSkillAnswers, setPreSkillAnswers] = useState<Record<string, string>>({});
+  const [preSkillTimeLeft, setPreSkillTimeLeft] = useState(300); // 5 min
+  const [preSkillSubmitted, setPreSkillSubmitted] = useState(false);
+
+  // ── Chaos / Recovery Banners ─────────────────────────────────────────────
+  const [chaosActive, setChaosActive] = useState(false);
+  const [recoveryActive, setRecoveryActive] = useState(false);
+  const [recoveryResponse, setRecoveryResponse] = useState('');
+
+  // ── UI State ─────────────────────────────────────────────────────────────
+  const [activeTab, setActiveTab] = useState<'slack' | 'email' | 'tasks' | 'calendar'>('slack');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [isProcessingAction, setIsProcessingAction] = useState(false);
 
-  // Monaco Coding Split View State
+  // ── Coding Sandbox ───────────────────────────────────────────────────────
   const [showSandbox, setShowSandbox] = useState(false);
-  const [sandboxCode, setSandboxCode] = useState('// Write code here...');
+  const [sandboxCode, setSandboxCode] = useState('// Write your solution here...');
   const [sandboxLang, setSandboxLang] = useState('javascript');
 
-  // Senior Hint Colleague Chatbot State
+  // ── Assistant ────────────────────────────────────────────────────────────
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [assistantInput, setAssistantInput] = useState('');
   const [assistantLogs, setAssistantLogs] = useState<{ role: 'user' | 'colleague'; content: string }[]>([
-    { role: 'colleague', content: 'Hey! I know you are in the middle of a crunch, but if you get blocked, let me know. I can give you a subtle nudge.' }
+    { role: 'colleague', content: "Heads up — things move fast here. If you get stuck, I can point you in the right direction. Just ping me." }
   ]);
 
-  // Face PiP Camera Stream State
+  // ── Camera PiP ───────────────────────────────────────────────────────────
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Submit Modal State
-  const [showSubmitModal, setShowSubmitModal] = useState(false);
-
-  // Anti-cheat & Timer
-  const [timeLeft, setTimeLeft] = useState(2400); // 40 mins
+  // ── Timer & Anti-cheat ───────────────────────────────────────────────────
+  const [timeLeft, setTimeLeft] = useState(2400);
   const [tabSwitches, setTabSwitches] = useState(0);
+  const simulationStartTime = useRef(Date.now());
 
-  // Theme
+  // ── HYRTE Score ──────────────────────────────────────────────────────────
+  const [hyrteScore, setHyrteScore] = useState<HyrteSkillScore | null>(null);
+  const [showScorePanel, setShowScorePanel] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [isComputingScore, setIsComputingScore] = useState(false);
+
+  // ── Theme ────────────────────────────────────────────────────────────────
   const [themeKey, setThemeKey] = useState<SimThemeKey>('noir');
   const [showThemePicker, setShowThemePicker] = useState(false);
   const t = THEMES[themeKey];
 
-  // Camera initialization for Face PiP
+  // ─── Camera Init ──────────────────────────────────────────────────────────
   useEffect(() => {
-    async function enableCamera() {
+    (async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         setCameraStream(stream);
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.warn('Webcam permission denied or unavailable for Face PiP:', err);
-      }
-    }
-    enableCamera();
-    return () => {
-      if (cameraStream) {
-        cameraStream.getTracks().forEach(track => track.stop());
-      }
-    };
+        if (videoRef.current) videoRef.current.srcObject = stream;
+      } catch { /* denied */ }
+    })();
+    return () => { cameraStream?.getTracks().forEach(t => t.stop()); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // ─── Blueprint Load ───────────────────────────────────────────────────────
   useEffect(() => {
     const stored = sessionStorage.getItem(`simulation_${sessionId}`);
     if (stored) {
       try {
         const bp = JSON.parse(stored) as SimulationBlueprint;
         setBlueprint(bp);
-        
-        // Initialize Runtime State
         const stakeholderStates = bp.stakeholders.reduce((acc, s) => {
-          acc[s.id] = s;
-          return acc;
+          acc[s.id] = s; return acc;
         }, {} as Record<string, StakeholderState>);
 
         setRuntime({
           blueprint: bp,
+          phase: 'pre_skill',
           currentAct: 1,
           actStartTime: Date.now(),
-          eventStream: bp.acts[0].initialEvents,
+          simulationStartTime: Date.now(),
+          eventStream: [],
           pendingConsequences: [],
+          consequenceWaveLog: [],
           stakeholderStates,
           candidateActions: [],
-          currentChallenge: bp.acts[0].challenge,
+          currentChallenge: bp.acts[0]?.challenge || null,
+          embeddedChallenges: bp.acts[0]?.embeddedChallenges || [],
           challengeResponses: [],
+          skillValidationAnswers: [],
+          recoveryActions: [],
+          chaosWaveActive: false,
+          liveHyrteScore: {},
           assistantUsageCount: 0,
           tabSwitches: 0,
           behavioralSignals: {
-            ignoredEventIds: [],
-            escalatedEventIds: [],
-            clarificationCount: 0,
-            averageResponseTimeSeconds: 0,
-            responseTimes: [],
-            openedEmails: [],
-            openedSlacks: [],
-          }
+            ignoredEventIds: [], escalatedEventIds: [], clarificationCount: 0,
+            averageResponseTimeSeconds: 0, responseTimes: [],
+            openedEmails: [], openedSlacks: [],
+            recoveryAttempted: false, firstToRespondToHighPriority: false,
+            respondedWithDataBeforeDeciding: false, acknowledgedMistakeProactively: false,
+          },
         });
-      } catch (e) {
-        alert("Failed to parse blueprint.");
+
+        // If no pre-skill questions, skip directly to workspace
+        if (!bp.skillValidationQuestions || bp.skillValidationQuestions.length === 0) {
+          setPhase('workspace');
+        }
+      } catch {
+        alert('Failed to parse simulation blueprint.');
         router.push('/simulation');
       }
     } else {
-      alert("Invalid or expired simulation session.");
+      alert('Invalid or expired simulation session.');
       router.push('/simulation');
     }
   }, [sessionId, router]);
 
+  // ─── Pre-Skill Timer ──────────────────────────────────────────────────────
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.hidden) setTabSwitches(prev => prev + 1);
-    };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, []);
+    if (phase !== 'pre_skill') return;
+    const t = setInterval(() => {
+      setPreSkillTimeLeft(prev => {
+        if (prev <= 1) { clearInterval(t); handleEnterWorkspace(); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
+  // ─── Main Timer ───────────────────────────────────────────────────────────
   useEffect(() => {
+    if (phase !== 'workspace' && phase !== 'chaos' && phase !== 'recovery') return;
     const timer = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleSubmitTest();
-          return 0;
-        }
+        if (prev <= 1) { clearInterval(timer); handleSubmitTest(); return 0; }
         return prev - 1;
       });
     }, 1000);
     return () => clearInterval(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
+  // ─── Tab Switch Detection ─────────────────────────────────────────────────
+  useEffect(() => {
+    const handler = () => { if (document.hidden) setTabSwitches(p => p + 1); };
+    document.addEventListener('visibilitychange', handler);
+    return () => document.removeEventListener('visibilitychange', handler);
   }, []);
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
+  // ─── Enter Workspace (after pre-skill) ───────────────────────────────────
+  const handleEnterWorkspace = useCallback(() => {
+    if (!blueprint) return;
+    // Save pre-skill answers to runtime
+    const answers = blueprint.skillValidationQuestions?.map(q => ({
+      questionId: q.id,
+      response: preSkillAnswers[q.id] || '',
+      timeSpentSeconds: 300 - preSkillTimeLeft,
+    })) || [];
+
+    setRuntime(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        phase: 'workspace',
+        skillValidationAnswers: answers,
+        eventStream: blueprint.acts[0]?.initialEvents || [],
+        currentChallenge: blueprint.acts[0]?.challenge || null,
+        embeddedChallenges: blueprint.acts[0]?.embeddedChallenges || [],
+      };
+    });
+    setPhase('workspace');
+    setPreSkillSubmitted(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blueprint, preSkillAnswers, preSkillTimeLeft]);
+
+  // ─── Handle Action ────────────────────────────────────────────────────────
   const handleAction = async (actionType: CandidateActionType, eventId: string) => {
     if (!runtime) return;
     setIsProcessingAction(true);
 
     const event = runtime.eventStream.find(e => e.id === eventId);
-    if (!event) return;
+    if (!event) { setIsProcessingAction(false); return; }
 
     const stakeholder = runtime.stakeholderStates[event.fromStakeholderId];
-    
-    // Optimistic UI Update
+
+    // Optimistic UI update
     setRuntime(prev => {
       if (!prev) return prev;
-      const updatedStream = prev.eventStream.map(e => 
-        e.id === eventId ? { ...e, isAnswered: true } : e
-      );
-      return { ...prev, eventStream: updatedStream };
+      return {
+        ...prev,
+        eventStream: prev.eventStream.map(e => e.id === eventId ? { ...e, isAnswered: true, isRead: true } : e),
+      };
     });
-
     setReplyText('');
     setSelectedEventId(null);
 
@@ -281,276 +255,469 @@ export default function LivingWorkplaceSimulation() {
         body: JSON.stringify({
           role: runtime.blueprint.role,
           companyCultureProfile: runtime.blueprint.companyCultureProfile,
+          businessObjective: runtime.blueprint.businessObjective,
           currentAct: runtime.currentAct,
           candidateAction: actionType,
-          candidateResponse: actionType === 'responded' || actionType === 'asked_clarification' ? replyText : null,
+          candidateResponse: (actionType === 'responded' || actionType === 'asked_clarification') ? replyText : null,
           triggeringEvent: event,
           stakeholder,
           allStakeholders: runtime.stakeholderStates,
-          recentHistory: runtime.candidateActions.slice(-5).map(a => a.type)
-        })
+          recentHistory: runtime.candidateActions.slice(-5).map(a => a.type),
+          ignoredCount: runtime.behavioralSignals.ignoredEventIds.length,
+          consequenceWaves: runtime.blueprint.consequenceWaveRules || [],
+          simulationElapsedSeconds: Math.floor((Date.now() - simulationStartTime.current) / 1000),
+        }),
       });
 
       const data = await res.json();
-      
+
       setRuntime(prev => {
         if (!prev) return prev;
-        
+
+        // Update stakeholder
         const newStakeholderStates = { ...prev.stakeholderStates };
         if (data.updatedStakeholder) {
           newStakeholderStates[stakeholder.id] = data.updatedStakeholder;
         }
 
-        const updatedSignals = { ...prev.behavioralSignals };
-        if (actionType === 'asked_clarification') {
-          updatedSignals.clarificationCount = (updatedSignals.clarificationCount || 0) + 1;
-        } else if (actionType === 'ignored') {
-          updatedSignals.ignoredEventIds = [...(updatedSignals.ignoredEventIds || []), eventId];
+        // Update behavioral signals
+        const signals = { ...prev.behavioralSignals };
+        if (actionType === 'ignored') {
+          signals.ignoredEventIds = [...signals.ignoredEventIds, eventId];
+        } else if (actionType === 'asked_clarification') {
+          signals.clarificationCount = (signals.clarificationCount || 0) + 1;
         } else if (actionType === 'escalated') {
-          updatedSignals.escalatedEventIds = [...(updatedSignals.escalatedEventIds || []), eventId];
+          signals.escalatedEventIds = [...signals.escalatedEventIds, eventId];
         }
+        if (actionType === 'responded' && (replyText?.length || 0) > 80) {
+          signals.respondedWithDataBeforeDeciding = true;
+        }
+
+        // Update fired waves
+        const updatedWaveLog = [
+          ...(prev.consequenceWaveLog || []),
+          ...(data.firedWaves || []),
+        ];
+
+        // Update consequence waves in blueprint (mark fired)
+        const updatedBlueprint = {
+          ...prev.blueprint,
+          consequenceWaveRules: (prev.blueprint.consequenceWaveRules || []).map(w => {
+            const fired = data.firedWaves?.find((fw: { id: string }) => fw.id === w.id);
+            return fired ? { ...w, fired: true, firedAt: fired.firedAt } : w;
+          }),
+        };
+
+        // New candidate action
+        const newAction = {
+          type: actionType,
+          eventId,
+          stakeholderId: stakeholder.id,
+          response: replyText,
+          responseTimeSeconds: Math.floor((Date.now() - prev.actStartTime) / 1000),
+          timestamp: Date.now(),
+          behaviorSignals: data.behaviorSignals,
+        };
 
         return {
           ...prev,
+          blueprint: updatedBlueprint,
           stakeholderStates: newStakeholderStates,
           eventStream: [...prev.eventStream, ...(data.consequenceEvents || [])],
-          behavioralSignals: updatedSignals,
-          candidateActions: [...prev.candidateActions, {
-            type: actionType,
-            eventId,
-            stakeholderId: stakeholder.id,
-            response: replyText,
-            responseTimeSeconds: Math.floor((Date.now() - prev.actStartTime) / 1000),
-            timestamp: Date.now()
-          }]
+          behavioralSignals: signals,
+          consequenceWaveLog: updatedWaveLog,
+          candidateActions: [...prev.candidateActions, newAction],
+          chaosWaveActive: data.chaosThresholdReached || prev.chaosWaveActive,
         };
       });
+
+      // Check for chaos / recovery phase transitions
+      if (data.chaosThresholdReached) { setChaosActive(true); setPhase('chaos'); }
+      if (data.recoveryPhaseTriggered) { setRecoveryActive(true); setPhase('recovery'); }
+
     } catch (e) {
-      console.error(e);
+      console.error('Action error:', e);
     } finally {
       setIsProcessingAction(false);
     }
   };
 
+  // ─── Advance Act ──────────────────────────────────────────────────────────
+  const handleAdvanceAct = () => {
+    if (!runtime) return;
+    if (runtime.currentAct >= 3) { handleSubmitTest(); return; }
+    const nextActNum = (runtime.currentAct + 1) as 1 | 2 | 3;
+    const nextAct = runtime.blueprint.acts.find(a => a.act === nextActNum);
+    if (!nextAct) return;
+    setRuntime(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        currentAct: nextActNum,
+        actStartTime: Date.now(),
+        eventStream: [...prev.eventStream, ...nextAct.initialEvents],
+        currentChallenge: nextAct.challenge,
+        embeddedChallenges: nextAct.embeddedChallenges || [],
+      };
+    });
+    if (nextActNum === 2) { setChaosActive(true); setPhase('chaos'); }
+    if (nextActNum === 3) { setRecoveryActive(true); setPhase('recovery'); }
+  };
+
+  // ─── Ask Assistant ────────────────────────────────────────────────────────
   const handleAskAssistant = async () => {
     if (!assistantInput.trim() || !runtime) return;
     const userMsg = assistantInput;
     setAssistantInput('');
     setAssistantLogs(prev => [...prev, { role: 'user', content: userMsg }]);
-    
-    // Increment assistant usage
-    setRuntime(prev => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        assistantUsageCount: (prev.assistantUsageCount || 0) + 1
-      };
-    });
-
+    setRuntime(prev => prev ? { ...prev, assistantUsageCount: (prev.assistantUsageCount || 0) + 1 } : prev);
     try {
       const res = await fetch('/api/simulation/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           role: runtime.blueprint.role,
-          simulationContext: `Candidate is in Act ${runtime.currentAct} of simulation. Active tab is ${activeTab}.`,
+          simulationContext: `Act ${runtime.currentAct} — Phase: ${phase} — Events ignored: ${runtime.behavioralSignals.ignoredEventIds.length}`,
           stakeholderStates: runtime.stakeholderStates,
           currentChallenge: runtime.currentChallenge,
           question: userMsg,
           hintNumber: runtime.assistantUsageCount || 0,
-        })
+        }),
       });
       const data = await res.json();
-      setAssistantLogs(prev => [...prev, { role: 'colleague', content: data.hint || 'Think about who is blocking you.' }]);
+      setAssistantLogs(prev => [...prev, { role: 'colleague', content: data.hint || 'Think about who is most affected right now.' }]);
     } catch {
-      setAssistantLogs(prev => [...prev, { role: 'colleague', content: 'Sorry, I am a bit swamped right now. Try reviewing your tasks!' }]);
+      setAssistantLogs(prev => [...prev, { role: 'colleague', content: 'Sorry — swamped. Check your tasks list.' }]);
     }
   };
 
-  const handleAdvanceAct = () => {
+  // ─── Compute + Show Final HYRTE Score ────────────────────────────────────
+  const handleSubmitTest = useCallback(async () => {
     if (!runtime) return;
-    if (runtime.currentAct >= 3) {
-      handleSubmitTest();
-      return;
-    }
-    
-    const nextActNum = runtime.currentAct + 1;
-    const nextAct = runtime.blueprint.acts.find(a => a.act === nextActNum);
-    
-    if (nextAct) {
-      setRuntime(prev => {
-        if (!prev) return prev;
-        return {
-          ...prev,
-          currentAct: nextActNum as 1 | 2 | 3,
-          actStartTime: Date.now(),
-          eventStream: [...prev.eventStream, ...nextAct.initialEvents],
-          currentChallenge: nextAct.challenge
-        };
-      });
-    }
-  };
-
-  const compileSimulationSummary = (currentRuntime: SimulationRuntimeState) => {
-    const actions = currentRuntime.candidateActions;
-    const stakeholders = Object.values(currentRuntime.stakeholderStates);
-    
-    let summary = `### Simulation Performance Metrics
-- **Role Evaluated:** ${currentRuntime.blueprint.role}
-- **Total Acts Completed:** ${currentRuntime.currentAct} / 3
-- **Ignored Events Count:** ${currentRuntime.behavioralSignals.ignoredEventIds?.length || 0}
-- **Escalated Events Count:** ${currentRuntime.behavioralSignals.escalatedEventIds?.length || 0}
-- **Clarification Requests Raised:** ${currentRuntime.behavioralSignals.clarificationCount || 0}
-- **Senior Hints Requested:** ${currentRuntime.assistantUsageCount || 0}
-- **Tab Focus Mismatches (Cheating Proctor Signal):** ${tabSwitches}
-
-### Stakeholder Trust Summary:
-`;
-
-    stakeholders.forEach(s => {
-      summary += `- **${s.name} (${s.role}):** Trust: ${s.trust}/100, Frustration: ${s.frustration}/100, Escalation Level: ${s.escalationLevel}/3\n`;
-    });
-
-    summary += `\n### Candidate Action Logs:\n`;
-    actions.forEach((act, idx) => {
-      summary += `${idx + 1}. Candidate **${act.type}** in response to Event ID ${act.eventId} (from ${currentRuntime.stakeholderStates[act.stakeholderId]?.name || 'System'}). Response: "${act.response || 'No text response'}" (took ${act.responseTimeSeconds}s)\n`;
-    });
-
-    if (currentRuntime.challengeResponses && currentRuntime.challengeResponses.length > 0) {
-      summary += `\n### Challenge Code Solutions:\n`;
-      currentRuntime.challengeResponses.forEach((resp) => {
-        summary += `- **Challenge ID ${resp.challengeId}:**\n\`\`\`${sandboxLang}\n${resp.response}\n\`\`\`\n`;
-      });
-    }
-
-    return summary;
-  };
-
-  const handleSubmitTest = async () => {
     setShowSubmitModal(true);
-  };
+    setIsComputingScore(true);
+    try {
+      const res = await fetch('/api/simulation/hyrte-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          runtime: { ...runtime, tabSwitches },
+          skillValidationAnswers: runtime.skillValidationAnswers,
+          isFinal: true,
+        }),
+      });
+      const score = await res.json() as HyrteSkillScore;
+      setHyrteScore(score);
+      // Save score to session
+      sessionStorage.setItem(`hyrte_score_${sessionId}`, JSON.stringify(score));
+    } catch { /* show modal without score */ } finally {
+      setIsComputingScore(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [runtime, tabSwitches, sessionId]);
 
+  // ─── Proceed to Interview ─────────────────────────────────────────────────
   const handleProceedToInterview = () => {
     if (!runtime || !blueprint) return;
-    const summary = compileSimulationSummary(runtime);
+    const actions = runtime.candidateActions;
+    const stakeholders = Object.values(runtime.stakeholderStates);
+    let summary = `### HYRTE Simulation Summary
+- Role: ${blueprint.role}
+- Company: ${blueprint.company} (${blueprint.companyCultureProfile})
+- Business Objective: ${blueprint.businessObjective}
+- Acts Completed: ${runtime.currentAct}/3
+- Phase Reached: ${phase}
+- Events Ignored: ${runtime.behavioralSignals.ignoredEventIds.length}
+- Clarifications Asked: ${runtime.behavioralSignals.clarificationCount}
+- Hints Used: ${runtime.assistantUsageCount}
+- Tab Switches: ${tabSwitches}
+- Chaos Wave Active: ${chaosActive}
+- Recovery Attempted: ${runtime.behavioralSignals.recoveryAttempted}
+
+Stakeholder Final States:
+${stakeholders.map(s => `- ${s.name} (${s.role}): Trust=${s.trust}/100, Frustration=${s.frustration}/100, EscLevel=${s.escalationLevel}/3`).join('\n')}
+
+Action Log:
+${actions.map((a, i) => `${i+1}. ${a.type} → ${runtime.stakeholderStates[a.stakeholderId]?.name || '?'}: "${a.response || 'no text'}" (${a.responseTimeSeconds}s)`).join('\n')}
+
+HYRTE Score: ${hyrteScore?.total ?? 'Pending'}/100
+${hyrteScore ? `- Direct Skill: ${hyrteScore.directSkill.score}/100\n- Embedded Skills: ${hyrteScore.embeddedSkills.score}/100\n- Workplace Intelligence: ${hyrteScore.workplaceIntelligence.score}/100` : ''}
+Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
+
     sessionStorage.setItem(`simulation_summary_${sessionId}`, summary);
     localStorage.setItem(`simulation_summary_${sessionId}`, summary);
-
     const candidateName = blueprint.candidateName || 'Candidate';
     router.push(`/instructions?name=${encodeURIComponent(candidateName)}&track=DYNAMIC&simulationSessionId=${sessionId}`);
   };
 
+  // ─── Loading State ────────────────────────────────────────────────────────
   if (!blueprint || !runtime) {
     return (
       <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center font-outfit">
         <div className="flex items-center gap-3">
-          <div className="w-6 h-6 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-          <span className="text-gray-400">Booting Workspace OS...</span>
+          <div className="w-6 h-6 border-2 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <span className="text-gray-400">Booting HYRTE Simulation Engine...</span>
         </div>
       </div>
     );
   }
 
-  const activeEvents = runtime.eventStream.filter(e => e.type === activeTab || (activeTab === 'slack' && e.type === 'notification'));
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ─── PHASE: PRE-SKILL VALIDATION ─────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (phase === 'pre_skill' && !preSkillSubmitted && blueprint.skillValidationQuestions?.length > 0) {
+    const questions = blueprint.skillValidationQuestions;
+    return (
+      <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        {/* Header */}
+        <div className="border-b border-white/5 px-8 py-4 flex items-center justify-between bg-[#0d0d0f]">
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-black">OS</div>
+            <div>
+              <div className="text-sm font-semibold text-gray-100">HYRTE Simulation</div>
+              <div className="text-xs text-gray-500">{blueprint.role} · {blueprint.company}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="px-3 py-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 text-xs font-bold text-violet-300">
+              Direct Skill Validation · 15% of Score
+            </div>
+            <div className={`font-mono text-lg px-3 py-1 rounded-lg border ${preSkillTimeLeft < 60 ? 'text-red-400 border-red-500/30 bg-red-500/10 animate-pulse' : 'text-gray-300 border-white/10 bg-white/5'}`}>
+              {formatTime(preSkillTimeLeft)}
+            </div>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 flex items-start justify-center p-8 overflow-y-auto">
+          <div className="max-w-3xl w-full space-y-6">
+            {/* Context Banner */}
+            <div className="bg-gradient-to-r from-violet-950/50 to-indigo-950/50 border border-violet-500/20 rounded-2xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/30 flex items-center justify-center shrink-0">
+                  <Brain className="w-5 h-5 text-violet-400" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold uppercase tracking-widest text-violet-400 mb-1">Before You Enter the Workplace</div>
+                  <div className="text-base font-semibold text-gray-100 mb-1">Business Objective</div>
+                  <div className="text-sm text-gray-300 leading-relaxed">{blueprint.businessObjective}</div>
+                  <div className="mt-3 text-xs text-gray-500">Answer {questions.length} question{questions.length > 1 ? 's' : ''} to validate your baseline competency. This scores 15% of your total HYRTE score. Take your time — you have 5 minutes.</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Questions */}
+            {questions.map((q, qi) => (
+              <div key={q.id} className="bg-[#111115] border border-white/6 rounded-2xl p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-black text-indigo-400 shrink-0">
+                    {qi + 1}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-2">
+                      {q.type === 'priority_decision' ? '⚡ Priority Decision' :
+                       q.type === 'data_analysis' ? '📊 Data Analysis' :
+                       q.type === 'scenario_judgment' ? '🎯 Scenario Judgment' : '💬 Open Ended'}
+                    </div>
+                    <div className="text-sm text-gray-200 leading-relaxed font-medium">{q.prompt}</div>
+                  </div>
+                </div>
+
+                {/* Context / Data Table */}
+                {q.context && (
+                  <div className="ml-10 bg-[#0d0d0f] border border-white/5 rounded-xl p-4">
+                    <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Context / Data</div>
+                    <pre className="text-xs text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">{q.context}</pre>
+                  </div>
+                )}
+
+                {/* Options (for priority_decision) or Textarea */}
+                {q.type === 'priority_decision' && q.options && q.options.length > 0 ? (
+                  <div className="ml-10 space-y-2">
+                    {q.options.map((opt, oi) => (
+                      <label key={oi} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                        preSkillAnswers[q.id] === opt
+                          ? 'border-indigo-500/50 bg-indigo-500/10'
+                          : 'border-white/6 bg-transparent hover:border-white/15'
+                      }`}>
+                        <input
+                          type="radio"
+                          name={q.id}
+                          value={opt}
+                          checked={preSkillAnswers[q.id] === opt}
+                          onChange={() => setPreSkillAnswers(prev => ({ ...prev, [q.id]: opt }))}
+                          className="mt-0.5 accent-indigo-500"
+                        />
+                        <span className="text-sm text-gray-300">{opt}</span>
+                      </label>
+                    ))}
+                    {/* Open reasoning field */}
+                    <textarea
+                      value={preSkillAnswers[`${q.id}_reason`] || ''}
+                      onChange={e => setPreSkillAnswers(prev => ({ ...prev, [`${q.id}_reason`]: e.target.value }))}
+                      placeholder="Explain your reasoning... (evaluated for depth and data-driven thinking)"
+                      className="w-full mt-2 h-24 bg-[#0d0d0f] border border-white/6 rounded-xl p-3 text-sm text-gray-200 outline-none resize-none placeholder-gray-600 focus:border-indigo-500/40"
+                    />
+                  </div>
+                ) : (
+                  <div className="ml-10">
+                    <textarea
+                      value={preSkillAnswers[q.id] || ''}
+                      onChange={e => setPreSkillAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
+                      placeholder="Your answer..."
+                      rows={5}
+                      className="w-full bg-[#0d0d0f] border border-white/6 rounded-xl p-4 text-sm text-gray-200 outline-none resize-none placeholder-gray-600 focus:border-indigo-500/40"
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Submit */}
+            <button
+              onClick={handleEnterWorkspace}
+              className="w-full py-4 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 transition-all"
+              style={{ background: 'linear-gradient(135deg, #6366f1, #4f46e5)' }}
+            >
+              <ChevronRight className="w-4 h-4" />
+              Submit & Enter Workplace Dashboard
+            </button>
+            <p className="text-center text-xs text-gray-600">Your answers are recorded and scored as 15% of your total HYRTE assessment</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ─── PHASE: WORKSPACE / CHAOS / RECOVERY ─────────────────────────────────
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  const activeEvents = runtime.eventStream.filter(e =>
+    activeTab === 'slack' ? (e.type === 'slack' || e.type === 'notification') :
+    activeTab === 'email' ? e.type === 'email' :
+    activeTab === 'tasks' ? e.type === 'task' :
+    activeTab === 'calendar' ? e.type === 'meeting' : false
+  );
   const selectedEvent = runtime.eventStream.find(e => e.id === selectedEventId);
+  const lowTrustStakeholders = Object.values(runtime.stakeholderStates).filter(s => s.trust < 40);
 
   return (
     <div
       className="min-h-screen flex flex-col relative"
-      style={{
-        backgroundColor: t.bg,
-        color: t.textPrimary,
-        fontFamily: t.fontFamily,
-        transition: 'background-color 0.35s, color 0.35s',
-      }}
+      style={{ backgroundColor: t.bg, color: t.textPrimary, fontFamily: t.fontFamily }}
     >
-      {/* ─── Top Bar: Progress & Status ─── */}
+      {/* ── Chaos Wave Banner ─────────────────────────────────────────────── */}
+      {chaosActive && (
+        <div className="relative z-50 px-6 py-2.5 flex items-center gap-3 border-b"
+          style={{ background: 'linear-gradient(90deg, rgba(239,68,68,0.15), rgba(251,146,60,0.12))', borderColor: 'rgba(239,68,68,0.3)' }}>
+          <div className="flex items-center gap-2 animate-pulse">
+            <Zap className="w-4 h-4 text-red-400" />
+            <span className="text-xs font-black uppercase tracking-widest text-red-400">Chaos Wave Active</span>
+          </div>
+          <span className="text-xs text-orange-300">Multiple stakeholders demanding attention simultaneously. Prioritize by business impact.</span>
+          {lowTrustStakeholders.length > 0 && (
+            <span className="ml-auto text-xs text-red-300 font-bold">{lowTrustStakeholders.length} stakeholder{lowTrustStakeholders.length > 1 ? 's' : ''} at critical trust level</span>
+          )}
+        </div>
+      )}
+
+      {/* ── Recovery Phase Banner ──────────────────────────────────────────── */}
+      {recoveryActive && (
+        <div className="relative z-50 px-6 py-2.5 flex items-center gap-3 border-b"
+          style={{ background: 'linear-gradient(90deg, rgba(245,158,11,0.12), rgba(251,191,36,0.08))', borderColor: 'rgba(245,158,11,0.3)' }}>
+          <RotateCcw className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '3s' }} />
+          <span className="text-xs font-black uppercase tracking-widest text-amber-400">Recovery Phase</span>
+          <span className="text-xs text-amber-300">Things went wrong. How you recover is being evaluated — this is unique to HYRTE.</span>
+          <span className="ml-auto text-xs text-amber-400 font-bold">Recovery quality: 50% Workplace Intelligence score</span>
+        </div>
+      )}
+
+      {/* ── Top Bar ───────────────────────────────────────────────────────── */}
       <div
-        className="border-b px-6 py-3 flex justify-between items-center z-20"
+        className="border-b px-5 py-2.5 flex justify-between items-center z-20 shrink-0"
         style={{ backgroundColor: t.surface, borderColor: t.border }}
       >
-        <div className="flex items-center gap-6">
+        {/* Left: Logo + Company + Act Progress */}
+        <div className="flex items-center gap-5">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shadow-lg"
-            style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})`, color: '#fff' }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black text-white shrink-0"
+            style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})` }}
           >OS</div>
           <div>
-            <h1 className="text-base font-semibold" style={{ color: t.textPrimary }}>{blueprint.company} Workspace</h1>
-            <p className="text-xs" style={{ color: t.textMuted }}>{blueprint.role}</p>
+            <div className="text-sm font-semibold" style={{ color: t.textPrimary }}>{blueprint.company}</div>
+            <div className="text-xs" style={{ color: t.textMuted }}>{blueprint.role}</div>
           </div>
 
-          {/* Act Progress Bar */}
-          <div
-            className="flex items-center gap-2 ml-8 px-3 py-1.5 rounded-full border"
-            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}
-          >
+          {/* Business Objective tag */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs"
+            style={{ borderColor: t.border, backgroundColor: t.surfaceAlt, color: t.textMuted }}>
+            <Target className="w-3 h-3" />
+            <span className="truncate max-w-xs">{blueprint.businessObjective}</span>
+          </div>
+
+          {/* Act Progress */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border"
+            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}>
             {[1, 2, 3].map(act => (
               <div key={act} className="flex items-center">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: runtime.currentAct >= act ? t.accent : t.textMuted }}
-                />
-                <span
-                  className="text-xs ml-2 mr-3 font-medium"
-                  style={{ color: runtime.currentAct >= act ? t.accentText : t.textMuted }}
-                >Act {act}</span>
-                {act < 3 && <div className="w-4 h-[1px] mr-3" style={{ backgroundColor: t.border }} />}
+                <div className={`w-2 h-2 rounded-full transition-all`}
+                  style={{ backgroundColor: runtime.currentAct >= act ? t.accent : t.textMuted }} />
+                <span className="text-xs ml-1.5 mr-2.5 font-medium"
+                  style={{ color: runtime.currentAct >= act ? t.accentText : t.textMuted }}>
+                  {act === 1 ? 'Day' : act === 2 ? 'Chaos' : 'Recovery'}
+                </span>
+                {act < 3 && <div className="w-3 h-px mr-2" style={{ backgroundColor: t.border }} />}
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex gap-3 items-center">
+        {/* Right: Alerts + Timer + Theme + Score + Submit */}
+        <div className="flex items-center gap-2">
           {tabSwitches > 0 && (
-            <div className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-full text-xs font-semibold border border-red-500/20 animate-pulse flex items-center gap-1">
-              <ShieldAlert className="w-3.5 h-3.5" /> Focus Lost ({tabSwitches})
+            <div className="px-2.5 py-1.5 text-red-400 rounded-lg text-xs font-bold border border-red-500/20 bg-red-500/10 animate-pulse flex items-center gap-1">
+              <ShieldAlert className="w-3.5 h-3.5" /> {tabSwitches}
             </div>
           )}
 
+          {/* Phase badge */}
+          <div className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
+            phase === 'chaos' ? 'text-red-400 border-red-500/25 bg-red-500/10' :
+            phase === 'recovery' ? 'text-amber-400 border-amber-500/25 bg-amber-500/10' :
+            'text-emerald-400 border-emerald-500/25 bg-emerald-500/10'
+          }`}>
+            {phase === 'chaos' ? '⚡ Chaos' : phase === 'recovery' ? '↩ Recovery' : '● Live'}
+          </div>
+
           <div
-            className={`text-xl font-mono px-3 py-1.5 rounded-lg ${timeLeft < 300 ? 'text-red-400 animate-pulse' : ''}`}
+            className={`text-lg font-mono px-3 py-1.5 rounded-lg border ${timeLeft < 300 ? 'animate-pulse' : ''}`}
             style={{
               backgroundColor: timeLeft < 300 ? 'rgba(239,68,68,0.1)' : t.surfaceAlt,
               color: timeLeft < 300 ? '#f87171' : t.textSecondary,
-              border: `1px solid ${t.border}`,
+              border: `1px solid ${timeLeft < 300 ? 'rgba(239,68,68,0.3)' : t.border}`,
             }}
           >
             {formatTime(timeLeft)}
           </div>
 
-          {/* ─── Theme Picker ─── */}
+          {/* Theme Picker */}
           <div className="relative">
             <button
               onClick={() => setShowThemePicker(p => !p)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold border transition-all"
-              style={{
-                backgroundColor: t.accentBg,
-                color: t.accentText,
-                borderColor: t.accentBorder,
-              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all"
+              style={{ backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder }}
             >
-              <Palette className="w-3.5 h-3.5" />
-              {t.label}
+              <Palette className="w-3.5 h-3.5" /> {t.label}
             </button>
             {showThemePicker && (
-              <div
-                className="absolute right-0 top-10 w-44 rounded-xl border shadow-2xl z-50 overflow-hidden"
-                style={{ backgroundColor: t.surface, borderColor: t.border }}
-              >
+              <div className="absolute right-0 top-9 w-40 rounded-xl border shadow-2xl z-50 overflow-hidden"
+                style={{ backgroundColor: t.surface, borderColor: t.border }}>
                 {(Object.keys(THEMES) as SimThemeKey[]).map(key => (
-                  <button
-                    key={key}
-                    onClick={() => { setThemeKey(key); setShowThemePicker(false); }}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-left text-xs font-medium transition-all"
-                    style={{
-                      color: themeKey === key ? THEMES[key].accent : t.textSecondary,
-                      backgroundColor: themeKey === key ? THEMES[key].accentBg : 'transparent',
-                    }}
-                  >
-                    <div
-                      className="w-3.5 h-3.5 rounded-full shrink-0"
-                      style={{ backgroundColor: THEMES[key].preview }}
-                    />
+                  <button key={key} onClick={() => { setThemeKey(key); setShowThemePicker(false); }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left text-xs font-medium transition-all"
+                    style={{ color: themeKey === key ? THEMES[key].accent : t.textSecondary, backgroundColor: themeKey === key ? THEMES[key].accentBg : 'transparent' }}>
+                    <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: THEMES[key].preview }} />
                     {THEMES[key].label}
                     {themeKey === key && <Check className="w-3 h-3 ml-auto" />}
                   </button>
@@ -560,99 +727,85 @@ export default function LivingWorkplaceSimulation() {
           </div>
 
           <button
+            onClick={() => setShowScorePanel(p => !p)}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold border flex items-center gap-1.5 transition-all"
+            style={{ color: t.textMuted, borderColor: t.border, backgroundColor: t.surfaceAlt }}
+          >
+            {showScorePanel ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+            Score
+          </button>
+
+          <button
             onClick={handleSubmitTest}
-            className="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider text-white"
+            className="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider text-white transition-all hover:opacity-90"
             style={{ backgroundColor: t.accent }}
           >
-            Submit Simulation
+            Submit
           </button>
         </div>
       </div>
 
+      {/* ── Main Layout ───────────────────────────────────────────────────── */}
       <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* ─── Sidebar Navigation ─── */}
-        <div
-          className="w-16 border-r flex flex-col items-center py-4 gap-2 shrink-0"
-          style={{ backgroundColor: t.surface, borderColor: t.border }}
-        >
-          {[
-            { key: 'slack' as const, icon: <MessageSquare className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'slack' && !e.isRead).length },
-            { key: 'email' as const, icon: <Mail className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
-            { key: 'tasks' as const, icon: <ClipboardCheck className="w-5 h-5" />, count: runtime.eventStream.filter(e => e.type === 'task' && !e.isRead).length },
-            { key: 'calendar' as const, icon: <Calendar className="w-5 h-5" />, count: 0 }
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className="relative w-12 h-12 rounded-xl flex flex-col items-center justify-center transition-all"
-              style={activeTab === tab.key ? {
-                backgroundColor: t.accentBg,
-                color: t.accentText,
-                border: `1px solid ${t.accentBorder}`,
-              } : {
-                color: t.textMuted,
-                border: '1px solid transparent',
-              }}
-            >
+
+        {/* Sidebar Nav */}
+        <div className="w-14 border-r flex flex-col items-center py-3 gap-1.5 shrink-0"
+          style={{ backgroundColor: t.surface, borderColor: t.border }}>
+          {([
+            { key: 'slack', icon: <MessageSquare className="w-4.5 h-4.5" />, count: runtime.eventStream.filter(e => (e.type === 'slack' || e.type === 'notification') && !e.isRead).length },
+            { key: 'email', icon: <Mail className="w-4.5 h-4.5" />, count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
+            { key: 'tasks', icon: <ClipboardCheck className="w-4.5 h-4.5" />, count: runtime.eventStream.filter(e => e.type === 'task' && !e.isRead).length },
+            { key: 'calendar', icon: <Calendar className="w-4.5 h-4.5" />, count: 0 },
+          ] as const).map(tab => (
+            <button key={tab.key} onClick={() => setActiveTab(tab.key as typeof activeTab)}
+              className="relative w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+              style={activeTab === tab.key ? { backgroundColor: t.accentBg, color: t.accentText, border: `1px solid ${t.accentBorder}` } : { color: t.textMuted, border: '1px solid transparent' }}>
               {tab.icon}
               {tab.count > 0 && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
-                  {tab.count}
-                </div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse">{tab.count}</div>
               )}
             </button>
           ))}
         </div>
 
-        {/* ─── Inbox / List View ─── */}
-        <div
-          className="w-[380px] border-r flex flex-col shrink-0 overflow-hidden"
-          style={{ backgroundColor: t.surface, borderColor: t.border }}
-        >
-          <div className="px-4 py-3 border-b flex justify-between items-center" style={{ borderColor: t.border }}>
-            <h2 className="text-sm font-semibold capitalize" style={{ color: t.textPrimary }}>{activeTab}</h2>
+        {/* Inbox List */}
+        <div className="w-[320px] border-r flex flex-col shrink-0 overflow-hidden"
+          style={{ backgroundColor: t.surface, borderColor: t.border }}>
+          <div className="px-4 py-2.5 border-b flex justify-between items-center" style={{ borderColor: t.border }}>
+            <h2 className="text-xs font-black uppercase tracking-widest capitalize" style={{ color: t.textPrimary }}>{activeTab}</h2>
+            <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: t.surfaceAlt, color: t.textMuted }}>{activeEvents.length}</span>
           </div>
           <div className="flex-1 overflow-y-auto">
             {activeEvents.map(event => {
-              const stakeholder = runtime.stakeholderStates[event.fromStakeholderId];
+              const sh = runtime.stakeholderStates[event.fromStakeholderId];
               const isSelected = selectedEventId === event.id;
               return (
-                <button
-                  key={event.id}
-                  onClick={() => setSelectedEventId(event.id)}
-                  className="w-full text-left p-4 border-b flex gap-3 items-start transition-all"
-                  style={{
-                    borderColor: t.border,
-                    backgroundColor: isSelected ? t.surfaceAlt : 'transparent',
-                  }}
-                >
-                  {stakeholder ? (
-                    stakeholder.photoUrl ? (
-                      <img src={stakeholder.photoUrl} alt={stakeholder.name} className="w-9 h-9 rounded-full object-cover shrink-0 border mt-0.5" style={{ borderColor: t.border }} />
-                    ) : (
-                      <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-black text-white uppercase shrink-0 mt-0.5" style={{ backgroundColor: stakeholder.avatarColor }}>
-                        {stakeholder.avatar}
-                      </div>
-                    )
+                <button key={event.id} onClick={() => {
+                  setSelectedEventId(event.id);
+                  setRuntime(prev => prev ? {
+                    ...prev,
+                    eventStream: prev.eventStream.map(e => e.id === event.id ? { ...e, isRead: true } : e)
+                  } : prev);
+                }}
+                  className="w-full text-left p-3.5 border-b flex gap-3 items-start transition-all"
+                  style={{ borderColor: t.border, backgroundColor: isSelected ? t.surfaceAlt : 'transparent' }}>
+                  {sh ? (
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0 mt-0.5"
+                      style={{ backgroundColor: sh.avatarColor }}>{sh.avatar}</div>
                   ) : (
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5" style={{ backgroundColor: t.surfaceAlt, color: t.textMuted }}><Cpu className="w-4 h-4" /></div>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                      style={{ backgroundColor: t.surfaceAlt, color: t.textMuted }}><Cpu className="w-3.5 h-3.5" /></div>
                   )}
-
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
-                      <span className="font-medium text-sm truncate" style={{ color: t.textPrimary }}>
-                        {stakeholder ? stakeholder.name : 'System'}
-                      </span>
-                      {event.priority === 'CRITICAL' && <span className="text-[10px] px-1.5 py-0.5 rounded font-bold shrink-0 bg-red-500/20 text-red-400">URGENT</span>}
+                    <div className="flex justify-between items-start mb-0.5">
+                      <span className="font-semibold text-xs truncate" style={{ color: !event.isRead ? t.textPrimary : t.textSecondary }}>{sh?.name || 'System'}</span>
+                      {event.priority === 'CRITICAL' && <span className="text-[9px] px-1.5 py-0.5 rounded font-black shrink-0 bg-red-500/20 text-red-400 animate-pulse">URGENT</span>}
+                      {event.priority === 'HIGH' && !event.isAnswered && <span className="text-[9px] px-1.5 py-0.5 rounded font-bold shrink-0 bg-orange-500/20 text-orange-400">HIGH</span>}
                     </div>
-                    <div className="text-xs mb-2 truncate" style={{ color: t.textMuted }}>
-                      {event.subject || event.channel || 'Direct Message'}
-                    </div>
-                    <p className="text-sm line-clamp-2" style={{ color: t.textSecondary }}>
-                      {event.message}
-                    </p>
+                    <div className="text-[10px] mb-1 truncate" style={{ color: t.textMuted }}>{event.subject || event.channel || 'DM'}</div>
+                    <p className="text-xs line-clamp-2" style={{ color: t.textMuted }}>{event.message}</p>
                     {event.isAnswered && (
-                      <div className="mt-2 text-[10px] text-emerald-400 flex items-center gap-1">
+                      <div className="mt-1.5 text-[9px] text-emerald-400 flex items-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Responded
                       </div>
                     )}
@@ -661,507 +814,557 @@ export default function LivingWorkplaceSimulation() {
               );
             })}
             {activeEvents.length === 0 && (
-              <div className="p-8 text-center text-sm" style={{ color: t.textMuted }}>
-                No active items here.
-              </div>
+              <div className="p-8 text-center text-xs" style={{ color: t.textMuted }}>No items in {activeTab}.</div>
             )}
           </div>
         </div>
 
-        {/* ─── Reading Pane & Monaco Code IDE Split Pane ─── */}
-        <div className="flex-1 flex min-h-0" style={{ backgroundColor: t.bg }}>
-
-          {/* Left Side: Message View */}
+        {/* Main Reading Pane */}
+        <div className={`flex-1 flex min-h-0 ${showSandbox ? '' : ''}`} style={{ backgroundColor: t.bg }}>
           <div
-            className={`flex-1 flex flex-col relative min-h-0 overflow-y-auto ${showSandbox ? 'w-1/2 border-r' : 'w-full'}`}
+            className={`flex-1 flex flex-col relative min-h-0 overflow-y-auto ${showSandbox ? 'border-r' : ''}`}
             style={{ borderColor: t.border }}
           >
             {selectedEvent ? (
-              <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full p-8 min-h-0">
-                <div className="flex justify-between items-start w-full mb-8">
+              <div className="flex-1 flex flex-col max-w-3xl mx-auto w-full p-7 min-h-0">
+                {/* Message Header */}
+                <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-4">
                     {runtime.stakeholderStates[selectedEvent.fromStakeholderId] && (
-                      runtime.stakeholderStates[selectedEvent.fromStakeholderId].photoUrl ? (
-                        <img 
-                          src={runtime.stakeholderStates[selectedEvent.fromStakeholderId].photoUrl} 
-                          alt={runtime.stakeholderStates[selectedEvent.fromStakeholderId].name}
-                          className="w-12 h-12 rounded-full object-cover border border-gray-800"
-                        />
-                      ) : (
-                        <div 
-                          className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg"
-                          style={{ backgroundColor: runtime.stakeholderStates[selectedEvent.fromStakeholderId].avatarColor }}
-                        >
-                          {runtime.stakeholderStates[selectedEvent.fromStakeholderId].avatar}
-                        </div>
-                      )
+                      <div
+                        className="w-11 h-11 rounded-full flex items-center justify-center text-white font-black text-base shrink-0"
+                        style={{ backgroundColor: runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.avatarColor }}
+                      >
+                        {runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.avatar}
+                      </div>
                     )}
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-100">
+                      <h3 className="text-base font-bold" style={{ color: t.textPrimary }}>
                         {selectedEvent.subject || selectedEvent.channel || 'Direct Message'}
                       </h3>
-                      <p className="text-sm text-gray-400">
-                        From: <span className="text-gray-300">{runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.name || 'System'}</span>
+                      <p className="text-xs mt-0.5" style={{ color: t.textMuted }}>
+                        From: <span style={{ color: t.textSecondary }}>{runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.name || 'System'}</span>
+                        {runtime.stakeholderStates[selectedEvent.fromStakeholderId] && (
+                          <span className="ml-1.5 text-[10px]" style={{ color: t.textMuted }}>
+                            ({runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.role})
+                          </span>
+                        )}
+                        {selectedEvent.priority === 'CRITICAL' && (
+                          <span className="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 font-bold">URGENT</span>
+                        )}
                       </p>
                     </div>
                   </div>
-
-                  {/* Monaco IDE Sandbox Toggle */}
                   <button
-                    onClick={() => setShowSandbox(prev => !prev)}
-                    className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all"
-                    style={showSandbox ? {
-                      backgroundColor: t.accentBg,
-                      color: t.accentText,
-                      borderColor: t.accentBorder,
-                    } : {
-                      backgroundColor: t.surface,
-                      color: t.textMuted,
-                      borderColor: t.border,
-                    }}
+                    onClick={() => setShowSandbox(p => !p)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 border transition-all"
+                    style={showSandbox ? { backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder } : { backgroundColor: t.surface, color: t.textMuted, borderColor: t.border }}
                   >
-                    <Terminal className="w-3.5 h-3.5" /> {showSandbox ? 'Close Coding Editor' : 'Open Coding Editor'}
+                    <Terminal className="w-3.5 h-3.5" /> {showSandbox ? 'Close' : 'Code'}
                   </button>
                 </div>
-                
+
+                {/* Message Body */}
                 <div
-                  className="rounded-xl p-6 mb-8 leading-relaxed whitespace-pre-wrap shadow-lg shrink-0 border"
+                  className="rounded-xl p-5 mb-6 leading-relaxed whitespace-pre-wrap border text-sm shrink-0"
                   style={{ backgroundColor: t.surface, borderColor: t.border, color: t.textSecondary }}
                 >
                   {selectedEvent.message}
                 </div>
 
+                {/* Response Area */}
                 {!selectedEvent.isAnswered && selectedEvent.requiresResponse && (
-                  <div className="mt-auto space-y-4 shrink-0">
+                  <div className="space-y-3 shrink-0">
                     <textarea
                       value={replyText}
                       onChange={e => setReplyText(e.target.value)}
-                      placeholder="Draft your response..."
-                      className="w-full h-32 rounded-xl p-4 text-sm focus:outline-none resize-none border"
-                      style={{
-                        backgroundColor: t.surface,
-                        borderColor: t.border,
-                        color: t.textPrimary,
-                      }}
+                      placeholder="Draft your response... (quality and speed both matter)"
+                      className="w-full h-28 rounded-xl p-4 text-sm focus:outline-none resize-none border"
+                      style={{ backgroundColor: t.surface, borderColor: t.border, color: t.textPrimary }}
                     />
                     <div className="flex justify-between items-center">
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleAction('ignored', selectedEvent.id)}
                           disabled={isProcessingAction}
-                          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-red-500/10 hover:text-red-400"
+                          className="px-4 py-2 rounded-lg text-xs font-semibold transition-all hover:bg-red-500/10 hover:text-red-400"
                           style={{ color: t.textMuted }}
                         >
                           Ignore & Archive
                         </button>
-
                         <button
                           onClick={() => handleAction('asked_clarification', selectedEvent.id)}
                           disabled={isProcessingAction || !replyText.trim()}
-                          className="px-4 py-2 rounded-lg text-sm font-medium transition-colors border"
-                          style={{ color: '#f59e0b', borderColor: 'rgba(245,158,11,0.25)' }}
+                          className="px-4 py-2 rounded-lg text-xs font-semibold border transition-all disabled:opacity-40"
+                          style={{ color: '#f59e0b', borderColor: 'rgba(245,158,11,0.25)', backgroundColor: 'rgba(245,158,11,0.06)' }}
                         >
                           Ask Clarification
                         </button>
+                        <button
+                          onClick={() => handleAction('escalated', selectedEvent.id)}
+                          disabled={isProcessingAction}
+                          className="px-4 py-2 rounded-lg text-xs font-semibold border transition-all"
+                          style={{ color: '#f87171', borderColor: 'rgba(248,113,113,0.25)', backgroundColor: 'rgba(248,113,113,0.06)' }}
+                        >
+                          Escalate
+                        </button>
                       </div>
-
                       <button
                         onClick={() => handleAction('responded', selectedEvent.id)}
                         disabled={isProcessingAction || !replyText.trim()}
-                        className="px-6 py-2 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-50"
+                        className="px-5 py-2 rounded-lg text-xs font-bold text-white flex items-center gap-2 disabled:opacity-40 transition-all"
                         style={{ backgroundColor: t.accent }}
                       >
+                        {isProcessingAction ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                         {isProcessingAction ? 'Sending...' : 'Send Response'}
                       </button>
                     </div>
                   </div>
                 )}
+
+                {selectedEvent.isAnswered && (
+                  <div className="p-3 rounded-xl border flex items-center gap-2 text-xs text-emerald-400 shrink-0"
+                    style={{ borderColor: 'rgba(52,211,153,0.2)', backgroundColor: 'rgba(52,211,153,0.06)' }}>
+                    <Check className="w-3.5 h-3.5" /> Response sent
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="flex-grow flex items-center justify-center text-gray-600">
-                Select an item from the list to read
+              <div className="flex-1 flex flex-col items-center justify-center gap-4 p-8" style={{ color: t.textMuted }}>
+                {/* Empty state — show dashboard overview */}
+                <div className="text-center max-w-sm">
+                  <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center"
+                    style={{ backgroundColor: t.surfaceAlt, border: `1px solid ${t.border}` }}>
+                    <Activity className="w-7 h-7" style={{ color: t.textMuted }} />
+                  </div>
+                  <div className="text-sm font-semibold mb-1" style={{ color: t.textSecondary }}>Select a message to respond</div>
+                  <div className="text-xs leading-relaxed" style={{ color: t.textMuted }}>
+                    {runtime.eventStream.filter(e => !e.isAnswered && e.requiresResponse).length} item{runtime.eventStream.filter(e => !e.isAnswered && e.requiresResponse).length !== 1 ? 's' : ''} waiting for your attention.
+                    Every action is recorded and evaluated.
+                  </div>
+                </div>
               </div>
             )}
-            
-            {/* ─── Challenge Overlay ─── */}
+
+            {/* Current Challenge Overlay */}
             {runtime.currentChallenge && (
               <div
-                className="absolute top-4 right-4 w-80 rounded-xl shadow-2xl overflow-hidden z-30 border"
+                className="absolute top-4 right-4 w-72 rounded-xl shadow-2xl overflow-hidden z-30 border"
                 style={{ backgroundColor: t.surface, borderColor: t.accentBorder }}
               >
-                <div
-                  className="px-4 py-2 border-b flex justify-between items-center"
-                  style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}
-                >
-                  <span className="text-xs font-bold uppercase tracking-wider" style={{ color: t.accentText }}>Current Objective</span>
+                <div className="px-4 py-2.5 border-b flex justify-between items-center"
+                  style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}>
+                  <span className="text-xs font-black uppercase tracking-wider" style={{ color: t.accentText }}>
+                    Act {runtime.currentAct} Objective
+                  </span>
+                  <span className="text-[9px] px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
+                    35% Score
+                  </span>
                 </div>
                 <div className="p-4">
-                  <p className="text-xs mb-4" style={{ color: t.textSecondary }}>{runtime.currentChallenge.prompt}</p>
+                  <p className="text-xs leading-relaxed mb-4" style={{ color: t.textSecondary }}>{runtime.currentChallenge.prompt}</p>
+
+                  {/* Recovery input if recovery phase */}
+                  {recoveryActive && (
+                    <div className="mb-3">
+                      <textarea
+                        value={recoveryResponse}
+                        onChange={e => setRecoveryResponse(e.target.value)}
+                        placeholder="What's your recovery plan? Be specific about each stakeholder..."
+                        className="w-full h-24 rounded-lg p-2 text-xs resize-none border outline-none"
+                        style={{ backgroundColor: t.bg, borderColor: t.border, color: t.textPrimary }}
+                      />
+                    </div>
+                  )}
+
                   <button
                     onClick={handleAdvanceAct}
-                    className="w-full py-2 rounded-lg text-xs font-medium transition-colors border"
+                    className="w-full py-2 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1.5"
                     style={{ backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder }}
                   >
-                    Complete Objective & Advance
+                    {runtime.currentAct >= 3 ? 'Complete Simulation' : 'Complete & Advance'}
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Right Side: CodeIDE Sandbox */}
+          {/* Code IDE Sandbox */}
           {showSandbox && (
             <div className="w-1/2 flex flex-col h-full border-l" style={{ borderColor: t.border }}>
               <CodeIDE
-                problem={runtime.currentChallenge?.prompt || 'Analyze the situation and write your code solution or resolution script here.'}
+                problem={runtime.currentChallenge?.prompt || 'Analyze the situation and write your solution or response script.'}
                 difficulty="Medium"
                 language={sandboxLang}
                 initialCode={sandboxCode}
-                tags={['Simulation', 'Live Coding']}
+                tags={['Simulation', 'Live']}
                 theme={t}
                 onSubmit={(code, lang) => {
-                  setSandboxCode(code);
-                  setSandboxLang(lang);
+                  setSandboxCode(code); setSandboxLang(lang);
                   setRuntime(prev => {
                     if (!prev) return prev;
                     const challengeId = prev.currentChallenge?.id || 'ch-sandbox';
                     const idx = prev.challengeResponses.findIndex(r => r.challengeId === challengeId);
                     const newResponses = [...prev.challengeResponses];
-                    if (idx > -1) {
-                      newResponses[idx] = { challengeId, response: code };
-                    } else {
-                      newResponses.push({ challengeId, response: code });
-                    }
+                    if (idx > -1) newResponses[idx] = { challengeId, response: code };
+                    else newResponses.push({ challengeId, response: code });
                     return { ...prev, challengeResponses: newResponses };
                   });
                 }}
               />
             </div>
           )}
-
         </div>
 
-        {/* ─── Real-Time Progress Analysis Panel ─── */}
+        {/* ── Right Panel: Live Behavioral Monitor ──────────────────────── */}
         <div
-          className="w-72 border-l flex flex-col overflow-y-auto shrink-0"
+          className="w-64 border-l flex flex-col overflow-hidden shrink-0"
           style={{ backgroundColor: t.bg, borderColor: t.border }}
         >
-          {/* Header */}
-          <div
-            className="px-4 py-3 border-b shrink-0"
-            style={{ backgroundColor: t.surface, borderColor: t.border }}
-          >
+          {/* Panel Header */}
+          <div className="px-4 py-3 border-b shrink-0" style={{ backgroundColor: t.surface, borderColor: t.border }}>
             <div className="flex items-center gap-2 mb-0.5">
-              <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: t.accent }} />
-              <p className="text-[10px] font-black uppercase tracking-[0.2em]" style={{ color: t.accent }}>Live Behavioral Monitor</p>
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: t.accent }} />
+              <p className="text-[9px] font-black uppercase tracking-[0.2em]" style={{ color: t.accent }}>Live Monitor</p>
             </div>
-            <p className="text-[9px] uppercase tracking-widest" style={{ color: t.textMuted }}>Real-time progress analysis</p>
+            <p className="text-[8px] uppercase tracking-widest" style={{ color: t.textMuted }}>Behavioral analysis · hidden from candidate</p>
           </div>
 
-          <div className="flex-1 p-3 space-y-4 overflow-y-auto">
-
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {/* Session Vitals */}
-            <div className="rounded-xl p-3 space-y-2 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Session Vitals</p>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                  <p className="text-lg font-black" style={{ color: t.accent }}>{runtime.currentAct}/3</p>
-                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Act</p>
-                </div>
-                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                  <p className="text-lg font-black text-rose-400">{runtime.behavioralSignals.ignoredEventIds?.length || 0}</p>
-                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Ignored</p>
-                </div>
-                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                  <p className="text-lg font-black text-amber-400">{runtime.behavioralSignals.clarificationCount || 0}</p>
-                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Clarified</p>
-                </div>
-                <div className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                  <p className="text-lg font-black" style={{ color: t.textSecondary }}>{tabSwitches}</p>
-                  <p className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>Focus Lost</p>
-                </div>
+            <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Session Vitals</p>
+              <div className="grid grid-cols-2 gap-1.5">
+                {[
+                  { val: `${runtime.currentAct}/3`, label: 'Act', color: t.accent },
+                  { val: runtime.behavioralSignals.ignoredEventIds.length, label: 'Ignored', color: '#f87171' },
+                  { val: runtime.behavioralSignals.clarificationCount, label: 'Clarified', color: '#fb923c' },
+                  { val: tabSwitches, label: 'Focus Lost', color: t.textMuted },
+                  { val: runtime.candidateActions.filter(a => a.type === 'responded').length, label: 'Responded', color: '#34d399' },
+                  { val: runtime.assistantUsageCount, label: 'Hints Used', color: '#a78bfa' },
+                ].map(v => (
+                  <div key={v.label} className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
+                    <p className="text-base font-black" style={{ color: v.color }}>{v.val}</p>
+                    <p className="text-[7px] uppercase tracking-wider mt-0.5" style={{ color: t.textMuted }}>{v.label}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Stakeholder Trust & Frustration Monitor */}
-            <div className="rounded-xl p-3 space-y-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: t.textMuted }}>Stakeholder Monitor</p>
+            {/* Stakeholder Monitor */}
+            <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Stakeholder Trust</p>
               {Object.values(runtime.stakeholderStates).map((s: StakeholderState) => {
-                const frustrationLevel = s.frustration || 0;
-                const trustLevel = s.trust !== undefined ? s.trust : 100;
-                const isCritical = frustrationLevel >= 70 || trustLevel <= 30;
-                const isWarning = frustrationLevel >= 40 || trustLevel <= 60;
+                const isCrit = s.frustration >= 70 || s.trust <= 30;
+                const isWarn = s.frustration >= 40 || s.trust <= 60;
                 return (
-                  <div
-                    key={s.id}
-                    className="p-2.5 rounded-lg border transition-all"
-                    style={{
-                      borderColor: isCritical ? 'rgba(239,68,68,0.3)' : isWarning ? 'rgba(245,158,11,0.2)' : t.border,
-                      backgroundColor: isCritical ? 'rgba(239,68,68,0.05)' : isWarning ? 'rgba(245,158,11,0.05)' : t.bg,
-                    }}
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-black text-white shrink-0"
-                        style={{ backgroundColor: s.avatarColor || '#4f46e5' }}
-                      >
-                        {s.avatar}
+                  <div key={s.id} className="mb-2 last:mb-0 p-2 rounded-lg border"
+                    style={{ borderColor: isCrit ? 'rgba(239,68,68,0.3)' : isWarn ? 'rgba(245,158,11,0.2)' : t.border, backgroundColor: isCrit ? 'rgba(239,68,68,0.05)' : 'transparent' }}>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black text-white shrink-0"
+                          style={{ backgroundColor: s.avatarColor }}>{s.avatar}</div>
+                        <span className="text-[9px] font-semibold truncate max-w-[70px]" style={{ color: t.textPrimary }}>{s.name.split(' ')[0]}</span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-bold truncate" style={{ color: t.textPrimary }}>{s.name}</p>
-                        <p className="text-[8px] truncate" style={{ color: t.textMuted }}>{s.role}</p>
-                      </div>
-                      {isCritical && (
-                        <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse shrink-0" />
-                      )}
+                      <span className="text-[8px] font-bold" style={{ color: isCrit ? '#f87171' : isWarn ? '#fb923c' : '#34d399' }}>
+                        {s.trust}/100
+                      </span>
                     </div>
-
-                    {/* Trust Bar */}
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Trust</span>
-                        <span className={`text-[8px] font-black ${
-                          trustLevel > 60 ? 'text-emerald-400' : trustLevel > 30 ? 'text-amber-400' : 'text-rose-400'
-                        }`}>{trustLevel}</span>
-                      </div>
-                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all duration-700 ${
-                            trustLevel > 60 ? 'bg-emerald-500' : trustLevel > 30 ? 'bg-amber-500' : 'bg-rose-500'
-                          }`}
-                          style={{ width: `${trustLevel}%` }}
-                        />
-                      </div>
+                    {/* Trust bar */}
+                    <div className="h-1 rounded-full overflow-hidden mb-1" style={{ backgroundColor: t.surfaceAlt }}>
+                      <div className="h-full rounded-full transition-all duration-500"
+                        style={{ width: `${s.trust}%`, backgroundColor: isCrit ? '#ef4444' : isWarn ? '#f59e0b' : '#34d399' }} />
                     </div>
-
-                    {/* Frustration Bar */}
-                    <div className="space-y-1 mt-1.5">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Frustration</span>
-                        <span className={`text-[8px] font-black ${
-                          frustrationLevel < 30 ? 'text-emerald-400' : frustrationLevel < 60 ? 'text-amber-400' : 'text-rose-400'
-                        }`}>{frustrationLevel}</span>
-                      </div>
-                      <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full transition-all duration-700 ${
-                            frustrationLevel < 30 ? 'bg-emerald-500' : frustrationLevel < 60 ? 'bg-amber-500' : 'bg-rose-500'
-                          }`}
-                          style={{ width: `${frustrationLevel}%` }}
-                        />
-                      </div>
+                    <div className="flex justify-between">
+                      <span className="text-[7px]" style={{ color: t.textMuted }}>Trust</span>
+                      {isCrit && <span className="text-[7px] text-red-400 font-bold animate-pulse">⚠ Critical</span>}
                     </div>
-
-                    {/* Escalation Badge */}
-                    {(s.escalationLevel || 0) > 0 && (
-                      <div className="mt-2 flex items-center gap-1">
-                        <span className="text-[8px] text-gray-600 uppercase tracking-wider">Escalation:</span>
-                        <div className="flex gap-0.5">
-                          {[1, 2, 3].map(lvl => (
-                            <div
-                              key={lvl}
-                              className={`w-2.5 h-1.5 rounded-sm ${
-                                (s.escalationLevel || 0) >= lvl ? 'bg-rose-500' : 'bg-gray-800'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 );
               })}
             </div>
 
-            {/* Candidate Action Log */}
-            <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[9px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Action Log</p>
-              {runtime.candidateActions.length === 0 ? (
-                <p className="text-[9px] text-center py-3" style={{ color: t.textMuted }}>No actions recorded yet</p>
-              ) : (
-                <div className="space-y-1.5 max-h-48 overflow-y-auto">
-                  {[...runtime.candidateActions].reverse().map((action, i) => {
-                    const stName = runtime.stakeholderStates[action.stakeholderId]?.name || 'System';
-                    const typeColors: Record<string, string> = {
-                      responded: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
-                      ignored: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
-                      escalated: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
-                      asked_clarification: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
-                    };
-                    const color = typeColors[action.type] || 'text-gray-400 bg-white/5 border-white/10';
-                    return (
-                      <div key={i} className="flex items-start gap-1.5">
-                        <span className={`text-[8px] font-black px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${color}`}>
-                          {action.type === 'asked_clarification' ? 'CLARIFY' : action.type.toUpperCase()}
-                        </span>
-                        <p className="text-[8px] leading-relaxed" style={{ color: t.textMuted }}>{stName} — {action.responseTimeSeconds}s</p>
-                      </div>
-                    );
-                  })}
+            {/* HYRTE Score Preview (if computed) */}
+            {showScorePanel && hyrteScore && (
+              <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>HYRTE Score Preview</p>
+                <div className="text-center mb-3">
+                  <div className="text-3xl font-black" style={{ color: t.accent }}>{hyrteScore.total}</div>
+                  <div className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>/ 100</div>
                 </div>
+                {/* 15/35/50 breakdown */}
+                {[
+                  { label: 'Direct Skill (15%)', val: hyrteScore.directSkill.score },
+                  { label: 'Embedded Skills (35%)', val: hyrteScore.embeddedSkills.score },
+                  { label: 'Workplace Intel (50%)', val: hyrteScore.workplaceIntelligence.score },
+                ].map(row => (
+                  <div key={row.label} className="mb-1.5">
+                    <div className="flex justify-between items-center mb-0.5">
+                      <span className="text-[8px]" style={{ color: t.textMuted }}>{row.label}</span>
+                      <span className="text-[9px] font-bold" style={{ color: t.textSecondary }}>{row.val}</span>
+                    </div>
+                    <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: t.surfaceAlt }}>
+                      <div className="h-full rounded-full" style={{ width: `${row.val}%`, backgroundColor: t.accent }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Chaos Wave Log */}
+            {runtime.consequenceWaveLog && runtime.consequenceWaveLog.length > 0 && (
+              <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                <p className="text-[8px] font-black uppercase tracking-widest mb-2 text-amber-400">Consequence Waves Fired</p>
+                {runtime.consequenceWaveLog.map((w, i) => (
+                  <div key={i} className="flex items-start gap-1.5 mb-1.5 last:mb-0">
+                    <Zap className="w-2.5 h-2.5 text-amber-400 shrink-0 mt-0.5" />
+                    <span className="text-[8px]" style={{ color: t.textMuted }}>{w.label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Action Log */}
+            <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Action Log</p>
+              {runtime.candidateActions.slice(-5).reverse().map((a, i) => (
+                <div key={i} className="flex items-start gap-2 mb-1.5 last:mb-0">
+                  <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${
+                    a.type === 'ignored' ? 'bg-red-400' :
+                    a.type === 'responded' ? 'bg-emerald-400' :
+                    a.type === 'asked_clarification' ? 'bg-amber-400' :
+                    a.type === 'escalated' ? 'bg-orange-400' : 'bg-gray-400'
+                  }`} />
+                  <div>
+                    <span className="text-[8px] font-bold capitalize" style={{ color: t.textSecondary }}>{a.type}</span>
+                    <span className="text-[8px] ml-1" style={{ color: t.textMuted }}>→ {runtime.stakeholderStates[a.stakeholderId]?.name?.split(' ')[0]}</span>
+                  </div>
+                </div>
+              ))}
+              {runtime.candidateActions.length === 0 && (
+                <p className="text-[8px]" style={{ color: t.textMuted }}>No actions yet</p>
               )}
             </div>
-
-            {/* Active Alerts */}
-            {(() => {
-              const alerts: { label: string; color: string }[] = [];
-              const ignoredCount = runtime.behavioralSignals.ignoredEventIds?.length || 0;
-              const escalatedCount = runtime.behavioralSignals.escalatedEventIds?.length || 0;
-              const criticalStakeholders = Object.values(runtime.stakeholderStates).filter(s => (s.frustration || 0) >= 70);
-              if (ignoredCount >= 2) alerts.push({ label: `${ignoredCount} ignored — stakeholders may escalate`, color: 'border-rose-500/20 bg-rose-500/5 text-rose-400' });
-              if (escalatedCount >= 1) alerts.push({ label: `${escalatedCount} escalation(s) flagged`, color: 'border-amber-500/20 bg-amber-500/5 text-amber-400' });
-              criticalStakeholders.forEach(s => alerts.push({ label: `${s.name} frustration critical`, color: 'border-rose-500/20 bg-rose-500/5 text-rose-400' }));
-              if (tabSwitches >= 2) alerts.push({ label: `${tabSwitches} focus losses detected`, color: 'border-amber-500/20 bg-amber-500/5 text-amber-400' });
-              if (alerts.length === 0) return null;
-              return (
-                <div className="rounded-xl p-3 space-y-2 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-                  <p className="text-[9px] font-black uppercase tracking-widest" style={{ color: t.textMuted }}>Active Alerts</p>
-                  {alerts.map((al, i) => (
-                    <div key={i} className={`text-[9px] font-bold px-2.5 py-1.5 rounded-lg border ${al.color}`}>
-                      {al.label}
-                    </div>
-                  ))}
-                </div>
-              );
-            })()}
-
           </div>
         </div>
-
       </div>
 
-      {/* ─── Face PiP (Micro proctoring camera feed) ─── */}
-      <div
-        className="fixed bottom-4 right-4 w-40 h-28 rounded-xl overflow-hidden shadow-2xl z-50 border"
-        style={{ backgroundColor: t.surface, borderColor: t.border }}
-      >
+      {/* ── Face PiP Camera ───────────────────────────────────────────────── */}
+      <div className="fixed bottom-20 right-4 z-40">
         <video
           ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="w-full h-full object-cover scale-x-[-1]"
+          autoPlay muted playsInline
+          className="w-36 h-24 rounded-xl object-cover border shadow-2xl"
+          style={{ transform: 'scaleX(-1)', borderColor: t.border, display: cameraStream ? 'block' : 'none' }}
         />
-        <div className="absolute top-2 left-2 flex items-center gap-1.5 px-2 py-0.5 bg-black/60 rounded-full border border-white/5">
-          <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-          <span className="text-[8px] font-black tracking-widest text-emerald-400 uppercase">Live PiP</span>
-        </div>
       </div>
 
-      {/* ─── Senior Hint Assistant Chatbot Float Button ─── */}
-      <button
-        onClick={() => setIsAssistantOpen(prev => !prev)}
-        className="fixed bottom-36 right-4 w-12 h-12 rounded-full flex items-center justify-center shadow-xl text-white transition-all z-40"
-        style={{ backgroundColor: t.accent }}
-        title="Consult Colleague"
-      >
-        <MessageSquare className="w-5 h-5" />
-      </button>
-
-      {/* ─── Senior Hint Colleague Chatbot Window ─── */}
-      {isAssistantOpen && (
-        <div
-          className="fixed bottom-4 right-20 w-80 h-[420px] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden border"
-          style={{ backgroundColor: t.surface, borderColor: t.border, fontFamily: t.fontFamily }}
+      {/* ── Assistant Button ──────────────────────────────────────────────── */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <button
+          onClick={() => setIsAssistantOpen(p => !p)}
+          className="w-12 h-12 rounded-2xl shadow-2xl flex items-center justify-center text-white relative transition-all hover:scale-110"
+          style={{ backgroundColor: t.accent }}
         >
-          <div
-            className="border-b p-4 flex justify-between items-center shrink-0"
-            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}
-          >
-            <div className="flex items-center gap-2">
-              <User className="w-5 h-5" style={{ color: t.textSecondary }} />
-              <div>
-                <p className="text-xs font-bold" style={{ color: t.textPrimary }}>Senior Colleague (AURA)</p>
-                <p className="text-[9px]" style={{ color: t.textMuted }}>Ask for a subtle hint or nudge</p>
-              </div>
+          <Sparkles className="w-5 h-5" />
+          {runtime.assistantUsageCount > 0 && (
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 text-black text-[9px] font-black rounded-full flex items-center justify-center">
+              {runtime.assistantUsageCount}
             </div>
-            <button onClick={() => setIsAssistantOpen(false)} className="text-gray-400 hover:text-white text-sm">X</button>
-          </div>
+          )}
+        </button>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ backgroundColor: t.bg }}>
-            {assistantLogs.map((log, i) => (
-              <div key={i} className={`flex flex-col ${log.role === 'user' ? 'items-end' : 'items-start'}`}>
-                <div
-                  className="max-w-[85%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed"
-                  style={log.role === 'user'
-                    ? { backgroundColor: t.accent, color: '#fff' }
-                    : { backgroundColor: t.surfaceAlt, color: t.textSecondary }
-                  }
-                >
-                  {log.content}
-                </div>
-              </div>
-            ))}
-          </div>
-          
+        {/* Assistant Chat Panel */}
+        {isAssistantOpen && (
           <div
-            className="p-3 border-t flex gap-2 shrink-0"
+            className="absolute bottom-16 right-0 w-80 rounded-2xl border shadow-2xl overflow-hidden"
             style={{ backgroundColor: t.surface, borderColor: t.border }}
           >
-            <input
-              type="text"
-              value={assistantInput}
-              onChange={e => setAssistantInput(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleAskAssistant()}
-              placeholder="Ask a question..."
-              className="flex-1 rounded-xl px-3 py-2 text-xs focus:outline-none border"
-              style={{ backgroundColor: t.surfaceAlt, borderColor: t.border, color: t.textPrimary }}
-            />
-            <button
-              onClick={handleAskAssistant}
-              className="text-white px-3 py-2 rounded-xl text-xs font-medium shrink-0"
-              style={{ backgroundColor: t.accent }}
-            >
-              Send
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Submit Transition Modal ─── */}
-      {showSubmitModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] flex items-center justify-center p-6">
-          <div
-            className="rounded-[32px] max-w-lg w-full p-8 text-center space-y-6 shadow-2xl border"
-            style={{ backgroundColor: t.surface, borderColor: t.border, fontFamily: t.fontFamily }}
-          >
-            <div
-              className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto border"
-              style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}
-            >
-              <Sparkles className="w-8 h-8" style={{ color: t.accentText }} />
+            <div className="px-4 py-3 border-b flex items-center justify-between"
+              style={{ borderColor: t.border, backgroundColor: t.accentBg }}>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4" style={{ color: t.accent }} />
+                <span className="text-xs font-black" style={{ color: t.accentText }}>AURA — Senior Colleague</span>
+              </div>
+              <span className="text-[9px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
+                Hint {runtime.assistantUsageCount + 1}
+              </span>
             </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold" style={{ color: t.textPrimary }}>Workplace Simulation Complete!</h2>
-              <p className="text-sm leading-relaxed" style={{ color: t.textSecondary }}>
-                Your actions, code solutions, communication tone, and stakeholder trust scores have been recorded.
+            <div className="h-52 overflow-y-auto p-3 space-y-2">
+              {assistantLogs.map((msg, i) => (
+                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div
+                    className="max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed"
+                    style={msg.role === 'user'
+                      ? { backgroundColor: t.accent, color: '#fff' }
+                      : { backgroundColor: t.surfaceAlt, color: t.textSecondary }}
+                  >{msg.content}</div>
+                </div>
+              ))}
+            </div>
+            <div className="border-t p-3 flex gap-2" style={{ borderColor: t.border }}>
+              <input
+                value={assistantInput}
+                onChange={e => setAssistantInput(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleAskAssistant(); } }}
+                placeholder="Ask for a nudge..."
+                className="flex-1 rounded-lg px-3 py-1.5 text-xs border outline-none"
+                style={{ backgroundColor: t.bg, borderColor: t.border, color: t.textPrimary }}
+              />
+              <button
+                onClick={handleAskAssistant}
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white transition-all"
+                style={{ backgroundColor: t.accent }}
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* Submit Modal — HYRTE Score Breakdown                              */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {showSubmitModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}>
+          <div
+            className="w-full max-w-2xl rounded-2xl border shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
+            style={{ backgroundColor: t.surface, borderColor: t.border }}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-5 border-b" style={{ borderColor: t.border, background: `linear-gradient(135deg, ${t.accentBg}, transparent)` }}>
+              <div className="flex items-center gap-3 mb-1">
+                <Award className="w-6 h-6" style={{ color: t.accent }} />
+                <h2 className="text-xl font-black" style={{ color: t.textPrimary }}>HYRTE Assessment Complete</h2>
+              </div>
+              <p className="text-sm" style={{ color: t.textMuted }}>
+                {blueprint.role} · {blueprint.company} · {new Date().toLocaleDateString()}
               </p>
             </div>
 
-            <div
-              className="p-4 rounded-2xl text-left space-y-1 text-xs border"
-              style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder, color: t.accentText }}
-            >
-              <p className="font-bold">Summary Metrics Captured:</p>
-              <ul className="list-disc pl-4 space-y-1 mt-2">
-                <li>Ignored Actions: {runtime?.behavioralSignals.ignoredEventIds?.length || 0}</li>
-                <li>Clarification Questions: {runtime?.behavioralSignals.clarificationCount || 0}</li>
-                <li>Senior Colleagues Consulted: {runtime?.assistantUsageCount || 0} hints</li>
-                <li>Stakeholders Escalation Flags: {Object.values(runtime?.stakeholderStates || {}).filter(s => s.escalationLevel > 1).length}</li>
-              </ul>
-            </div>
+            <div className="p-6 space-y-5">
+              {isComputingScore ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-4">
+                  <div className="w-10 h-10 border-4 border-t-violet-500 border-violet-500/20 rounded-full animate-spin" />
+                  <div className="text-sm text-gray-400">Computing your HYRTE behavioral score...</div>
+                  <div className="text-xs text-gray-600">This may take 10–15 seconds. We're analyzing {runtime.candidateActions.length} actions across {runtime.currentAct} act{runtime.currentAct > 1 ? 's' : ''}.</div>
+                </div>
+              ) : hyrteScore ? (
+                <>
+                  {/* Total Score */}
+                  <div className="text-center py-6 rounded-xl border" style={{ borderColor: t.accentBorder, backgroundColor: t.accentBg }}>
+                    <div className="text-6xl font-black mb-1" style={{ color: t.accent }}>{hyrteScore.total}</div>
+                    <div className="text-sm font-semibold" style={{ color: t.accentText }}>HYRTE Score / 100</div>
+                  </div>
 
-            <button
-              onClick={handleProceedToInterview}
-              className="w-full py-3.5 text-white rounded-xl text-sm font-semibold tracking-wider transition-all"
-              style={{ backgroundColor: t.accent }}
-            >
-              Proceed to Phase 2: Live AI Voice Interview
-            </button>
+                  {/* 15 / 35 / 50 breakdown */}
+                  <div className="grid grid-cols-3 gap-3">
+                    {[
+                      { label: 'Direct Skill', pct: '15%', score: hyrteScore.directSkill.score, color: '#818cf8', desc: 'Pre-simulation case question' },
+                      { label: 'Embedded Skills', pct: '35%', score: hyrteScore.embeddedSkills.score, color: '#34d399', desc: 'In-simulation decisions' },
+                      { label: 'Workplace Intel', pct: '50%', score: hyrteScore.workplaceIntelligence.score, color: '#f59e0b', desc: 'Behavioral signals' },
+                    ].map(row => (
+                      <div key={row.label} className="rounded-xl p-4 border text-center" style={{ borderColor: t.border, backgroundColor: t.bg }}>
+                        <div className="text-xs font-bold mb-1" style={{ color: row.color }}>{row.pct}</div>
+                        <div className="text-3xl font-black mb-1" style={{ color: row.color }}>{row.score}</div>
+                        <div className="text-xs font-semibold mb-0.5" style={{ color: t.textPrimary }}>{row.label}</div>
+                        <div className="text-[10px]" style={{ color: t.textMuted }}>{row.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Workplace Intelligence Dimensions */}
+                  <div className="rounded-xl p-4 border" style={{ borderColor: t.border, backgroundColor: t.bg }}>
+                    <h3 className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: t.textMuted }}>Workplace Intelligence Breakdown (50%)</h3>
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+                      {Object.entries(hyrteScore.workplaceIntelligence.dimensions).map(([key, val]) => (
+                        <div key={key}>
+                          <div className="flex justify-between text-xs mb-1">
+                            <span style={{ color: t.textSecondary }}>{DIM_LABELS[key] || key}</span>
+                            <span className="font-bold" style={{ color: t.textPrimary }}>{val}/100</span>
+                          </div>
+                          <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: t.surfaceAlt }}>
+                            <div className="h-full rounded-full transition-all"
+                              style={{ width: `${val}%`, backgroundColor: val >= 75 ? '#34d399' : val >= 55 ? '#f59e0b' : '#f87171' }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Recovery Score */}
+                  <div className="flex items-center gap-3 p-4 rounded-xl border" style={{ borderColor: t.border, backgroundColor: t.bg }}>
+                    <RotateCcw className="w-5 h-5 text-amber-400 shrink-0" />
+                    <div className="flex-1">
+                      <div className="text-xs font-bold mb-0.5" style={{ color: t.textPrimary }}>Recovery Score</div>
+                      <div className="text-xs" style={{ color: t.textMuted }}>How well you recovered from mistakes — unique to HYRTE</div>
+                    </div>
+                    <div className="text-2xl font-black text-amber-400">{hyrteScore.recoveryScore}</div>
+                  </div>
+
+                  {/* Hiring Insight */}
+                  {hyrteScore.hiringInsight && (
+                    <div className="p-4 rounded-xl border" style={{ borderColor: t.accentBorder, backgroundColor: t.accentBg }}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Brain className="w-4 h-4" style={{ color: t.accentText }} />
+                        <span className="text-xs font-black uppercase tracking-wider" style={{ color: t.accentText }}>Hiring Insight</span>
+                      </div>
+                      <p className="text-sm leading-relaxed" style={{ color: t.textSecondary }}>{hyrteScore.hiringInsight}</p>
+                    </div>
+                  )}
+
+                  {/* Observations */}
+                  {hyrteScore.workplaceIntelligence.observations?.length > 0 && (
+                    <div className="p-4 rounded-xl border" style={{ borderColor: t.border, backgroundColor: t.bg }}>
+                      <div className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: t.textMuted }}>Key Observations</div>
+                      <ul className="space-y-1.5">
+                        {hyrteScore.workplaceIntelligence.observations.map((obs, i) => (
+                          <li key={i} className="flex items-start gap-2 text-xs" style={{ color: t.textSecondary }}>
+                            <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style={{ backgroundColor: t.accent }} />
+                            {obs}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-8">
+                  <div className="text-sm mb-2" style={{ color: t.textSecondary }}>Simulation completed.</div>
+                  <div className="text-xs" style={{ color: t.textMuted }}>Score computation unavailable. Proceed to Phase 2.</div>
+                </div>
+              )}
+
+              {/* Session Stats */}
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { label: 'Acts Done', val: `${runtime.currentAct}/3` },
+                  { label: 'Ignored', val: runtime.behavioralSignals.ignoredEventIds.length },
+                  { label: 'Clarified', val: runtime.behavioralSignals.clarificationCount },
+                  { label: 'Hints', val: runtime.assistantUsageCount },
+                ].map(s => (
+                  <div key={s.label} className="rounded-xl p-3 border text-center" style={{ borderColor: t.border, backgroundColor: t.bg }}>
+                    <div className="text-xl font-black" style={{ color: t.accent }}>{s.val}</div>
+                    <div className="text-[9px] uppercase tracking-wider mt-0.5" style={{ color: t.textMuted }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={handleProceedToInterview}
+                className="w-full py-4 rounded-xl font-black text-white text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90"
+                style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})` }}
+              >
+                <ChevronRight className="w-4 h-4" />
+                Proceed to Phase 2: Live AI Voice Interview
+              </button>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

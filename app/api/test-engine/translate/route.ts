@@ -13,6 +13,7 @@ function buildFallbackBlueprint(): SimulationBlueprint {
     workspace: 'product_manager',
     companyCultureProfile: 'Aggressive Scale-up',
     company: 'NovaTech',
+    businessObjective: 'Reduce enterprise customer churn by 15% before the quarterly board review',
     stakeholders: [
       {
         id: 's1', name: 'Arjun Mehta', role: 'VP Engineering', department: 'Engineering',
@@ -138,7 +139,59 @@ function buildFallbackBlueprint(): SimulationBlueprint {
         },
       },
     ],
-    benchmarks: { expectedScore: 72, criticalSkills: ['Prioritization', 'Client communication', 'Upward management'] },
+    benchmarks: {
+      expectedScore: 72,
+      criticalSkills: ['Prioritization', 'Client communication', 'Upward management'],
+      roleScoringWeights: {
+        technicalJudgment: 0.10, prioritization: 0.20, communication: 0.15,
+        stakeholderManagement: 0.20, accountability: 0.15, pressureResponse: 0.10, adaptability: 0.10,
+      },
+    },
+    skillValidationQuestions: [
+      {
+        id: 'svq-1',
+        type: 'data_analysis',
+        prompt: 'You are a PM at NovaTech. Three features are competing for Q3 investment. You can only fund one. Which do you prioritize and why?',
+        context: 'Feature        | Monthly Usage | Churn Impact | Eng Effort\nAnalytics Export | High (82%)    | Very High    | 3 weeks\nReporting v2     | Medium (41%)  | Low          | 1 week\nAPI Integrations | Low (23%)     | High         | 6 weeks',
+        options: [
+          'Analytics Export — highest usage AND highest churn impact despite 3-week effort',
+          'Reporting v2 — fastest to ship, delivers value quickly even if churn impact is low',
+          'API Integrations — highest strategic value for enterprise expansion despite high effort',
+        ],
+        evaluationCriteria: [
+          'Does the candidate reason from data rather than gut?',
+          'Do they acknowledge the tradeoff between effort and impact?',
+          'Do they connect their choice to the business objective (reducing churn)?',
+        ],
+        timeboxSeconds: 300,
+        skillDimensions: ['technicalJudgment', 'prioritization', 'businessJudgment'],
+      },
+    ],
+    consequenceWaveRules: [
+      {
+        id: 'global-cw-ignore',
+        label: 'Ignoring HIGH events triggers manager awareness',
+        condition: { type: 'ignored_count', threshold: 2 },
+        consequence: {
+          type: 'escalation',
+          message: "Hey — I'm hearing from a couple of people that some messages haven't been addressed. What's going on? Leadership is watching this situation.",
+          fromStakeholderId: 's1',
+          eventType: 'slack',
+          priority: 'HIGH',
+          delaySeconds: 60,
+        },
+        fired: false,
+      },
+    ],
+    recoveryScenarios: [
+      {
+        id: 'rec-1',
+        prompt: 'What is your recovery plan? Walk through what went wrong, what you are doing about it, and how you will prevent recurrence for each affected stakeholder.',
+        stakeholderIds: ['s1', 's3'],
+        recoveryScore: 0,
+        timestamp: 0,
+      },
+    ],
   };
 }
 
