@@ -2,9 +2,45 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
+// ─── TTS route upgraded with personality-matched voice selection ──────────────
+// personality → Azure Neural Voice mapping
+
+const PERSONALITY_VOICE_MAP: Record<string, string> = {
+  overbearing_executive:  'en-US-DavisNeural',       // authoritative male
+  micromanager:           'en-US-ChristopherNeural',  // precise, clipped
+  passive_aggressive:     'en-US-JennyNeural',        // calm but terse
+  credit_stealer:         'en-US-GuyNeural',          // smooth, confident
+  lazy_contributor:       'en-US-TonyNeural',         // relaxed, slow
+  difficult_client:       'en-US-AriaNeural',         // professional, firm
+  political_manager:      'en-US-AndrewMultilingualNeural', // polished
+  supportive_colleague:   'en-US-AvaMultilingualNeural',    // warm, friendly
+};
+
+// Rate/pitch/style per personality for SSML expressiveness
+const PERSONALITY_SSML: Record<string, { rate: string; pitch: string; style?: string }> = {
+  overbearing_executive:  { rate: '105%', pitch: '-2st',  style: 'authoritative' },
+  micromanager:           { rate: '110%', pitch: '-1st',  style: 'serious' },
+  passive_aggressive:     { rate: '95%',  pitch: '+0st',  style: 'disgruntled' },
+  credit_stealer:         { rate: '100%', pitch: '+0st',  style: 'friendly' },
+  lazy_contributor:       { rate: '88%',  pitch: '-1st',  style: 'cheerful' },
+  difficult_client:       { rate: '108%', pitch: '+1st',  style: 'angry' },
+  political_manager:      { rate: '98%',  pitch: '+0st',  style: 'hopeful' },
+  supportive_colleague:   { rate: '95%',  pitch: '+1st',  style: 'excited' },
+};
+
 export async function POST(req: Request) {
   try {
-    const { text, voice = 'alloy' } = await req.json();
+    const {
+      text,
+      personality,
+      voice = 'alloy',
+      eventType,
+    }: {
+      text: string;
+      personality?: string;
+      voice?: string;
+      eventType?: string;
+    } = await req.json();
 
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 });
@@ -18,20 +54,36 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'TTS Configuration Error' }, { status: 500 });
     }
 
-    // Map existing OpenAI voice names to Azure Neural Voices
-    // Female options: en-US-AriaNeural, en-US-JennyNeural, en-US-AvaMultilingualNeural
-    // Male options: en-US-GuyNeural, en-US-ChristopherNeural, en-US-AndrewMultilingualNeural
-    const azureVoiceName = voice === 'nova' ? 'en-US-JennyNeural' : 'en-US-GuyNeural';
+    // Pick voice based on personality if provided
+    const azureVoiceName = personality
+      ? PERSONALITY_VOICE_MAP[personality] ?? 'en-US-JennyNeural'
+      : voice === 'nova' ? 'en-US-JennyNeural' : 'en-US-GuyNeural';
+
+    const ssmlConfig = personality ? PERSONALITY_SSML[personality] : null;
+
+    const safeText = text
+      .slice(0, 500) // cap at 500 chars for TTS
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+
+    // Build SSML — add style/prosody for personality expressiveness if supported
+    let speechContent = safeText;
+    if (ssmlConfig?.style && azureVoiceName.includes('Neural') && !azureVoiceName.includes('Multilingual')) {
+      speechContent = `<mstts:express-as style="${ssmlConfig.style}" styledegree="1.2">${safeText}</mstts:express-as>`;
+    }
+
+    const ssml = `<speak version='1.0' xml:lang='en-US' xmlns:mstts='http://www.w3.org/2001/mstts'>
+  <voice xml:lang='en-US' name='${azureVoiceName}'>
+    <prosody rate='${ssmlConfig?.rate ?? '100%'}' pitch='${ssmlConfig?.pitch ?? '+0st'}'>
+      ${speechContent}
+    </prosody>
+  </voice>
+</speak>`;
 
     const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
-
-    const ssml = `
-      <speak version='1.0' xml:lang='en-US'>
-        <voice xml:lang='en-US' name='${azureVoiceName}'>
-          ${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}
-        </voice>
-      </speak>
-    `;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -39,9 +91,9 @@ export async function POST(req: Request) {
         'Ocp-Apim-Subscription-Key': apiKey,
         'Content-Type': 'application/ssml+xml',
         'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
-        'User-Agent': 'InterviewOS-TTS'
+        'User-Agent': 'InterviewOS-HYRTE-TTS',
       },
-      body: ssml
+      body: ssml,
     });
 
     if (!response.ok) {
@@ -56,11 +108,13 @@ export async function POST(req: Request) {
       headers: {
         'Content-Type': 'audio/mpeg',
         'Cache-Control': 'no-store, max-age=0',
+        'X-Voice-Used': azureVoiceName,
       },
     });
 
-  } catch (error: any) {
-    console.error('TTS Error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    console.error('TTS Error:', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

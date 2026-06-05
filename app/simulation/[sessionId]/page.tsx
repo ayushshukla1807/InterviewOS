@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTTS } from '../../hooks/useTTS';
 import {
   SimulationBlueprint,
   SimulationRuntimeState,
@@ -16,7 +17,7 @@ import {
   MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles,
   Terminal, Palette, Check, Zap, AlertTriangle, RotateCcw, ChevronRight,
   TrendingUp, Clock, Users, Target, Award, Brain, Eye, EyeOff, Send,
-  ChevronDown, ChevronUp, Activity
+  ChevronDown, ChevronUp, Activity, Volume2, VolumeX
 } from 'lucide-react';
 import CodeIDE from '../../components/CodeIDE';
 
@@ -97,6 +98,25 @@ export default function LivingWorkplaceSimulation() {
   // ── Theme ────────────────────────────────────────────────────────────────
   const [themeKey, setThemeKey] = useState<SimThemeKey>('noir');
   const [showThemePicker, setShowThemePicker] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
+
+  // ─── TTS Hook ─────────────────────────────────────────────────────────────
+  const { speak, stop: stopTTS } = useTTS({ enabled: ttsEnabled, volume: 1.0 });
+
+  // Auto-speak new incoming events
+  const spokenEventsRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (!runtime) return;
+    const newEvents = runtime.eventStream.filter(e => !spokenEventsRef.current.has(e.id) && !e.isRead && (e.type === 'slack' || e.type === 'email' || e.type === 'notification' || e.type === 'escalation'));
+    if (newEvents.length > 0) {
+      newEvents.forEach(e => {
+        spokenEventsRef.current.add(e.id);
+        const stakeholder = runtime.stakeholderStates[e.fromStakeholderId];
+        speak(e, stakeholder);
+      });
+    }
+  }, [runtime?.eventStream, speak, runtime?.stakeholderStates]);
+
   const t = THEMES[themeKey];
 
   // ─── Camera Init ──────────────────────────────────────────────────────────
@@ -680,6 +700,19 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               <ShieldAlert className="w-3.5 h-3.5" /> {tabSwitches}
             </div>
           )}
+
+          {/* TTS Volume Toggle */}
+          <button
+            onClick={() => {
+              setTtsEnabled(!ttsEnabled);
+              if (ttsEnabled) stopTTS();
+            }}
+            className="w-9 h-9 rounded-lg border flex items-center justify-center transition-colors"
+            style={{ backgroundColor: t.surfaceAlt, borderColor: t.border, color: ttsEnabled ? t.accent : t.textMuted }}
+            title={ttsEnabled ? "Disable Voice" : "Enable Voice"}
+          >
+            {ttsEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+          </button>
 
           {/* Phase badge */}
           <div className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
