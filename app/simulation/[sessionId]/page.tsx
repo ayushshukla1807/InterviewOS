@@ -436,8 +436,8 @@ export default function LivingWorkplaceSimulation() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runtime, tabSwitches, sessionId]);
 
-  // ─── Proceed to Interview ─────────────────────────────────────────────────
-  const handleProceedToInterview = () => {
+  // ─── Proceed to Interview / Save Report ───────────────────────────────────
+  const handleProceedToInterview = async () => {
     if (!runtime || !blueprint) return;
     const actions = runtime.candidateActions;
     const stakeholders = Object.values(runtime.stakeholderStates);
@@ -466,6 +466,31 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
     sessionStorage.setItem(`simulation_summary_${sessionId}`, summary);
     localStorage.setItem(`simulation_summary_${sessionId}`, summary);
+    
+    // Save to Database
+    try {
+      const userStr = localStorage.getItem('interviewos_user');
+      const userId = userStr ? JSON.parse(userStr)._id : undefined;
+
+      await fetch('/api/reports/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          candidateName: blueprint.candidateName || 'Candidate',
+          sessionId,
+          role: blueprint.role,
+          company: blueprint.company,
+          score: hyrteScore?.total || 0,
+          fullReportData: hyrteScore,
+          runtimeSummary: summary,
+          phaseCompletedAt: phase,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to save report to DB:', err);
+    }
+
     const candidateName = blueprint.candidateName || 'Candidate';
     router.push(`/instructions?name=${encodeURIComponent(candidateName)}&track=DYNAMIC&simulationSessionId=${sessionId}`);
   };

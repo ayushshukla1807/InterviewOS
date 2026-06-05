@@ -58,45 +58,34 @@ export default function CandidateDashboard() {
       }
     ];
 
-    // Try fetching reports from MongoDB backend via Express
-    const fetchReports = async () => {
+    // Try fetching reports from MongoDB via Next.js API
+    const fetchReports = async (userId: string) => {
       try {
-        const token = localStorage.getItem('interviewos_token');
-        if (!token) {
-          // If guest, fall back to local storage
-          const savedApps = localStorage.getItem('interviewos_applications') || '[]';
-          const parsedApps = JSON.parse(savedApps);
-          loadLocalStorageRecords(parsedApps);
-          return;
-        }
-
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5001';
-        const res = await fetch(`${backendUrl}/api/reports`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        const res = await fetch(`/api/reports/user/${userId}`);
         if (res.ok) {
-          const dbApps = await res.json();
-          if (Array.isArray(dbApps) && dbApps.length > 0) {
-            const formatted = dbApps.map((a: any, idx: number) => ({
-              id: a.id || `INT-${1000 + idx}`,
-              jobTitle: a.jobTitle || a.simulation?.title || 'AI Fullstack & System Engineer',
-              date: new Date(a.timestamp || Date.now()).toISOString().split('T')[0],
+          const data = await res.json();
+          if (data.reports && data.reports.length > 0) {
+            const formatted = data.reports.map((a: any) => ({
+              id: a.sessionId.substring(0, 8).toUpperCase(),
+              jobTitle: `${a.role} at ${a.company}`,
+              date: new Date(a.createdAt).toISOString().split('T')[0],
               score: a.score,
               status: 'Completed',
-              feedbackUrl: `/feedback/candidate?name=${encodeURIComponent(a.candidateName)}&track=${a.track || 'DYNAMIC'}`,
-              skills: { JS: a.score, DSA: a.score - 5 > 0 ? a.score - 5 : 60, System: a.score + 2 <= 100 ? a.score + 2 : 98, Communication: 90 }
+              feedbackUrl: `/report?sessionId=${a.sessionId}&name=${encodeURIComponent(a.candidateName)}&role=${encodeURIComponent(a.role)}&company=${encodeURIComponent(a.company)}`,
+              skills: { 
+                Skill: a.fullReportData?.directSkill?.score || 0, 
+                Embedded: a.fullReportData?.embeddedSkills?.score || 0, 
+                Workplace: a.fullReportData?.workplaceIntelligence?.score || 0 
+              }
             }));
             setPastInterviews(formatted);
-          } else {
-            setPastInterviews(defaultPastRecords);
+            return;
           }
-        } else {
-          // Fallback if request is not ok
-          const savedApps = localStorage.getItem('interviewos_applications') || '[]';
-          loadLocalStorageRecords(JSON.parse(savedApps));
         }
+        
+        // Fallback to local storage if API fails or no reports
+        const savedApps = localStorage.getItem('interviewos_applications') || '[]';
+        loadLocalStorageRecords(JSON.parse(savedApps));
       } catch (err) {
         console.error('Failed to load candidate reports from MongoDB API:', err);
         const savedApps = localStorage.getItem('interviewos_applications') || '[]';
@@ -121,7 +110,13 @@ export default function CandidateDashboard() {
       }
     };
 
-    fetchReports();
+    const userStr = localStorage.getItem('interviewos_user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      fetchReports(user._id);
+    } else {
+      loadLocalStorageRecords([]);
+    }
   }, []);
 
   const clearHistory = () => {

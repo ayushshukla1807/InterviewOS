@@ -15,8 +15,25 @@ interface ActiveSession {
 }
 
 export default function RecruiterDashboard() {
-  const [activeTab, setActiveTab] = useState<'candidates' | 'live' | 'templates'>('live');
+  const [activeTab, setActiveTab] = useState<'candidates' | 'live' | 'templates' | 'users'>('live');
   const [liveSessions, setLiveSessions] = useState<ActiveSession[]>([]);
+  const [dbReports, setDbReports] = useState<any[]>([]);
+  const [dbUsers, setDbUsers] = useState<any[]>([]);
+  const [isLoadingDb, setIsLoadingDb] = useState(false);
+
+  // Fetch from MongoDB
+  useEffect(() => {
+    if (activeTab === 'candidates' || activeTab === 'users') {
+      setIsLoadingDb(true);
+      fetch('/api/recruiter/data')
+        .then(res => res.json())
+        .then(data => {
+          if (data.reports) setDbReports(data.reports);
+          if (data.users) setDbUsers(data.users);
+        })
+        .finally(() => setIsLoadingDb(false));
+    }
+  }, [activeTab]);
 
   // Poll localStorage for active simulations (demo of "live" tracking)
   useEffect(() => {
@@ -70,7 +87,8 @@ export default function RecruiterDashboard() {
           <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/10">
             {[
               { id: 'live', label: 'Live Monitor', icon: Activity },
-              { id: 'candidates', label: 'Hiring Reports', icon: Users },
+              { id: 'candidates', label: 'Hiring Reports', icon: FileText },
+              { id: 'users', label: 'User Directory', icon: Users },
               { id: 'templates', label: 'Role Blueprints', icon: Layers },
             ].map(tab => (
               <button
@@ -191,15 +209,97 @@ export default function RecruiterDashboard() {
               <div className="flex items-end justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Completed Reports</h1>
-                  <p className="text-white/50">Full PDF-ready HYRTE evaluation reports.</p>
+                  <p className="text-white/50">Full PDF-ready HYRTE evaluation reports stored in Database.</p>
                 </div>
               </div>
 
-              <div className="border border-white/10 bg-[#111115] rounded-2xl p-8 text-center">
-                <FileText className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-white/80 mb-2">No Reports Yet</h3>
-                <p className="text-white/40 max-w-md mx-auto mb-6">Reports will appear here once candidates complete their simulations. To view a demo report, complete a simulation yourself or check the Live Monitor.</p>
+              {isLoadingDb ? (
+                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
+              ) : dbReports.length === 0 ? (
+                <div className="border border-white/10 bg-[#111115] rounded-2xl p-8 text-center">
+                  <FileText className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-white/80 mb-2">No Reports Yet</h3>
+                  <p className="text-white/40 max-w-md mx-auto mb-6">Reports will appear here once candidates complete their simulations.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {dbReports.map((report: any) => (
+                    <div key={report._id} className="border border-white/10 bg-[#111115] rounded-2xl p-6 flex flex-col hover:border-white/20 transition-colors">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-lg font-bold">{report.candidateName}</h3>
+                          <p className="text-xs text-white/50">{report.role} · {report.company}</p>
+                        </div>
+                        <div className={`text-xl font-black ${report.score >= 80 ? 'text-emerald-400' : report.score >= 60 ? 'text-amber-400' : 'text-red-400'}`}>
+                          {report.score}
+                        </div>
+                      </div>
+                      <div className="text-xs text-white/40 mb-6">
+                        Completed: {new Date(report.createdAt).toLocaleDateString()}
+                      </div>
+                      <Link href={`/report?sessionId=${report.sessionId}&name=${encodeURIComponent(report.candidateName)}&role=${encodeURIComponent(report.role)}&company=${encodeURIComponent(report.company)}`} className="mt-auto">
+                        <button className="w-full py-2.5 rounded-lg bg-violet-600/10 text-violet-400 hover:bg-violet-600/20 transition-colors border border-violet-500/20 text-sm font-semibold flex items-center justify-center gap-2">
+                          <FileText className="w-4 h-4" /> View Full Report
+                        </button>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* ── USER DIRECTORY ────────────────────────────────────────────── */}
+          {activeTab === 'users' && (
+            <motion.div
+              key="users"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-8"
+            >
+              <div className="flex items-end justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold mb-2">User Directory</h1>
+                  <p className="text-white/50">All registered users (login/signup data) in the Database.</p>
+                </div>
               </div>
+
+              {isLoadingDb ? (
+                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
+              ) : dbUsers.length === 0 ? (
+                <div className="border border-white/10 bg-[#111115] rounded-2xl p-8 text-center">
+                  <Users className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-white/80 mb-2">No Users Found</h3>
+                </div>
+              ) : (
+                <div className="overflow-x-auto border border-white/10 rounded-2xl bg-[#111115]">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-white/5 border-b border-white/10">
+                      <tr>
+                        <th className="px-6 py-4 font-semibold text-white/80">Name</th>
+                        <th className="px-6 py-4 font-semibold text-white/80">Email</th>
+                        <th className="px-6 py-4 font-semibold text-white/80">Role</th>
+                        <th className="px-6 py-4 font-semibold text-white/80">Registered At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {dbUsers.map((user: any) => (
+                        <tr key={user._id} className="hover:bg-white/[0.02]">
+                          <td className="px-6 py-4 font-medium">{user.name}</td>
+                          <td className="px-6 py-4 text-white/50">{user.email}</td>
+                          <td className="px-6 py-4">
+                            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-xs text-white/70 capitalize">
+                              {user.role || 'candidate'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-white/50">{new Date(user.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </motion.div>
           )}
 
