@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Shield, BrainCircuit, Code2, Briefcase, Award, 
   ArrowRight, ExternalLink, Calendar, CheckCircle2, 
-  BookOpen, Sparkles, Star, ClipboardList, RefreshCw 
+  BookOpen, Sparkles, Star, ClipboardList, RefreshCw, Share2 
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -178,15 +178,29 @@ export default function CandidateDashboard() {
             <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-8 space-y-6 backdrop-blur-xl">
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400">Account Profile</h2>
               
-              <div className="flex items-center gap-4 p-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-sm">
-                <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold text-indigo-400 uppercase text-lg">
-                  {candidateContext?.name?.[0] || 'C'}
-                </div>
-                <div>
-                  <h3 className="text-sm font-black text-[var(--text)]">{candidateContext?.name || 'Guest Candidate'}</h3>
-                  <p className="text-[10px] text-slate-500">{candidateContext?.email || 'no-email@interviewos.ai'}</p>
+              <div className="flex items-center justify-between p-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-2xl shadow-sm">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold text-indigo-400 uppercase text-lg">
+                    {candidateContext?.name?.[0] || 'C'}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-[var(--text)]">{candidateContext?.name || 'Guest Candidate'}</h3>
+                    <p className="text-[10px] text-slate-500">{candidateContext?.email || 'no-email@interviewos.ai'}</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Feature 4: Public Profile Sharing */}
+              <button 
+                onClick={() => {
+                  const url = `${window.location.origin}/report?sessionId=${pastInterviews[0]?.id || 'demo'}&name=${encodeURIComponent(candidateContext?.name || 'Guest')}&public=true`;
+                  navigator.clipboard.writeText(url);
+                  alert('Public Profile Link copied to clipboard!');
+                }}
+                className="w-full py-3 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-400 border border-indigo-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+              >
+                <Share2 className="w-3.5 h-3.5" /> Share Verified Profile
+              </button>
 
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="p-4 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl">

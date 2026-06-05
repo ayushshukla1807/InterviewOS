@@ -63,7 +63,7 @@ export default function LivingWorkplaceSimulation() {
   const [recoveryResponse, setRecoveryResponse] = useState('');
 
   // ── UI State ─────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<'slack' | 'email' | 'tasks' | 'calendar'>('slack');
+  const [activeTab, setActiveTab] = useState<'slack' | 'email' | 'tasks' | 'calendar' | 'wiki'>('slack');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [isProcessingAction, setIsProcessingAction] = useState(false);
@@ -99,6 +99,51 @@ export default function LivingWorkplaceSimulation() {
   const [themeKey, setThemeKey] = useState<SimThemeKey>('noir');
   const [showThemePicker, setShowThemePicker] = useState(false);
   const [ttsEnabled, setTtsEnabled] = useState(true);
+
+  // ── Candidate Stress Level (Feature 6) & Coworker Interruptions (Feature 5) ──
+  const [stressLevel, setStressLevel] = useState(0); // 0 to 100
+
+  // Feature 6: Stress Indicator Engine
+  useEffect(() => {
+    if (!runtime || phase !== 'workspace') return;
+    const interval = setInterval(() => {
+      setStressLevel(prev => {
+        let newStress = prev;
+        const unreadCount = runtime.eventStream.filter(e => !e.isRead).length;
+        if (unreadCount > 2) newStress += 5;
+        if (unreadCount === 0) newStress -= 2;
+        if (timeLeft < 300) newStress += 2; // last 5 mins
+        if (runtime.chaosWaveActive) newStress += 10;
+        return Math.max(0, Math.min(100, newStress));
+      });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [runtime?.eventStream, timeLeft, runtime?.chaosWaveActive, phase]);
+
+  // Feature 5: Dynamic Coworker Interruptions
+  useEffect(() => {
+    if (!runtime || phase !== 'workspace') return;
+    const interval = setInterval(() => {
+      // 30% chance every 45 seconds to get a random ping
+      if (Math.random() > 0.7) {
+        const pingEvent: SimulationEvent = {
+          id: `ping_${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          type: 'slack',
+          priority: 'LOW',
+          fromStakeholderId: Object.keys(runtime.stakeholderStates)[0] || 'Coworker',
+          content: 'Hey, do you want to grab lunch soon? Or are you swamped?',
+          requiresAction: true,
+          isRead: false,
+        };
+        setRuntime(prev => {
+          if (!prev) return prev;
+          return { ...prev, eventStream: [pingEvent, ...prev.eventStream] };
+        });
+      }
+    }, 45000);
+    return () => clearInterval(interval);
+  }, [runtime, phase]);
 
   // ─── TTS Hook ─────────────────────────────────────────────────────────────
   const { speak, stop: stopTTS } = useTTS({ enabled: ttsEnabled, volume: 1.0 });
@@ -719,7 +764,20 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         </div>
 
         {/* Right: Alerts + Timer + Theme + Score + Submit */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          
+          {/* Feature 6: Stress Indicator */}
+          <div className="hidden md:flex flex-col items-end gap-1 px-3 py-1.5 rounded-lg border bg-black/20"
+               style={{ borderColor: t.border }}>
+            <div className="flex items-center gap-2">
+              <Activity className={`w-3.5 h-3.5 ${stressLevel > 75 ? 'text-red-500 animate-pulse' : stressLevel > 40 ? 'text-amber-500' : 'text-emerald-500'}`} />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">Stress Level</span>
+            </div>
+            <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div className={`h-full transition-all duration-1000 ${stressLevel > 75 ? 'bg-red-500' : stressLevel > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`} style={{ width: `${stressLevel}%` }} />
+            </div>
+          </div>
+
           {tabSwitches > 0 && (
             <div className="px-2.5 py-1.5 text-red-400 rounded-lg text-xs font-bold border border-red-500/20 bg-red-500/10 animate-pulse flex items-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5" /> {tabSwitches}
@@ -814,6 +872,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             { key: 'email', icon: <Mail className="w-4.5 h-4.5" />, count: runtime.eventStream.filter(e => e.type === 'email' && !e.isRead).length },
             { key: 'tasks', icon: <ClipboardCheck className="w-4.5 h-4.5" />, count: runtime.eventStream.filter(e => e.type === 'task' && !e.isRead).length },
             { key: 'calendar', icon: <Calendar className="w-4.5 h-4.5" />, count: 0 },
+            { key: 'wiki', icon: <BookOpen className="w-4.5 h-4.5" />, count: 0 },
           ] as const).map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key as typeof activeTab)}
               className="relative w-10 h-10 rounded-xl flex items-center justify-center transition-all"
@@ -826,7 +885,39 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
           ))}
         </div>
 
-        {/* Inbox List */}
+        {/* Feature 8: Wiki Main View */}
+        {activeTab === 'wiki' ? (
+          <div className="flex-1 overflow-y-auto p-10 space-y-8" style={{ backgroundColor: t.bg }}>
+             <div className="max-w-4xl mx-auto space-y-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center border" style={{ backgroundColor: t.surfaceAlt, borderColor: t.border }}>
+                    <BookOpen className="w-8 h-8" style={{ color: t.accent }} />
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-bold" style={{ color: t.textPrimary }}>Company Internal Wiki</h1>
+                    <p style={{ color: t.textSecondary }}>Confidential guidelines and policies. Employees must consult these before making critical decisions.</p>
+                  </div>
+                </div>
+                
+                <div className="grid gap-6">
+                  <div className="p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                      <h3 className="text-lg font-bold mb-2 flex items-center gap-2" style={{ color: t.textPrimary }}><ShieldAlert className="w-4 h-4 text-red-400" /> Policy 41A: Incident Response</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: t.textMuted }}>In the event of a critical system failure or data breach, employees must NOT respond to external media or stakeholders without explicit approval from Legal. The primary directive is to immediately isolate the system and inform the VP of Engineering.</p>
+                  </div>
+                  <div className="p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                      <h3 className="text-lg font-bold mb-2 flex items-center gap-2" style={{ color: t.textPrimary }}><Target className="w-4 h-4 text-amber-400" /> Policy 12B: Resource Allocation</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: t.textMuted }}>When two projects demand the same engineering resources, priority is given to the project with immediate revenue impact (Tier 1) over infrastructure improvements (Tier 2), unless the infrastructure risk exceeds an estimated 99.9% uptime failure.</p>
+                  </div>
+                  <div className="p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: t.surface, borderColor: t.border }}>
+                      <h3 className="text-lg font-bold mb-2 flex items-center gap-2" style={{ color: t.textPrimary }}><Users className="w-4 h-4 text-emerald-400" /> Culture Guide: Communication</h3>
+                      <p className="text-sm leading-relaxed" style={{ color: t.textMuted }}>We value radical candor. However, public channels are for alignment, not debate. Take disagreements to DMs or synchronous meetings. If you make a mistake, "Retract & Apologize" early rather than attempting to quietly fix it.</p>
+                  </div>
+                </div>
+             </div>
+          </div>
+        ) : (
+          <>
+            {/* Inbox List */}
         <div className="w-[320px] border-r flex flex-col shrink-0 overflow-hidden"
           style={{ backgroundColor: t.surface, borderColor: t.border }}>
           <div className="px-4 py-2.5 border-b flex justify-between items-center" style={{ borderColor: t.border }}>
@@ -961,10 +1052,20 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                         <button
                           onClick={() => handleAction('escalated', selectedEvent.id)}
                           disabled={isProcessingAction}
-                          className="px-4 py-2 rounded-lg text-xs font-semibold border transition-all"
+                          className="px-4 py-2 rounded-lg text-xs font-semibold border transition-all hover:-translate-y-0.5"
                           style={{ color: '#f87171', borderColor: 'rgba(248,113,113,0.25)', backgroundColor: 'rgba(248,113,113,0.06)' }}
                         >
                           Escalate
+                        </button>
+                        {/* Feature 7: Retract / Apologize */}
+                        <button
+                          onClick={() => handleAction('retracted_apologized' as CandidateActionType, selectedEvent.id)}
+                          disabled={isProcessingAction}
+                          className="px-4 py-2 rounded-lg text-xs font-semibold border transition-all hover:-translate-y-0.5"
+                          style={{ color: '#8b5cf6', borderColor: 'rgba(139,92,246,0.25)', backgroundColor: 'rgba(139,92,246,0.06)' }}
+                          title="If you realize you made a mistake, take accountability."
+                        >
+                          Retract & Apologize
                         </button>
                       </div>
                       <button
@@ -1004,7 +1105,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               </div>
             )}
 
-            {/* Current Challenge Overlay */}
+        {/* Current Challenge Overlay */}
             {runtime.currentChallenge && (
               <div
                 className="absolute top-4 right-4 w-72 rounded-xl shadow-2xl overflow-hidden z-30 border"
@@ -1074,6 +1175,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             </div>
           )}
         </div>
+        </>
+      )}
 
         {/* ── Right Panel: Live Behavioral Monitor ──────────────────────── */}
         <div

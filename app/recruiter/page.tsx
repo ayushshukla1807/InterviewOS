@@ -28,12 +28,46 @@ export default function RecruiterDashboard() {
       fetch('/api/recruiter/data')
         .then(res => res.json())
         .then(data => {
-          if (data.reports) setDbReports(data.reports);
+          if (data.reports) {
+            // Sort reports by score descending for Leaderboard effect
+            setDbReports(data.reports.sort((a: any, b: any) => b.score - a.score));
+          }
           if (data.users) setDbUsers(data.users);
         })
         .finally(() => setIsLoadingDb(false));
     }
   }, [activeTab]);
+
+  // Feature 2: CSV Export
+  const exportToCSV = () => {
+    if (!dbReports.length) return;
+    const headers = ['Candidate Name', 'Role', 'Company', 'Score', 'Direct Skill', 'Embedded Skills', 'Workplace Intelligence', 'Date Completed', 'Session ID'];
+    const rows = dbReports.map(r => [
+      `"${r.candidateName}"`, `"${r.role}"`, `"${r.company}"`, r.score,
+      r.fullReportData?.directSkill?.score || 0,
+      r.fullReportData?.embeddedSkills?.score || 0,
+      r.fullReportData?.workplaceIntelligence?.score || 0,
+      new Date(r.createdAt).toISOString().split('T')[0], 
+      r.sessionId
+    ]);
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + headers.join(',') + '\\n' 
+      + rows.map(e => e.join(',')).join('\\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "interviewos_hiring_leaderboard.csv");
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  // Feature 3: Global Analytics Calculations
+  const avgScore = dbReports.length ? Math.round(dbReports.reduce((sum, r) => sum + r.score, 0) / dbReports.length) : 0;
+  const topRoleEntry = dbReports.length ? Object.entries(dbReports.reduce((acc, r) => {
+    acc[r.role] = (acc[r.role] || 0) + 1; return acc;
+  }, {} as Record<string, number>)).sort((a: any, b: any) => b[1] - a[1])[0] : null;
+  const topRole = topRoleEntry ? topRoleEntry[0] : '--';
 
   // Poll localStorage for active simulations (demo of "live" tracking)
   useEffect(() => {
@@ -208,10 +242,50 @@ export default function RecruiterDashboard() {
             >
               <div className="flex items-end justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Completed Reports</h1>
-                  <p className="text-white/50">Full PDF-ready HYRTE evaluation reports stored in Database.</p>
+                  <h1 className="text-3xl font-bold mb-2">Leaderboard & Reports</h1>
+                  <p className="text-white/50">Candidates ranked by overall HYRTE score.</p>
                 </div>
+                <button 
+                  onClick={exportToCSV}
+                  disabled={dbReports.length === 0}
+                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 transition-colors rounded-lg text-sm font-semibold border border-white/10"
+                >
+                  <BarChart className="w-4 h-4" /> Export CSV Leaderboard
+                </button>
               </div>
+
+              {/* Feature 3: Analytics Overview */}
+              {!isLoadingDb && dbReports.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-violet-500/20 flex items-center justify-center border border-violet-500/30">
+                      <Users className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Total Candidates</div>
+                      <div className="text-2xl font-black">{dbReports.length}</div>
+                    </div>
+                  </div>
+                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                      <Activity className="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Avg Platform Score</div>
+                      <div className="text-2xl font-black">{avgScore}</div>
+                    </div>
+                  </div>
+                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
+                      <Target className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Most Active Role</div>
+                      <div className="text-md font-bold truncate max-w-[150px]">{topRole}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {isLoadingDb ? (
                 <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
