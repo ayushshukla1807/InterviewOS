@@ -2,40 +2,14 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Editor from '@monaco-editor/react';
-import {
-  Play, Send, Terminal, CheckCircle2, XCircle, Clock,
-  Zap, MemoryStick, Lightbulb, Code2, ChevronDown,
-  RotateCcw, Loader2, Award, AlertTriangle, TrendingUp,
-  RefreshCw, Plus, ChevronRight, Copy, Check,
-} from 'lucide-react';
+import { Play, Send, ChevronDown, RotateCcw, Loader2, CheckCircle2, XCircle, AlertCircle, Maximize2, Minimize2 } from 'lucide-react';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
-interface TestCase {
-  id: string;
-  input: string;
-  expected: string;
-  description?: string;
-}
-interface TestResult {
-  id: string;
-  input: string;
-  expected: string;
-  actual: string;
-  passed: boolean;
-  error?: string;
-  runtimeMs: number;
-  memory?: string;
-}
+// ─── Types ───────────────────────────────────────────────────────────────────
+interface TestCase { id: string; input: string; expected: string; description?: string; }
 interface CodeReview {
-  verdict: string;
-  score: number;
-  timeComplexity: string;
-  spaceComplexity: string;
-  isOptimal: boolean;
-  strengths: string[];
-  improvements: string[];
-  interviewFeedback: string;
-  optimalApproach: string;
+  verdict: string; score: number; timeComplexity: string; spaceComplexity: string;
+  isOptimal: boolean; strengths: string[]; improvements: string[];
+  interviewFeedback: string; optimalApproach: string;
 }
 interface CodeIDEProps {
   problem: string;
@@ -45,427 +19,367 @@ interface CodeIDEProps {
   language?: string;
   tags?: string[];
   onSubmit?: (code: string, language: string, review: CodeReview | null) => void;
-  theme?: {
-    bg: string; surface: string; surfaceAlt: string; border: string;
-    textPrimary: string; textSecondary: string; textMuted: string;
-    accent: string; accentText: string; accentBg: string; accentBorder: string;
-    fontFamily?: string;
-  };
+  theme?: Record<string, string>;
 }
 
-// ─── Language Config ─────────────────────────────────────────────────────────
-const LANGUAGES = [
-  { id: 'javascript', label: 'JavaScript', monaco: 'javascript', icon: 'JS' },
-  { id: 'typescript', label: 'TypeScript', monaco: 'typescript', icon: 'TS' },
-  { id: 'python',     label: 'Python 3',   monaco: 'python',     icon: 'PY' },
-  { id: 'java',       label: 'Java',       monaco: 'java',       icon: 'JV' },
-  { id: 'cpp',        label: 'C++',        monaco: 'cpp',        icon: 'C+' },
-  { id: 'go',         label: 'Go',         monaco: 'go',         icon: 'GO' },
+// ─── Language Config ──────────────────────────────────────────────────────────
+const LANGS = [
+  { id: 'python',     label: 'Python (3.11.5)', monaco: 'python'     },
+  { id: 'javascript', label: 'JavaScript (Node 18)', monaco: 'javascript' },
+  { id: 'typescript', label: 'TypeScript (5.0)',  monaco: 'typescript' },
+  { id: 'java',       label: 'Java (OpenJDK 17)', monaco: 'java'       },
+  { id: 'cpp',        label: 'C++ (GCC 12)',      monaco: 'cpp'        },
+  { id: 'go',         label: 'Go (1.21)',         monaco: 'go'         },
 ];
 
-const BOILERPLATES: Record<string, string> = {
-  javascript: `/**
- * @param {any} input - parsed JSON input
- * @return {any}
- */
-function solution(input) {
-  // Write your solution here
-  
-}
+const STARTERS: Record<string, string> = {
+  python: `# Your code here
+def solution(n, nums):
+    # implement your solution
+    pass
 
-// Test your solution
-const input = JSON.parse(process.argv[2] || 'null');
-const result = solution(input);
-console.log(JSON.stringify(result));`,
-
-  typescript: `function solution(input: unknown): unknown {
-  // Write your solution here
-  return input;
-}
-
-const input = JSON.parse(process.argv[2] || 'null');
-const result = solution(input);
-console.log(JSON.stringify(result));`,
-
-  python: `import sys
-import json
-
-def solution(input_data):
-    # Write your solution here
-    return input_data
-
-if __name__ == "__main__":
-    raw = sys.argv[1] if len(sys.argv) > 1 else "null"
-    data = json.loads(raw)
-    result = solution(data)
-    print(json.dumps(result))`,
-
+import sys
+data = sys.stdin.read().split()
+`,
+  javascript: `// Your code here
+process.stdin.resume();
+process.stdin.setEncoding('utf8');
+let input = '';
+process.stdin.on('data', d => input += d);
+process.stdin.on('end', () => {
+  const lines = input.trim().split('\\n');
+  // parse input and write your solution
+  console.log(lines[0]);
+});`,
+  typescript: `// Your code here
+import * as readline from 'readline';
+const rl = readline.createInterface({ input: process.stdin });
+const lines: string[] = [];
+rl.on('line', l => lines.push(l));
+rl.on('close', () => {
+  // parse lines[] and write your solution
+  console.log(lines[0]);
+});`,
   java: `import java.util.*;
+import java.io.*;
 
 public class Solution {
-    public static Object solve(Object input) {
-        // Write your solution here
-        return input;
-    }
-    
-    public static void main(String[] args) {
-        // Test your solution here
-        System.out.println(solve(args.length > 0 ? args[0] : null));
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // Read input
+        String line = br.readLine();
+        // Write your solution
+        System.out.println(line);
     }
 }`,
-
   cpp: `#include <bits/stdc++.h>
 using namespace std;
 
-// Write your solution here
-string solution(string input) {
-    return input;
-}
-
 int main() {
-    string input;
-    if (cin >> input) {
-        cout << solution(input) << endl;
-    }
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    // Read input
+    int n;
+    cin >> n;
+    
+    // Write your solution
+    cout << n << endl;
     return 0;
 }`,
-
   go: `package main
 
 import (
-    "encoding/json"
+    "bufio"
     "fmt"
     "os"
 )
 
-func solution(input interface{}) interface{} {
-    // Write your solution here
-    return input
-}
-
 func main() {
-    var input interface{}
-    if len(os.Args) > 1 {
-        json.Unmarshal([]byte(os.Args[1]), &input)
-    }
-    result := solution(input)
-    out, _ := json.Marshal(result)
-    fmt.Println(string(out))
+    reader := bufio.NewReader(os.Stdin)
+    // Read input
+    var n int
+    fmt.Fscan(reader, &n)
+    // Write your solution
+    fmt.Println(n)
 }`,
 };
 
-const DIFFICULTY_COLOR = {
-  Easy:   { color: '#22c55e', bg: 'rgba(34,197,94,0.1)',   border: 'rgba(34,197,94,0.25)'   },
-  Medium: { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.25)'  },
-  Hard:   { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   border: 'rgba(239,68,68,0.25)'   },
-};
+const DIFF_COLOR: Record<string, string> = { Easy: '#00b8a3', Medium: '#ffc01e', Hard: '#ff375f' };
 
-// ─── Execute via Judge0 ──────────────────────────────────────────────────────
-async function executeCode(
-  code: string,
-  language: string,
-  stdin: string
-): Promise<{ stdout: string; stderr: string; status: string; time: string; memory: string }> {
+async function runCode(code: string, language: string, stdin: string) {
   const res = await fetch('/api/execute', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code, language, stdin }),
   });
-  return res.json();
+  return res.json() as Promise<{ stdout: string; stderr: string; status: string; time: string; memory: string; error?: string }>;
 }
 
-// ─── Main Component ──────────────────────────────────────────────────────────
-export default function CodeIDE({
-  problem, difficulty = 'Medium', testCases = [], initialCode = '',
-  language = 'javascript', tags = [], onSubmit, theme,
-}: CodeIDEProps) {
-  const t = theme ?? {
-    bg: '#0d0d0f', surface: '#111113', surfaceAlt: '#18181b',
-    border: 'rgba(255,255,255,0.07)', textPrimary: '#f1f5f9',
-    textSecondary: '#94a3b8', textMuted: '#475569',
-    accent: '#6366f1', accentText: '#a5b4fc',
-    accentBg: 'rgba(99,102,241,0.1)', accentBorder: 'rgba(99,102,241,0.3)',
-    fontFamily: 'Inter, sans-serif',
-  };
-
+// ─── Component ───────────────────────────────────────────────────────────────
+export default function CodeIDE({ problem, difficulty = 'Medium', testCases = [], initialCode = '', language = 'python', tags = [], onSubmit }: CodeIDEProps) {
   const [lang, setLang] = useState(language);
-  const [code, setCode] = useState(initialCode || BOILERPLATES[language] || '');
-  const [activePanel, setActivePanel] = useState<'tests' | 'console' | 'review'>('tests');
-  const [testResults, setTestResults] = useState<TestResult[]>([]);
-  const [consoleLines, setConsoleLines] = useState<string[]>([]);
+  const [code, setCode] = useState(initialCode || STARTERS[language] || '');
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const [customInput, setCustomInput] = useState(testCases[0]?.input || '');
+  const [output, setOutput] = useState('');
+  const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState<'INPUT' | 'OUTPUT' | 'ERROR'>('INPUT');
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [runResult, setRunResult] = useState<{ status: string; time: string; memory: string } | null>(null);
+  const [verdict, setVerdict] = useState<'AC' | 'WA' | 'TLE' | 'CE' | 'RE' | null>(null);
   const [review, setReview] = useState<CodeReview | null>(null);
-  const [submissionCount, setSubmissionCount] = useState(0);
-  const [activeTestIdx, setActiveTestIdx] = useState(0);
-  const [showLangMenu, setShowLangMenu] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [customInput, setCustomInput] = useState('');
-  const [activeTab, setActiveTab] = useState<'testcase' | 'custom'>('testcase');
+  const [bottomH, setBottomH] = useState(220);
+  const [isDragging, setIsDragging] = useState(false);
+  const [fullEditor, setFullEditor] = useState(false);
+  const dragStartY = useRef(0);
+  const dragStartH = useRef(0);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<unknown>(null);
 
-  const diffStyle = DIFFICULTY_COLOR[difficulty];
-  const currentLang = LANGUAGES.find(l => l.id === lang) || LANGUAGES[0];
-
-  // Reset code on lang change
   useEffect(() => {
-    if (!initialCode) setCode(BOILERPLATES[lang] || '// Write your solution here\n');
+    if (!initialCode) setCode(STARTERS[lang] || '# Write your code here\n');
   }, [lang, initialCode]);
 
-  // Keyboard shortcuts
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'Enter') {
-        e.preventDefault(); handleRun();
-      }
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter') {
-        e.preventDefault(); handleSubmit();
-      }
+    const h = (e: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) setShowLangMenu(false);
     };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [code, lang]);
-
-  // Close lang menu on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
-        setShowLangMenu(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('mousedown', h);
+    return () => document.removeEventListener('mousedown', h);
   }, []);
 
-  // ── Run: execute against test cases via Judge0 ──
+  // Drag to resize bottom panel
+  const onDragStart = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStartY.current = e.clientY;
+    dragStartH.current = bottomH;
+  };
+  useEffect(() => {
+    if (!isDragging) return;
+    const move = (e: MouseEvent) => {
+      const delta = dragStartY.current - e.clientY;
+      setBottomH(Math.max(120, Math.min(480, dragStartH.current + delta)));
+    };
+    const up = () => setIsDragging(false);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+  }, [isDragging]);
+
+  // Ctrl+Enter = Run, Ctrl+Shift+Enter = Submit
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'Enter') { e.preventDefault(); handleSubmit(); }
+      else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); handleRun(); }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code, lang, customInput]);
+
   const handleRun = useCallback(async () => {
     if (isRunning || !code.trim()) return;
     setIsRunning(true);
-    setActivePanel('tests');
-    setConsoleLines([]);
-
-    const cases = testCases.length > 0 ? testCases : [{
-      id: 'custom', input: customInput || 'null', expected: '', description: 'Custom input',
-    }];
-
-    const results: TestResult[] = [];
-    for (const tc of cases) {
-      const start = performance.now();
-      try {
-        const exec = await executeCode(code, lang, tc.input);
-        const runtimeMs = Math.round(performance.now() - start);
-        const actual = (exec.stdout || '').trim();
-        const expected = tc.expected.trim();
-        const passed = expected ? actual === expected : exec.status === 'Accepted';
-        const errorMsg = exec.stderr || (exec.status !== 'Accepted' && exec.status !== 'Wrong Answer' ? exec.status : '');
-
-        results.push({
-          id: tc.id, input: tc.input, expected: tc.expected,
-          actual: actual || exec.status,
-          passed, error: errorMsg || undefined,
-          runtimeMs: exec.time ? Math.round(parseFloat(exec.time) * 1000) : runtimeMs,
-          memory: exec.memory,
-        });
-
-        if (exec.stdout) {
-          exec.stdout.split('\n').filter(Boolean).forEach(l => setConsoleLines(p => [...p, l]));
-        }
-        if (exec.stderr) {
-          exec.stderr.split('\n').filter(Boolean).forEach(l => setConsoleLines(p => [...p, `[ERR] ${l}`]));
-        }
-      } catch {
-        results.push({ id: tc.id, input: tc.input, expected: tc.expected, actual: 'Execution Error', passed: false, runtimeMs: 0 });
+    setOutput(''); setError(''); setRunResult(null); setVerdict(null);
+    setActiveTab('OUTPUT');
+    try {
+      const res = await runCode(code, lang, customInput);
+      setRunResult({ status: res.status, time: res.time, memory: res.memory });
+      if (res.stderr || res.error) {
+        setError(res.stderr || res.error || '');
+        setActiveTab('ERROR');
+      } else {
+        setOutput(res.stdout || '(no output)');
+        setActiveTab('OUTPUT');
       }
+    } catch (e) {
+      setError(String(e));
+      setActiveTab('ERROR');
+    } finally {
+      setIsRunning(false);
     }
+  }, [code, lang, customInput, isRunning]);
 
-    setTestResults(results);
-    setIsRunning(false);
-  }, [code, lang, testCases, customInput, isRunning]);
-
-  // ── Submit: run + AI review ──
   const handleSubmit = useCallback(async () => {
     if (isSubmitting || !code.trim()) return;
     setIsSubmitting(true);
-    setActivePanel('review');
-    setSubmissionCount(c => c + 1);
-
-    // Run test cases first
-    const cases = testCases.length > 0 ? testCases : [];
-    const results: TestResult[] = [];
-    for (const tc of cases) {
-      try {
-        const exec = await executeCode(code, lang, tc.input);
-        const actual = (exec.stdout || '').trim();
-        results.push({
-          id: tc.id, input: tc.input, expected: tc.expected,
-          actual, passed: actual === tc.expected.trim(),
-          runtimeMs: exec.time ? Math.round(parseFloat(exec.time) * 1000) : 0,
-        });
-      } catch { /* skip */ }
-    }
-    setTestResults(results);
+    setOutput(''); setError(''); setVerdict(null);
 
     try {
-      const res = await fetch('/api/code-review', {
+      // Run against all test cases
+      let allPassed = true;
+      const results = [];
+      for (const tc of testCases) {
+        const res = await runCode(code, lang, tc.input);
+        const actual = (res.stdout || '').trim();
+        const expected = tc.expected.trim();
+        const passed = actual === expected;
+        if (!passed) allPassed = false;
+        results.push({ id: tc.id, input: tc.input, expected, actual, passed, runtimeMs: res.time ? Math.round(parseFloat(res.time) * 1000) : 0 });
+      }
+
+      setVerdict(allPassed ? 'AC' : 'WA');
+      setOutput(results.map((r, i) => `Case ${i + 1}: ${r.passed ? '✓ PASSED' : '✗ FAILED'}\n  Input:    ${r.input}\n  Expected: ${r.expected}\n  Got:      ${r.actual}`).join('\n\n') || 'No test cases to run');
+      setActiveTab('OUTPUT');
+
+      // AI Review
+      const reviewRes = await fetch('/api/code-review', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, language: lang, problem, testResults: results }),
       });
-      const data = await res.json();
-      setReview(data);
-      onSubmit?.(code, lang, data);
-    } catch {
-      setReview(null);
+      const reviewData = await reviewRes.json();
+      setReview(reviewData);
+      onSubmit?.(code, lang, reviewData);
+    } catch (e) {
+      setError(String(e));
+      setActiveTab('ERROR');
     } finally {
       setIsSubmitting(false);
     }
-  }, [code, lang, problem, testCases, isSubmitting, onSubmit]);
+  }, [code, lang, testCases, problem, isSubmitting, onSubmit]);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  };
-
-  const passedCount = testResults.filter(r => r.passed).length;
-  const allPassed = testResults.length > 0 && passedCount === testResults.length;
-  const hasErrors = testResults.some(r => !r.passed);
+  const currentLang = LANGS.find(l => l.id === lang) || LANGS[0];
+  const diffColor = DIFF_COLOR[difficulty] || '#ffc01e';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: t.bg, fontFamily: t.fontFamily, overflow: 'hidden' }}>
-
-      {/* ── Top Bar ── */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 12px', height: 44, borderBottom: `1px solid ${t.border}`, background: t.surface, flexShrink: 0 }}>
-        {/* Left: difficulty + tags */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Code2 size={14} style={{ color: t.textMuted }} />
-          <span style={{ fontSize: 10, fontWeight: 800, padding: '2px 8px', borderRadius: 20, color: diffStyle.color, background: diffStyle.bg, border: `1px solid ${diffStyle.border}` }}>
-            {difficulty}
-          </span>
-          {tags.slice(0, 3).map(tag => (
-            <span key={tag} style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 20, color: t.textMuted, background: t.surfaceAlt, border: `1px solid ${t.border}` }}>
-              {tag}
-            </span>
-          ))}
+    <div style={S.root}>
+      {/* ══ TOP NAV ══════════════════════════════════════════════ */}
+      <div style={S.topNav}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={S.problemTitle}>{problem.split('\n')[0].slice(0, 40) || 'Coding Challenge'}</span>
+          <span style={{ ...S.diffBadge, color: diffColor, borderColor: diffColor + '40', background: diffColor + '15' }}>{difficulty}</span>
         </div>
-
-        {/* Right: controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {/* Language selector */}
-          <div ref={langMenuRef} style={{ position: 'relative' }}>
-            <button
-              onClick={() => setShowLangMenu(p => !p)}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 10px', borderRadius: 8, border: `1px solid ${t.border}`, background: t.surfaceAlt, color: t.textSecondary, fontSize: 11, fontWeight: 700, cursor: 'pointer' }}
-            >
-              <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: t.accent }}>{currentLang.icon}</span>
-              {currentLang.label}
-              <ChevronDown size={11} />
-            </button>
-            {showLangMenu && (
-              <div style={{ position: 'absolute', right: 0, top: 36, width: 160, background: t.surface, border: `1px solid ${t.border}`, borderRadius: 12, boxShadow: '0 16px 48px rgba(0,0,0,0.5)', zIndex: 100, overflow: 'hidden' }}>
-                {LANGUAGES.map(l => (
-                  <button
-                    key={l.id}
-                    onClick={() => { setLang(l.id); setShowLangMenu(false); }}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '9px 14px', border: 'none', background: lang === l.id ? t.accentBg : 'transparent', color: lang === l.id ? t.accentText : t.textSecondary, fontSize: 12, fontWeight: 600, cursor: 'pointer', textAlign: 'left' }}
-                  >
-                    <span>{l.label}</span>
-                    {lang === l.id && <ChevronRight size={12} />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Copy */}
-          <button onClick={handleCopy} title="Copy code" style={{ padding: '5px 8px', borderRadius: 8, border: `1px solid ${t.border}`, background: t.surfaceAlt, color: t.textMuted, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-            {copied ? <Check size={13} style={{ color: '#22c55e' }} /> : <Copy size={13} />}
-          </button>
-
-          {/* Reset */}
-          <button onClick={() => setCode(BOILERPLATES[lang] || '')} title="Reset code" style={{ padding: '5px 8px', borderRadius: 8, border: `1px solid ${t.border}`, background: t.surfaceAlt, color: t.textMuted, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-            <RotateCcw size={13} />
-          </button>
-
-          {/* Run */}
-          <button
-            onClick={handleRun}
-            disabled={isRunning}
-            title="Run Code (Ctrl+Enter)"
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.08)', color: '#22c55e', fontSize: 11, fontWeight: 700, cursor: isRunning ? 'not-allowed' : 'pointer', opacity: isRunning ? 0.6 : 1 }}
-          >
-            {isRunning ? <Loader2 size={13} style={{ animation: 'spin 0.8s linear infinite' }} /> : <Play size={13} />}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {verdict && (
+            <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 12px', borderRadius: 6, background: verdict === 'AC' ? 'rgba(0,184,163,0.15)' : 'rgba(255,55,95,0.15)', color: verdict === 'AC' ? '#00b8a3' : '#ff375f', border: `1px solid ${verdict === 'AC' ? '#00b8a330' : '#ff375f30'}` }}>
+              {verdict === 'AC' ? 'Accepted' : verdict === 'WA' ? 'Wrong Answer' : verdict}
+            </span>
+          )}
+          <button onClick={handleRun} disabled={isRunning} style={S.runBtn}>
+            {isRunning ? <Loader2 size={13} style={{ animation: 'spin .7s linear infinite' }} /> : <Play size={13} />}
             Run
           </button>
-
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            title="Submit & AI Review (Ctrl+Shift+Enter)"
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, border: 'none', background: t.accent, color: '#fff', fontSize: 11, fontWeight: 700, cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.6 : 1, boxShadow: '0 4px 12px rgba(99,102,241,0.3)' }}
-          >
-            {isSubmitting ? <Loader2 size={13} style={{ animation: 'spin 0.8s linear infinite' }} /> : <Send size={13} />}
+          <button onClick={handleSubmit} disabled={isSubmitting} style={S.submitBtn}>
+            {isSubmitting ? <Loader2 size={13} style={{ animation: 'spin .7s linear infinite' }} /> : <Send size={13} />}
             Submit
           </button>
         </div>
       </div>
 
-      {/* ── Body: Split Left + Right ── */}
-      <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+      {/* ══ BODY ═════════════════════════════════════════════════ */}
+      <div style={S.body}>
 
-        {/* Left: Problem Panel */}
-        <div style={{ width: '38%', flexShrink: 0, borderRight: `1px solid ${t.border}`, display: 'flex', flexDirection: 'column', overflow: 'hidden', background: t.surface }}>
-          {/* Problem header */}
-          <div style={{ padding: '14px 18px 12px', borderBottom: `1px solid ${t.border}`, flexShrink: 0 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: t.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 6 }}>Problem Statement</div>
+        {/* ─── LEFT: Question Panel ─── */}
+        <div style={S.leftPanel}>
+          {/* Question header */}
+          <div style={S.qHeader}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <span style={{ fontSize: 15, fontWeight: 700, color: '#e6edf3' }}>
+                {problem.split('\n')[0] || 'Problem Statement'}
+              </span>
+            </div>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {tags.map(tag => (
-                <span key={tag} style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: t.accentBg, border: `1px solid ${t.accentBorder}`, color: t.accentText, fontWeight: 700 }}>
-                  {tag}
-                </span>
-              ))}
+              <span style={{ ...S.diffBadge, color: diffColor, borderColor: diffColor + '40', background: diffColor + '15' }}>{difficulty}</span>
+              {tags.map(t => <span key={t} style={S.tag}>{t}</span>)}
             </div>
           </div>
 
-          {/* Scrollable content */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '16px 18px' }}>
-            <p style={{ fontSize: 13, lineHeight: 1.75, color: t.textSecondary, whiteSpace: 'pre-wrap', marginBottom: 20 }}>
-              {problem}
-            </p>
+          {/* Scrollable body */}
+          <div style={S.qBody}>
+            {/* Problem text */}
+            <div style={{ marginBottom: 20 }}>
+              <p style={{ fontSize: 13, lineHeight: 1.8, color: '#8b949e', whiteSpace: 'pre-wrap' }}>
+                {problem}
+              </p>
+            </div>
 
             {/* Examples */}
-            {testCases.slice(0, 3).map((tc, i) => (
-              <div key={tc.id} style={{ marginBottom: 14, padding: 14, background: t.surfaceAlt, borderRadius: 12, border: `1px solid ${t.border}` }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: t.accent, marginBottom: 8 }}>Example {i + 1}</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 12 }}>
-                  <div><span style={{ color: t.textMuted, marginRight: 6 }}>Input:</span><code style={{ color: t.textPrimary, fontFamily: 'JetBrains Mono, monospace' }}>{tc.input}</code></div>
-                  <div><span style={{ color: t.textMuted, marginRight: 6 }}>Output:</span><code style={{ color: '#22c55e', fontFamily: 'JetBrains Mono, monospace' }}>{tc.expected}</code></div>
-                  {tc.description && <div style={{ color: t.textMuted, fontSize: 11, marginTop: 2 }}>{tc.description}</div>}
+            {testCases.slice(0, 2).map((tc, i) => (
+              <div key={tc.id} style={S.exampleBox}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#58a6ff', marginBottom: 10 }}>Example {i + 1}</div>
+                <div style={{ fontFamily: 'JetBrains Mono, Consolas, monospace', fontSize: 12, lineHeight: 2 }}>
+                  <div><span style={{ color: '#6e7681' }}>Input:    </span><span style={{ color: '#e6edf3' }}>{tc.input}</span></div>
+                  <div><span style={{ color: '#6e7681' }}>Output:   </span><span style={{ color: '#00b8a3' }}>{tc.expected}</span></div>
+                  {tc.description && <div style={{ marginTop: 6, color: '#6e7681', fontSize: 11 }}>{tc.description}</div>}
                 </div>
               </div>
             ))}
 
-            {/* Constraints / Shortcuts */}
-            <div style={{ marginTop: 20, padding: 14, background: t.surfaceAlt, borderRadius: 12, border: `1px solid ${t.border}` }}>
-              <div style={{ fontSize: 10, fontWeight: 800, color: t.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 10 }}>Shortcuts</div>
-              {[['Ctrl + Enter', 'Run code'], ['Ctrl + Shift + Enter', 'Submit + AI Review']].map(([k, v]) => (
-                <div key={k} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, alignItems: 'center' }}>
-                  <span style={{ fontSize: 11, color: t.textMuted }}>{v}</span>
-                  <code style={{ fontSize: 10, padding: '2px 6px', background: t.bg, border: `1px solid ${t.border}`, borderRadius: 4, color: t.textSecondary, fontFamily: 'JetBrains Mono, monospace' }}>{k}</code>
+            {/* AI Review (after submit) */}
+            {review && (
+              <div style={{ marginTop: 20, padding: 14, background: '#0d1117', borderRadius: 10, border: '1px solid #21262d' }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: '#58a6ff', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 10 }}>AI Review — Gemini</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: review.verdict === 'Accepted' ? '#00b8a3' : '#ff375f' }}>{review.verdict}</span>
+                  <span style={{ fontSize: 22, fontWeight: 900, color: '#58a6ff' }}>{review.score}<span style={{ fontSize: 11, color: '#6e7681' }}>/100</span></span>
                 </div>
-              ))}
-            </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+                  {[['Time', review.timeComplexity], ['Space', review.spaceComplexity]].map(([l, v]) => (
+                    <div key={l} style={{ padding: '8px 10px', background: '#161b22', borderRadius: 8, border: '1px solid #21262d' }}>
+                      <div style={{ fontSize: 9, color: '#6e7681', marginBottom: 3, textTransform: 'uppercase' }}>{l}</div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: '#e6edf3', fontFamily: 'JetBrains Mono, monospace' }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+                <p style={{ fontSize: 12, lineHeight: 1.7, color: '#8b949e', marginBottom: 10 }}>{review.interviewFeedback}</p>
+                {review.improvements?.length > 0 && (
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#ffc01e', marginBottom: 6 }}>To Improve</div>
+                    {review.improvements.slice(0, 2).map((imp, i) => (
+                      <div key={i} style={{ fontSize: 11, color: '#8b949e', marginBottom: 4, paddingLeft: 12, borderLeft: '2px solid #ffc01e40' }}>{imp}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right: Editor + Output */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        {/* ─── RESIZER ─── */}
+        <div style={S.colResizer} />
 
-          {/* Monaco Editor */}
-          <div style={{ flex: 1, minHeight: 200, position: 'relative' }}>
+        {/* ─── RIGHT: Editor + Bottom ─── */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
+
+          {/* Editor top bar */}
+          <div style={S.editorTopBar}>
+            {/* Language selector */}
+            <div ref={langMenuRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setShowLangMenu(p => !p)}
+                style={S.langBtn}
+              >
+                {currentLang.label}
+                <ChevronDown size={12} />
+              </button>
+              {showLangMenu && (
+                <div style={S.langMenu}>
+                  {LANGS.map(l => (
+                    <button
+                      key={l.id}
+                      onClick={() => { setLang(l.id); setShowLangMenu(false); }}
+                      style={{ ...S.langOption, background: lang === l.id ? '#1f2937' : 'transparent', color: lang === l.id ? '#58a6ff' : '#8b949e' }}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button onClick={() => setCode(STARTERS[lang] || '')} title="Reset" style={S.iconBtn}><RotateCcw size={13} /></button>
+              <button onClick={() => setFullEditor(p => !p)} title="Toggle fullscreen" style={S.iconBtn}>
+                {fullEditor ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Monaco */}
+          <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
             <Editor
               height="100%"
               language={currentLang.monaco}
@@ -475,10 +389,10 @@ export default function CodeIDE({
               onMount={editor => { editorRef.current = editor; }}
               options={{
                 minimap: { enabled: false },
-                fontSize: 13,
-                fontFamily: '"JetBrains Mono", "Fira Code", monospace',
+                fontSize: 14,
+                fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace',
                 fontLigatures: true,
-                padding: { top: 14, bottom: 14 },
+                padding: { top: 20, bottom: 16 },
                 scrollBeyondLastLine: false,
                 smoothScrolling: true,
                 cursorBlinking: 'smooth',
@@ -488,278 +402,171 @@ export default function CodeIDE({
                 renderLineHighlight: 'line',
                 bracketPairColorization: { enabled: true },
                 autoClosingBrackets: 'always',
-                tabSize: 2,
-                suggest: { showMethods: true, showFunctions: true, showVariables: true },
-                quickSuggestions: true,
+                autoClosingQuotes: 'always',
+                tabSize: 4,
+                quickSuggestions: { other: true, comments: false, strings: false },
+                suggestOnTriggerCharacters: true,
+                formatOnType: false,
+                scrollbar: { verticalScrollbarSize: 6, horizontalScrollbarSize: 6 },
+                lineDecorationsWidth: 8,
+                glyphMargin: false,
               }}
             />
-            {/* No-paste badge */}
-            <div style={{ position: 'absolute', top: 10, right: 10, fontSize: 9, fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}>
-              No Paste
-            </div>
           </div>
 
-          {/* ── Output Panel ── */}
-          <div style={{ height: 240, flexShrink: 0, borderTop: `1px solid ${t.border}`, display: 'flex', flexDirection: 'column', background: t.bg }}>
+          {/* ── Bottom I/O Panel ── */}
+          {!fullEditor && (
+            <div style={{ height: bottomH, flexShrink: 0, display: 'flex', flexDirection: 'column', borderTop: '1px solid #21262d' }}>
+              {/* Drag handle */}
+              <div
+                onMouseDown={onDragStart}
+                style={{ height: 6, cursor: 'ns-resize', background: 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <div style={{ width: 36, height: 3, borderRadius: 2, background: '#30363d' }} />
+              </div>
 
-            {/* Tab bar */}
-            <div style={{ display: 'flex', alignItems: 'center', borderBottom: `1px solid ${t.border}`, background: t.surface, height: 38, paddingLeft: 4, flexShrink: 0 }}>
-              {[
-                { key: 'tests', label: testResults.length > 0 ? `Test Results  ${passedCount}/${testResults.length}` : 'Test Cases', icon: <CheckCircle2 size={13} /> },
-                { key: 'console', label: 'Console', icon: <Terminal size={13} /> },
-                { key: 'review', label: review ? `AI Review  ${review.score}/100` : 'AI Review', icon: <Zap size={13} /> },
-              ].map(tab => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActivePanel(tab.key as typeof activePanel)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '0 14px', height: '100%', fontSize: 11, fontWeight: 700, border: 'none', borderBottom: `2px solid ${activePanel === tab.key ? t.accent : 'transparent'}`, background: 'transparent', color: activePanel === tab.key ? t.accent : t.textMuted, cursor: 'pointer', whiteSpace: 'nowrap' }}
-                >
-                  {tab.icon} {tab.label}
-                </button>
-              ))}
-
-              {/* Status badge */}
-              {testResults.length > 0 && (
-                <div style={{ marginLeft: 'auto', marginRight: 12, fontSize: 10, fontWeight: 800, padding: '3px 10px', borderRadius: 20, color: allPassed ? '#22c55e' : '#ef4444', background: allPassed ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${allPassed ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)'}` }}>
-                  {allPassed ? 'All Passed' : hasErrors ? `${passedCount}/${testResults.length} Passed` : 'Running...'}
-                </div>
-              )}
-            </div>
-
-            {/* Panel content */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: 12 }}>
-
-              {/* ── Tests Panel ── */}
-              {activePanel === 'tests' && (
-                <div>
-                  {/* Sub-tabs: Test Cases / Custom Input */}
-                  {testResults.length === 0 && (
-                    <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-                      {['testcase', 'custom'].map(tab => (
-                        <button
-                          key={tab}
-                          onClick={() => setActiveTab(tab as typeof activeTab)}
-                          style={{ padding: '4px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, border: `1px solid ${activeTab === tab ? t.accentBorder : t.border}`, background: activeTab === tab ? t.accentBg : t.surfaceAlt, color: activeTab === tab ? t.accentText : t.textMuted, cursor: 'pointer' }}
-                        >
-                          {tab === 'testcase' ? 'Test Cases' : 'Custom Input'}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Custom input */}
-                  {testResults.length === 0 && activeTab === 'custom' && (
-                    <div>
-                      <textarea
-                        value={customInput}
-                        onChange={e => setCustomInput(e.target.value)}
-                        placeholder="Enter custom stdin..."
-                        style={{ width: '100%', minHeight: 80, background: t.surfaceAlt, border: `1px solid ${t.border}`, borderRadius: 10, padding: 10, color: t.textPrimary, fontSize: 12, fontFamily: 'JetBrains Mono, monospace', resize: 'vertical', outline: 'none', boxSizing: 'border-box' }}
-                      />
-                      <button
-                        onClick={handleRun}
-                        disabled={isRunning}
-                        style={{ marginTop: 8, padding: '7px 16px', borderRadius: 8, border: '1px solid rgba(34,197,94,0.3)', background: 'rgba(34,197,94,0.08)', color: '#22c55e', fontSize: 11, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
-                      >
-                        {isRunning ? <Loader2 size={12} style={{ animation: 'spin 0.8s linear infinite' }} /> : <Play size={12} />}
-                        Run Custom Input
-                      </button>
-                    </div>
-                  )}
-
-                  {/* Test case picker (before run) */}
-                  {testResults.length === 0 && activeTab === 'testcase' && testCases.length > 0 && (
-                    <div>
-                      <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-                        {testCases.map((tc, i) => (
-                          <button
-                            key={tc.id}
-                            onClick={() => setActiveTestIdx(i)}
-                            style={{ padding: '4px 12px', borderRadius: 8, fontSize: 11, fontWeight: 700, border: `1px solid ${activeTestIdx === i ? t.accentBorder : t.border}`, background: activeTestIdx === i ? t.accentBg : t.surfaceAlt, color: activeTestIdx === i ? t.accentText : t.textMuted, cursor: 'pointer' }}
-                          >
-                            Case {i + 1}
-                          </button>
-                        ))}
-                        <button style={{ padding: '4px 8px', borderRadius: 8, fontSize: 11, border: `1px solid ${t.border}`, background: t.surfaceAlt, color: t.textMuted, cursor: 'pointer' }}>
-                          <Plus size={12} />
-                        </button>
-                      </div>
-                      {testCases[activeTestIdx] && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                          <div>
-                            <div style={{ fontSize: 10, fontWeight: 700, color: t.textMuted, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Input</div>
-                            <pre style={{ margin: 0, padding: '8px 12px', background: t.surfaceAlt, border: `1px solid ${t.border}`, borderRadius: 8, color: t.textPrimary, fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>{testCases[activeTestIdx].input}</pre>
-                          </div>
-                          <div>
-                            <div style={{ fontSize: 10, fontWeight: 700, color: t.textMuted, marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.6px' }}>Expected</div>
-                            <pre style={{ margin: 0, padding: '8px 12px', background: t.surfaceAlt, border: `1px solid ${t.border}`, borderRadius: 8, color: '#22c55e', fontSize: 12, fontFamily: 'JetBrains Mono, monospace' }}>{testCases[activeTestIdx].expected}</pre>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Test results */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    {testResults.map((r, i) => (
-                      <div key={r.id} style={{ padding: 12, borderRadius: 10, border: `1px solid ${r.passed ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'}`, background: r.passed ? 'rgba(34,197,94,0.04)' : 'rgba(239,68,68,0.04)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                            {r.passed
-                              ? <CheckCircle2 size={15} style={{ color: '#22c55e' }} />
-                              : <XCircle size={15} style={{ color: '#ef4444' }} />}
-                            <span style={{ fontSize: 12, fontWeight: 700, color: r.passed ? '#22c55e' : '#ef4444' }}>
-                              {r.passed ? 'Accepted' : 'Wrong Answer'} — Case {i + 1}
-                            </span>
-                          </div>
-                          <div style={{ display: 'flex', gap: 10, fontSize: 10, color: t.textMuted }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><Clock size={10} />{r.runtimeMs}ms</span>
-                            {r.memory && <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><MemoryStick size={10} />{r.memory}</span>}
-                          </div>
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, fontSize: 11 }}>
-                          {[['Input', r.input, t.textPrimary], ['Expected', r.expected, '#22c55e'], ['Output', r.actual, r.passed ? '#22c55e' : '#f87171']].map(([label, val, color]) => (
-                            <div key={label as string}>
-                              <div style={{ fontSize: 9, fontWeight: 700, color: t.textMuted, marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.6px' }}>{label as string}</div>
-                              <code style={{ fontFamily: 'JetBrains Mono, monospace', color: color as string, fontSize: 11 }}>{val as string}</code>
-                            </div>
-                          ))}
-                        </div>
-                        {r.error && (
-                          <div style={{ marginTop: 8, padding: '6px 10px', borderRadius: 6, background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)', fontSize: 11, color: '#f87171', fontFamily: 'JetBrains Mono, monospace' }}>
-                            {r.error}
-                          </div>
-                        )}
-                      </div>
-                    ))}
+              {/* Tabs */}
+              <div style={S.ioTabBar}>
+                {(['INPUT', 'OUTPUT', 'ERROR'] as const).map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    style={{ ...S.ioTab, borderBottom: `2px solid ${activeTab === tab ? '#58a6ff' : 'transparent'}`, color: activeTab === tab ? '#e6edf3' : '#6e7681' }}
+                  >
+                    {tab === 'ERROR' && error && <AlertCircle size={11} style={{ color: '#ff375f', marginRight: 4 }} />}
+                    {tab === 'OUTPUT' && runResult && !error && (
+                      runResult.status === 'Accepted' || output
+                        ? <CheckCircle2 size={11} style={{ color: '#00b8a3', marginRight: 4 }} />
+                        : <XCircle size={11} style={{ color: '#ff375f', marginRight: 4 }} />
+                    )}
+                    {tab}
+                  </button>
+                ))}
+                {runResult && (
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: 12, paddingRight: 14, alignItems: 'center' }}>
+                    <span style={{ fontSize: 10, color: '#6e7681' }}>Time: <span style={{ color: '#8b949e', fontFamily: 'JetBrains Mono, monospace' }}>{runResult.time ? `${Math.round(parseFloat(runResult.time) * 1000)}ms` : '--'}</span></span>
+                    <span style={{ fontSize: 10, color: '#6e7681' }}>Memory: <span style={{ color: '#8b949e', fontFamily: 'JetBrains Mono, monospace' }}>{runResult.memory || '--'}</span></span>
                   </div>
+                )}
+              </div>
 
-                  {testResults.length === 0 && testCases.length === 0 && activeTab === 'testcase' && (
-                    <div style={{ textAlign: 'center', padding: '24px 0', color: t.textMuted, fontSize: 12 }}>
-                      No test cases. Use Custom Input or Submit for AI review.
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* ── Console Panel ── */}
-              {activePanel === 'console' && (
-                <div style={{ background: '#020204', borderRadius: 10, padding: 12, minHeight: 120, border: `1px solid ${t.border}`, fontFamily: 'JetBrains Mono, monospace', fontSize: 12 }}>
-                  {consoleLines.length === 0
-                    ? <span style={{ color: t.textMuted }}>{'// Output will appear here after Run'}</span>
-                    : consoleLines.map((line, i) => (
-                      <div key={i} style={{ color: line.startsWith('[ERR]') ? '#f87171' : '#22c55e', lineHeight: 1.6 }}>{line}</div>
-                    ))
-                  }
-                </div>
-              )}
-
-              {/* ── AI Review Panel ── */}
-              {activePanel === 'review' && (
-                <div>
-                  {isSubmitting && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px 0', gap: 10 }}>
-                      <Loader2 size={28} style={{ color: t.accent, animation: 'spin 0.8s linear infinite' }} />
-                      <span style={{ fontSize: 12, color: t.textMuted }}>Gemini is analyzing your solution...</span>
-                    </div>
-                  )}
-
-                  {!isSubmitting && !review && submissionCount === 0 && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '24px 0', gap: 8 }}>
-                      <Zap size={28} style={{ color: t.textMuted }} />
-                      <span style={{ fontSize: 12, color: t.textMuted }}>Submit your code to get an AI review from Gemini</span>
-                    </div>
-                  )}
-
-                  {review && !isSubmitting && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {/* Verdict */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderRadius: 10, border: `1px solid ${review.verdict === 'Accepted' ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'}`, background: review.verdict === 'Accepted' ? 'rgba(34,197,94,0.06)' : 'rgba(239,68,68,0.06)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          {review.verdict === 'Accepted' ? <Award size={18} style={{ color: '#22c55e' }} /> : <AlertTriangle size={18} style={{ color: '#ef4444' }} />}
-                          <div>
-                            <div style={{ fontSize: 13, fontWeight: 800, color: review.verdict === 'Accepted' ? '#22c55e' : '#ef4444' }}>{review.verdict}</div>
-                            <div style={{ fontSize: 10, color: t.textMuted }}>Submission #{submissionCount}</div>
-                          </div>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                          <div style={{ fontSize: 24, fontWeight: 900, color: t.accent, lineHeight: 1 }}>{review.score}</div>
-                          <div style={{ fontSize: 10, color: t.textMuted }}>/100</div>
-                        </div>
-                      </div>
-
-                      {/* Complexity grid */}
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
-                        {[
-                          { label: 'Time', value: review.timeComplexity, icon: <Clock size={13} /> },
-                          { label: 'Space', value: review.spaceComplexity, icon: <MemoryStick size={13} /> },
-                          { label: 'Optimal', value: review.isOptimal ? 'Yes' : 'No', icon: <TrendingUp size={13} /> },
-                        ].map(item => (
-                          <div key={item.label} style={{ padding: 10, borderRadius: 10, background: t.surface, border: `1px solid ${t.border}`, textAlign: 'center' }}>
-                            <div style={{ color: t.accent, marginBottom: 4, display: 'flex', justifyContent: 'center' }}>{item.icon}</div>
-                            <div style={{ fontSize: 11, fontWeight: 800, color: t.textPrimary }}>{item.value}</div>
-                            <div style={{ fontSize: 9, color: t.textMuted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.label}</div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Feedback */}
-                      <div style={{ padding: 12, borderRadius: 10, background: t.surface, border: `1px solid ${t.border}` }}>
-                        <div style={{ fontSize: 10, fontWeight: 800, color: t.textMuted, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 6 }}>Interviewer Feedback</div>
-                        <p style={{ fontSize: 12, lineHeight: 1.65, color: t.textSecondary, margin: 0 }}>{review.interviewFeedback}</p>
-                      </div>
-
-                      {/* Strengths */}
-                      {review.strengths?.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: 10, fontWeight: 800, color: '#22c55e', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 6 }}>Strengths</div>
-                          {review.strengths.map((s, i) => (
-                            <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 5, alignItems: 'flex-start' }}>
-                              <CheckCircle2 size={13} style={{ color: '#22c55e', marginTop: 1, flexShrink: 0 }} />
-                              <span style={{ fontSize: 12, color: t.textSecondary }}>{s}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Improvements */}
-                      {review.improvements?.length > 0 && (
-                        <div>
-                          <div style={{ fontSize: 10, fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: 6 }}>Improvements</div>
-                          {review.improvements.map((imp, i) => (
-                            <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 5, alignItems: 'flex-start' }}>
-                              <RefreshCw size={13} style={{ color: '#f59e0b', marginTop: 1, flexShrink: 0 }} />
-                              <span style={{ fontSize: 12, color: t.textSecondary }}>{imp}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Hint */}
-                      {review.optimalApproach && !review.isOptimal && (
-                        <div style={{ display: 'flex', gap: 8, padding: 12, borderRadius: 10, background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.2)', alignItems: 'flex-start' }}>
-                          <Lightbulb size={14} style={{ color: t.accent, marginTop: 1, flexShrink: 0 }} />
-                          <span style={{ fontSize: 12, color: t.textSecondary }}>{review.optimalApproach}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Panel body */}
+              <div style={{ flex: 1, overflow: 'auto', padding: '10px 14px', background: '#0d1117' }}>
+                {activeTab === 'INPUT' && (
+                  <textarea
+                    value={customInput}
+                    onChange={e => setCustomInput(e.target.value)}
+                    placeholder="Enter input here..."
+                    spellCheck={false}
+                    style={S.ioTextarea}
+                  />
+                )}
+                {activeTab === 'OUTPUT' && (
+                  <pre style={S.ioOutput}>
+                    {output || <span style={{ color: '#4d565e' }}>// Run your code to see output</span>}
+                  </pre>
+                )}
+                {activeTab === 'ERROR' && (
+                  <pre style={{ ...S.ioOutput, color: '#ff7b7b' }}>
+                    {error || <span style={{ color: '#4d565e' }}>// No errors</span>}
+                  </pre>
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         * { box-sizing: border-box; }
-        textarea:focus { border-color: rgba(99,102,241,0.4) !important; box-shadow: 0 0 0 2px rgba(99,102,241,0.1); outline: none; }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+        ::-webkit-scrollbar-track { background: #0d1117; }
+        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #484f58; }
       `}</style>
     </div>
   );
 }
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const S: Record<string, React.CSSProperties> = {
+  root: {
+    display: 'flex', flexDirection: 'column', height: '100%',
+    background: '#010409', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif',
+    color: '#e6edf3', overflow: 'hidden',
+  },
+  topNav: {
+    height: 46, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    padding: '0 16px', borderBottom: '1px solid #21262d', background: '#0d1117', flexShrink: 0,
+  },
+  problemTitle: { fontSize: 13, fontWeight: 600, color: '#e6edf3', maxWidth: 300, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  diffBadge: { fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 4, border: '1px solid', letterSpacing: '0.3px' },
+  tag: { fontSize: 10, fontWeight: 600, padding: '2px 7px', borderRadius: 4, background: 'rgba(88,166,255,0.1)', border: '1px solid rgba(88,166,255,0.2)', color: '#58a6ff' },
+  runBtn: {
+    display: 'flex', alignItems: 'center', gap: 6, padding: '6px 16px',
+    borderRadius: 6, border: '1px solid #30363d', background: '#21262d',
+    color: '#e6edf3', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  },
+  submitBtn: {
+    display: 'flex', alignItems: 'center', gap: 6, padding: '6px 16px',
+    borderRadius: 6, border: 'none', background: '#238636',
+    color: '#fff', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  },
+  body: { display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' },
+  leftPanel: {
+    width: 320, flexShrink: 0, display: 'flex', flexDirection: 'column',
+    borderRight: '1px solid #21262d', background: '#0d1117', overflow: 'hidden',
+  },
+  qHeader: { padding: '16px 18px', borderBottom: '1px solid #21262d', flexShrink: 0 },
+  qBody: { flex: 1, overflowY: 'auto', padding: '16px 18px' },
+  exampleBox: {
+    marginBottom: 14, padding: '12px 14px', background: '#161b22',
+    borderRadius: 8, border: '1px solid #21262d',
+  },
+  colResizer: { width: 4, background: '#21262d', cursor: 'col-resize', flexShrink: 0 },
+  editorTopBar: {
+    height: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    padding: '0 12px', borderBottom: '1px solid #21262d', background: '#0d1117', flexShrink: 0,
+  },
+  langBtn: {
+    display: 'flex', alignItems: 'center', gap: 6,
+    padding: '5px 10px', borderRadius: 6, border: '1px solid #30363d',
+    background: '#161b22', color: '#8b949e', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+  },
+  langMenu: {
+    position: 'absolute', top: 36, left: 0, width: 220,
+    background: '#161b22', border: '1px solid #30363d', borderRadius: 8,
+    boxShadow: '0 8px 32px rgba(0,0,0,0.6)', zIndex: 200, overflow: 'hidden',
+  },
+  langOption: {
+    display: 'block', width: '100%', padding: '9px 14px',
+    border: 'none', fontSize: 12, fontWeight: 500, cursor: 'pointer', textAlign: 'left',
+  },
+  iconBtn: {
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: 28, height: 28, borderRadius: 6, border: '1px solid #30363d',
+    background: '#161b22', color: '#6e7681', cursor: 'pointer',
+  },
+  ioTabBar: {
+    display: 'flex', alignItems: 'center', borderBottom: '1px solid #21262d',
+    background: '#0d1117', flexShrink: 0, height: 36,
+  },
+  ioTab: {
+    display: 'flex', alignItems: 'center',
+    padding: '0 14px', height: '100%', fontSize: 11, fontWeight: 700,
+    border: 'none', background: 'transparent', cursor: 'pointer',
+    letterSpacing: '0.5px',
+  },
+  ioTextarea: {
+    width: '100%', height: '100%', minHeight: 80, background: 'transparent',
+    border: 'none', outline: 'none', resize: 'none',
+    color: '#e6edf3', fontSize: 13, fontFamily: '"JetBrains Mono", Consolas, monospace',
+    lineHeight: 1.7,
+  },
+  ioOutput: {
+    margin: 0, padding: 0, background: 'transparent',
+    color: '#e6edf3', fontSize: 13, fontFamily: '"JetBrains Mono", Consolas, monospace',
+    lineHeight: 1.7, whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+  },
+};
