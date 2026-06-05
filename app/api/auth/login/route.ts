@@ -32,7 +32,7 @@ export async function POST(req: Request) {
       { expiresIn: '7d' }
     );
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       token,
       user: {
         id: user._id.toString(),
@@ -42,6 +42,17 @@ export async function POST(req: Request) {
         organization: user.organization,
       }
     });
+
+    // Set HTTP-only cookie so middleware can guard routes
+    response.cookies.set('interviewos_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+    });
+
+    return response;
 
   } catch (err) {
     console.error('[auth/login]', err);
