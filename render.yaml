@@ -1,31 +1,18 @@
 services:
-  # 1. Express API Backend Service
+  # Single Full-Stack Next.js Service (Frontend + Backend API Routes + MongoDB Auth)
+  # Deployed at: https://interviewos-ytph.onrender.com
+  # All secret env vars are set via Render Dashboard (not in this file for security)
   - type: web
-    name: interviewos-backend
+    name: interviewos-ytph
     env: node
-    buildCommand: npm install --prefix server
-    startCommand: node server/server.js
-    envVars:
-      - key: MONGODB_URI
-        sync: false # Set this to your MongoDB Atlas connection string in the Render Dashboard
-      - key: JWT_SECRET
-        generateValue: true # Generates a random secret key automatically
-      - key: BACKEND_PORT
-        value: 5001
-
-  # 2. Next.js Frontend Service
-  - type: web
-    name: interviewos-frontend
-    env: node
+    region: oregon
+    plan: free
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
-      - key: GEMINI_API_KEY
-        sync: false # Set your Gemini API key in the Render Dashboard
+      - key: NODE_ENV
+        value: production
       - key: NEXT_PUBLIC_APP_NAME
-        value: HYRTE
-      - key: NEXT_PUBLIC_BACKEND_URL
-        fromService:
-          type: web
-          name: interviewos-backend
-          property: url
+        value: InterviewOS
+      # Secrets are set in Render Dashboard — not committed to git
+      # Required: MONGODB_URI, JWT_SECRET, GEMINI_API_KEY, AZURE_SPEECH_KEY, AZURE_SPEECH_REGION
