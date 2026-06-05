@@ -131,10 +131,15 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
   const [verdict, setVerdict] = useState<'AC' | 'WA' | 'TLE' | 'CE' | 'RE' | null>(null);
   const [review, setReview] = useState<CodeReview | null>(null);
   const [bottomH, setBottomH] = useState(220);
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDraggingRow, setIsDraggingRow] = useState(false);
+  const [leftW, setLeftW] = useState(320);
+  const [isDraggingCol, setIsDraggingCol] = useState(false);
   const [fullEditor, setFullEditor] = useState(false);
   const dragStartY = useRef(0);
   const dragStartH = useRef(0);
+  const dragStartX = useRef(0);
+  const dragStartW = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<unknown>(null);
 
@@ -150,23 +155,43 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     return () => document.removeEventListener('mousedown', h);
   }, []);
 
-  // Drag to resize bottom panel
-  const onDragStart = (e: React.MouseEvent) => {
-    setIsDragging(true);
+  // Drag to resize bottom panel (vertical)
+  const onRowDragStart = (e: React.MouseEvent) => {
+    setIsDraggingRow(true);
     dragStartY.current = e.clientY;
     dragStartH.current = bottomH;
   };
   useEffect(() => {
-    if (!isDragging) return;
+    if (!isDraggingRow) return;
     const move = (e: MouseEvent) => {
       const delta = dragStartY.current - e.clientY;
-      setBottomH(Math.max(120, Math.min(480, dragStartH.current + delta)));
+      setBottomH(Math.max(80, Math.min(520, dragStartH.current + delta)));
     };
-    const up = () => setIsDragging(false);
+    const up = () => setIsDraggingRow(false);
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
     return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-  }, [isDragging]);
+  }, [isDraggingRow]);
+
+  // Drag to resize left/right columns (horizontal)
+  const onColDragStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDraggingCol(true);
+    dragStartX.current = e.clientX;
+    dragStartW.current = leftW;
+  };
+  useEffect(() => {
+    if (!isDraggingCol) return;
+    const move = (e: MouseEvent) => {
+      const containerW = containerRef.current?.offsetWidth || 1200;
+      const newW = dragStartW.current + (e.clientX - dragStartX.current);
+      setLeftW(Math.max(200, Math.min(containerW * 0.65, newW)));
+    };
+    const up = () => setIsDraggingCol(false);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+  }, [isDraggingCol]);
 
   // Ctrl+Enter = Run, Ctrl+Shift+Enter = Submit
   useEffect(() => {
@@ -270,10 +295,10 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
       </div>
 
       {/* ══ BODY ═════════════════════════════════════════════════ */}
-      <div style={S.body}>
+      <div ref={containerRef} style={S.body}>
 
         {/* ─── LEFT: Question Panel ─── */}
-        <div style={S.leftPanel}>
+        <div style={{ ...S.leftPanel, width: leftW }}>
           {/* Question header */}
           <div style={S.qHeader}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
@@ -338,8 +363,25 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
           </div>
         </div>
 
-        {/* ─── RESIZER ─── */}
-        <div style={S.colResizer} />
+        {/* ─── COLUMN DRAG DIVIDER ─── */}
+        <div
+          onMouseDown={onColDragStart}
+          title="Drag to resize"
+          style={{
+            width: 6, flexShrink: 0, cursor: 'col-resize', background: 'transparent',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', zIndex: 10,
+            transition: isDraggingCol ? 'none' : 'background 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(88,166,255,0.15)')}
+          onMouseLeave={e => { if (!isDraggingCol) e.currentTarget.style.background = 'transparent'; }}
+        >
+          <div style={{ width: 2, height: '100%', background: isDraggingCol ? '#58a6ff' : '#21262d', transition: 'background 0.15s' }} />
+          {/* Grab handle dots */}
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', display: 'flex', flexDirection: 'column', gap: 3, pointerEvents: 'none' }}>
+            {[0,1,2,3].map(i => <div key={i} style={{ width: 3, height: 3, borderRadius: '50%', background: isDraggingCol ? '#58a6ff' : '#484f58' }} />)}
+          </div>
+        </div>
 
         {/* ─── RIGHT: Editor + Bottom ─── */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
@@ -419,7 +461,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
             <div style={{ height: bottomH, flexShrink: 0, display: 'flex', flexDirection: 'column', borderTop: '1px solid #21262d' }}>
               {/* Drag handle */}
               <div
-                onMouseDown={onDragStart}
+                onMouseDown={onRowDragStart}
                 style={{ height: 6, cursor: 'ns-resize', background: 'transparent', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 <div style={{ width: 36, height: 3, borderRadius: 2, background: '#30363d' }} />
@@ -484,6 +526,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
         ::-webkit-scrollbar-track { background: #0d1117; }
         ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #484f58; }
+        body { ${isDraggingCol ? 'cursor: col-resize !important; user-select: none;' : ''} ${isDraggingRow ? 'cursor: ns-resize !important; user-select: none;' : ''} }
       `}</style>
     </div>
   );
@@ -515,7 +558,7 @@ const S: Record<string, React.CSSProperties> = {
   },
   body: { display: 'flex', flex: 1, minHeight: 0, overflow: 'hidden' },
   leftPanel: {
-    width: 320, flexShrink: 0, display: 'flex', flexDirection: 'column',
+    flexShrink: 0, display: 'flex', flexDirection: 'column',
     borderRight: '1px solid #21262d', background: '#0d1117', overflow: 'hidden',
   },
   qHeader: { padding: '16px 18px', borderBottom: '1px solid #21262d', flexShrink: 0 },
