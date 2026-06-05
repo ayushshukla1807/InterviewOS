@@ -1,413 +1,111 @@
-import { NextResponse } from 'next/server';
-import vm from 'vm';
-import { spawn } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Local storage for temporary compilation files (must be within workspace)
-const TEMP_DIR = path.join(process.cwd(), 'scratch', 'run_temp');
-
-// Helper to guarantee temp directory exists
-function ensureTempDir() {
-  if (!fs.existsSync(TEMP_DIR)) {
-    fs.mkdirSync(TEMP_DIR, { recursive: true });
-  }
-}
-
-// ─── JavaScript Execution (Real, via Node.js vm module) ─────────────────────
-function executeJavaScript(code: string, stdin: string): { stdout: string; stderr: string; success: boolean; runtime_ms: number } {
-  const start = Date.now();
-  const logs: string[] = [];
-  let error = '';
-
-  const sandbox = {
-    console: {
-      log: (...args: any[]) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ')),
-      error: (...args: any[]) => logs.push('[ERROR] ' + args.map(a => String(a)).join(' ')),
-      warn: (...args: any[]) => logs.push('[WARN] ' + args.map(a => String(a)).join(' ')),
-      info: (...args: any[]) => logs.push(args.map(a => String(a)).join(' ')),
-      table: (data: any) => logs.push(JSON.stringify(data, null, 2)),
-    },
-    __stdin__: stdin,
-    Math, JSON, parseInt, parseFloat, isNaN, isFinite,
-    Array, Object, String, Number, Boolean, Map, Set, Date, RegExp, Error, TypeError, RangeError, Promise,
-    setTimeout: undefined,
-    setInterval: undefined,
-    fetch: undefined,
-    require: undefined,
-    process: undefined,
-  };
-
-  try {
-    const context = vm.createContext(sandbox);
-    const wrappedCode = `(function() {\n${code}\n})();`;
-    const script = new vm.Script(wrappedCode, { filename: 'solution.js' });
-    const result = script.runInContext(context, { timeout: 5000 });
-
-    if (result !== undefined) {
-      logs.push(typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result));
-    }
-  } catch (err: any) {
-    if (err.code === 'ERR_SCRIPT_EXECUTION_TIMEOUT') {
-      error = 'Error: Execution timed out (5 second limit exceeded)';
-    } else {
-      error = `${err.name || 'Error'}: ${err.message}`;
-      if (err.stack) {
-        const stackLines = err.stack.split('\n');
-        const relevantLine = stackLines.find((l: string) => l.includes('solution.js'));
-        if (relevantLine) {
-          error += '\n' + relevantLine.trim();
-        }
-      }
-    }
-  }
-
-  const runtime_ms = Date.now() - start;
-  return {
-    stdout: logs.join('\n'),
-    stderr: error,
-    success: !error,
-    runtime_ms,
-  };
-}
-
-// ─── Local Process Runner with Timeout and Stdin ────────────────────────────
-function runLocalProcess(
-  cmd: string,
-  args: string[],
-  stdin: string,
-  timeoutMs = 5000
-): Promise<{ stdout: string; stderr: string; success: boolean }> {
-  return new Promise((resolve) => {
-    const child = spawn(cmd, args);
-
-    let stdout = '';
-    let stderr = '';
-    let resolved = false;
-
-    const timer = setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        child.kill('SIGKILL');
-        resolve({
-          stdout,
-          stderr: stderr + `\nError: Execution timed out (${timeoutMs / 1000} second limit exceeded)`,
-          success: false,
-        });
-      }
-    }, timeoutMs);
-
-    if (stdin) {
-      child.stdin.write(stdin);
-      child.stdin.end();
-    } else {
-      child.stdin.end();
-    }
-
-    child.stdout.on('data', (data) => {
-      stdout += data.toString();
-    });
-
-    child.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    child.on('close', (code) => {
-      clearTimeout(timer);
-      if (!resolved) {
-        resolved = true;
-        resolve({
-          stdout,
-          stderr,
-          success: code === 0,
-        });
-      }
-    });
-
-    child.on('error', (err) => {
-      clearTimeout(timer);
-      if (!resolved) {
-        resolved = true;
-        resolve({
-          stdout,
-          stderr: stderr + `\nSystem Error: ${err.message}`,
-          success: false,
-        });
-      }
-    });
-  });
-}
-
-// ─── Native Python Execution ────────────────────────────────────────────────
-async function executePython(code: string, stdin: string) {
-  ensureTempDir();
-  const fileId = Math.random().toString(36).substring(7);
-  const filePath = path.join(TEMP_DIR, `run_${fileId}.py`);
-
-  fs.writeFileSync(filePath, code);
-
-  const start = Date.now();
-  const res = await runLocalProcess('python3', [filePath], stdin);
-  const runtime_ms = Date.now() - start;
-
-  // Cleanup temp file safely
-  try { fs.unlinkSync(filePath); } catch {}
-
-  return { ...res, runtime_ms };
-}
-
-// ─── Native C++ Execution ───────────────────────────────────────────────────
-async function executeCpp(code: string, stdin: string) {
-  ensureTempDir();
-  const fileId = Math.random().toString(36).substring(7);
-  const sourcePath = path.join(TEMP_DIR, `run_${fileId}.cpp`);
-  const binPath = path.join(TEMP_DIR, `run_${fileId}.out`);
-
-  fs.writeFileSync(sourcePath, code);
-
-  const start = Date.now();
-
-  // Compile
-  const compileRes = await runLocalProcess('g++', ['-O2', '-std=c++17', sourcePath, '-o', binPath], '', 8000);
-  if (!compileRes.success) {
-    try { fs.unlinkSync(sourcePath); } catch {}
-    return {
-      stdout: '',
-      stderr: `Compilation Error:\n${compileRes.stderr}`,
-      success: false,
-      runtime_ms: Date.now() - start,
-    };
-  }
-
-  // Execute binary
-  const execRes = await runLocalProcess(binPath, [], stdin);
-  const runtime_ms = Date.now() - start;
-
-  // Cleanup files safely
-  try { fs.unlinkSync(sourcePath); } catch {}
-  try { fs.unlinkSync(binPath); } catch {}
-
-  return { ...execRes, runtime_ms };
-}
-
-// ─── Native Java Execution ──────────────────────────────────────────────────
-async function executeJava(code: string, stdin: string) {
-  ensureTempDir();
-  
-  // Java requires the class name to match the file name.
-  // We parse the code to locate the public class name, defaulting to "Solution".
-  let className = 'Solution';
-  const match = code.match(/public\s+class\s+(\w+)/);
-  if (match && match[1]) {
-    className = match[1];
-  }
-
-  const runId = Math.random().toString(36).substring(7);
-  // We isolate Java compiles by putting them in their own directory
-  const javaDir = path.join(TEMP_DIR, `java_${runId}`);
-  fs.mkdirSync(javaDir, { recursive: true });
-
-  const sourcePath = path.join(javaDir, `${className}.java`);
-  fs.writeFileSync(sourcePath, code);
-
-  const start = Date.now();
-
-  // Compile
-  const compileRes = await runLocalProcess('javac', [sourcePath], '', 8000);
-  if (!compileRes.success) {
-    try { fs.rmSync(javaDir, { recursive: true, force: true }); } catch {}
-    return {
-      stdout: '',
-      stderr: `Compilation Error:\n${compileRes.stderr}`,
-      success: false,
-      runtime_ms: Date.now() - start,
-    };
-  }
-
-  // Execute Class
-  const execRes = await runLocalProcess('java', ['-cp', javaDir, className], stdin);
-  const runtime_ms = Date.now() - start;
-
-  // Cleanup
-  try { fs.rmSync(javaDir, { recursive: true, force: true }); } catch {}
-
-  return { ...execRes, runtime_ms };
-}
-
-// ─── Native TypeScript Execution (Transpiled) ────────────────────────────────
-async function executeTypeScript(code: string, stdin: string) {
-  ensureTempDir();
-  const fileId = Math.random().toString(36).substring(7);
-  const tsPath = path.join(TEMP_DIR, `run_${fileId}.ts`);
-  const jsPath = path.join(TEMP_DIR, `run_${fileId}.js`);
-
-  fs.writeFileSync(tsPath, code);
-
-  const start = Date.now();
-  // Compile using npx tsc
-  const compileRes = await runLocalProcess('npx', ['tsc', tsPath, '--outFile', jsPath, '--target', 'es2020', '--module', 'commonjs', '--noEmitOnError', 'false', '--skipLibCheck', 'true'], '', 10000);
-  
-  if (!fs.existsSync(jsPath)) {
-    try { fs.unlinkSync(tsPath); } catch {}
-    return {
-      stdout: '',
-      stderr: `TypeScript Compilation Error:\n${compileRes.stderr || 'Failed to transpile code. Ensure syntax is correct.'}`,
-      success: false,
-      runtime_ms: Date.now() - start,
-    };
-  }
-
-  // Read compiled JS and execute it in VM
-  const compiledJs = fs.readFileSync(jsPath, 'utf8');
-  const vmRes = executeJavaScript(compiledJs, stdin);
-  const runtime_ms = Date.now() - start;
-
-  // Cleanup
-  try { fs.unlinkSync(tsPath); } catch {}
-  try { fs.unlinkSync(jsPath); } catch {}
-
-  return { ...vmRes, runtime_ms };
-}
-
-// ─── Native Rust Execution ───────────────────────────────────────────────────
-async function executeRust(code: string, stdin: string) {
-  ensureTempDir();
-  const fileId = Math.random().toString(36).substring(7);
-  const sourcePath = path.join(TEMP_DIR, `run_${fileId}.rs`);
-  const binPath = path.join(TEMP_DIR, `run_${fileId}.out`);
-
-  fs.writeFileSync(sourcePath, code);
-
-  const start = Date.now();
-
-  // Compile using rustc
-  const rustcPath = '/Users/ayushshukla/.cargo/bin/rustc';
-  const compileRes = await runLocalProcess(rustcPath, [sourcePath, '-o', binPath], '', 8000);
-  if (!compileRes.success) {
-    try { fs.unlinkSync(sourcePath); } catch {}
-    return {
-      stdout: '',
-      stderr: `Rust Compilation Error:\n${compileRes.stderr}`,
-      success: false,
-      runtime_ms: Date.now() - start,
-    };
-  }
-
-  // Execute binary
-  const execRes = await runLocalProcess(binPath, [], stdin);
-  const runtime_ms = Date.now() - start;
-
-  // Cleanup
-  try { fs.unlinkSync(sourcePath); } catch {}
-  try { fs.unlinkSync(binPath); } catch {}
-
-  return { ...execRes, runtime_ms };
-}
-
-// ─── Native Go Execution (Fallback to local warning if binary not present) ────
-async function executeGo(code: string, stdin: string) {
-  ensureTempDir();
-  const fileId = Math.random().toString(36).substring(7);
-  const sourcePath = path.join(TEMP_DIR, `run_${fileId}.go`);
-
-  fs.writeFileSync(sourcePath, code);
-
-  const start = Date.now();
-  const res = await runLocalProcess('go', ['run', sourcePath], stdin, 6000);
-  const runtime_ms = Date.now() - start;
-
-  try { fs.unlinkSync(sourcePath); } catch {}
-
-  // If go is not found, show helpful instructions
-  if (res.stderr.includes('spawn go ENOENT') || res.stderr.includes('not found') || res.stderr.includes('go: not found')) {
-    return {
-      stdout: '',
-      stderr: 'Language "Go" is not installed on the local runner. Please install the Go compiler (Golang) on your machine to execute Go code in this sandbox.',
-      success: false,
-      runtime_ms: 0
-    };
-  }
-
-  return { ...res, runtime_ms };
-}
-
-// ─── Language details ────────────────────────────────────────────────────────
-const LANG_DISPLAY: Record<string, string> = {
-  javascript: 'JavaScript (Node.js VM)',
-  typescript: 'TypeScript (Transpiled Node VM)',
-  python: 'Python (Local 3.14)',
-  cpp: 'C++ (Local Apple Clang)',
-  java: 'Java (Local OpenJDK 22)',
-  rust: 'Rust (Local Cargo compiler)',
-  go: 'Go (Local compiler)',
+// Judge0 CE language IDs
+const LANGUAGE_IDS: Record<string, number> = {
+  javascript: 93,  // Node.js 12.14.0
+  typescript: 94,  // TypeScript 3.7.4
+  python: 71,      // Python 3.8.1
+  java: 62,        // OpenJDK 13.0.1
+  cpp: 54,         // GCC 9.2.0 (C++17)
+  go: 60,          // Go 1.13.5
 };
 
-export async function POST(req: Request) {
+const JUDGE0_URL = 'https://judge0-ce.p.rapidapi.com';
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '';
+
+// Fallback: use public Judge0 CE instance (no key, rate-limited)
+const PUBLIC_JUDGE0 = 'https://api.judge0.com';
+
+function toBase64(str: string) {
+  return Buffer.from(str).toString('base64');
+}
+function fromBase64(str: string) {
+  try { return Buffer.from(str, 'base64').toString('utf-8'); } catch { return str; }
+}
+
+async function submitToJudge0(
+  sourceCode: string,
+  languageId: number,
+  stdin: string,
+  useRapidAPI: boolean
+): Promise<{ stdout: string; stderr: string; status: string; time: string; memory: string }> {
+  const base = useRapidAPI ? JUDGE0_URL : PUBLIC_JUDGE0;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  };
+  if (useRapidAPI && RAPIDAPI_KEY) {
+    headers['X-RapidAPI-Key'] = RAPIDAPI_KEY;
+    headers['X-RapidAPI-Host'] = 'judge0-ce.p.rapidapi.com';
+  }
+
+  // Submit
+  const submitRes = await fetch(`${base}/submissions?base64_encoded=true&wait=false`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      source_code: toBase64(sourceCode),
+      language_id: languageId,
+      stdin: toBase64(stdin),
+    }),
+  });
+
+  if (!submitRes.ok) throw new Error(`Judge0 submit failed: ${submitRes.status}`);
+  const { token } = await submitRes.json();
+
+  // Poll for result (max 8s)
+  for (let i = 0; i < 16; i++) {
+    await new Promise(r => setTimeout(r, 500));
+    const resultRes = await fetch(
+      `${base}/submissions/${token}?base64_encoded=true&fields=status,stdout,stderr,time,memory`,
+      { headers }
+    );
+    if (!resultRes.ok) continue;
+    const result = await resultRes.json();
+
+    // Status IDs: 1=In Queue, 2=Processing, 3=Accepted, 4=Wrong Answer, 5=TLE, 6=CE, etc.
+    if (result.status?.id <= 2) continue; // still running
+
+    return {
+      stdout: result.stdout ? fromBase64(result.stdout) : '',
+      stderr: result.stderr ? fromBase64(result.stderr) : '',
+      status: result.status?.description || 'Unknown',
+      time: result.time || '0',
+      memory: result.memory ? `${Math.round(result.memory / 1024)}KB` : '0KB',
+    };
+  }
+  throw new Error('Execution timeout');
+}
+
+export async function POST(req: NextRequest) {
   try {
-    const { code, language, stdin } = await req.json();
+    const { code, language, stdin = '' } = await req.json();
 
-    if (!code || !code.trim()) {
-      return NextResponse.json({
-        success: false,
-        stdout: '',
-        stderr: 'No code provided.',
-        exit_code: 1,
-        runtime_ms: 0,
-        language: language || 'javascript',
-        version: LANG_DISPLAY[language] || language,
-      });
+    if (!code || !language) {
+      return NextResponse.json({ error: 'code and language required' }, { status: 400 });
     }
 
-    let result: { stdout: string; stderr: string; success: boolean; runtime_ms: number };
-
-    if (language === 'javascript') {
-      result = executeJavaScript(code, stdin || '');
-    } else if (language === 'typescript') {
-      result = await executeTypeScript(code, stdin || '');
-    } else if (language === 'python') {
-      result = await executePython(code, stdin || '');
-    } else if (language === 'cpp') {
-      result = await executeCpp(code, stdin || '');
-    } else if (language === 'java') {
-      result = await executeJava(code, stdin || '');
-    } else if (language === 'rust') {
-      result = await executeRust(code, stdin || '');
-    } else if (language === 'go') {
-      result = await executeGo(code, stdin || '');
-    } else {
-      return NextResponse.json({
-        success: false,
-        stdout: '',
-        stderr: `Language "${language}" is not supported locally. Supported: JavaScript, TypeScript, Python, C++, Java, Rust, Go.`,
-        exit_code: 1,
-        runtime_ms: 0,
-        language,
-        version: language,
-      });
+    const langId = LANGUAGE_IDS[language.toLowerCase()];
+    if (!langId) {
+      return NextResponse.json({ error: `Unsupported language: ${language}` }, { status: 400 });
     }
 
-    return NextResponse.json({
-      success: result.success,
-      stdout: result.stdout,
-      stderr: result.stderr,
-      exit_code: result.success ? 0 : 1,
-      runtime_ms: result.runtime_ms,
-      language: language,
-      version: LANG_DISPLAY[language] || language,
-      engine: 'local-native',
-    });
+    // Wrap JS/TS code so it prints output properly for test execution
+    let finalCode = code;
+    if (language === 'javascript' || language === 'typescript') {
+      // If code doesn't have console.log at top level, add basic test runner
+      if (!code.includes('console.log(') && code.includes('function solution')) {
+        finalCode = code + `\n\ntry {\n  const input = JSON.parse(\`${stdin || 'null'}\`);\n  const result = solution(input);\n  console.log(JSON.stringify(result));\n} catch(e) { console.error(e.message); }`;
+      }
+    }
 
-  } catch (err: any) {
-    console.error('[/api/execute] error:', err);
-    return NextResponse.json({
-      success: false,
-      stdout: '',
-      stderr: err.message || 'Execution failed',
-      exit_code: 1,
-      runtime_ms: 0,
-      language: 'unknown',
-      version: '',
-      engine: 'error',
-    });
+    // Try RapidAPI first if key available, else public instance
+    const useRapidAPI = Boolean(RAPIDAPI_KEY);
+    const result = await submitToJudge0(finalCode, langId, stdin, useRapidAPI);
+
+    return NextResponse.json(result);
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Execution failed';
+    return NextResponse.json({ error: msg, stdout: '', stderr: msg, status: 'Error', time: '0', memory: '0KB' }, { status: 200 });
   }
 }
