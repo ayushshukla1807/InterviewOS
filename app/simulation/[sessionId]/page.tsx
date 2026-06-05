@@ -17,7 +17,7 @@ import {
   MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles,
   Terminal, Palette, Check, Zap, AlertTriangle, RotateCcw, ChevronRight,
   TrendingUp, Clock, Users, Target, Award, Brain, Eye, EyeOff, Send,
-  ChevronDown, ChevronUp, Activity, Volume2, VolumeX
+  ChevronDown, ChevronUp, Activity, Volume2, VolumeX, BookOpen
 } from 'lucide-react';
 import CodeIDE from '../../components/CodeIDE';
 
@@ -128,13 +128,14 @@ export default function LivingWorkplaceSimulation() {
       if (Math.random() > 0.7) {
         const pingEvent: SimulationEvent = {
           id: `ping_${Date.now()}`,
-          timestamp: new Date().toISOString(),
+          revealedAt: Date.now(),
           type: 'slack',
           priority: 'LOW',
           fromStakeholderId: Object.keys(runtime.stakeholderStates)[0] || 'Coworker',
-          content: 'Hey, do you want to grab lunch soon? Or are you swamped?',
-          requiresAction: true,
+          message: 'Hey, do you want to grab lunch soon? Or are you swamped?',
+          requiresResponse: true,
           isRead: false,
+          isAnswered: false,
         };
         setRuntime(prev => {
           if (!prev) return prev;
@@ -515,7 +516,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
     // Save to Database
     try {
       const userStr = localStorage.getItem('interviewos_user');
-      const userId = userStr ? JSON.parse(userStr)._id : undefined;
+      const userId = userStr ? (JSON.parse(userStr).id || JSON.parse(userStr)._id) : undefined;
 
       await fetch('/api/reports/save', {
         method: 'POST',

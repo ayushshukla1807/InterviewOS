@@ -113,7 +113,7 @@ export default function CandidateDashboard() {
     const userStr = localStorage.getItem('interviewos_user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      fetchReports(user._id);
+      fetchReports(user.id || user._id);
     } else {
       loadLocalStorageRecords([]);
     }
