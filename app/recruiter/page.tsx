@@ -28,8 +28,16 @@ export default function RecruiterDashboard() {
       window.location.href = '/login';
       return;
     }
-    const user = JSON.parse(savedUser);
-    if (user.role !== 'recruiter') {
+    try {
+      const user = JSON.parse(savedUser);
+      if (user.role !== 'recruiter' && user.role !== 'founder') {
+        localStorage.removeItem('interviewos_token');
+        localStorage.removeItem('interviewos_user');
+        window.location.href = '/login';
+      }
+    } catch {
+      localStorage.removeItem('interviewos_token');
+      localStorage.removeItem('interviewos_user');
       window.location.href = '/login';
     }
   }, []);

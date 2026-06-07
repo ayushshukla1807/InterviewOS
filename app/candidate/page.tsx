@@ -26,15 +26,23 @@ export default function CandidateDashboard() {
       return;
     }
     
-    const user = JSON.parse(savedUser);
-    if (user.role !== 'candidate') {
+    try {
+      const user = JSON.parse(savedUser);
+      if (user.role !== 'candidate') {
+        localStorage.removeItem('interviewos_token');
+        localStorage.removeItem('interviewos_user');
+        router.push('/login');
+        return;
+      }
+      candidateName = user.name;
+      candidateEmail = user.email;
+      setCandidateContext(user);
+    } catch {
+      localStorage.removeItem('interviewos_token');
+      localStorage.removeItem('interviewos_user');
       router.push('/login');
       return;
     }
-
-    candidateName = user.name;
-    candidateEmail = user.email;
-    setCandidateContext(user);
 
 
     // No mock data - we want an empty state if no DB records are found
