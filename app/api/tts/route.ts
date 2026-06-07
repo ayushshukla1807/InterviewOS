@@ -73,10 +73,7 @@ export async function POST(req: Request) {
       console.error('ElevenLabs TTS Error:', response.status, errorText);
       throw new Error(`ElevenLabs TTS failed: ${response.status}`);
     }
-
-    const buffer = Buffer.from(await response.arrayBuffer());
-
-    return new NextResponse(buffer, {
+    return new NextResponse(response.body, {
       headers: {
         'Content-Type': 'audio/mpeg',
         'Cache-Control': 'no-store, max-age=0',
