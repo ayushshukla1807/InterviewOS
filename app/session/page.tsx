@@ -537,6 +537,15 @@ function SessionContent() {
     document.documentElement.requestFullscreen().catch(() => {});
     setIsFullscreen(true);
     setIsStarted(true);
+
+    // UNLOCK AUDIO CONTEXT IMMEDIATELY ON CLICK TO BYPASS AUTOPLAY POLICIES
+    const audioEl = document.getElementById('ai-voice') as HTMLAudioElement;
+    if (audioEl) {
+      audioEl.play().catch(() => {});
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+    }
     // Give the browser 2s to settle before blur violations count
     setTimeout(() => { proctorReadyRef.current = true; }, 2000);
   };
@@ -751,19 +760,27 @@ function SessionContent() {
 
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
+      const audioEl = document.getElementById('ai-voice') as HTMLAudioElement;
       
-      audio.onended = () => {
-        setIsSpeaking(false);
-        URL.revokeObjectURL(url);
-      };
-      audio.onerror = () => {
-        setIsSpeaking(false);
-        URL.revokeObjectURL(url);
-        fallbackSpeak(text);
-      };
-      
-      await audio.play();
+      if (audioEl) {
+        audioEl.src = url;
+        audioEl.onended = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(url);
+        };
+        audioEl.onerror = () => {
+          setIsSpeaking(false);
+          URL.revokeObjectURL(url);
+          fallbackSpeak(text);
+        };
+        await audioEl.play();
+      } else {
+        // Fallback if DOM element is missing
+        const fallbackAudio = new Audio(url);
+        fallbackAudio.onended = () => { setIsSpeaking(false); URL.revokeObjectURL(url); };
+        fallbackAudio.onerror = () => { setIsSpeaking(false); URL.revokeObjectURL(url); fallbackSpeak(text); };
+        await fallbackAudio.play();
+      }
     } catch (err) {
       console.warn("OpenAI TTS failed, falling back to browser synthesis:", err);
       fallbackSpeak(text);
