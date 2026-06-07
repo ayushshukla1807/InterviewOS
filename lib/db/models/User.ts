@@ -8,6 +8,11 @@ export interface IUser {
   role: 'candidate' | 'recruiter' | 'founder';
   organization: string;
   createdAt: Date;
+  isEmailVerified: boolean;
+  verificationToken?: string;
+  plan: 'free' | 'pro';
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -17,6 +22,11 @@ const UserSchema = new Schema<IUser>({
   role:         { type: String, enum: ['candidate', 'recruiter', 'founder'], default: 'candidate' },
   organization: { type: String, default: '' },
   createdAt:    { type: Date, default: Date.now },
+  isEmailVerified: { type: Boolean, default: false },
+  verificationToken: { type: String },
+  plan:         { type: String, enum: ['free', 'pro'], default: 'free' },
+  stripeCustomerId: { type: String },
+  stripeSubscriptionId: { type: String },
 });
 
 const User: Model<IUser> = mongoose.models.User ?? mongoose.model<IUser>('User', UserSchema);

@@ -134,6 +134,8 @@ function SessionContent() {
   const isMock = searchParams.get('mock') === 'true'; // controls hint visibility
   const simulationSessionId = searchParams.get('simulationSessionId') || '';
   const [simulationSummary, setSimulationSummary] = useState<string | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<BlobPart[]>([]);
 
   useEffect(() => {
     if (simulationSessionId) {
@@ -628,6 +630,19 @@ function SessionContent() {
       try {
         const s = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         setStream(s);
+        
+        // Setup Media Recorder for S3
+        try {
+          const mediaRecorder = new MediaRecorder(s, { mimeType: 'video/webm' });
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) recordedChunksRef.current.push(e.data);
+          };
+          mediaRecorderRef.current = mediaRecorder;
+          mediaRecorder.start(2000); // chunk every 2s
+        } catch (mrErr) {
+          console.warn('MediaRecorder init failed:', mrErr);
+        }
+
         if (videoRef.current) {
            videoRef.current.srcObject = s;
            videoRef.current.play();
@@ -829,9 +844,38 @@ function SessionContent() {
     setIsRunning(false);
     setIsEvaluating(true);
 
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+
     const transcript = messages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n\n');
 
     try {
+      // 0. Upload Video to S3
+      let s3VideoUrl = null;
+      if (recordedChunksRef.current.length > 0) {
+        try {
+          const blob = new Blob(recordedChunksRef.current, { type: 'video/webm' });
+          const presignRes = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: 'session.webm', contentType: 'video/webm' })
+          });
+          if (presignRes.ok) {
+            const { url, key } = await presignRes.json();
+            await fetch(url, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'video/webm' },
+              body: blob
+            });
+            s3VideoUrl = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.amazonaws.com/${key}`;
+            console.log('Video successfully uploaded to S3:', s3VideoUrl);
+          }
+        } catch (e) {
+          console.error('Failed to upload video to S3:', e);
+        }
+      }
+
       // 1. Fetch ML Code Originality
       let originalityScore = null;
       if (code && code.trim()) {
@@ -910,7 +954,8 @@ function SessionContent() {
           endTime: new Date().toISOString(),
           durationMinutes: Math.floor(durationSeconds / 60),
           track,
-          candidateName: name
+          candidateName: name,
+          s3VideoUrl: s3VideoUrl
         },
         proctoringLogs: proctoringLogs
       };
