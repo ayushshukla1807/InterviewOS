@@ -6,14 +6,14 @@ export const dynamic = 'force-dynamic';
 
 // personality → ElevenLabs Voice ID mapping
 const PERSONALITY_VOICE_MAP: Record<string, string> = {
-  overbearing_executive:  'pNInz6obpgDQGcFmaJcg', // Adam (Deep, authoritative)
-  micromanager:           '29vD33N1CtxCmqQRPOHJ', // Drew (Precise, articulate)
-  passive_aggressive:     '21m00Tcm4TlvDq8ikWAM', // Rachel (Calm but terse)
-  credit_stealer:         'TxGEqnHWrfWFTfGW9XjX', // Josh (Smooth, confident)
-  lazy_contributor:       'yoZ06aMxZJJ28mfd3POQ', // Sam (Relaxed, slow)
-  difficult_client:       'EXAVITQu4vr4xnSDxMaL', // Bella (Firm, professional)
-  political_manager:      'VR6AewLTigWG4xSOukaG', // (Polished)
-  supportive_colleague:   'EXAVITQu4vr4xnSDxMaL', // Bella (Warm, friendly)
+  overbearing_executive:  'pNInz6obpgDQGcFmaJgB', // Adam (Dominant, Firm)
+  micromanager:           'XrExE9yKIg1WjnnlVkGX', // Matilda (Knowledgeable)
+  passive_aggressive:     'SAz9YHcvj6GT2YYXdXww', // River (Relaxed, Neutral)
+  credit_stealer:         'cjVigY5qzO86Huf0OWal', // Eric (Smooth)
+  lazy_contributor:       'bIHbv24MWmeRgasZH58o', // Will (Relaxed)
+  difficult_client:       'hpp4J3VqNfWAUOO0d1Us', // Bella (Firm)
+  political_manager:      'cjVigY5qzO86Huf0OWal', // Eric (Polished)
+  supportive_colleague:   'EXAVITQu4vr4xnSDxMaL', // Sarah (Warm, friendly)
 };
 
 export async function POST(req: Request) {
@@ -40,11 +40,11 @@ export async function POST(req: Request) {
     }
 
     // Pick voice based on personality if provided
-    let voiceId = '21m00Tcm4TlvDq8ikWAM'; // Default: Rachel
+    let voiceId = 'hpp4J3VqNfWAUOO0d1Us'; // Default: Bella
     if (personality && PERSONALITY_VOICE_MAP[personality]) {
       voiceId = PERSONALITY_VOICE_MAP[personality];
     } else if (voice === 'alloy') {
-      voiceId = 'TxGEqnHWrfWFTfGW9XjX'; // Default male (Josh)
+      voiceId = 'cjVigY5qzO86Huf0OWal'; // Default male (Eric)
     }
 
     const safeText = text.slice(0, 500); // cap at 500 chars for TTS
