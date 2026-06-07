@@ -21,6 +21,19 @@ export default function RecruiterDashboard() {
   const [dbUsers, setDbUsers] = useState<any[]>([]);
   const [isLoadingDb, setIsLoadingDb] = useState(false);
 
+  // Role Guard
+  useEffect(() => {
+    const savedUser = localStorage.getItem('interviewos_user');
+    if (!savedUser) {
+      window.location.href = '/login';
+      return;
+    }
+    const user = JSON.parse(savedUser);
+    if (user.role !== 'recruiter') {
+      window.location.href = '/login';
+    }
+  }, []);
+
   // Fetch from MongoDB
   useEffect(() => {
     if (activeTab === 'candidates' || activeTab === 'users') {
@@ -138,6 +151,15 @@ export default function RecruiterDashboard() {
           </div>
 
           <div className="flex items-center gap-4">
+            <button 
+              onClick={() => {
+                localStorage.clear();
+                window.location.href = '/login';
+              }}
+              className="text-xs font-semibold text-white/50 hover:text-rose-400 transition-colors"
+            >
+              Log out
+            </button>
             <button className="flex items-center gap-2 px-4 py-1.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold">
               <Plus className="w-4 h-4" /> New Simulation
             </button>

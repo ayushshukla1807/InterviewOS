@@ -66,6 +66,7 @@ export default function CodeChallenge({ question, initialCode = '', language = '
           onChange={(val) => setCode(val || '')}
           options={{
             minimap: { enabled: false },
+            automaticLayout: true,
             fontSize: 14,
             fontFamily: 'JetBrains Mono, monospace',
             padding: { top: 16 },

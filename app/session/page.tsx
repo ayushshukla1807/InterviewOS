@@ -679,10 +679,11 @@ function SessionContent() {
 
   const fallbackSpeak = (text: string) => {
     const play = () => {
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       const isFemale = voiceGender === 'female' || (voiceGender === 'default' && (interviewer?.name === 'Ava' || interviewer?.name === 'Zoe' || interviewer?.name === 'Zara'));
       
-      utterance.rate = voiceSpeed;
+      utterance.rate = 1.0;
       utterance.pitch = isFemale ? 1.2 : 0.9;
       
       const voices = window.speechSynthesis.getVoices();

@@ -21,43 +21,24 @@ export default function CandidateDashboard() {
     let candidateEmail = 'no-email@interviewos.ai';
 
     const savedUser = localStorage.getItem('interviewos_user');
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
-      candidateName = user.name;
-      candidateEmail = user.email;
-      setCandidateContext(user);
-    } else {
-      const savedContext = localStorage.getItem('interviewos_candidate_context');
-      if (savedContext) {
-        const context = JSON.parse(savedContext);
-        candidateName = context.name || candidateName;
-        candidateEmail = context.email || candidateEmail;
-        setCandidateContext(context);
-      }
+    if (!savedUser) {
+      router.push('/login');
+      return;
+    }
+    
+    const user = JSON.parse(savedUser);
+    if (user.role !== 'candidate') {
+      router.push('/login');
+      return;
     }
 
-    // Default test records as fallback
-    const defaultPastRecords = [
-      {
-        id: 'INT-9021',
-        jobTitle: 'JavaScript Performance & UI Engineer',
-        date: '2026-05-18',
-        score: 87,
-        status: 'Completed',
-        feedbackUrl: '/feedback/candidate?name=Ayush&track=JS',
-        skills: { JS: 92, DSA: 78, System: 85, Communication: 90 }
-      },
-      {
-        id: 'INT-4391',
-        jobTitle: 'Algorithms & Competitive Coding (Tryout)',
-        date: '2026-05-19',
-        score: 94,
-        status: 'Completed',
-        feedbackUrl: '/feedback/candidate?name=Ayush&track=DSA',
-        skills: { JS: 75, DSA: 98, System: 80, Communication: 92 }
-      }
-    ];
+    candidateName = user.name;
+    candidateEmail = user.email;
+    setCandidateContext(user);
 
+
+    // No mock data - we want an empty state if no DB records are found
+    
     // Try fetching reports from MongoDB via Next.js API
     const fetchReports = async (userId: string) => {
       try {
@@ -106,7 +87,7 @@ export default function CandidateDashboard() {
         }));
         setPastInterviews(formatted);
       } else {
-        setPastInterviews(defaultPastRecords);
+        setPastInterviews([]);
       }
     };
 
@@ -155,10 +136,13 @@ export default function CandidateDashboard() {
 
           <div className="flex items-center gap-4">
             <button 
-              onClick={clearHistory}
-              className="px-5 py-3 border border-[var(--border-color)] rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-[var(--text)] hover:bg-[var(--hover-bg)] transition-all flex items-center gap-2"
+              onClick={() => {
+                localStorage.clear();
+                window.location.href = '/login';
+              }}
+              className="px-5 py-3 border border-[var(--border-color)] rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all flex items-center gap-2"
             >
-              <RefreshCw className="w-3.5 h-3.5" /> Clear History
+              Log out
             </button>
             <Link 
               href="/"
