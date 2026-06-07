@@ -55,6 +55,14 @@ function LoginInner() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // If middleware redirected here (via 'from' param), the httpOnly cookie is missing/expired.
+    // We MUST clear localStorage to break the infinite reload loop between client and middleware.
+    if (searchParams.get('from')) {
+      localStorage.removeItem('interviewos_token');
+      localStorage.removeItem('interviewos_user');
+      return;
+    }
+
     const token = localStorage.getItem('interviewos_token');
     const user = localStorage.getItem('interviewos_user');
     if (token && user) {
@@ -63,7 +71,7 @@ function LoginInner() {
         router.push(parsed.role === 'candidate' ? '/candidate' : '/recruiter');
       } catch { /* ignore */ }
     }
-  }, [router]);
+  }, [router, searchParams]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
