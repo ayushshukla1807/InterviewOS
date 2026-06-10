@@ -146,7 +146,7 @@ export default function SignupPage() {
             </div>
           </div>
           <div className="su-preview-quote">
-            "Tell me about a time you had to debug a critical production issue under pressure. Walk me through your thought process."
+            &quot;Tell me about a time you had to debug a critical production issue under pressure. Walk me through your thought process.&quot;
           </div>
           <div className="su-preview-bars">
             {[
@@ -249,7 +249,7 @@ export default function SignupPage() {
                 <label className="su-label">Full Name</label>
                 <div className="su-input-wrap">
                   <User size={14} className="su-input-icon" />
-                  <input id="signup-name" type="text" required placeholder="Alex Johnson" value={name} onChange={e => setName(e.target.value)} className="su-input" autoComplete="name" />
+                  <input id="signup-name" type="text" required placeholder="Candidate Name" value={name} onChange={e => setName(e.target.value)} className="su-input" autoComplete="name" />
                 </div>
               </div>
               <div className="su-field">

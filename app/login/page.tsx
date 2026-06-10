@@ -16,8 +16,8 @@ const TICKER_ITEMS = [
 ];
 
 const CODE_LINES = [
-  { text: 'import { InterviewOS } from "@interviewos/core";', color: '#a5b4fc' },
-  { text: 'import { BehavioralEngine } from "@interviewos/ai";', color: '#a5b4fc' },
+  { text: 'import { NextResponse } from "next/server";', color: '#a5b4fc' },
+  { text: 'import { GoogleGenAI } from "@google/genai";', color: '#a5b4fc' },
   { text: '', color: '' },
   { text: 'const session = await InterviewOS.create({', color: '#e2e8f0' },
   { text: '  role: "Senior Full Stack Engineer",', color: '#86efac' },
@@ -35,9 +35,9 @@ const CODE_LINES = [
 ];
 
 const STATS = [
-  { value: '94%', label: 'Hire Rate Accuracy' },
-  { value: '2.3x', label: 'Faster Screening' },
-  { value: '50K+', label: 'Interviews Run' },
+  { value: '0MB', label: 'Server Video Storage' },
+  { value: '100%', label: 'Offline Execution' },
+  { value: '100%', label: 'Privacy Secured' },
 ];
 
 function LoginInner() {

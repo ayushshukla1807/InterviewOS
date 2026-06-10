@@ -49,7 +49,7 @@ function RecruiterContent() {
   }, []);
 
   if (!report) return (
-    <div className="min-h-screen bg-[#050508] flex items-center justify-center">
+    <div data-theme="dark" className="min-h-screen bg-[#050508] flex items-center justify-center">
       <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
     </div>
   );
@@ -77,7 +77,7 @@ function RecruiterContent() {
   const riskColor = risk === 'Low' ? 'text-emerald-400' : risk === 'Medium' ? 'text-amber-400' : 'text-rose-400';
 
   return (
-    <div className="min-h-screen bg-[#050508] text-slate-200 font-sans">
+    <div data-theme="dark" className="min-h-screen bg-[#050508] text-slate-200 font-sans">
       {/* Header */}
       <header className="sticky top-0 z-50 px-8 py-4 border-b border-white/5 bg-[#050508]/90 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-4">

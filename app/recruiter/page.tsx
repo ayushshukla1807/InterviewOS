@@ -128,7 +128,7 @@ export default function RecruiterDashboard() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-violet-500/30">
+    <div data-theme="dark" className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-violet-500/30">
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -136,7 +136,7 @@ export default function RecruiterDashboard() {
             <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-violet-500 to-fuchsia-600 font-black text-xs">
               OS
             </div>
-            <span className="font-bold text-sm tracking-widest uppercase">InterviewOS <span className="text-violet-400">HYRTE</span></span>
+            <span className="font-bold text-sm tracking-widest uppercase">InterviewOS</span>
           </div>
           
           <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/10">
@@ -160,7 +160,12 @@ export default function RecruiterDashboard() {
 
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => {
+              onClick={async () => {
+                try {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                } catch (e) {
+                  // ignore
+                }
                 localStorage.clear();
                 window.location.href = '/login';
               }}
@@ -168,7 +173,10 @@ export default function RecruiterDashboard() {
             >
               Log out
             </button>
-            <button className="flex items-center gap-2 px-4 py-1.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold">
+            <button 
+              onClick={() => setActiveTab('templates')}
+              className="flex items-center gap-2 px-4 py-1.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold"
+            >
               <Plus className="w-4 h-4" /> New Simulation
             </button>
           </div>
@@ -191,7 +199,7 @@ export default function RecruiterDashboard() {
               <div className="flex items-end justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Live Monitor</h1>
-                  <p className="text-white/50">Watch candidates navigate HYRTE simulations in real-time.</p>
+                  <p className="text-white/50">Watch candidates navigate simulations in real-time.</p>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-white/50">
                   <span className="relative flex h-3 w-3">
@@ -242,7 +250,7 @@ export default function RecruiterDashboard() {
                           </div>
                         </div>
                         <div className="bg-black/40 rounded-xl p-3 border border-white/5">
-                          <div className="text-xs text-white/40 mb-1">HYRTE Projection</div>
+                          <div className="text-xs text-white/40 mb-1">Score Projection</div>
                           <div className="text-xl font-bold text-violet-400">
                             {session.score || '--'}
                           </div>
@@ -273,7 +281,7 @@ export default function RecruiterDashboard() {
               <div className="flex items-end justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Leaderboard & Reports</h1>
-                  <p className="text-white/50">Candidates ranked by overall HYRTE score.</p>
+                  <p className="text-white/50">Candidates ranked by overall evaluation score.</p>
                 </div>
                 <button 
                   onClick={exportToCSV}
@@ -324,6 +332,12 @@ export default function RecruiterDashboard() {
                   <FileText className="w-12 h-12 text-white/20 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-white/80 mb-2">No Reports Yet</h3>
                   <p className="text-white/40 max-w-md mx-auto mb-6">Reports will appear here once candidates complete their simulations.</p>
+                  <button 
+                    onClick={() => setActiveTab('templates')}
+                    className="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold inline-flex items-center gap-2"
+                  >
+                    Configure Role & Invite Candidates
+                  </button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -419,16 +433,16 @@ export default function RecruiterDashboard() {
               <div className="flex items-end justify-between">
                 <div>
                   <h1 className="text-3xl font-bold mb-2">Role Blueprints</h1>
-                  <p className="text-white/50">HYRTE v3 templates configured for 15/35/50 scoring.</p>
+                  <p className="text-white/50">Templates configured for standard scoring metrics.</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { role: 'Product Manager', type: 'Tech', focus: 'Prioritization & Stakeholders', color: 'from-violet-500 to-indigo-600' },
-                  { role: 'Software Engineer', type: 'Tech', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600' },
-                  { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-500 to-red-600' },
-                  { role: 'HR Business Partner', type: 'Ops', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600' },
+                  { role: 'Product Manager', type: 'Tech', focus: 'Prioritization & Stakeholders', color: 'from-violet-500 to-indigo-600', trackId: 'it_pm' },
+                  { role: 'Software Engineer', type: 'Tech', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600', trackId: 'fullstack' },
+                  { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-500 to-red-600', trackId: 'backend' },
+                  { role: 'HR Business Partner', type: 'Ops', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600', trackId: 'qa_engineer' },
                 ].map(b => (
                   <div key={b.role} className="border border-white/10 bg-[#111115] rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-colors">
                     <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${b.color} opacity-20 blur-3xl -mr-10 -mt-10`} />
@@ -438,7 +452,7 @@ export default function RecruiterDashboard() {
                     <h3 className="text-xl font-bold mb-1">{b.role}</h3>
                     <p className="text-sm text-white/50 mb-6">Tests for: {b.focus}</p>
                     
-                    <Link href={`/simulation?role=${encodeURIComponent(b.role)}`}>
+                    <Link href={`/instructions?name=Test%20Candidate&track=${b.trackId}`}>
                       <button className="w-full py-2.5 rounded-lg bg-white/10 hover:bg-white/15 transition-colors text-sm font-semibold flex items-center justify-center gap-2 group-hover:bg-white/20">
                         <PlayCircle className="w-4 h-4" /> Test Simulation
                       </button>

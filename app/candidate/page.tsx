@@ -138,13 +138,18 @@ export default function CandidateDashboard() {
                    <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest">Profile: Active</span>
                 </div>
               </div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Verified Certifications & Learning Path Matrix</p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-1">Verified Assessments, Certificates & AI Roadmap</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => {
+              onClick={async () => {
+                try {
+                  await fetch('/api/auth/logout', { method: 'POST' });
+                } catch (e) {
+                  // ignore
+                }
                 localStorage.clear();
                 window.location.href = '/login';
               }}

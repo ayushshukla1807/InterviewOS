@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export type Theme = 'light' | 'dark' | 'multicolor' | 'skynight';
+export type Theme = 'light' | 'dark';
 
 interface ThemeContextType {
   theme: Theme;
@@ -17,8 +17,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedTheme = (localStorage.getItem('theme') as Theme) || 'light';
-    setThemeState(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    const finalTheme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'light';
+    setThemeState(finalTheme);
+    document.documentElement.setAttribute('data-theme', finalTheme);
     setMounted(true);
   }, []);
 

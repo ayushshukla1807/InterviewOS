@@ -244,7 +244,7 @@ function SessionContent() {
   const proctorReadyRef = useRef(false); // grace period guard
 
   // ─── SCRATCHPAD & IDE STATE ──────────────────────────────────────────────
-  const [scratchpad, setScratchpad] = useState('// Neural Scratchpad: Draft your logic here before final submission...');
+  const [scratchpad, setScratchpad] = useState('// Scratchpad: Draft your logic here before final submission...');
   const [activeEditorTab, setActiveEditorTab] = useState<'scratch' | 'final' | 'terminal' | 'canvas'>('scratch');
   const [terminalLogs, setTerminalLogs] = useState<string[]>(['> Sandbox initialized.', '> run `npm start` to begin.']);
   const [terminalInput, setTerminalInput] = useState('');
@@ -1037,7 +1037,7 @@ function SessionContent() {
 
   if (isEvaluating) {
     return (
-      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
+      <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
         <motion.div 
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -1061,7 +1061,7 @@ function SessionContent() {
 
   if (isGeneratingQuestions || !question) {
     return (
-      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
+      <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
         <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-8" />
         <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Matching Profile to Job Description</p>
         <p className="text-indigo-400 font-bold uppercase tracking-widest text-[9px] mt-2 animate-pulse">Generating Custom Interview Protocol...</p>
@@ -1072,7 +1072,7 @@ function SessionContent() {
   // ─── TERMINATED SCREEN ─────────────────────────────────────────────
   if (terminated) {
     return (
-      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
+      <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
         <div className="w-20 h-20 rounded-full bg-rose-500/10 border-2 border-rose-500/30 flex items-center justify-center">
           <ShieldAlert className="w-10 h-10 text-rose-500" />
         </div>
@@ -1090,7 +1090,7 @@ function SessionContent() {
   // ─── FULLSCREEN GATE ────────────────────────────────────────────────
   if (!isFullscreen) {
     return (
-      <div className="min-h-screen bg-transparent flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
+      <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
         <div className="w-20 h-20 rounded-full bg-indigo-600/10 border-2 border-indigo-500/30 flex items-center justify-center">
           <Maximize2 className="w-10 h-10 text-indigo-400" />
         </div>
@@ -1107,7 +1107,7 @@ function SessionContent() {
   }
 
   return (
-    <div className="h-screen bg-transparent flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
+    <div data-theme="dark" className="h-screen bg-[#020204] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -1416,7 +1416,7 @@ function SessionContent() {
                         <div className="w-80 shrink-0 border-l border-white/5 pl-8 flex flex-col gap-6">
                            <div className="space-y-1">
                               <h3 className="text-[10px] font-black uppercase tracking-widest text-indigo-400 flex items-center gap-2">
-                                <Activity className="w-3.5 h-3.5" /> Neural Analytics
+                                <Activity className="w-3.5 h-3.5" /> Live Analytics
                               </h3>
                               <p className="text-[9px] font-bold uppercase tracking-wider text-slate-500">Live Telemetry Feed</p>
                            </div>
@@ -2117,7 +2117,7 @@ function SessionContent() {
                   </div>
                   <div className="flex items-center gap-2">
                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                     <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.2em]">Neural Sync: {syncVal.toFixed(1)}%</span>
+                     <span className="text-[7px] font-black text-slate-600 uppercase tracking-[0.2em]">Session Sync: {syncVal.toFixed(1)}%</span>
                   </div>
                </div>
             </div>
@@ -2178,7 +2178,7 @@ function SessionContent() {
                
                <div className="p-4 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl space-y-2 mt-2">
                   <div className="flex items-center justify-between">
-                     <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Sentient Adaptation Flow</span>
+                     <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Adaptive Assessment Flow</span>
                      <Sparkles className="w-3 h-3 text-indigo-400 animate-pulse" />
                   </div>
                   <p className="text-[9px] font-bold text-slate-400 leading-tight uppercase tracking-wider">
@@ -2615,11 +2615,12 @@ function SessionContent() {
 
 export default function SessionPage() {
   const [isMounted, setIsMounted] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return <div className="min-h-screen bg-[#050508] flex items-center justify-center text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] animate-pulse">Neural Link Establishing...</div>;
+  if (!isMounted) return <div className="min-h-screen bg-[#050508] flex items-center justify-center text-slate-500 text-[11px] font-black uppercase tracking-[0.4em] animate-pulse">Loading Interview Session...</div>;
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#050508] flex items-center justify-center text-slate-500 text-[11px] font-black uppercase tracking-widest animate-pulse">Syncing...</div>}>

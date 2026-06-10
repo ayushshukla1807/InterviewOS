@@ -17,7 +17,7 @@ function InterviewOSLogo() {
         <Shield className="w-5 h-5 text-white" />
       </div>
       <div>
-        <div className="text-[11px] font-black text-white uppercase tracking-widest leading-none">InterviewOS</div>
+        <div className="text-[11px] font-black text-[var(--text)] uppercase tracking-widest leading-none">InterviewOS</div>
         <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">AI Platform</div>
       </div>
     </div>
@@ -32,7 +32,7 @@ function InstructionsContent() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [pledged, setPledged] = useState(false);
 
-  const nameParam = searchParams.get('name') || 'Ayush Shukla';
+  const nameParam = searchParams.get('name') || 'Guest Candidate';
   const trackParam = searchParams.get('track') || 'JS';
   const mockParam = searchParams.get('mock') === 'true';
   const simulationSessionId = searchParams.get('simulationSessionId') || '';
@@ -79,12 +79,20 @@ function InstructionsContent() {
     <div className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 transition-colors" style={{ color: 'var(--text)' }}>
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-5 border-b backdrop-blur-md sticky top-0 z-50 transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-        <InterviewOSLogo />
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={() => router.back()} 
+            className="px-4 py-2 border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-[var(--text)] transition-all"
+          >
+            ← Back
+          </button>
+          <InterviewOSLogo />
+        </div>
         <div className="flex items-center gap-2">
            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Powered by</span>
-           <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-full border border-white/10">
+           <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)]">
              <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
-             <span className="text-[11px] font-black text-white tracking-tight italic">elevate</span>
+             <span className="text-[11px] font-black text-[var(--text)] tracking-tight italic">elevate</span>
            </div>
         </div>
       </header>
@@ -105,7 +113,7 @@ function InstructionsContent() {
                   </div>
                   <div className="flex-1">
                     <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Invigilator</p>
-                    <p className="text-xs font-black text-white tracking-tight">{invigilator.name}, {invigilator.org}</p>
+                    <p className="text-xs font-black text-[var(--text)] tracking-tight">{invigilator.name}, {invigilator.org}</p>
                     <p className="text-[9px] font-medium text-slate-500 mt-1 leading-tight">{invigilator.message}</p>
                   </div>
                 </div>
@@ -126,14 +134,14 @@ function InstructionsContent() {
                           className={`p-3 rounded-2xl border text-left flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
                             isSelected 
                               ? 'border-indigo-600 bg-indigo-600/10 shadow-[0_0_15px_rgba(79,70,229,0.15)]' 
-                              : 'border-white/5 bg-white/5 hover:bg-white/10'
+                              : 'border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10'
                           }`}
                         >
-                          <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shrink-0 transition-all ${isSelected ? 'border-indigo-500' : 'border-white/10'}`}>
+                          <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shrink-0 transition-all ${isSelected ? 'border-indigo-500' : 'border-[var(--border-color)]'}`}>
                             <img src={int.avatar} alt={int.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="text-center">
-                            <p className="text-[11px] font-black text-white">{int.name}</p>
+                            <p className="text-[11px] font-black text-[var(--text)]">{int.name}</p>
                             <p className="text-[8px] font-bold text-slate-500 uppercase tracking-tight mt-0.5 leading-none">{int.role}</p>
                           </div>
                           {isSelected && (
@@ -214,7 +222,7 @@ function InstructionsContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Rubric 1 */}
                 <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Technical Probing (60%)</h4>
+                  <h4 className="text-xs font-black text-[var(--text)] uppercase tracking-wider mb-2">Technical Probing (60%)</h4>
                   <ul className="space-y-2 text-[12px] font-medium text-slate-400">
                     <li className="flex items-start gap-2">
                       <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
@@ -233,7 +241,7 @@ function InstructionsContent() {
 
                 {/* Rubric 2 */}
                 <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Communication & Persona (40%)</h4>
+                  <h4 className="text-xs font-black text-[var(--text)] uppercase tracking-wider mb-2">Communication & Persona (40%)</h4>
                   <ul className="space-y-2 text-[12px] font-medium text-slate-400">
                     <li className="flex items-start gap-2">
                       <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-indigo-500 shrink-0" />
@@ -248,25 +256,6 @@ function InstructionsContent() {
                       <span>Language Agility: Support for multiple languages, fluidly translating concepts to explain trade-offs.</span>
                     </li>
                   </ul>
-                </div>
-
-                {/* Rubric 3 */}
-                <div className="p-5 rounded-2xl border md:col-span-2" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Sentient Integrity Protocol</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px] font-medium text-slate-400 mt-3">
-                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Gaze Check</p>
-                      <span>Webcam feed tracks focus vectors to flag candidate posture and document-reading triggers.</span>
-                    </div>
-                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Sandbox Lock</p>
-                      <span>Full screen constraint tracks window switching and unfocus events during programming rounds.</span>
-                    </div>
-                    <div className="p-3 bg-white/5 rounded-xl border border-white/5">
-                      <p className="font-black text-white uppercase tracking-tight text-[9px] mb-1">Audio Signature</p>
-                      <span>Acoustic sensors measure environmental noise and secondary voice occurrences to verify identity.</span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>
@@ -283,10 +272,10 @@ function InstructionsContent() {
                 <button 
                   onClick={() => agreed && setShowPledgeModal(true)}
                   disabled={!agreed}
-                  className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-2xl ${
+                  className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${
                     agreed 
-                      ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-indigo-600/20 active:scale-[0.98]' 
-                      : 'bg-white/5 text-slate-600 cursor-not-allowed border border-white/5'
+                      ? 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-xl shadow-indigo-600/20 active:scale-[0.98]' 
+                      : 'bg-[var(--border-color)] text-slate-500 cursor-not-allowed border border-[var(--border-color)]'
                   }`}
                 >
                   Start Interview
@@ -382,24 +371,24 @@ function InstructionsContent() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-4xl bg-white rounded-[40px] overflow-hidden flex flex-col md:flex-row shadow-2xl"
+              className="relative w-full max-w-4xl bg-[var(--card-bg)] rounded-[40px] overflow-hidden flex flex-col md:flex-row shadow-2xl border border-[var(--border-color)]"
             >
               {/* Left Panel: Pledge */}
-              <div className="w-full md:w-[45%] bg-[#f8f9fb] p-12 flex flex-col justify-between border-r border-slate-100">
+              <div className="w-full md:w-[45%] bg-[var(--bg)] p-12 flex flex-col justify-between border-r border-[var(--border-color)]">
                 <div className="space-y-8">
                    <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20">
                      <Shield className="w-6 h-6 text-white" />
                    </div>
                    <div className="space-y-4">
-                     <h3 className="text-3xl font-black text-slate-900 tracking-tighter leading-tight">Pledge of Honesty.</h3>
+                     <h3 className="text-3xl font-black text-[var(--text)] tracking-tighter leading-tight">Pledge of Honesty.</h3>
                      <p className="text-slate-500 font-medium text-sm leading-relaxed">
                        I understand that my interview session may be recorded and reviewed. If I am found cheating, I accept full responsibility for the consequences.
                      </p>
                    </div>
                 </div>
                 <div className="pt-12">
-                   <div className="border-b-2 border-slate-200 pb-4">
-                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Signature</span>
+                   <div className="border-b-2 border-[var(--border-color)] pb-4">
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Signature</span>
                    </div>
                 </div>
               </div>
@@ -408,7 +397,7 @@ function InstructionsContent() {
               <div className="flex-1 p-12 space-y-10">
                 <button 
                   onClick={() => setShowPledgeModal(false)}
-                  className="absolute top-8 right-8 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute top-8 right-8 text-slate-400 hover:text-[var(--text)] transition-colors"
                 >
                   <ExternalLink className="w-5 h-5 rotate-45" />
                 </button>
@@ -418,20 +407,20 @@ function InstructionsContent() {
                     <AlertTriangle className="w-4 h-4 text-rose-500" />
                     <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Protocol Warning</span>
                   </div>
-                  <h4 className="text-xl font-black text-slate-900 tracking-tight">If cheating is detected, the following actions will be taken:</h4>
+                  <h4 className="text-xl font-black text-[var(--text)] tracking-tight">If cheating is detected, the following actions will be taken:</h4>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
+                  <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>
-                      <p className="text-sm font-black text-slate-900">Permanent Ban</p>
+                      <p className="text-sm font-black text-[var(--text)]">Permanent Ban</p>
                       <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">From InterviewOS Ecosystem</p>
                     </div>
                     <InterviewOSLogo />
                   </div>
-                  <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
+                  <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>
-                      <p className="text-sm font-black text-slate-900">3-Year Blacklist</p>
+                      <p className="text-sm font-black text-[var(--text)]">3-Year Blacklist</p>
                       <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">Across 800+ Hiring Partners</p>
                     </div>
                     <div className="flex items-center gap-2 text-slate-400">
@@ -447,16 +436,16 @@ function InstructionsContent() {
                       type="checkbox" 
                       checked={pledged} 
                       onChange={(e) => setPledged(e.target.checked)}
-                      className="w-5 h-5 rounded border-slate-200 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      className="w-5 h-5 rounded border-[var(--border-color)] text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                     />
-                    <span className="text-xs font-bold text-slate-600 group-hover:text-slate-900 transition-colors">I will not cheat and accept the consequences if caught</span>
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 group-hover:text-[var(--text)] transition-colors">I will not cheat and accept the consequences if caught</span>
                   </label>
 
                   <button 
                     onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`)}
                     disabled={!pledged}
                     className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${
-                      pledged ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20 hover:bg-indigo-500' : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                      pledged ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20 hover:bg-indigo-500' : 'bg-[var(--border-color)] text-slate-500 cursor-not-allowed'
                     }`}
                   >
                     Start Interview

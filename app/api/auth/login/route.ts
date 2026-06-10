@@ -14,6 +14,41 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Email and password are required' }, { status: 400 });
     }
 
+    const lowerEmail = email.toLowerCase().trim();
+    if (
+      (lowerEmail === 'demo.candidate@interviewos.com' || lowerEmail === 'demo.recruiter@interviewos.com') &&
+      password === 'demo1234'
+    ) {
+      const demoUser = {
+        id: lowerEmail === 'demo.candidate@interviewos.com' ? 'demo_candidate_id' : 'demo_recruiter_id',
+        name: lowerEmail === 'demo.candidate@interviewos.com' ? 'Demo Candidate' : 'Demo Recruiter',
+        email: lowerEmail,
+        role: lowerEmail === 'demo.candidate@interviewos.com' ? 'candidate' : 'recruiter',
+        organization: lowerEmail === 'demo.candidate@interviewos.com' ? '' : 'Demo Org',
+      };
+
+      const token = jwt.sign(
+        { id: demoUser.id, role: demoUser.role },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+      );
+
+      const response = NextResponse.json({
+        token,
+        user: demoUser
+      });
+
+      response.cookies.set('interviewos_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+
+      return response;
+    }
+
     await connectDB();
 
     const user = await User.findOne({ email: email.toLowerCase().trim() });

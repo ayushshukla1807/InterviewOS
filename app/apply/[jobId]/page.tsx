@@ -86,8 +86,8 @@ export default function ApplyPage() {
 
       localStorage.setItem('interviewos_candidate_context', JSON.stringify(context));
       
-      // Redirect to the main instructions page, passing the track as 'DYNAMIC'
-      router.push(`/?name=${encodeURIComponent(name)}&track=DYNAMIC`);
+      // Redirect to the instructions page, passing the track as 'DYNAMIC'
+      router.push(`/instructions?name=${encodeURIComponent(name)}&track=DYNAMIC`);
 
     } catch (err: any) {
       setError(err.message || 'An error occurred during application submission.');

@@ -96,15 +96,15 @@ function LandingPageContent() {
     setProfile(prev => ({ ...prev, [key]: val }));
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-indigo-500/30 overflow-x-hidden flex flex-col relative">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-indigo-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
 
       {/* Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div 
-          className="absolute inset-0 opacity-50 bg-cover bg-center bg-no-repeat" 
-          style={{ backgroundImage: 'url(/hero-bg.png)' }} 
+          className="absolute inset-0 opacity-50 bg-cover bg-center bg-no-repeat animate-pulse" 
+          style={{ backgroundImage: 'url(/hero-bg.png)', mixBlendMode: 'overlay' }} 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/70 to-slate-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg)]/70 to-[var(--bg)]" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full" />
       </div>
 
@@ -121,10 +121,6 @@ function LandingPageContent() {
         </motion.div>
 
         <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 border rounded-full" style={{ backgroundColor: 'color-mix(in srgb, #10b981 10%, transparent)', borderColor: 'color-mix(in srgb, #10b981 20%, transparent)' }}>
-            <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Neural Core: Active</span>
-          </div>
           <Link href="/recruiter" className="text-[11px] font-bold uppercase tracking-widest transition-colors" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Recruiter</Link>
           <Link href="/candidate" className="text-[11px] font-bold uppercase tracking-widest transition-colors" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Candidate</Link>
         </div>
@@ -285,7 +281,7 @@ function LandingPageContent() {
                               <input
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
-                                placeholder="Ayush Shukla"
+                                placeholder="Guest Candidate"
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none placeholder-slate-400 shadow-inner"
                               />
                             </div>
@@ -294,7 +290,7 @@ function LandingPageContent() {
                               <input
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
-                                placeholder="BTech CS, IIT Mandi · Minor in AI/ML"
+                                placeholder="B.S. Computer Science"
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none placeholder-slate-400 shadow-inner"
                               />
                             </div>
@@ -303,7 +299,7 @@ function LandingPageContent() {
                               <textarea
                                 value={profile.projects}
                                 onChange={e => updateProfile('projects', e.target.value)}
-                                placeholder="e.g. Built InterviewOS — an AI-powered hiring platform using Next.js, Gemini API, and real-time WebRTC proctoring..."
+                                placeholder="e.g. Built an AI-powered logistics routing application using Next.js..."
                                 rows={2}
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
                               />
@@ -313,7 +309,7 @@ function LandingPageContent() {
                               <textarea
                                 value={profile.experience}
                                 onChange={e => updateProfile('experience', e.target.value)}
-                                placeholder="e.g. SDE Intern at XYZ — built payment APIs handling 10K req/min..."
+                                placeholder="e.g. Software Engineer Intern at Acme Corp — optimized database queries..."
                                 rows={2}
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
                               />
@@ -323,7 +319,7 @@ function LandingPageContent() {
                               <textarea
                                 value={profile.certifications}
                                 onChange={e => updateProfile('certifications', e.target.value)}
-                                placeholder="e.g. AWS Solutions Architect, Google AI Essentials, Minor in AI/ML from IIT Mandi..."
+                                placeholder="e.g. AWS Certified Developer, React, Node.js..."
                                 rows={2}
                                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
                               />
@@ -356,22 +352,22 @@ function LandingPageContent() {
             {activeTab === 'candidate' && (
               <motion.div key="candidate" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Candidate Portfolio Workspace</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-1">View past assessments, download verified certificates, and follow your AI learning roadmap</p>
+                  <h3 className="text-xl font-bold text-[var(--text)]">Candidate Portfolio Workspace</h3>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">View past assessments, download verified certificates, and follow your AI learning roadmap</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-5 bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5">
-                    <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Personalised Paths</span>
-                    <p className="text-sm font-bold text-slate-900">AI Learning Roadmap</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">Customised skill improvement checklists based on your actual interview results.</p>
-                  </div>
-                  <div className="p-5 bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5">
-                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Verified Badge</span>
-                    <p className="text-sm font-bold text-slate-900">Shareable Certificate</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">Download and share elegant completion certificates with unique verification hashes.</p>
-                  </div>
+                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Personalised Paths</span>
+                    <p className="text-sm font-bold text-[var(--text)]">AI Learning Roadmap</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Customised skill improvement checklists based on your actual interview results.</p>
+                  </Link>
+                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Verified Badge</span>
+                    <p className="text-sm font-bold text-[var(--text)]">Shareable Certificate</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Download and share elegant completion certificates with unique verification hashes.</p>
+                  </Link>
                 </div>
-                <Link href="/candidate" className="w-full py-4 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
+                <Link href="/candidate" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 dark:bg-white dark:text-black dark:hover:bg-slate-100 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
                   Open My Candidate Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -381,22 +377,22 @@ function LandingPageContent() {
             {activeTab === 'recruiter' && (
               <motion.div key="recruiter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">Recruiter Control Dashboard</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-1">Create job listings, send candidate invite links, audit proctor logs, evaluate competency radars</p>
+                  <h3 className="text-xl font-bold text-[var(--text)]">Recruiter Control Dashboard</h3>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Create job listings, send candidate invite links, audit proctor logs, evaluate competency radars</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-5 bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5">
-                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Visual Proctoring</span>
-                    <p className="text-sm font-bold text-slate-900">Neural Integrity Audit Log</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">Gaze tracking, tab-switch violations, and screen-sharing audit snapshots.</p>
-                  </div>
-                  <div className="p-5 bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5">
-                    <span className="text-[10px] font-bold text-violet-600 uppercase tracking-widest">Analytics</span>
-                    <p className="text-sm font-bold text-slate-900">Competency Radar Grid</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">16-point merit reports with hiring-readiness scores and risk flags.</p>
-                  </div>
+                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Visual Proctoring</span>
+                    <p className="text-sm font-bold text-[var(--text)]">Neural Integrity Audit Log</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Gaze tracking, tab-switch violations, and screen-sharing audit snapshots.</p>
+                  </Link>
+                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                    <span className="text-[10px] font-bold text-violet-500 uppercase tracking-widest">Analytics</span>
+                    <p className="text-sm font-bold text-[var(--text)]">Competency Radar Grid</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">16-point merit reports with hiring-readiness scores and risk flags.</p>
+                  </Link>
                 </div>
-                <Link href="/recruiter" className="w-full py-4 bg-slate-900 text-white hover:bg-slate-800 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
+                <Link href="/recruiter" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 dark:bg-white dark:text-black dark:hover:bg-slate-100 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
                   Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -406,23 +402,23 @@ function LandingPageContent() {
             {activeTab === 'mvp' && (
               <motion.div key="mvp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">JD + Resume Custom Assessment (MVP Flow)</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-1">Upload your resume against a recruiter's job description — AI generates a 100% custom interview</p>
+                  <h3 className="text-xl font-bold text-[var(--text)]">JD + Resume Custom Assessment (MVP Flow)</h3>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Upload your resume against a recruiter's job description — AI generates a 100% custom interview</p>
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[11px] font-bold text-slate-600 uppercase tracking-widest">Select Job Opening</label>
+                  <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Select Job Opening</label>
                   <select
                     value={selectedJob}
                     onChange={e => setSelectedJob(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-emerald-500 focus:bg-white outline-none shadow-inner"
+                    className="w-full bg-[var(--bg)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text)] focus:border-emerald-500 focus:bg-[var(--card-bg)] outline-none shadow-inner"
                   >
                     <option value="REQ-101">REQ-101: Senior Staff Engineer (React & AI Integration)</option>
                     <option value="REQ-102">REQ-102: Lead Fullstack & Distributed Systems Architect</option>
                     <option value="REQ-103">REQ-103: Algorithms & Competitive Programmer Intern</option>
                   </select>
                 </div>
-                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
-                  <p className="text-[13px] text-emerald-800 leading-relaxed font-medium">
+                <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                  <p className="text-[13px] text-emerald-600 dark:text-emerald-400 leading-relaxed font-medium">
                     You will land on the job application page, enter your details, and upload a <strong>PDF Resume</strong>. The AI parses your resume, matches it against the JD requirements, and generates a personalised 4-question technical assessment covering exactly the intersection of your skills and the role's needs.
                   </p>
                 </div>
@@ -440,27 +436,23 @@ function LandingPageContent() {
         {/* Feature pillars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
           {[
-            { icon: <Bot className="w-6 h-6 text-indigo-600" />, bg: 'bg-indigo-50 border-indigo-200', title: 'Sentient AI Interviewer', desc: 'Syed probes your actual projects, not textbook definitions.' },
-            { icon: <ShieldAlert className="w-6 h-6 text-emerald-600" />, bg: 'bg-emerald-50 border-emerald-200', title: 'Neural Proctoring', desc: 'Gaze tracking, tab-switch detection, zero false positives.' },
-            { icon: <UserCheck className="w-6 h-6 text-violet-600" />, bg: 'bg-violet-50 border-violet-200', title: '16-Point Merit Reports', desc: 'Hiring-ready competency radars delivered instantly.' },
+            { icon: <Bot className="w-6 h-6 text-indigo-600" />, bg: 'bg-indigo-50 border-indigo-200 dark:bg-indigo-950/30 dark:border-indigo-900/50', title: 'Sentient AI Interviewer', desc: 'Syed probes your actual projects, not textbook definitions.' },
+            { icon: <ShieldAlert className="w-6 h-6 text-emerald-600" />, bg: 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900/50', title: 'Neural Proctoring', desc: 'Gaze tracking, tab-switch detection, zero false positives.' },
+            { icon: <UserCheck className="w-6 h-6 text-violet-600" />, bg: 'bg-violet-50 border-violet-200 dark:bg-violet-950/30 dark:border-violet-900/50', title: '16-Point Merit Reports', desc: 'Hiring-ready competency radars delivered instantly.' },
           ].map(f => (
-            <div key={f.title} className="group flex flex-col items-center gap-4 p-8 bg-white border border-slate-200 rounded-3xl hover:border-slate-300 hover:shadow-xl transition-all duration-300 text-center shadow-md">
+            <div key={f.title} className="group flex flex-col items-center gap-4 p-8 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl hover:border-indigo-500/50 hover:shadow-xl transition-all duration-300 text-center shadow-md">
               <div className={`w-14 h-14 ${f.bg} rounded-2xl flex items-center justify-center border group-hover:scale-110 transition-transform`}>{f.icon}</div>
               <div className="space-y-1.5">
-                <p className="text-sm font-bold text-slate-900 tracking-tight">{f.title}</p>
-                <p className="text-[11px] font-medium text-slate-500 leading-relaxed">{f.desc}</p>
+                <p className="text-sm font-bold text-[var(--text)] tracking-tight">{f.title}</p>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </main>
 
-      <footer className="p-12 border-t border-slate-200 text-center bg-white">
+      <footer className="p-12 border-t border-[var(--border-color)] text-center bg-[var(--card-bg)]">
         <div className="flex flex-col items-center gap-4">
-          <div className="flex items-center gap-3 opacity-40">
-            <Cpu className="w-4 h-4 text-slate-600" />
-            <span className="text-[9px] font-bold text-slate-600 uppercase tracking-[0.3em]">System Version 5.0 // Sentient Core</span>
-          </div>
           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">© 2026 InterviewOS Inc. All rights reserved.</p>
         </div>
       </footer>

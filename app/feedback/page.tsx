@@ -10,18 +10,43 @@ function FeedbackGateway() {
   const name = searchParams.get('name') || 'Candidate';
   const track = searchParams.get('track') || 'JS';
   const [report, setReport] = useState<any>(null);
+  const [hasTimedOut, setHasTimedOut] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('interviewos_report');
     if (saved) setReport(JSON.parse(saved));
+
+    const timer = setTimeout(() => {
+      setHasTimedOut(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  if (!report) return (
-    <div className="min-h-screen bg-[#050508] flex flex-col items-center justify-center gap-4">
-      <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-      <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] animate-pulse">Generating Assessment Report...</p>
-    </div>
-  );
+  if (!report) {
+    if (hasTimedOut) {
+      return (
+        <div data-theme="dark" className="min-h-screen bg-[#050508] flex flex-col items-center justify-center gap-6 p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-rose-500 animate-bounce" />
+          <div className="space-y-2">
+            <h3 className="text-lg font-black text-white tracking-tight uppercase">No Report Found</h3>
+            <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
+              We couldn't find an assessment report for this session. It might have expired or not been generated yet.
+            </p>
+          </div>
+          <Link href="/" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 transition-colors text-white rounded-xl text-xs font-black uppercase tracking-widest inline-flex items-center gap-2 shadow-lg shadow-indigo-600/20">
+            Go to Home
+          </Link>
+        </div>
+      );
+    }
+    return (
+      <div data-theme="dark" className="min-h-screen bg-[#050508] flex flex-col items-center justify-center gap-4">
+        <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+        <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] animate-pulse">Generating Assessment Report...</p>
+      </div>
+    );
+  }
 
   const ev = report.fullEvaluation || {};
   const overall = ev.overallScore || report.score || 0;
@@ -32,7 +57,7 @@ function FeedbackGateway() {
   const recColor = rec === 'Hire' ? 'emerald' : rec === 'Proceed with Caution' ? 'amber' : 'rose';
 
   return (
-    <div className="min-h-screen bg-[#050508] text-slate-200 font-sans flex flex-col">
+    <div data-theme="dark" className="min-h-screen bg-[#050508] text-slate-200 font-sans flex flex-col">
       <header className="px-8 py-5 border-b border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl flex items-center gap-4">
         <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
           <Shield className="w-4 h-4 text-white" />
