@@ -23,7 +23,12 @@ export default function CandidateDashboard() {
     // Authenticate via cookie + API
     const verifyAuth = async () => {
       try {
-        const res = await fetch('/api/auth/me');
+        const token = localStorage.getItem('interviewos_token');
+        const res = await fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (!res.ok) throw new Error('Not authenticated');
         const user = await res.json();
         
