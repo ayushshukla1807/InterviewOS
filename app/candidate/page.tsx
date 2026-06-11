@@ -33,7 +33,8 @@ export default function CandidateDashboard() {
           }
         });
         if (!res.ok) throw new Error('Not authenticated');
-        const user = await res.json();
+        const data = await res.json();
+        const user = data.user || data;
         
         if (user.role !== 'candidate') {
           localStorage.removeItem('interviewos_token');
