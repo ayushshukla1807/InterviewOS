@@ -15,6 +15,19 @@ export async function GET(req: Request) {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
 
+    if (decoded.id === 'demo_candidate_id' || decoded.id === 'demo_recruiter_id') {
+      const isCandidate = decoded.id === 'demo_candidate_id';
+      return NextResponse.json({
+        user: {
+          id: decoded.id,
+          name: isCandidate ? 'Demo Candidate' : 'Demo Recruiter',
+          email: isCandidate ? 'demo.candidate@interviewos.com' : 'demo.recruiter@interviewos.com',
+          role: isCandidate ? 'candidate' : 'recruiter',
+          organization: isCandidate ? '' : 'Demo Org',
+        }
+      });
+    }
+
     await connectDB();
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {

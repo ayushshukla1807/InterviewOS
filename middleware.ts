@@ -15,8 +15,6 @@ const PUBLIC_ROUTES = [
 const PROTECTED_ROUTES = [
   '/session',
   '/simulation',
-  '/candidate',
-  '/recruiter',
   '/interview',
   '/report',
   '/feedback',
