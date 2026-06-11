@@ -383,18 +383,6 @@ function LoginInner() {
                 <div className="ios-demo-hint">Proctor dashboard</div>
               </div>
             </button>
-            <button
-              type="button"
-              className="ios-demo-btn group"
-              onClick={() => handleDemoLogin('founder@interviewos.com')}
-              disabled={loginStatus !== 'idle'}
-            >
-              <div className="ios-demo-icon bg-indigo-500 text-white">F</div>
-              <div>
-                <div className="ios-demo-role text-indigo-200 group-hover:text-indigo-100 transition-colors">Founder Portal</div>
-                <div className="ios-demo-hint text-indigo-400/50">Admin & DB Access</div>
-              </div>
-            </button>
           </div>
 
           <p className="ios-switch-text">
