@@ -673,6 +673,7 @@ function SessionContent() {
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true; // DO NOT cut off automatically!
       recognitionRef.current.interimResults = true;
+      let silenceTimer: any;
       recognitionRef.current.onresult = (event: any) => {
         let finalTranscript = '';
         for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -682,6 +683,16 @@ function SessionContent() {
         }
         if (finalTranscript) {
           setInput((prev) => prev + (prev ? ' ' : '') + finalTranscript);
+          
+          clearTimeout(silenceTimer);
+          silenceTimer = setTimeout(() => {
+            const sendBtn = document.getElementById('send-message-btn') || document.getElementById('send-message-btn-alt');
+            if (sendBtn) {
+              setIsListening(false);
+              recognitionRef.current?.stop();
+              sendBtn.click();
+            }
+          }, 2000);
         }
       };
       
@@ -2044,7 +2055,7 @@ function SessionContent() {
                        <Mic className={`w-4 h-4 ${isListening ? 'animate-pulse' : ''}`} />
                      </button>
                   </div>
-                  <button onClick={send} disabled={!input.trim() || isThinking} className="bg-white hover:bg-slate-200 disabled:opacity-20 text-black p-5 rounded-[20px] shadow-2xl transition-all shrink-0 active:scale-95">
+                  <button id="send-message-btn" onClick={send} disabled={!input.trim() || isThinking} className="bg-white hover:bg-slate-200 disabled:opacity-20 text-black p-5 rounded-[20px] shadow-2xl transition-all shrink-0 active:scale-95">
                     <Send className="w-5 h-5" />
                   </button>
                </div>
@@ -2297,7 +2308,7 @@ function SessionContent() {
                <Mic className="w-6 h-6" />
             </button>
             {isListening && input && (
-               <button onClick={send} className="px-6 h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-full hover:bg-indigo-50 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+               <button id="send-message-btn-alt" onClick={send} className="px-6 h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-full hover:bg-indigo-50 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                   <Send className="w-4 h-4" /> Send Reply
                </button>
             )}
