@@ -401,7 +401,31 @@ function LoginInner() {
           background: #050508;
           font-family: 'Inter', sans-serif;
           overflow: hidden;
+          transition: background 0.3s ease;
         }
+        
+        .light .ios-auth-root {
+          background: #f8fafc;
+        }
+
+        .light .ios-auth-root h1 { color: #0f172a; }
+        .light .ios-auth-root p { color: #475569; }
+        .light .ios-auth-right { background: #ffffff; border-left: 1px solid #e2e8f0; }
+        .light .ios-form-container { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05); }
+        .light .ios-form-container h2 { color: #0f172a; }
+        .light .ios-form-container p { color: #64748b; }
+        .light .ios-label { color: #475569; }
+        .light .ios-input { background: #f8fafc; border: 1px solid #e2e8f0; color: #0f172a; }
+        .light .ios-input::placeholder { color: #94a3b8; }
+        .light .ios-input-icon { color: #64748b; }
+        .light .ios-demo-btn { background: #f8fafc; border: 1px solid #e2e8f0; }
+        .light .ios-demo-role { color: #0f172a; }
+        .light .ios-demo-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .light .ios-switch-text { color: #64748b; }
+        .light .ios-switch-link { color: #6366f1; }
+        .light .ios-divider-line { background: #e2e8f0; }
+        .light .ios-divider-text { color: #94a3b8; }
+        .light .ios-auth-left::after { background: linear-gradient(135deg, rgba(248,250,252,0.8) 0%, rgba(99,102,241,0.05) 50%, rgba(248,250,252,0.95) 100%); }
 
         /* ── LEFT PANEL ── */
         .ios-auth-left {
@@ -430,6 +454,7 @@ function LoginInner() {
           inset: 0;
           background: linear-gradient(135deg, rgba(5,5,8,0.55) 0%, rgba(99,102,241,0.08) 50%, rgba(5,5,8,0.8) 100%);
           z-index: 1;
+          transition: background 0.3s ease;
         }
         .ios-auth-left > * { position: relative; z-index: 2; }
 

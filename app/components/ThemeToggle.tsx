@@ -12,21 +12,27 @@ export function ThemeToggle() {
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="fixed bottom-6 right-6 z-[100] w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95 border border-slate-200 dark:border-white/10 backdrop-blur-md"
-      style={{
-        backgroundColor: 'var(--card-bg)',
-        color: 'var(--text)',
-        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.15)'
-      }}
-      aria-label="Toggle theme"
-    >
-      {theme === 'light' ? (
-        <Moon className="w-5 h-5 text-slate-700" />
-      ) : (
-        <Sun className="w-5 h-5 text-amber-400" />
-      )}
-    </button>
+    <div className="fixed bottom-6 right-6 z-[100] flex items-center bg-slate-200/50 dark:bg-white/10 p-1 rounded-full backdrop-blur-md border border-slate-300/50 dark:border-white/10 shadow-lg">
+      <button
+        onClick={() => setTheme('light')}
+        className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
+          theme === 'light' 
+            ? 'bg-white text-slate-900 shadow-sm' 
+            : 'text-slate-400 hover:text-white'
+        }`}
+      >
+        LIGHT
+      </button>
+      <button
+        onClick={() => setTheme('dark')}
+        className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
+          theme === 'dark' 
+            ? 'bg-indigo-500 text-white shadow-sm' 
+            : 'text-slate-500 hover:text-slate-800'
+        }`}
+      >
+        DARK
+      </button>
+    </div>
   );
 }
