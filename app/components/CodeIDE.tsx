@@ -167,25 +167,6 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     document.addEventListener('mousedown', h);
   
   
-  useEffect(() => {
-    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
-    // For strictly blocking paste in the whole IDE component:
-    const blockPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      alert("Copy/Paste is disabled during the interview for integrity reasons.");
-    };
-    const container = document.getElementById('code-ide-container');
-    if (container) {
-      container.addEventListener('paste', blockPaste as any);
-      container.addEventListener('copy', blockPaste as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('paste', blockPaste as any);
-        container.removeEventListener('copy', blockPaste as any);
-      }
-    };
-  }, []);
 
   return () => document.removeEventListener('mousedown', h);
   }, []);
@@ -207,25 +188,6 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     window.addEventListener('mouseup', up);
   
   
-  useEffect(() => {
-    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
-    // For strictly blocking paste in the whole IDE component:
-    const blockPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      alert("Copy/Paste is disabled during the interview for integrity reasons.");
-    };
-    const container = document.getElementById('code-ide-container');
-    if (container) {
-      container.addEventListener('paste', blockPaste as any);
-      container.addEventListener('copy', blockPaste as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('paste', blockPaste as any);
-        container.removeEventListener('copy', blockPaste as any);
-      }
-    };
-  }, []);
 
   return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
   }, [isDraggingRow]);
@@ -249,25 +211,6 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     window.addEventListener('mouseup', up);
   
   
-  useEffect(() => {
-    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
-    // For strictly blocking paste in the whole IDE component:
-    const blockPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      alert("Copy/Paste is disabled during the interview for integrity reasons.");
-    };
-    const container = document.getElementById('code-ide-container');
-    if (container) {
-      container.addEventListener('paste', blockPaste as any);
-      container.addEventListener('copy', blockPaste as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('paste', blockPaste as any);
-        container.removeEventListener('copy', blockPaste as any);
-      }
-    };
-  }, []);
 
   return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
   }, [isDraggingCol]);
@@ -281,25 +224,6 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     window.addEventListener('keydown', h);
   
   
-  useEffect(() => {
-    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
-    // For strictly blocking paste in the whole IDE component:
-    const blockPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      alert("Copy/Paste is disabled during the interview for integrity reasons.");
-    };
-    const container = document.getElementById('code-ide-container');
-    if (container) {
-      container.addEventListener('paste', blockPaste as any);
-      container.addEventListener('copy', blockPaste as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('paste', blockPaste as any);
-        container.removeEventListener('copy', blockPaste as any);
-      }
-    };
-  }, []);
 
   return () => window.removeEventListener('keydown', h);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -372,25 +296,6 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
 
 
   
-  useEffect(() => {
-    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
-    // For strictly blocking paste in the whole IDE component:
-    const blockPaste = (e: ClipboardEvent) => {
-      e.preventDefault();
-      alert("Copy/Paste is disabled during the interview for integrity reasons.");
-    };
-    const container = document.getElementById('code-ide-container');
-    if (container) {
-      container.addEventListener('paste', blockPaste as any);
-      container.addEventListener('copy', blockPaste as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('paste', blockPaste as any);
-        container.removeEventListener('copy', blockPaste as any);
-      }
-    };
-  }, []);
 
   return (
     <div style={S.root}>
