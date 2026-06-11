@@ -16,6 +16,7 @@
     "@google/genai": "^2.4.0",
     "@mediapipe/tasks-vision": "^0.10.35",
     "@monaco-editor/react": "^4.7.0",
+    "@tailwindcss/postcss": "^4",
     "@types/nodemailer": "^8.0.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
@@ -28,15 +29,16 @@
     "nodemailer": "^8.0.10",
     "openai": "^6.37.0",
     "pdfjs-dist": "^5.7.284",
+    "postcss": "^8.5.15",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
     "stripe": "^22.2.0",
     "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4",
     "unpdf": "^1.6.2"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
@@ -44,7 +46,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }
