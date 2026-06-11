@@ -70,12 +70,19 @@ function LoginInner() {
         const parsed = JSON.parse(user);
         if (parsed.role === 'founder') {
           router.push('/founder');
+        } else if (parsed.role === 'recruiter') {
+          router.push('/recruiter');
         } else if (parsed.role === 'candidate') {
           router.push('/candidate');
         } else {
-          router.push('/recruiter');
+          // If role is missing or invalid, clear session and stay on login
+          localStorage.removeItem('interviewos_token');
+          localStorage.removeItem('interviewos_user');
         }
-      } catch { /* ignore */ }
+      } catch { 
+        localStorage.removeItem('interviewos_token');
+        localStorage.removeItem('interviewos_user');
+      }
     }
   }, [router, searchParams]);
 
