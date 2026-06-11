@@ -15,15 +15,35 @@ export async function GET(req: Request) {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
 
-    if (decoded.id === 'demo_candidate_id' || decoded.id === 'demo_recruiter_id') {
+    if (decoded.id === 'demo_candidate_id' || decoded.id === 'demo_recruiter_id' || decoded.id === 'demo_founder_id') {
       const isCandidate = decoded.id === 'demo_candidate_id';
+      const isRecruiter = decoded.id === 'demo_recruiter_id';
+      const isFounder = decoded.id === 'demo_founder_id';
+      
+      let role = 'candidate';
+      let name = 'Demo Candidate';
+      let email = 'demo.candidate@interviewos.com';
+      let org = '';
+
+      if (isRecruiter) {
+        role = 'recruiter';
+        name = 'Demo Recruiter';
+        email = 'demo.recruiter@interviewos.com';
+        org = 'Demo Org';
+      } else if (isFounder) {
+        role = 'founder';
+        name = 'Founder Admin';
+        email = 'founder@interviewos.com';
+        org = 'InterviewOS Core';
+      }
+
       return NextResponse.json({
         user: {
           id: decoded.id,
-          name: isCandidate ? 'Demo Candidate' : 'Demo Recruiter',
-          email: isCandidate ? 'demo.candidate@interviewos.com' : 'demo.recruiter@interviewos.com',
-          role: isCandidate ? 'candidate' : 'recruiter',
-          organization: isCandidate ? '' : 'Demo Org',
+          name,
+          email,
+          role,
+          organization: org,
         }
       });
     }

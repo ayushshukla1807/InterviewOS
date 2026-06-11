@@ -15,12 +15,13 @@ export async function POST(req: Request) {
     }
 
     const lowerEmail = email.toLowerCase().trim();
+    const cleanPassword = password.trim();
     
     // Hardcoded Demo & Founder Bypass
     if (
-      (lowerEmail === 'demo.candidate@interviewos.com' && password === 'demo1234') ||
-      (lowerEmail === 'demo.recruiter@interviewos.com' && password === 'demo1234') ||
-      (lowerEmail === 'founder@interviewos.com' && password === 'founder2026')
+      (lowerEmail === 'demo.candidate@interviewos.com' && cleanPassword === 'demo1234') ||
+      (lowerEmail === 'demo.recruiter@interviewos.com' && cleanPassword === 'demo1234') ||
+      (lowerEmail === 'founder@interviewos.com' && cleanPassword === 'founder2026')
     ) {
       let role = 'candidate';
       let id = 'demo_candidate_id';
