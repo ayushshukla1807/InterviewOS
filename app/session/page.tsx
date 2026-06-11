@@ -149,7 +149,7 @@ function SessionContent() {
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQ, setCurrentQ] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>('voice');
+  const [activeTab, setActiveTab] = useState<TabType>('code');
   const [scenario, setScenario] = useState<any>(null);
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -448,8 +448,8 @@ function SessionContent() {
       const openingLines = [
         `Hey ${name.split(' ')[0]}! I'm ${interviewer.name}. I'll be your lead interviewer today.`,
         `First of all, don't sweat it. We're just here to have a solid technical chat and see how you think.`,
-        `I've got some interesting challenges lined up${jobTitle}.`,
-        `We have shared a coding question on your screen. Take your time to read the constraints. Whenever you're ready, let's dive into it. Sound good?`
+        `Before we dive into the technical challenges, I'd love to learn a bit more about you.`,
+        `Could you briefly introduce yourself and highlight a recent project you're particularly proud of?`
       ];
       const fullGreeting = openingLines.join(' ');
       setMessages([{ role: 'assistant', content: fullGreeting }]);
