@@ -30,6 +30,7 @@ const LANGS = [
   { id: 'java',       label: 'Java (OpenJDK 17)', monaco: 'java'       },
   { id: 'cpp',        label: 'C++ (GCC 12)',      monaco: 'cpp'        },
   { id: 'go',         label: 'Go (1.21)',         monaco: 'go'         },
+  { id: 'rust',       label: 'Rust (1.50)',       monaco: 'rust'       },
 ];
 
 const STARTERS: Record<string, string> = {
@@ -103,6 +104,14 @@ func main() {
     // Write your solution
     fmt.Println(n)
 }`,
+  rust: `use std::io::{self, Read};
+
+fn main() {
+    let mut input = String::new();
+    io::stdin().read_to_string(&mut input).unwrap();
+    // Parse input and write your solution
+    println!("{}", input.trim());
+}`,
 };
 
 const DIFF_COLOR: Record<string, string> = { Easy: '#00b8a3', Medium: '#ffc01e', Hard: '#ff375f' };
@@ -142,6 +151,10 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
   const containerRef = useRef<HTMLDivElement>(null);
   const langMenuRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<unknown>(null);
+
+  useEffect(() => {
+    setLang(language);
+  }, [language]);
 
   useEffect(() => {
     if (!initialCode) setCode(STARTERS[lang] || '# Write your code here\n');
@@ -388,28 +401,9 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
 
           {/* Editor top bar */}
           <div style={S.editorTopBar}>
-            {/* Language selector */}
-            <div ref={langMenuRef} style={{ position: 'relative' }}>
-              <button
-                onClick={() => setShowLangMenu(p => !p)}
-                style={S.langBtn}
-              >
-                {currentLang.label}
-                <ChevronDown size={12} />
-              </button>
-              {showLangMenu && (
-                <div style={S.langMenu}>
-                  {LANGS.map(l => (
-                    <button
-                      key={l.id}
-                      onClick={() => { setLang(l.id); setShowLangMenu(false); }}
-                      style={{ ...S.langOption, background: lang === l.id ? '#1f2937' : 'transparent', color: lang === l.id ? '#58a6ff' : '#8b949e' }}
-                    >
-                      {l.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+            {/* Language indicator (read-only) */}
+            <div style={S.langBtn}>
+              {currentLang?.label || 'Language'}
             </div>
 
             <div style={{ display: 'flex', gap: 6 }}>
