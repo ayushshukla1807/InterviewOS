@@ -255,9 +255,7 @@ function SessionContent() {
   const [execSuccess, setExecSuccess] = useState<boolean | null>(null);
   const [isCodeRunning, setIsCodeRunning] = useState(false);
 
-  const triggerCodingQuestionAnnouncement = () => {
-    speak("We have shared a coding question on the right panel. Please read it carefully and write your solution in the editor.");
-  };
+
 
   const handleRunCode = async () => {
     const codeToRun = activeEditorTab === 'scratch' ? scratchpad : code;
@@ -438,15 +436,7 @@ function SessionContent() {
   const isTerminalSession = status === 'completed' || status === 'error';
   const question = questions[currentQ];
 
-  useEffect(() => {
-    // Only trigger once when the first question loads and starts
-    if (question && !isGeneratingQuestions && isStarted && timeLeft > 0) {
-      if (!window.sessionStorage.getItem('interviewos_coding_announced')) {
-        setTimeout(() => triggerCodingQuestionAnnouncement(), 2000);
-        window.sessionStorage.setItem('interviewos_coding_announced', 'true');
-      }
-    }
-  }, [question, isGeneratingQuestions, isStarted, timeLeft]);
+
 
   // Handle Fullscreen & Anti-Cheating
   useEffect(() => {
