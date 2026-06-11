@@ -139,9 +139,9 @@ function LandingPageContent() {
             <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 70%, transparent)' }}>Behavioral Intelligence Platform</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1]" style={{ color: 'var(--text)' }}>
-            Master the <br />
+            Experience the <br />
             <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(to right, var(--primary), #8b5cf6)' }}>
-              Modern Tech Interview
+              Future of AI Hiring
             </span>
           </h1>
           <p className="font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>

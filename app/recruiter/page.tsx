@@ -9,7 +9,6 @@ import {
   LineChart, Line
 } from 'recharts';
 
-// Mock active sessions reading from localStorage for demo purposes
 interface ActiveSession {
   sessionId: string;
   name: string;
@@ -26,7 +25,6 @@ export default function RecruiterDashboard() {
   const [dbUsers, setDbUsers] = useState<any[]>([]);
   const [isLoadingDb, setIsLoadingDb] = useState(false);
 
-  // Role Guard
   useEffect(() => {
     const savedUser = localStorage.getItem('interviewos_user');
     if (!savedUser) {
@@ -47,7 +45,6 @@ export default function RecruiterDashboard() {
     }
   }, []);
 
-  // Fetch from MongoDB
   useEffect(() => {
     if (activeTab === 'candidates' || activeTab === 'users') {
       setIsLoadingDb(true);
@@ -55,7 +52,6 @@ export default function RecruiterDashboard() {
         .then(res => res.json())
         .then(data => {
           if (data.reports) {
-            // Sort reports by score descending for Leaderboard effect
             setDbReports(data.reports.sort((a: any, b: any) => b.score - a.score));
           }
           if (data.users) setDbUsers(data.users);
@@ -88,12 +84,7 @@ export default function RecruiterDashboard() {
   };
 
   const avgScore = dbReports.length ? Math.round(dbReports.reduce((sum, r) => sum + r.score, 0) / dbReports.length) : 0;
-  const topRoleEntry = dbReports.length ? Object.entries(dbReports.reduce((acc, r) => {
-    acc[r.role] = (acc[r.role] || 0) + 1; return acc;
-  }, {} as Record<string, number>)).sort((a: any, b: any) => b[1] - a[1])[0] : null;
-  const topRole = topRoleEntry ? topRoleEntry[0] : '--';
 
-  // Bar Chart Data Preparation
   const getScoreDistribution = () => {
     const bins = { '0-40': 0, '41-60': 0, '61-80': 0, '81-100': 0 };
     dbReports.forEach(r => {
@@ -139,19 +130,20 @@ export default function RecruiterDashboard() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-cyan-500/30 transition-colors duration-500">
+    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-cyan-500/30 transition-colors duration-500 relative">
+      <div className="mesh-bg" />
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 border-b border-[var(--border-color)] bg-[var(--bg)]/80 backdrop-blur-xl">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-500 to-fuchsia-600 text-white font-black text-xs shadow-md group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-black text-xs shadow-[0_0_15px_rgba(34,211,238,0.4)] group-hover:scale-105 transition-transform">
               OS
             </div>
-            <span className="font-bold text-sm tracking-widest uppercase">InterviewOS</span>
+            <span className="font-bold text-sm tracking-widest uppercase text-white">Recruiter OS</span>
           </Link>
           
-          <div className="hidden md:flex items-center gap-1 p-1 bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] shadow-sm">
+          <div className="hidden md:flex items-center gap-1 p-1 bg-black/30 rounded-xl border border-white/10 shadow-inner">
             {[
               { id: 'live', label: 'Live Monitor', icon: Activity },
               { id: 'candidates', label: 'Hiring Reports', icon: FileText },
@@ -161,13 +153,13 @@ export default function RecruiterDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-all ${
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-cyan-600 text-white font-semibold shadow-md' 
-                    : 'text-slate-500 hover:text-cyan-500 hover:bg-cyan-500/10'
+                    ? 'bg-cyan-500/20 text-cyan-400 shadow-md border border-cyan-500/30' 
+                    : 'text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent'
                 }`}
               >
-                <tab.icon className="w-4 h-4" /> {tab.label}
+                <tab.icon className="w-3.5 h-3.5" /> {tab.label}
               </button>
             ))}
           </div>
@@ -179,22 +171,22 @@ export default function RecruiterDashboard() {
                 localStorage.clear();
                 window.location.href = '/login';
               }}
-              className="text-xs font-semibold text-slate-500 hover:text-rose-500 transition-colors"
+              className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-400 transition-colors"
             >
               Log out
             </button>
             <button 
               onClick={() => setActiveTab('templates')}
-              className="hidden sm:flex items-center gap-2 px-4 py-1.5 bg-[var(--text)] text-[var(--bg)] hover:opacity-80 transition-colors rounded-lg text-sm font-semibold active:scale-95 shadow-sm"
+              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
             >
-              <Plus className="w-4 h-4" /> New Session
+              <Plus className="w-3.5 h-3.5" /> New Session
             </button>
           </div>
         </div>
       </nav>
 
       {/* ── Main Content ────────────────────────────────────────────────────── */}
-      <main className="pt-28 pb-20 max-w-7xl mx-auto px-6">
+      <main className="pt-28 pb-20 max-w-7xl mx-auto px-6 relative z-10">
         <AnimatePresence mode="wait">
           
           {/* ── LIVE MONITOR ──────────────────────────────────────────────── */}
@@ -208,73 +200,80 @@ export default function RecruiterDashboard() {
             >
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight mb-2">Live Monitor</h1>
-                  <p className="text-slate-500 text-sm">Watch candidates navigate simulations in real-time.</p>
+                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Live Monitor</h1>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Watch candidates navigate simulations in real-time.</p>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-emerald-500 font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full shadow-sm">
-                  <span className="relative flex h-2.5 w-2.5">
+                <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-black uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 px-4 py-2 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                  <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                   </span>
                   Live Polling Active
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {liveSessions.length === 0 ? (
-                  <div className="col-span-full py-20 text-center border border-[var(--border-color)] rounded-3xl bg-[var(--card-bg)] shadow-sm">
-                    <div className="w-16 h-16 bg-[var(--bg)] rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--border-color)] shadow-inner">
-                      <Activity className="w-8 h-8 text-slate-400" />
+                  <div className="col-span-full py-24 text-center border border-white/10 rounded-[2rem] glass-card shadow-sm flex flex-col items-center justify-center">
+                    <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20 shadow-inner">
+                      <Activity className="w-10 h-10 text-blue-400" />
                     </div>
-                    <h3 className="text-lg font-bold mb-2">No Active Simulations</h3>
-                    <p className="text-slate-500 text-sm">Candidates taking a test right now will appear here instantly.</p>
+                    <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">No Active Simulations</h3>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Candidates taking a test right now will appear here instantly.</p>
                   </div>
                 ) : (
                   liveSessions.map(session => (
-                    <div key={session.sessionId} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-6 flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow">
-                      
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      key={session.sessionId} 
+                      className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 flex flex-col relative overflow-hidden group"
+                    >
                       {/* Live Phase Gradient Line */}
                       <div className={`absolute top-0 left-0 w-full h-1.5 ${
-                        session.phase === 'chaos' ? 'bg-gradient-to-r from-red-500 to-orange-500' :
-                        session.phase === 'recovery' ? 'bg-gradient-to-r from-amber-500 to-yellow-500' :
-                        'bg-gradient-to-r from-emerald-500 to-teal-500'
+                        session.phase === 'chaos' ? 'bg-gradient-to-r from-red-500 to-orange-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]' :
+                        session.phase === 'recovery' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]' :
+                        'bg-gradient-to-r from-emerald-500 to-teal-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]'
                       }`} />
 
-                      <div className="flex justify-between items-start mb-6">
+                      <div className="flex justify-between items-start mb-8 mt-2">
                         <div>
-                          <h3 className="text-lg font-bold">{session.name}</h3>
-                          <p className="text-xs text-slate-500">{session.role}</p>
+                          <h3 className="text-xl font-black text-white">{session.name}</h3>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{session.role}</p>
                         </div>
-                        <div className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
-                          session.phase === 'chaos' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
-                          session.phase === 'recovery' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
-                          'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
+                        <div className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm ${
+                          session.phase === 'chaos' ? 'bg-red-500/10 text-red-400 border border-red-500/30' :
+                          session.phase === 'recovery' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' :
+                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
                         }`}>
                           {session.phase === 'pre_skill' ? 'Skill Test' : session.phase}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-[var(--bg)] rounded-2xl p-4 border border-[var(--border-color)]">
-                          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Live Trust</div>
-                          <div className={`text-2xl font-black ${session.trust < 40 ? 'text-red-500' : 'text-emerald-500'}`}>
+                      <div className="grid grid-cols-2 gap-4 mb-8">
+                        <div className="bg-black/20 rounded-2xl p-5 border border-white/5">
+                          <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2">Live Trust</div>
+                          <div className={`text-3xl font-black ${session.trust < 40 ? 'text-red-400' : 'text-emerald-400'}`}>
                             {session.trust}%
                           </div>
                         </div>
-                        <div className="bg-[var(--bg)] rounded-2xl p-4 border border-[var(--border-color)]">
-                          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Proj. Score</div>
-                          <div className="text-2xl font-black text-cyan-500">
+                        <div className="bg-black/20 rounded-2xl p-5 border border-white/5">
+                          <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2">Proj. Score</div>
+                          <div className="text-3xl font-black text-cyan-400">
                             {session.score || '--'}
                           </div>
                         </div>
                       </div>
 
                       <Link href={`/report?sessionId=${session.sessionId}&name=${encodeURIComponent(session.name)}&role=${encodeURIComponent(session.role)}&company=InterviewOS`} className="mt-auto">
-                        <button className="w-full py-3 rounded-xl bg-blue-700/10 hover:bg-blue-700/20 text-blue-700 dark:text-blue-400 border border-blue-600/20 transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                        <motion.button 
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full py-4 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+                        >
                           <Zap className="w-4 h-4" /> Live Spectate
-                        </button>
+                        </motion.button>
                       </Link>
-                    </div>
+                    </motion.div>
                   ))
                 )}
               </div>
@@ -292,98 +291,126 @@ export default function RecruiterDashboard() {
             >
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight mb-2">Platform Leaderboard</h1>
-                  <p className="text-slate-500 text-sm">Visual analytics and comprehensive hiring reports.</p>
+                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Platform Leaderboard</h1>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Visual analytics and comprehensive hiring reports.</p>
                 </div>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={exportToCSV}
                   disabled={dbReports.length === 0}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-[var(--card-bg)] hover:bg-[var(--hover-bg)] disabled:opacity-50 transition-colors rounded-xl text-xs font-bold uppercase tracking-widest border border-[var(--border-color)] shadow-sm active:scale-95"
+                  className="flex items-center gap-2 px-5 py-3 glass-card disabled:opacity-50 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 text-white shadow-lg"
                 >
                   <BarChartIcon className="w-4 h-4" /> Export CSV
-                </button>
+                </motion.button>
               </div>
 
               {/* Data Visualization Grid */}
               {!isLoadingDb && dbReports.length > 0 && (
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
                   {/* KPI Cards */}
-                  <div className="lg:col-span-1 flex flex-col gap-4">
-                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-cyan-500/50 transition-colors">
-                      <div className="w-14 h-14 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                        <Users className="w-7 h-7 text-cyan-500" />
+                  <div className="lg:col-span-1 flex flex-col gap-6">
+                    <div className="glass-card border border-white/10 shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-cyan-500/50 transition-colors">
+                      <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+                        <Users className="w-8 h-8 text-cyan-400" />
                       </div>
                       <div>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Total Processed</div>
-                        <div className="text-3xl font-black">{dbReports.length}</div>
+                        <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1">Total Processed</div>
+                        <div className="text-4xl font-black text-white">{dbReports.length}</div>
                       </div>
                     </div>
-                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-emerald-500/50 transition-colors">
-                      <div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                        <Target className="w-7 h-7 text-emerald-500" />
+                    <div className="glass-card border border-white/10 shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-emerald-500/50 transition-colors">
+                      <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                        <Target className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div>
-                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Avg Quality Score</div>
-                        <div className="text-3xl font-black text-emerald-500">{avgScore}</div>
+                        <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1">Avg Quality Score</div>
+                        <div className="text-4xl font-black text-emerald-400">{avgScore}</div>
                       </div>
                     </div>
                   </div>
 
                   {/* Recharts Bar Chart */}
-                  <div className="lg:col-span-2 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 h-64">
-                    <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Score Distribution</h3>
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={getScoreDistribution()}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
-                        <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text)' }} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text)' }} />
-                        <Tooltip 
-                          cursor={{ fill: 'var(--bg)' }}
-                          contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '12px' }} 
-                        />
-                        <Bar dataKey="candidates" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
+                  <div className="lg:col-span-2 glass-card border border-white/10 shadow-lg rounded-3xl p-8 h-[300px] flex flex-col">
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Score Distribution</h3>
+                    <div className="flex-1 relative">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={getScoreDistribution()}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                          <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 'bold' }} />
+                          <Tooltip 
+                            cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                            contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px', color: '#fff' }} 
+                            itemStyle={{ color: '#8b5cf6', fontWeight: 'bold' }}
+                          />
+                          <Bar dataKey="candidates" fill="url(#colorBar)" radius={[6, 6, 0, 0]}>
+                            <defs>
+                              <linearGradient id="colorBar" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1}/>
+                                <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                              </linearGradient>
+                            </defs>
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
                 </div>
               )}
 
               {isLoadingDb ? (
-                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbReports.length === 0 ? (
-                <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
-                  <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-bold mb-2">No Reports Yet</h3>
-                  <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">Candidate merit reports will appear here automatically once a simulation is completed.</p>
-                  <button 
+                <div className="border border-white/10 glass-card shadow-lg rounded-[2rem] p-16 text-center flex flex-col items-center">
+                  <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
+                    <FileText className="w-10 h-10 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-black uppercase text-white mb-3 tracking-tight">No Reports Yet</h3>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest max-w-md mb-8">Candidate merit reports will appear here automatically once a simulation is completed.</p>
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab('templates')}
-                    className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white transition-colors rounded-xl text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 inline-flex items-center gap-2"
+                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white transition-all rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(34,211,238,0.4)] inline-flex items-center gap-2"
                   >
                     Send Role Invites
-                  </button>
+                  </motion.button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {dbReports.map((report: any) => (
-                    <div key={report._id} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-6 flex flex-col hover:shadow-md transition-shadow group">
-                      <div className="flex justify-between items-start mb-4">
+                    <motion.div 
+                      whileHover={{ scale: 1.02 }}
+                      key={report._id} 
+                      className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 flex flex-col group relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[40px] rounded-full pointer-events-none transition-all duration-500 group-hover:bg-blue-500/20" />
+                      
+                      <div className="flex justify-between items-start mb-6">
                         <div>
-                          <h3 className="text-lg font-black tracking-tight">{report.candidateName}</h3>
-                          <p className="text-xs font-semibold text-slate-500 mt-0.5">{report.role} · {report.company}</p>
+                          <h3 className="text-xl font-black text-white tracking-tight">{report.candidateName}</h3>
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">{report.role} · {report.company}</p>
                         </div>
-                        <div className={`px-2.5 py-1 rounded-lg font-black text-lg ${report.score >= 80 ? 'bg-emerald-500/10 text-emerald-500' : report.score >= 60 ? 'bg-amber-500/10 text-amber-500' : 'bg-red-500/10 text-red-500'}`}>
+                        <div className={`px-3 py-1.5 rounded-xl font-black text-xl shadow-sm ${report.score >= 80 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : report.score >= 60 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}`}>
                           {report.score}
                         </div>
                       </div>
-                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 border-b border-[var(--border-color)] pb-4">
-                        Completed: {new Date(report.createdAt).toLocaleDateString()}
+                      
+                      <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-8 border-b border-white/10 pb-5">
+                        Completed: <span className="text-slate-300 ml-1">{new Date(report.createdAt).toLocaleDateString()}</span>
                       </div>
+                      
                       <Link href={`/report?sessionId=${report.sessionId}&name=${encodeURIComponent(report.candidateName)}&role=${encodeURIComponent(report.role)}&company=${encodeURIComponent(report.company)}`} className="mt-auto">
-                        <button className="w-full py-3 rounded-xl bg-[var(--bg)] hover:bg-cyan-600/10 text-[var(--text)] group-hover:text-cyan-600 transition-colors border border-[var(--border-color)] group-hover:border-cyan-500/50 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                        <motion.button 
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full py-4 rounded-xl bg-white/5 hover:bg-cyan-500/10 text-white group-hover:text-cyan-400 transition-colors border border-white/10 group-hover:border-cyan-500/50 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm"
+                        >
                           <FileText className="w-4 h-4" /> Full Merit Report
-                        </button>
+                        </motion.button>
                       </Link>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -399,52 +426,56 @@ export default function RecruiterDashboard() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight mb-2">User Directory</h1>
-                  <p className="text-slate-500 text-sm">Manage registered candidate and recruiter accounts.</p>
+                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">User Directory</h1>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Manage registered candidate and recruiter accounts.</p>
                 </div>
               </div>
 
               {isLoadingDb ? (
-                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbUsers.length === 0 ? (
-                <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
-                  <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-bold mb-2">No Users Found</h3>
+                <div className="border border-white/10 glass-card shadow-lg rounded-[2rem] p-16 text-center flex flex-col items-center">
+                  <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
+                    <Users className="w-10 h-10 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-black uppercase text-white mb-2 tracking-tight">No Users Found</h3>
                 </div>
               ) : (
-                <div className="overflow-x-auto border border-[var(--border-color)] shadow-sm rounded-2xl bg-[var(--card-bg)]">
-                  <table className="w-full text-left text-sm">
-                    <thead className="bg-[var(--bg)] border-b border-[var(--border-color)]">
-                      <tr>
-                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Name</th>
-                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Email</th>
-                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Role</th>
-                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Joined</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[var(--border-color)]">
-                      {dbUsers.map((user: any) => (
-                        <tr key={user._id} className="hover:bg-[var(--hover-bg)] transition-colors">
-                          <td className="px-6 py-4 font-bold">{user.name}</td>
-                          <td className="px-6 py-4 text-slate-500">{user.email}</td>
-                          <td className="px-6 py-4">
-                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
-                              user.role === 'recruiter' 
-                                ? 'bg-cyan-500/10 text-cyan-600 border-cyan-500/20' 
-                                : user.role === 'founder'
-                                ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
-                                : 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20'
-                            }`}>
-                              {user.role || 'candidate'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 text-slate-500 text-xs font-semibold">{new Date(user.createdAt).toLocaleDateString()}</td>
+                <div className="overflow-hidden border border-white/10 shadow-xl rounded-[2rem] glass-card">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead className="bg-black/40 border-b border-white/10">
+                        <tr>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Name</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Email</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Role</th>
+                          <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Joined</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-white/5 bg-black/20">
+                        {dbUsers.map((user: any) => (
+                          <tr key={user._id} className="hover:bg-white/5 transition-colors">
+                            <td className="px-8 py-5 font-bold text-white text-sm">{user.name}</td>
+                            <td className="px-8 py-5 text-slate-400 text-sm font-semibold">{user.email}</td>
+                            <td className="px-8 py-5">
+                              <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border shadow-sm ${
+                                user.role === 'recruiter' 
+                                  ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' 
+                                  : user.role === 'founder'
+                                  ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                                  : 'bg-slate-500/10 text-slate-300 border-slate-500/30'
+                              }`}>
+                                {user.role || 'candidate'}
+                              </span>
+                            </td>
+                            <td className="px-8 py-5 text-slate-400 text-xs font-bold">{new Date(user.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
             </motion.div>
@@ -459,34 +490,42 @@ export default function RecruiterDashboard() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight mb-2">Role Blueprints</h1>
-                  <p className="text-slate-500 text-sm">Launch simulations using pre-configured AI evaluators.</p>
+                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Role Blueprints</h1>
+                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Launch simulations using pre-configured AI evaluators.</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-cyan-500 to-blue-700', trackId: 'it_pm' },
-                  { role: 'Software Engineer', type: 'Engineering', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600', trackId: 'fullstack' },
-                  { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-500 to-red-600', trackId: 'backend' },
-                  { role: 'HR Business Partner', type: 'Operations', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600', trackId: 'qa_engineer' },
+                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-cyan-500 to-blue-600', trackId: 'it_pm' },
+                  { role: 'Software Engineer', type: 'Engineering', focus: 'Technical Judgment & Pressure', color: 'from-emerald-400 to-teal-600', trackId: 'fullstack' },
+                  { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-400 to-red-600', trackId: 'backend' },
+                  { role: 'HR Business Partner', type: 'Operations', focus: 'Conflict & Compliance', color: 'from-fuchsia-400 to-pink-600', trackId: 'qa_engineer' },
                 ].map(b => (
-                  <div key={b.role} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-8 relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${b.color} opacity-10 blur-2xl -mr-8 -mt-8 group-hover:opacity-20 transition-opacity`} />
-                    <div className="inline-block px-3 py-1 bg-[var(--bg)] border border-[var(--border-color)] rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-500 mb-6 shadow-sm">
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    key={b.role} 
+                    className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 relative overflow-hidden group"
+                  >
+                    <div className={`absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br ${b.color} opacity-20 blur-[50px] group-hover:opacity-40 transition-opacity duration-500`} />
+                    <div className="inline-block px-3 py-1.5 bg-black/40 border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-300 mb-6 shadow-sm backdrop-blur-md">
                       {b.type}
                     </div>
-                    <h3 className="text-xl font-black tracking-tight mb-2">{b.role}</h3>
-                    <p className="text-xs font-semibold text-slate-500 mb-8 h-8">Evaluates: <span className="text-[var(--text)]">{b.focus}</span></p>
+                    <h3 className="text-2xl font-black tracking-tight mb-2 text-white">{b.role}</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-8 h-8">Evaluates: <span className="text-slate-200">{b.focus}</span></p>
                     
                     <Link href={`/instructions?name=Test%20Candidate&track=${b.trackId}`}>
-                      <button className="w-full py-3 rounded-xl bg-[var(--text)] text-[var(--bg)] hover:scale-[1.02] active:scale-95 transition-all text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-md">
+                      <motion.button 
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="w-full py-4 rounded-xl bg-white text-black hover:bg-slate-200 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                      >
                         <PlayCircle className="w-4 h-4" /> Start Simulation
-                      </button>
+                      </motion.button>
                     </Link>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
