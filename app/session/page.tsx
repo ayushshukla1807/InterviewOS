@@ -753,7 +753,7 @@ function SessionContent() {
       const res = await fetch('/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voice })
+        body: JSON.stringify({ text, voice, interviewerName: interviewer?.name })
       });
 
       if (!res.ok) throw new Error('TTS API failed');
@@ -1102,13 +1102,13 @@ function SessionContent() {
   // ─── FULLSCREEN GATE ────────────────────────────────────────────────
   if (!isFullscreen) {
     return (
-      <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
         <div className="w-20 h-20 rounded-full bg-indigo-600/10 border-2 border-indigo-500/30 flex items-center justify-center">
           <Maximize2 className="w-10 h-10 text-indigo-400" />
         </div>
         <div className="space-y-4">
           <h1 className="text-2xl font-black text-[var(--text)] tracking-tighter">Fullscreen Required</h1>
-          <p className="text-slate-400 text-sm font-medium max-w-sm mx-auto leading-relaxed">This interview must be conducted in fullscreen mode. Exiting fullscreen will be logged as a violation.</p>
+          <p className="text-slate-500 text-sm font-medium max-w-sm mx-auto leading-relaxed">This interview must be conducted in fullscreen mode. Exiting fullscreen will be logged as a violation.</p>
         </div>
         <button onClick={enterFullscreen} className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-3">
           <Maximize2 className="w-4 h-4" /> Enter Fullscreen & Start Interview
@@ -1119,7 +1119,7 @@ function SessionContent() {
   }
 
   return (
-    <div data-theme="dark" className="h-screen bg-[#020204] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
+    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -2159,7 +2159,7 @@ function SessionContent() {
         </div>
 
         {/* Aura Support Bot (Floating) */}
-        <div className="fixed bottom-24 right-8 z-[100]">
+        <div className="fixed bottom-16 right-[420px] z-[100]">
            <AnimatePresence>
               {isSupportOpen && (
                 <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -2253,8 +2253,8 @@ function SessionContent() {
          <motion.div 
             drag
             dragMomentum={false}
-            dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
-            className="fixed bottom-8 right-8 z-[150] w-[280px] rounded-2xl overflow-hidden border border-white/20 bg-[#070709]/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-indigo-500/50 transition-colors"
+            dragConstraints={{ left: -2000, right: 20, top: -20, bottom: 2000 }}
+            className="fixed top-6 right-[420px] z-[150] w-[280px] rounded-2xl overflow-hidden border border-white/20 bg-[#070709]/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-indigo-500/50 transition-colors"
          >
             {/* Drag Handle (Visible on Hover) */}
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">

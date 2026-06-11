@@ -109,10 +109,12 @@ export async function POST(req: Request) {
       text,
       personality,
       voice,
+      interviewerName,
     }: {
       text: string;
       personality?: string;
       voice?: string;
+      interviewerName?: string;
     } = await req.json();
 
     if (!text || typeof text !== 'string') {
@@ -124,13 +126,36 @@ export async function POST(req: Request) {
 
     const cartesiaKey = process.env.CARTESIA_API_KEY;
     const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
+    
+    // Map specific interviewer names to unique Cartesia voices
+    const CARTESIA_NAME_MAP: Record<string, string> = {
+      'Syed': 'a0e99841-438c-4a64-b679-ae501e7d6091', // Professional Male
+      'Zara': '5c42302c-194b-4d0c-ba1a-8cb485c84ab9', // Professional Female
+      'Ava': '41534e16-2966-4c6b-9670-111411def906',  // Warm Female
+      'Sathvik': 'd46abd1d-2d02-43e8-819f-51fb652c1c61', // Calm Male
+      'Zoe': 'bf991597-6c13-47e4-8411-91ec2de5c466',   // Bright Female (Wait, bf991597 is polished. Or another ID. We can just use the mapped ones.)
+    };
+
+    // ElevenLabs Name Map
+    const ELEVEN_NAME_MAP: Record<string, string> = {
+      'Syed': 'pNInz6obpgDQGcFmaJgB',
+      'Zara': 'SAz9YHcvj6GT2YYXdXww',
+      'Ava': 'EXAVITQu4vr4xnSDxMaL',
+      'Sathvik': 'bIHbv24MWmeRgasZH58o',
+      'Zoe': 'cjVigY5qzO86Huf0OWal',
+    };
 
     // ── Attempt Cartesia first ────────────────────────────────────────────────
     if (cartesiaKey) {
       try {
-        const cartesiaVoiceId = personality && CARTESIA_PERSONALITY_VOICE_MAP[personality]
-          ? CARTESIA_PERSONALITY_VOICE_MAP[personality]
-          : CARTESIA_DEFAULT_VOICE;
+        let cartesiaVoiceId = CARTESIA_DEFAULT_VOICE;
+        if (personality && CARTESIA_PERSONALITY_VOICE_MAP[personality]) {
+          cartesiaVoiceId = CARTESIA_PERSONALITY_VOICE_MAP[personality];
+        } else if (interviewerName && CARTESIA_NAME_MAP[interviewerName]) {
+          cartesiaVoiceId = CARTESIA_NAME_MAP[interviewerName];
+        } else if (voice === 'nova') {
+          cartesiaVoiceId = '41534e16-2966-4c6b-9670-111411def906'; // fallback female
+        }
 
         const audioBuffer = await generateCartesiaTTS(safeText, cartesiaVoiceId, cartesiaKey);
 
@@ -155,9 +180,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'TTS Configuration Error' }, { status: 500 });
     }
 
-    const elevenVoiceId = personality && ELEVEN_PERSONALITY_VOICE_MAP[personality]
-      ? ELEVEN_PERSONALITY_VOICE_MAP[personality]
-      : (voice === 'alloy' ? 'cjVigY5qzO86Huf0OWal' : 'hpp4J3VqNfWAUOO0d1Us');
+    let elevenVoiceId = voice === 'alloy' ? 'cjVigY5qzO86Huf0OWal' : 'hpp4J3VqNfWAUOO0d1Us';
+    if (personality && ELEVEN_PERSONALITY_VOICE_MAP[personality]) {
+      elevenVoiceId = ELEVEN_PERSONALITY_VOICE_MAP[personality];
+    } else if (interviewerName && ELEVEN_NAME_MAP[interviewerName]) {
+      elevenVoiceId = ELEVEN_NAME_MAP[interviewerName];
+    } else if (voice === 'nova') {
+      elevenVoiceId = 'SAz9YHcvj6GT2YYXdXww';
+    }
 
     const audioBuffer = await generateElevenLabsTTS(safeText, elevenVoiceId, elevenLabsKey);
 
