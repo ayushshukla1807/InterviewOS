@@ -24,7 +24,7 @@ const PROTECTED_ROUTES = [
   '/select',
 ];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow all API routes except auth-gated ones

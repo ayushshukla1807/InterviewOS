@@ -15,16 +15,33 @@ export async function POST(req: Request) {
     }
 
     const lowerEmail = email.toLowerCase().trim();
+    
+    // Hardcoded Demo & Founder Bypass
     if (
-      (lowerEmail === 'demo.candidate@interviewos.com' || lowerEmail === 'demo.recruiter@interviewos.com') &&
-      password === 'demo1234'
+      (lowerEmail === 'demo.candidate@interviewos.com' && password === 'demo1234') ||
+      (lowerEmail === 'demo.recruiter@interviewos.com' && password === 'demo1234') ||
+      (lowerEmail === 'founder@interviewos.com' && password === 'founder2026')
     ) {
+      let role = 'candidate';
+      let id = 'demo_candidate_id';
+      let name = 'Demo Candidate';
+      
+      if (lowerEmail === 'demo.recruiter@interviewos.com') {
+        role = 'recruiter';
+        id = 'demo_recruiter_id';
+        name = 'Demo Recruiter';
+      } else if (lowerEmail === 'founder@interviewos.com') {
+        role = 'founder';
+        id = 'demo_founder_id';
+        name = 'Founder Admin';
+      }
+
       const demoUser = {
-        id: lowerEmail === 'demo.candidate@interviewos.com' ? 'demo_candidate_id' : 'demo_recruiter_id',
-        name: lowerEmail === 'demo.candidate@interviewos.com' ? 'Demo Candidate' : 'Demo Recruiter',
+        id,
+        name,
         email: lowerEmail,
-        role: lowerEmail === 'demo.candidate@interviewos.com' ? 'candidate' : 'recruiter',
-        organization: lowerEmail === 'demo.candidate@interviewos.com' ? '' : 'Demo Org',
+        role,
+        organization: role === 'candidate' ? '' : 'InterviewOS Core',
       };
 
       const token = jwt.sign(

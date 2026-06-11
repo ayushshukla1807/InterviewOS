@@ -85,51 +85,49 @@ function LoginInner() {
     return () => clearInterval(t);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) return;
-    setIsLoading(true);
+  const [loginStatus, setLoginStatus] = useState<'idle' | 'authenticating' | 'success'>('idle');
+
+  const executeLogin = async (credentials: any) => {
+    setLoginStatus('authenticating');
     setError('');
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(credentials),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Invalid email or password');
+      if (!res.ok) throw new Error(data.message || 'Invalid credentials');
+      
       localStorage.setItem('interviewos_token', data.token);
       localStorage.setItem('interviewos_user', JSON.stringify(data.user));
-      router.push(data.user.role === 'candidate' ? '/candidate' : '/recruiter');
+      
+      setLoginStatus('success');
+      
+      // Delay to show the success state animation
+      setTimeout(() => {
+        if (data.user.role === 'founder') {
+          router.push('/founder');
+        } else {
+          router.push(data.user.role === 'candidate' ? '/candidate' : '/recruiter');
+        }
+      }, 800);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setIsLoading(false);
+      setLoginStatus('idle');
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) return;
+    executeLogin({ email, password });
   };
 
   const handleDemoLogin = async (roleEmail: string) => {
     setEmail(roleEmail);
-    setPassword('demo1234');
-    
-    setIsLoading(true);
-    setError('');
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: roleEmail, password: 'demo1234' }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Invalid email or password');
-      localStorage.setItem('interviewos_token', data.token);
-      localStorage.setItem('interviewos_user', JSON.stringify(data.user));
-      router.push(data.user.role === 'candidate' ? '/candidate' : '/recruiter');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Login failed');
-    } finally {
-      setIsLoading(false);
-    }
+    setPassword(roleEmail === 'founder@interviewos.com' ? 'founder2026' : 'demo1234');
+    executeLogin({ email: roleEmail, password: roleEmail === 'founder@interviewos.com' ? 'founder2026' : 'demo1234' });
   };
 
   return (
@@ -326,16 +324,29 @@ function LoginInner() {
             <button
               id="login-submit"
               type="submit"
-              disabled={isLoading}
-              className="ios-submit-btn"
+              disabled={loginStatus !== 'idle'}
+              className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
+                loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
+              }`}
             >
-              {isLoading ? (
-                <span className="ios-spinner" />
-              ) : (
-                <>
-                  Enter Platform <ArrowRight size={16} />
-                </>
-              )}
+              <AnimatePresence mode="wait">
+                {loginStatus === 'idle' && (
+                  <motion.div key="idle" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
+                    Enter Platform <ArrowRight size={16} />
+                  </motion.div>
+                )}
+                {loginStatus === 'authenticating' && (
+                  <motion.div key="auth" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
+                    <span className="ios-spinner" /> Authenticating Neural Engine...
+                  </motion.div>
+                )}
+                {loginStatus === 'success' && (
+                  <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    ACCESS GRANTED
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </form>
 
@@ -350,9 +361,9 @@ function LoginInner() {
           <div className="ios-demo-row">
             <button
               type="button"
-              className="ios-demo-btn"
+              className="ios-demo-btn group"
               onClick={() => handleDemoLogin('demo.candidate@interviewos.com')}
-              disabled={isLoading}
+              disabled={loginStatus !== 'idle'}
             >
               <div className="ios-demo-icon ios-demo-icon-candidate">C</div>
               <div>
@@ -362,14 +373,26 @@ function LoginInner() {
             </button>
             <button
               type="button"
-              className="ios-demo-btn"
+              className="ios-demo-btn group"
               onClick={() => handleDemoLogin('demo.recruiter@interviewos.com')}
-              disabled={isLoading}
+              disabled={loginStatus !== 'idle'}
             >
               <div className="ios-demo-icon ios-demo-icon-recruiter">R</div>
               <div>
-                <div className="ios-demo-role">Recruiter Demo</div>
-                <div className="ios-demo-hint">Manage pipelines</div>
+                <div className="ios-demo-role text-slate-200 group-hover:text-white transition-colors">Recruiter Demo</div>
+                <div className="ios-demo-hint">Proctor dashboard</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              className="ios-demo-btn group"
+              onClick={() => handleDemoLogin('founder@interviewos.com')}
+              disabled={loginStatus !== 'idle'}
+            >
+              <div className="ios-demo-icon bg-indigo-500 text-white">F</div>
+              <div>
+                <div className="ios-demo-role text-indigo-200 group-hover:text-indigo-100 transition-colors">Founder Portal</div>
+                <div className="ios-demo-hint text-indigo-400/50">Admin & DB Access</div>
               </div>
             </button>
           </div>
