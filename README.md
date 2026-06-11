@@ -1,4 +1,4 @@
-# InterviewOS
+# InterviewOS V2 🚀
 
 A simulation-first platform designed to test candidates by dropping them into a living workplace environment, followed by a voice-based technical interview that grills them on their decisions. 
 
@@ -20,17 +20,19 @@ Instead of answering questions, the candidate enters a simulated operating syste
 
 ### 2. Live Voice Interview (Context Carryover)
 Immediately after the simulation, the candidate enters a voice interview with an AI recruiter. 
-*   **Simulation Behavior Ingestion:** The AI doesn't just read a list of static questions. It ingests the exact log of the candidate's simulation (response times, communication style, priorities, code output, and stakeholder relations).
+*   **Simulation Behavior Ingestion (RAG):** The AI doesn't just read a list of static questions. It natively ingests the exact log of the candidate's simulation (response times, communication style, priorities, code output, and stakeholder relations).
 *   **Direct Cross-Questioning:** The interviewer questions the candidate about their actual trade-offs. (e.g. *"I noticed you ignored Priya's design feedback to rush Sarah's CSV export feature. Why did you prioritize the client's feature over team alignment?"*).
+*   **Interruptible Audio:** The system uses a Web Audio API `AnalyserNode` to constantly monitor candidate microphone volume. If the candidate speaks over the AI, it instantly cancels its own speech and listens to the candidate.
+*   **Dynamic Audio Visualizer:** A glowing waveform visualizer reacts in real-time when the AI speaks, giving the UI an immersive "JARVIS" aesthetic.
 
-### 3. Local Machine Learning Proctoring
+### 3. Fortress Proctoring
 *   **Visual Gaze Tracking:** Uses a WebAssembly build of **MediaPipe FaceLandmarker** in the browser to track eye movement and detect when a candidate keeps looking away.
-*   **Acoustic Load Analysis:** Web Audio API running FFT (Fast Fourier Transform) tracks background noise level and alerts the system to whisper sounds.
+*   **Window Integrity:** Uses the native Page Visibility API to detect tab switching, incrementing violation strikes.
+*   **Copy/Paste Blocks:** Natively intercepts and prevents copy/paste actions to prevent external code injection.
 *   *Everything runs client-side inside the browser. No video is ever sent to a server, keeping candidate data secure and private.*
 
 ### 4. Recruiter Analytics
 *   **Behavioral Intelligence Graph:** Visualizes the candidate's trade-off handling (long-term roadmap vs. immediate fire fighting, client happiness vs. internal technical debt, flexibility under pressure).
-*   **Originality & Plagiarism Scorer:** Compares code written in the Monaco challenge against common LeetCode patterns using vector embeddings (`text-embedding-004`) and cosine similarity.
 *   **Predictive Match Score:** Combines behavioral scores, code quality, resume fit, and proctoring integrity flags to output hiring probability.
 
 ---
@@ -39,22 +41,11 @@ Immediately after the simulation, the candidate enters a voice interview with an
 
 *   **App Core:** Next.js 16 (App Router with Turbopack)
 *   **Database & API:** Serverless Next.js route handlers
-*   **AI Models:** Gemini 2.5 Flash (for JD parsing, blueprint translation, and conversational brain), OpenAI GPT-4o-mini (low-latency behavioral evaluation), OpenAI TTS `tts-1` (natural voice generation)
+*   **AI Models:** Gemini 2.5 Flash (Conversational Core & RAG), OpenAI TTS `tts-1` (Natural voice generation)
 *   **In-Browser ML:** MediaPipe FaceLandmarker WebAssembly, Web Audio API AnalyzerNode
+*   **Procedural Audio:** Custom `SFXEngine` using `OscillatorNode` for zero-dependency UI sounds
 *   **Editor:** Monaco Editor (`@monaco-editor/react`)
-*   **Vector Engine:** Google GenAI Embeddings API (`text-embedding-004`)
 *   **Styling:** HSL-based Tailwind CSS, Framer Motion
-
----
-
-## Background: How I Built This From Scratch
-
-I wanted to see if it was possible to create an interview platform that mimics a real day of work rather than a quiz. Here is how I built it:
-
-1.  **Setting up the OS State:** The hardest part was building the state sync between acts. The UI needs to feel like a real operating system. I built a custom simulation router that parses a static JSON job description blueprint into a structured tree of cascading stakeholders, acts, and challenge objects.
-2.  **The Consequence Pipeline:** I wrote a custom POST handler `/api/simulation/events`. Every time a candidate responds to an email or Slack, the handler calls Gemini to determine how the recipient's trust/frustration shifts and appends new consequential events to the stream. If they click "Ignore & Archive", it schedules an escalation event to fire in a subsequent act.
-3.  **Compiling MediaPipe without SSR Issues:** Getting MediaPipe FaceLandmarker to compile in Next.js without crashing on server-side rendering was a major pain. I resolved it by wrapping the camera components in dynamic client-only loaders and lazy-loading the WebAssembly binaries after the browser window mounts.
-4.  **Connecting the Dots:** Feeding the simulation logs into the voice chat session. I configured the `/api/chat` route to accept a structured markdown summary of the candidate's simulation decisions and prepended it to the system instructions, giving the AI interviewer a memory of the candidate's performance.
 
 ---
 

@@ -165,7 +165,40 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) setShowLangMenu(false);
     };
     document.addEventListener('mousedown', h);
-    return () => document.removeEventListener('mousedown', h);
+  
+  const handleEditorWillMount = (monaco: any) => {
+    // Enable advanced JS/TS diagnostics
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true
+    });
+  };
+
+  useEffect(() => {
+    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
+    // For strictly blocking paste in the whole IDE component:
+    const blockPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copy/Paste is disabled during the interview for integrity reasons.");
+    };
+    const container = document.getElementById('code-ide-container');
+    if (container) {
+      container.addEventListener('paste', blockPaste as any);
+      container.addEventListener('copy', blockPaste as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('paste', blockPaste as any);
+        container.removeEventListener('copy', blockPaste as any);
+      }
+    };
+  }, []);
+
+  return () => document.removeEventListener('mousedown', h);
   }, []);
 
   // Drag to resize bottom panel (vertical)
@@ -183,7 +216,40 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     const up = () => setIsDraggingRow(false);
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
-    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+  
+  const handleEditorWillMount = (monaco: any) => {
+    // Enable advanced JS/TS diagnostics
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true
+    });
+  };
+
+  useEffect(() => {
+    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
+    // For strictly blocking paste in the whole IDE component:
+    const blockPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copy/Paste is disabled during the interview for integrity reasons.");
+    };
+    const container = document.getElementById('code-ide-container');
+    if (container) {
+      container.addEventListener('paste', blockPaste as any);
+      container.addEventListener('copy', blockPaste as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('paste', blockPaste as any);
+        container.removeEventListener('copy', blockPaste as any);
+      }
+    };
+  }, []);
+
+  return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
   }, [isDraggingRow]);
 
   // Drag to resize left/right columns (horizontal)
@@ -203,7 +269,40 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     const up = () => setIsDraggingCol(false);
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
-    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+  
+  const handleEditorWillMount = (monaco: any) => {
+    // Enable advanced JS/TS diagnostics
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true
+    });
+  };
+
+  useEffect(() => {
+    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
+    // For strictly blocking paste in the whole IDE component:
+    const blockPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copy/Paste is disabled during the interview for integrity reasons.");
+    };
+    const container = document.getElementById('code-ide-container');
+    if (container) {
+      container.addEventListener('paste', blockPaste as any);
+      container.addEventListener('copy', blockPaste as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('paste', blockPaste as any);
+        container.removeEventListener('copy', blockPaste as any);
+      }
+    };
+  }, []);
+
+  return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
   }, [isDraggingCol]);
 
   // Ctrl+Enter = Run, Ctrl+Shift+Enter = Submit
@@ -213,7 +312,40 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
       else if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); handleRun(); }
     };
     window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
+  
+  const handleEditorWillMount = (monaco: any) => {
+    // Enable advanced JS/TS diagnostics
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true
+    });
+  };
+
+  useEffect(() => {
+    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
+    // For strictly blocking paste in the whole IDE component:
+    const blockPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copy/Paste is disabled during the interview for integrity reasons.");
+    };
+    const container = document.getElementById('code-ide-container');
+    if (container) {
+      container.addEventListener('paste', blockPaste as any);
+      container.addEventListener('copy', blockPaste as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('paste', blockPaste as any);
+        container.removeEventListener('copy', blockPaste as any);
+      }
+    };
+  }, []);
+
+  return () => window.removeEventListener('keydown', h);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, lang, customInput]);
 
@@ -281,6 +413,39 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
 
   const currentLang = LANGS.find(l => l.id === lang) || LANGS[0];
   const diffColor = DIFF_COLOR[difficulty] || '#ffc01e';
+
+
+  const handleEditorWillMount = (monaco: any) => {
+    // Enable advanced JS/TS diagnostics
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true
+    });
+  };
+
+  useEffect(() => {
+    // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
+    // For strictly blocking paste in the whole IDE component:
+    const blockPaste = (e: ClipboardEvent) => {
+      e.preventDefault();
+      alert("Copy/Paste is disabled during the interview for integrity reasons.");
+    };
+    const container = document.getElementById('code-ide-container');
+    if (container) {
+      container.addEventListener('paste', blockPaste as any);
+      container.addEventListener('copy', blockPaste as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('paste', blockPaste as any);
+        container.removeEventListener('copy', blockPaste as any);
+      }
+    };
+  }, []);
 
   return (
     <div style={S.root}>
@@ -423,6 +588,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
               value={code}
               onChange={val => setCode(val || '')}
               onMount={editor => { editorRef.current = editor; }}
+              beforeMount={handleEditorWillMount}
               options={{
                 minimap: { enabled: false },
                 automaticLayout: true,

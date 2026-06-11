@@ -320,6 +320,8 @@ function SessionContent() {
 
   // ─── SPEAKER STATE ─────────────────────────────────────────────────
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const isSpeakingRef = useRef(false);
+  useEffect(() => { isSpeakingRef.current = isSpeaking; }, [isSpeaking]);
   
   // KOYO SIGNAL SIMULATION
   useEffect(() => {
@@ -654,10 +656,44 @@ function SessionContent() {
            videoRef.current.play();
            initMLTrackers(s, videoRef.current);
         }
-        if (videoRefMirror.current) {
+                if (videoRefMirror.current) {
            videoRefMirror.current.srcObject = s;
            videoRefMirror.current.play();
         }
+        
+        // Interruptibility Analyzer
+        try {
+           const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+           const analyser = audioCtx.createAnalyser();
+           const source = audioCtx.createMediaStreamSource(s);
+           source.connect(analyser);
+           analyser.fftSize = 256;
+           const bufferLength = analyser.frequencyBinCount;
+           const dataArray = new Uint8Array(bufferLength);
+           
+           const checkVolume = () => {
+             if (isSpeakingRef.current) {
+                analyser.getByteFrequencyData(dataArray);
+                let sum = 0;
+                for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+                const avg = sum / bufferLength;
+                
+                // If candidate speaks loudly while AI is talking
+                if (avg > 40) {
+                   console.log('Interruption detected!');
+                   window.speechSynthesis.cancel();
+                   const fallbackAudio = document.getElementById('ai-voice') as HTMLAudioElement;
+                   if (fallbackAudio) fallbackAudio.pause();
+                   
+                   // Automatically restart recognition
+                   const micBtn = document.getElementById('mic-toggle-btn');
+                   if (micBtn) micBtn.click();
+                }
+             }
+             requestAnimationFrame(checkVolume);
+           };
+           checkVolume();
+        } catch(e) { console.error('Audio interrupt init failed', e); }
       } catch (err) {
         console.error("Hardware access denied:", err);
         setTerminated(true);
@@ -796,10 +832,19 @@ function SessionContent() {
   };
 
   const toggleListening = () => {
-    if (isThinking || isSpeaking) return; // Block interruptions during AI turns
+    // We remove the block during AI speaking so candidate CAN interrupt by clicking if they want
     if (isListening) {
+      sfx?.playMicOff();
       recognitionRef.current?.stop();
+      setIsListening(false);
     } else {
+      sfx?.playMicOn();
+      // If AI is speaking, cancel it!
+      if (isSpeakingRef.current) {
+          window.speechSynthesis.cancel();
+          const fallbackAudio = document.getElementById('ai-voice') as HTMLAudioElement;
+          if (fallbackAudio) fallbackAudio.pause();
+      }
       recognitionRef.current?.start();
       setIsListening(true);
     }
@@ -807,6 +852,7 @@ function SessionContent() {
 
   const send = async () => {
     if (!input.trim() || isThinking) return;
+    sfx?.playType();
     const msg = input;
     setInput('');
     const updated = [...messages, { role: 'user' as const, content: msg }];
