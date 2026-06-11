@@ -36,12 +36,13 @@ export default function SimulationLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center p-6 font-outfit relative overflow-hidden">
+    <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col items-center justify-center p-6 relative overflow-hidden" style={{ fontFamily: '"Inter", sans-serif' }}>
+      <div className="noise-overlay" />
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/3 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-2xl w-full space-y-8 relative z-10">
@@ -66,7 +67,7 @@ export default function SimulationLanding() {
             { icon: <Mail className="w-6 h-6 text-indigo-400" />, title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
             { icon: <ClipboardCheck className="w-6 h-6 text-cyan-400" />, title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
           ].map(f => (
-            <div key={f.title} className="bg-[#111113] border border-gray-800/50 rounded-xl p-4 space-y-2 hover:border-indigo-500/30 transition-all flex flex-col items-start">
+            <div key={f.title} className="glass-card hud-border p-4 space-y-2 flex flex-col items-start transition-all hover:bg-[var(--card-bg)]/80">
               <div className="mb-1">{f.icon}</div>
               <h3 className="text-sm font-semibold text-gray-200">{f.title}</h3>
               <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
@@ -74,13 +75,13 @@ export default function SimulationLanding() {
           ))}
         </div>
 
-        <div className="bg-[#111113] p-6 rounded-2xl border border-gray-800/50 shadow-2xl space-y-4">
+        <div className="glass-card hud-border p-6 shadow-2xl space-y-4">
           <div className="flex items-center justify-between">
             <label className="block text-sm font-medium text-gray-300">Paste Job Description</label>
             <span className="text-xs text-gray-600">{jd.length} chars</span>
           </div>
           <textarea
-            className="w-full h-48 bg-[#0e0e10] border border-gray-800/50 rounded-xl p-4 text-sm font-inter text-gray-200 focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30 outline-none resize-none placeholder-gray-600"
+            className="w-full h-48 bg-black/40 border border-[var(--border-color)] rounded-xl p-4 text-sm font-mono text-cyan-50 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 outline-none resize-none placeholder-slate-600"
             placeholder="e.g. We are looking for a Senior Product Manager who can lead cross-functional teams, manage high-stakes client escalations, and handle sudden priority shifts..."
             value={jd}
             onChange={(e) => setJd(e.target.value)}
@@ -89,7 +90,7 @@ export default function SimulationLanding() {
           <button
             onClick={handleGenerateTest}
             disabled={loading || !jd.trim()}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40"
+            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[var(--accent)] to-cyan-600 hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed font-black uppercase tracking-widest text-white text-[10px] transition-all flex items-center justify-center gap-2 sci-fi-glow"
           >
             {loading ? (
               <>

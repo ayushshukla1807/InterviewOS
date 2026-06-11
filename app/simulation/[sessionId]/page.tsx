@@ -21,7 +21,7 @@ import {
 } from 'lucide-react';
 import CodeIDE from '../../components/CodeIDE';
 
-const THEME = { label:'Noir', preview:'#6366f1', bg:'#0e0e10', surface:'#111113', surfaceAlt:'#1a1a1c', border:'rgba(255,255,255,0.06)', textPrimary:'#f1f5f9', textSecondary:'#94a3b8', textMuted:'#475569', accent:'#6366f1', accentText:'#a5b4fc', accentBg:'rgba(99,102,241,0.12)', accentBorder:'rgba(99,102,241,0.3)', accentHover:'#4f46e5', fontFamily:'Outfit, sans-serif' };
+const THEME = { label:'Sci-Fi', preview:'var(--accent)', bg:'transparent', surface:'var(--card-bg)', surfaceAlt:'var(--card-bg)', border:'var(--border-color)', textPrimary:'var(--text)', textSecondary:'var(--text-muted)', textMuted:'var(--text-muted)', accent:'var(--accent)', accentText:'var(--accent)', accentBg:'rgba(34,211,238,0.1)', accentBorder:'rgba(34,211,238,0.3)', accentHover:'var(--accent)', fontFamily:'"Inter", sans-serif' };
 
 // ─── Skill dimension labels ───────────────────────────────────────────────────
 const DIM_LABELS: Record<string, string> = {
@@ -608,7 +608,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   // ─── Error State ──────────────────────────────────────────────────────────
   if (hasLoadError) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center font-outfit p-6 text-center">
+      <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col items-center justify-center p-6 text-center">
+        <div className="noise-overlay" />
         <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mb-6">
           <AlertCircle className="w-8 h-8 text-red-400" />
         </div>
@@ -627,7 +628,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   // ─── Loading State ────────────────────────────────────────────────────────
   if (!blueprint || !runtime) {
     return (
-      <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center font-outfit">
+      <div className="min-h-screen mesh-bg text-[var(--text)] flex items-center justify-center">
+        <div className="noise-overlay" />
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 border-2 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
           <span className="text-gray-400">Booting HYRTE Simulation Engine...</span>
@@ -642,9 +644,10 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   if (phase === 'pre_skill' && !preSkillSubmitted && blueprint.skillValidationQuestions?.length > 0) {
     const questions = blueprint.skillValidationQuestions;
     return (
-      <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col" style={{ fontFamily: 'Outfit, sans-serif' }}>
+      <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col" style={{ fontFamily: t.fontFamily }}>
+        <div className="noise-overlay" />
         {/* Header */}
-        <div className="border-b border-white/5 px-8 py-4 flex items-center justify-between bg-[#0d0d0f]">
+        <div className="border-b px-8 py-4 flex items-center justify-between" style={{ borderColor: t.border, backgroundColor: t.surface }}>
           <div className="flex items-center gap-4">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-black">OS</div>
             <div>
@@ -682,7 +685,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
             {/* Questions */}
             {questions.map((q, qi) => (
-              <div key={q.id} className="bg-[#111115] border border-white/6 rounded-2xl p-6 space-y-4">
+              <div key={q.id} className="glass-card hud-border p-6 space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-black text-indigo-400 shrink-0">
                     {qi + 1}
@@ -699,7 +702,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
                 {/* Context / Data Table */}
                 {q.context && (
-                  <div className="ml-10 bg-[#0d0d0f] border border-white/5 rounded-xl p-4">
+                  <div className="ml-10 bg-black/40 border border-[var(--border-color)] rounded-xl p-4">
                     <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Context / Data</div>
                     {q.context.includes('|') ? (
                       <div className="overflow-x-auto">
@@ -753,7 +756,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       value={preSkillAnswers[`${q.id}_reason`] || ''}
                       onChange={e => setPreSkillAnswers(prev => ({ ...prev, [`${q.id}_reason`]: e.target.value }))}
                       placeholder="Explain your reasoning... (evaluated for depth and data-driven thinking)"
-                      className="w-full mt-2 h-24 bg-[#0d0d0f] border border-white/6 rounded-xl p-3 text-sm text-gray-200 outline-none resize-none placeholder-gray-600 focus:border-indigo-500/40"
+                      className="w-full mt-2 h-24 bg-black/40 border border-[var(--border-color)] rounded-xl p-3 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-cyan-500/40"
                     />
                   </div>
                 ) : (
@@ -763,7 +766,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       onChange={e => setPreSkillAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
                       placeholder="Your answer..."
                       rows={5}
-                      className="w-full bg-[#0d0d0f] border border-white/6 rounded-xl p-4 text-sm text-gray-200 outline-none resize-none placeholder-gray-600 focus:border-indigo-500/40"
+                      className="w-full bg-black/40 border border-[var(--border-color)] rounded-xl p-4 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-cyan-500/40"
                     />
                   </div>
                 )}
@@ -801,9 +804,10 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
   return (
     <div
-      className="min-h-screen flex flex-col relative"
-      style={{ backgroundColor: t.bg, color: t.textPrimary, fontFamily: t.fontFamily }}
+      className="min-h-screen flex flex-col relative mesh-bg"
+      style={{ color: t.textPrimary, fontFamily: t.fontFamily }}
     >
+      <div className="noise-overlay" />
       {/* ── Chaos Wave Banner ─────────────────────────────────────────────── */}
       {chaosActive && (
         <div className="relative z-50 px-6 py-2.5 flex items-center gap-3 border-b"
