@@ -8,7 +8,7 @@ import {
   ChevronLeft, LayoutDashboard, TrendingUp, Clock, 
   Shield, CheckCircle, BarChart3, Code2, MessageSquare,
   Maximize2, Play, Power, Volume2, VolumeX, ShieldAlert, Headphones, X, Terminal, Monitor,
-  Briefcase, ListTodo, CheckCircle2, Cpu, FileCode, Check, AlertTriangle, RefreshCw, Activity
+  Briefcase, ListTodo, CheckCircle2, Cpu, FileCode, Check, AlertTriangle, RefreshCw, Activity, GripHorizontal
 } from 'lucide-react';
 import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
 
@@ -637,7 +637,7 @@ function SessionContent() {
   useEffect(() => {
     const initHardware = async () => {
       try {
-        const s = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true });
         setStream(s);
         
         // Setup Media Recorder for S3
@@ -2367,39 +2367,54 @@ function SessionContent() {
            </motion.button>
         </div>
 
-        {/* Global Neural Proctoring Dashboard Card */}
-        <div className="fixed bottom-8 right-8 z-[150] w-64 rounded-[24px] overflow-hidden border border-white/10 bg-[#070709]/95 backdrop-blur-md shadow-2xl flex flex-col">
-           {/* Video Feed */}
-           <div className="relative w-full h-36 bg-slate-900 border-b border-white/5">
-              {stream ? (
-                 <video 
-                    ref={videoRef} 
-                    autoPlay 
-                    playsInline 
-                    muted 
-                    className="w-full h-full object-cover scale-x-[-1]" 
-                 />
-              ) : (
-                 <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/50">
-                    <User className="text-slate-700 w-10 h-10 animate-pulse" />
-                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-1">Connecting Stream...</p>
-                 </div>
-              )}
-              {/* Pulsing indicator overlay */}
-              <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 bg-black/60 rounded-full border border-white/5">
-                 <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                    (phoneDetected || faceCount !== 1 || violations > 0) ? 'bg-rose-500' : 'bg-emerald-500'
-                 }`} />
-                 <span className="text-[7px] font-black tracking-widest text-slate-300 uppercase">
-                    {(phoneDetected || faceCount !== 1 || violations > 0) ? 'Alert Mode' : 'Secure Pilot'}
-                 </span>
-              </div>
-              
-              <div className="absolute bottom-3 left-3 text-[7px] font-bold text-white/70 uppercase tracking-widest bg-black/40 px-2 py-0.5 rounded-md">
-                 Feed: Candidate Camera
-              </div>
-           </div>
-        </div>
+         {/* Floating Draggable Candidate Camera Card */}
+         <motion.div 
+            drag
+            dragMomentum={false}
+            dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
+            className="fixed bottom-8 right-8 z-[150] w-[280px] rounded-2xl overflow-hidden border border-white/20 bg-[#070709]/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-indigo-500/50 transition-colors"
+         >
+            {/* Drag Handle (Visible on Hover) */}
+            <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+               <GripHorizontal className="w-5 h-5 text-white/70 drop-shadow-md" />
+            </div>
+
+            {/* Video Feed */}
+            <div className="relative w-full aspect-[4/3] bg-slate-900 pointer-events-none">
+               {stream ? (
+                  <video 
+                     ref={videoRef} 
+                     autoPlay 
+                     playsInline 
+                     muted 
+                     className="w-full h-full object-cover scale-x-[-1]" 
+                  />
+               ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/80">
+                     <User className="text-slate-600 w-10 h-10 animate-pulse mb-2" />
+                     <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Initializing Camera...</p>
+                  </div>
+               )}
+               
+               {/* Pulsing overlay shadow for a premium feel */}
+               <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.6)] z-10" />
+
+               {/* Integrity Status overlay */}
+               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-black/50 backdrop-blur-md rounded-full border border-white/10 z-20 shadow-lg">
+                  <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                     (phoneDetected || faceCount !== 1 || violations > 0) ? 'bg-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'
+                  }`} />
+                  <span className="text-[7px] font-black tracking-widest text-slate-200 uppercase drop-shadow-sm">
+                     {(phoneDetected || faceCount !== 1 || violations > 0) ? 'Alert Mode' : 'Secure Pilot'}
+                  </span>
+               </div>
+               
+               {/* Camera label */}
+               <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-black/50 backdrop-blur-md px-2 py-1 rounded-md border border-white/10 z-20 shadow-lg">
+                  Feed: Candidate Camera
+               </div>
+            </div>
+         </motion.div>
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
