@@ -418,10 +418,10 @@ function LoginInner() {
         .ios-auth-left-bg {
           position: absolute;
           inset: 0;
-          background-image: url('/auth-bg.png');
+          background-image: url('/images/login_bg.png');
           background-size: cover;
           background-position: center left;
-          opacity: 0.35;
+          opacity: 0.55;
           z-index: 0;
         }
         .ios-auth-left::after {
