@@ -825,9 +825,21 @@ function SessionContent() {
         }),
       });
       const data = await res.json();
-      const content = data.content || data.message || 'I hear you. Let\'s explore this further.';
-      const signals: string[] = data.signals || [];
-      const adaptation = data.adaptation || 'Maintaining current depth.';
+      let content = data.content || data.message || "I hear you. Let's explore this further.";
+      let signals: string[] = data.signals || [];
+      let adaptation = data.adaptation || 'Maintaining current depth.';
+
+      // Fallback: If the API accidentally returned a raw stringified JSON inside `content`
+      if (typeof content === 'string' && content.trim().startsWith('{')) {
+        try {
+          const parsed = JSON.parse(content);
+          content = parsed.content || content;
+          if (parsed.signals) signals = parsed.signals;
+          if (parsed.adaptation) adaptation = parsed.adaptation;
+        } catch (e) {
+          // Ignore parse errors, just use the raw string
+        }
+      }
       
       let spokenContent = content;
       const codeInjectionMatch = content.match(/\[INJECT_CODE\]([\s\S]*?)\[\/INJECT_CODE\]/);
@@ -1449,7 +1461,7 @@ function SessionContent() {
                            <div className="bg-white/5 border border-white/5 rounded-2xl p-5 space-y-4">
                               <div className="flex justify-between items-center">
                                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Acoustic Load (Noise)</span>
-                                 <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">{noiseVal}%</span>
+                                 <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">{Math.round(noiseVal)}%</span>
                               </div>
                               <div className="h-2 bg-white/10 rounded-full overflow-hidden flex">
                                  <motion.div className="h-full bg-amber-500" animate={{ width: `${noiseVal}%` }} />
@@ -2181,7 +2193,7 @@ function SessionContent() {
                      <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Adaptive Assessment Flow</span>
                      <Sparkles className="w-3 h-3 text-indigo-400 animate-pulse" />
                   </div>
-                  <p className="text-[9px] font-bold text-slate-400 leading-tight uppercase tracking-wider">
+                  <p className="text-[9px] font-bold text-slate-400 leading-tight uppercase tracking-wider line-clamp-4">
                     {currentAdaptation}
                   </p>
                </div>
