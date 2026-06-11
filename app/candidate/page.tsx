@@ -20,32 +20,36 @@ export default function CandidateDashboard() {
     let candidateName = 'Guest Candidate';
     let candidateEmail = 'no-email@interviewos.ai';
 
-    const savedUser = localStorage.getItem('interviewos_user');
-    if (!savedUser) {
-      router.push('/login');
-      return;
-    }
-    
-    try {
-      const user = JSON.parse(savedUser);
-      if (user.role !== 'candidate') {
+    // Authenticate via cookie + API
+    const verifyAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) throw new Error('Not authenticated');
+        const user = await res.json();
+        
+        if (user.role !== 'candidate') {
+          localStorage.removeItem('interviewos_token');
+          localStorage.removeItem('interviewos_user');
+          router.push('/login');
+          return;
+        }
+
+        // Sync localStorage
+        localStorage.setItem('interviewos_user', JSON.stringify(user));
+        
+        candidateName = user.name;
+        candidateEmail = user.email;
+        setCandidateContext(user);
+        fetchReports(user.id || user._id);
+      } catch (err) {
+        // Fallback to strict login requirement if API fails
         localStorage.removeItem('interviewos_token');
         localStorage.removeItem('interviewos_user');
         router.push('/login');
-        return;
       }
-      candidateName = user.name;
-      candidateEmail = user.email;
-      setCandidateContext(user);
-    } catch {
-      localStorage.removeItem('interviewos_token');
-      localStorage.removeItem('interviewos_user');
-      router.push('/login');
-      return;
-    }
+    };
 
-
-    // No mock data - we want an empty state if no DB records are found
+    verifyAuth();
     
     // Try fetching reports from MongoDB via Next.js API
     const fetchReports = async (userId: string) => {
@@ -99,13 +103,7 @@ export default function CandidateDashboard() {
       }
     };
 
-    const userStr = localStorage.getItem('interviewos_user');
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      fetchReports(user.id || user._id);
-    } else {
-      loadLocalStorageRecords([]);
-    }
+    // (verifyAuth handles fetching reports)
   }, []);
 
   const clearHistory = () => {
@@ -114,13 +112,9 @@ export default function CandidateDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-indigo-500/30">
       
-      {/* Background Ambience */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-600/10 rounded-full blur-[120px]" />
-      </div>
+      {/* Background Ambience Removed */}
 
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
         
@@ -132,7 +126,7 @@ export default function CandidateDashboard() {
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-black text-[var(--text)] tracking-tighter uppercase">Candidate Dashboard</h1>
+                <h1 className="text-3xl font-black text-white tracking-tighter uppercase">Candidate Dashboard</h1>
                 <div className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center gap-2">
                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
                    <span className="text-[7px] font-black text-emerald-400 uppercase tracking-widest">Profile: Active</span>
@@ -153,15 +147,15 @@ export default function CandidateDashboard() {
                 localStorage.clear();
                 window.location.href = '/login';
               }}
-              className="px-5 py-3 border border-[var(--border-color)] rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all flex items-center gap-2"
+              className="px-5 py-3 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all flex items-center gap-2"
             >
               Log out
             </button>
             <Link 
-              href="/"
+              href="/simulation"
               className="px-6 py-3 bg-white text-black hover:bg-slate-200 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-white/5"
             >
-              Start New Tryout
+              Start New Simulation
             </Link>
           </div>
         </header>

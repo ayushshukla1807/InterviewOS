@@ -49,15 +49,15 @@ function generateOfflineResponse(messages: any[], candidateProfile: any, roleNam
 
     case 3:
       content = usesHindi
-        ? `Makes sense. Chalo ab thoda hands-on coding karte hain. Editor mein apne preferred language mein ek clean aur optimized function likho, run karo, aur phir apna approach samjhao.`
-        : `Makes sense. Let's shift our focus to hands-on coding. I want you to write a clean, optimized function in the editor on your left. You can select your preferred language, write the solution, and click 'Run Code' to execute it. Once you are done, explain your approach to me.`;
+        ? `Makes sense. Chalo ab thoda hands-on coding karte hain. Main chat mein ek problem share karunga. Aap usko yahi chat mein solve kar sakte ho pseudo-code ya actual code likh kar. Ready?`
+        : `Makes sense. Let's shift our focus to hands-on coding. I will share a problem statement here in the chat, and I want you to write a clean, optimized function directly in the chat box to solve it. Ready?`;
       signals = ['Coding Assessment Triggered', 'Problem Solving Check'];
       break;
 
     case 4:
       content = usesHindi
-        ? `Nice work. Output console pe dikh raha hai. Ise space complexity ke liye aur kaise optimize karoge? Aur edge cases (jaise empty inputs) ke liye test cases kaise likhoge?`
-        : `Nice work running the code. I can see the execution output and runtime metrics in the console panel. How would you optimize this code further for space complexity, and how would you write test cases to cover edge cases?`;
+        ? `Nice work. Jo code aapne likha hai woh sahi lag raha hai. Ise space complexity ke liye aur kaise optimize karoge? Aur edge cases (jaise empty inputs) ke liye test cases kaise handle karoge?`
+        : `Nice work. The code you wrote looks good conceptually. How would you optimize this code further for space complexity, and how would you handle edge cases such as empty inputs?`;
       signals = ['Optimization Evaluation', 'Testing Standard'];
       break;
 

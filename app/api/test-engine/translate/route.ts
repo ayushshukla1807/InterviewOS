@@ -206,7 +206,11 @@ export async function POST(req: Request) {
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-    const response = await ai.models.generateContent({
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('AI Generation Timeout')), 15000)
+    );
+
+    const generatePromise = ai.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: [
         { role: 'user', parts: [{ text: JD_TRANSLATOR_SYSTEM_PROMPT }] },
@@ -214,6 +218,8 @@ export async function POST(req: Request) {
       ],
       config: { responseMimeType: 'application/json' },
     });
+
+    const response = (await Promise.race([generatePromise, timeoutPromise])) as any;
 
     const raw = (response.text ?? '').replace(/```json/g, '').replace(/```/g, '').trim();
     let blueprint: SimulationBlueprint;

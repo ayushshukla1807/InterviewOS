@@ -17,25 +17,11 @@ import {
   MessageSquare, Mail, ClipboardCheck, Calendar, ShieldAlert, Cpu, Sparkles,
   Terminal, Palette, Check, Zap, AlertTriangle, RotateCcw, ChevronRight,
   TrendingUp, Clock, Users, Target, Award, Brain, Eye, EyeOff, Send,
-  ChevronDown, ChevronUp, Activity, Volume2, VolumeX, BookOpen
+  ChevronDown, ChevronUp, Activity, Volume2, VolumeX, BookOpen, AlertCircle
 } from 'lucide-react';
 import CodeIDE from '../../components/CodeIDE';
 
-// ─── Theme System ─────────────────────────────────────────────────────────────
-type SimThemeKey = 'noir' | 'terminal' | 'corporate' | 'sunset' | 'arctic';
-
-const THEMES: Record<SimThemeKey, {
-  label: string; preview: string; bg: string; surface: string; surfaceAlt: string;
-  border: string; textPrimary: string; textSecondary: string; textMuted: string;
-  accent: string; accentText: string; accentBg: string; accentBorder: string; accentHover: string;
-  fontFamily: string;
-}> = {
-  noir: { label:'Noir', preview:'#6366f1', bg:'#0e0e10', surface:'#111113', surfaceAlt:'#1a1a1c', border:'rgba(255,255,255,0.06)', textPrimary:'#f1f5f9', textSecondary:'#94a3b8', textMuted:'#475569', accent:'#6366f1', accentText:'#a5b4fc', accentBg:'rgba(99,102,241,0.12)', accentBorder:'rgba(99,102,241,0.3)', accentHover:'#4f46e5', fontFamily:'Outfit, sans-serif' },
-  terminal: { label:'Terminal', preview:'#22c55e', bg:'#020b02', surface:'#051005', surfaceAlt:'#0a1f0a', border:'rgba(34,197,94,0.15)', textPrimary:'#86efac', textSecondary:'#4ade80', textMuted:'#166534', accent:'#22c55e', accentText:'#86efac', accentBg:'rgba(34,197,94,0.1)', accentBorder:'rgba(34,197,94,0.3)', accentHover:'#16a34a', fontFamily:'"Fira Code","JetBrains Mono",monospace' },
-  corporate: { label:'Corporate', preview:'#3b82f6', bg:'#f0f4f8', surface:'#ffffff', surfaceAlt:'#f8fafc', border:'rgba(0,0,0,0.08)', textPrimary:'#1e293b', textSecondary:'#475569', textMuted:'#94a3b8', accent:'#3b82f6', accentText:'#1d4ed8', accentBg:'rgba(59,130,246,0.08)', accentBorder:'rgba(59,130,246,0.25)', accentHover:'#2563eb', fontFamily:'Inter,system-ui,sans-serif' },
-  sunset: { label:'Sunset', preview:'#f97316', bg:'#120a00', surface:'#1c1008', surfaceAlt:'#271608', border:'rgba(251,146,60,0.12)', textPrimary:'#fed7aa', textSecondary:'#fdba74', textMuted:'#92400e', accent:'#f97316', accentText:'#fed7aa', accentBg:'rgba(249,115,22,0.12)', accentBorder:'rgba(249,115,22,0.3)', accentHover:'#ea580c', fontFamily:'Outfit, sans-serif' },
-  arctic: { label:'Arctic', preview:'#06b6d4', bg:'#030f1a', surface:'#061525', surfaceAlt:'#0a2035', border:'rgba(6,182,212,0.12)', textPrimary:'#cffafe', textSecondary:'#67e8f9', textMuted:'#164e63', accent:'#06b6d4', accentText:'#cffafe', accentBg:'rgba(6,182,212,0.1)', accentBorder:'rgba(6,182,212,0.3)', accentHover:'#0891b2', fontFamily:'Outfit, sans-serif' },
-};
+const THEME = { label:'Noir', preview:'#6366f1', bg:'#0e0e10', surface:'#111113', surfaceAlt:'#1a1a1c', border:'rgba(255,255,255,0.06)', textPrimary:'#f1f5f9', textSecondary:'#94a3b8', textMuted:'#475569', accent:'#6366f1', accentText:'#a5b4fc', accentBg:'rgba(99,102,241,0.12)', accentBorder:'rgba(99,102,241,0.3)', accentHover:'#4f46e5', fontFamily:'Outfit, sans-serif' };
 
 // ─── Skill dimension labels ───────────────────────────────────────────────────
 const DIM_LABELS: Record<string, string> = {
@@ -94,10 +80,13 @@ export default function LivingWorkplaceSimulation() {
   const [showScorePanel, setShowScorePanel] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [isComputingScore, setIsComputingScore] = useState(false);
+  const [hasLoadError, setHasLoadError] = useState(false);
+  const [challengeResponseText, setChallengeResponseText] = useState('');
+  const [showChallengeModal, setShowChallengeModal] = useState(false);
+  const [activeChallenge, setActiveChallenge] = useState<any>(null);
 
   // ── Theme ────────────────────────────────────────────────────────────────
-  const [themeKey, setThemeKey] = useState<SimThemeKey>('noir');
-  const [showThemePicker, setShowThemePicker] = useState(false);
+  const t = THEME;
   const [ttsEnabled, setTtsEnabled] = useState(true);
 
   // ── Candidate Stress Level (Feature 6) & Coworker Interruptions (Feature 5) ──
@@ -119,6 +108,39 @@ export default function LivingWorkplaceSimulation() {
     }, 5000);
     return () => clearInterval(interval);
   }, [runtime?.eventStream, timeLeft, runtime?.chaosWaveActive, phase]);
+
+  // ─── Challenge Trigger Logic ────────────────────────────────────────────────
+  useEffect(() => {
+    if (!runtime || phase !== 'workspace') return;
+    
+    const readCount = runtime.eventStream.filter(e => e.isRead).length;
+    
+    // Check embedded challenges first
+    const triggeredEmbedded = runtime.embeddedChallenges.find(c => 
+      !c.triggered && 
+      (c.triggerCondition === 'after_2_events_read' && readCount >= 2) ||
+      (c.triggerCondition === 'after_chaos_wave_starts' && runtime.chaosWaveActive)
+    );
+
+    if (triggeredEmbedded) {
+      setRuntime(prev => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          embeddedChallenges: prev.embeddedChallenges.map(c => 
+            c.id === triggeredEmbedded.id ? { ...c, triggered: true } : c
+          )
+        };
+      });
+      setActiveChallenge(triggeredEmbedded);
+      setShowChallengeModal(true);
+      return;
+    }
+
+    // If no embedded challenge is active, check if Act challenge is unsubmitted
+    // We only force it if they click "Advance Act" or if we want to show it explicitly.
+    // For now, let's let the user open the Act Challenge manually, or trigger it at the end of the Act.
+  }, [runtime?.eventStream, runtime?.embeddedChallenges, runtime?.chaosWaveActive, phase]);
 
   // Feature 5: Dynamic Coworker Interruptions
   useEffect(() => {
@@ -163,7 +185,7 @@ export default function LivingWorkplaceSimulation() {
     }
   }, [runtime?.eventStream, speak, runtime?.stakeholderStates]);
 
-  const t = THEMES[themeKey];
+
 
   // ─── Camera Init ──────────────────────────────────────────────────────────
   useEffect(() => {
@@ -223,12 +245,10 @@ export default function LivingWorkplaceSimulation() {
           setPhase('workspace');
         }
       } catch {
-        alert('Failed to parse simulation blueprint.');
-        router.push('/simulation');
+        setHasLoadError(true);
       }
     } else {
-      alert('Invalid or expired simulation session.');
-      router.push('/simulation');
+      setHasLoadError(true);
     }
   }, [sessionId, router]);
 
@@ -385,6 +405,43 @@ export default function LivingWorkplaceSimulation() {
           behaviorSignals: data.behaviorSignals,
         };
 
+        // Auto phase transition logic (behavior-driven)
+        let nextActNum = prev.currentAct;
+        if (data.chaosThresholdReached && prev.currentAct < 2) nextActNum = 2;
+        if (data.recoveryPhaseTriggered && prev.currentAct < 3) nextActNum = 3;
+
+        if (nextActNum > prev.currentAct) {
+          const nextAct = updatedBlueprint.acts.find(a => a.act === nextActNum);
+          if (nextAct) {
+            // Auto advance act
+            setTimeout(() => {
+              if (nextActNum >= 2) { setChaosActive(true); setPhase('chaos'); }
+              if (nextActNum === 3) { setRecoveryActive(true); setPhase('recovery'); }
+            }, 0);
+
+            // If simultaneous is true or it's Act 2, all events reveal at 0
+            const autoRevealEvents = nextAct.initialEvents.map(e => ({
+              ...e,
+              revealAt: 0, // Force simultaneous delivery for chaos wave
+            }));
+
+            return {
+              ...prev,
+              blueprint: updatedBlueprint,
+              stakeholderStates: newStakeholderStates,
+              currentAct: nextActNum,
+              actStartTime: Date.now(),
+              eventStream: [...prev.eventStream, ...(data.consequenceEvents || []), ...autoRevealEvents],
+              currentChallenge: nextAct.challenge,
+              embeddedChallenges: nextAct.embeddedChallenges || [],
+              behavioralSignals: signals,
+              consequenceWaveLog: updatedWaveLog,
+              candidateActions: [...prev.candidateActions, newAction],
+              chaosWaveActive: data.chaosThresholdReached || prev.chaosWaveActive,
+            };
+          }
+        }
+
         return {
           ...prev,
           blueprint: updatedBlueprint,
@@ -397,10 +454,6 @@ export default function LivingWorkplaceSimulation() {
         };
       });
 
-      // Check for chaos / recovery phase transitions
-      if (data.chaosThresholdReached) { setChaosActive(true); setPhase('chaos'); }
-      if (data.recoveryPhaseTriggered) { setRecoveryActive(true); setPhase('recovery'); }
-
     } catch (e) {
       console.error('Action error:', e);
     } finally {
@@ -411,6 +464,17 @@ export default function LivingWorkplaceSimulation() {
   // ─── Advance Act ──────────────────────────────────────────────────────────
   const handleAdvanceAct = () => {
     if (!runtime) return;
+
+    // Force Act Challenge before advancing if not submitted
+    if (runtime.currentChallenge) {
+      const isSubmitted = runtime.challengeResponses.some(r => r.challengeId === runtime.currentChallenge!.id);
+      if (!isSubmitted) {
+        setActiveChallenge(runtime.currentChallenge);
+        setShowChallengeModal(true);
+        return; // Block advancement until submitted
+      }
+    }
+
     if (runtime.currentAct >= 3) { handleSubmitTest(); return; }
     const nextActNum = (runtime.currentAct + 1) as 1 | 2 | 3;
     const nextAct = runtime.blueprint.acts.find(a => a.act === nextActNum);
@@ -541,6 +605,25 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
     router.push(`/instructions?name=${encodeURIComponent(candidateName)}&track=DYNAMIC&simulationSessionId=${sessionId}`);
   };
 
+  // ─── Error State ──────────────────────────────────────────────────────────
+  if (hasLoadError) {
+    return (
+      <div className="min-h-screen bg-[#0A0A0A] text-white flex flex-col items-center justify-center font-outfit p-6 text-center">
+        <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mb-6">
+          <AlertCircle className="w-8 h-8 text-red-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-100 mb-2">Session Not Found or Expired</h2>
+        <p className="text-gray-400 max-w-md mb-8">The simulation session you are trying to access is invalid or has expired. Please launch a new simulation from your dashboard.</p>
+        <button
+          onClick={() => router.push('/candidate')}
+          className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-semibold transition-colors"
+        >
+          Return to Dashboard
+        </button>
+      </div>
+    );
+  }
+
   // ─── Loading State ────────────────────────────────────────────────────────
   if (!blueprint || !runtime) {
     return (
@@ -618,7 +701,30 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                 {q.context && (
                   <div className="ml-10 bg-[#0d0d0f] border border-white/5 rounded-xl p-4">
                     <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Context / Data</div>
-                    <pre className="text-xs text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">{q.context}</pre>
+                    {q.context.includes('|') ? (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs text-gray-300">
+                          <thead>
+                            <tr className="border-b border-white/10">
+                              {q.context.split('\n')[0]?.split('|').map((h, i) => (
+                                <th key={i} className="pb-2 pr-4 font-semibold text-gray-400">{h.trim()}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {q.context.split('\n').slice(1).filter(r => r.trim()).map((row, rIdx) => (
+                              <tr key={rIdx} className="border-b border-white/5 last:border-0">
+                                {row.split('|').map((cell, cIdx) => (
+                                  <td key={cIdx} className="py-2 pr-4 text-gray-300">{cell.trim()}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <pre className="text-xs text-gray-300 leading-relaxed whitespace-pre-wrap font-mono">{q.context}</pre>
+                    )}
                   </div>
                 )}
 
@@ -818,30 +924,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {formatTime(timeLeft)}
           </div>
 
-          {/* Theme Picker */}
-          <div className="relative">
-            <button
-              onClick={() => setShowThemePicker(p => !p)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold border transition-all"
-              style={{ backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder }}
-            >
-              <Palette className="w-3.5 h-3.5" /> {t.label}
-            </button>
-            {showThemePicker && (
-              <div className="absolute right-0 top-9 w-40 rounded-xl border shadow-2xl z-50 overflow-hidden"
-                style={{ backgroundColor: t.surface, borderColor: t.border }}>
-                {(Object.keys(THEMES) as SimThemeKey[]).map(key => (
-                  <button key={key} onClick={() => { setThemeKey(key); setShowThemePicker(false); }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left text-xs font-medium transition-all"
-                    style={{ color: themeKey === key ? THEMES[key].accent : t.textSecondary, backgroundColor: themeKey === key ? THEMES[key].accentBg : 'transparent' }}>
-                    <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: THEMES[key].preview }} />
-                    {THEMES[key].label}
-                    {themeKey === key && <Check className="w-3 h-3 ml-auto" />}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Theme Picker Removed */}
 
           <button
             onClick={() => setShowScorePanel(p => !p)}
@@ -1106,75 +1189,10 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               </div>
             )}
 
-        {/* Current Challenge Overlay */}
-            {runtime.currentChallenge && (
-              <div
-                className="absolute top-4 right-4 w-72 rounded-xl shadow-2xl overflow-hidden z-30 border"
-                style={{ backgroundColor: t.surface, borderColor: t.accentBorder }}
-              >
-                <div className="px-4 py-2.5 border-b flex justify-between items-center"
-                  style={{ backgroundColor: t.accentBg, borderColor: t.accentBorder }}>
-                  <span className="text-xs font-black uppercase tracking-wider" style={{ color: t.accentText }}>
-                    Act {runtime.currentAct} Objective
-                  </span>
-                  <span className="text-[9px] px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
-                    35% Score
-                  </span>
-                </div>
-                <div className="p-4">
-                  <p className="text-xs leading-relaxed mb-4" style={{ color: t.textSecondary }}>{runtime.currentChallenge.prompt}</p>
-
-                  {/* Recovery input if recovery phase */}
-                  {recoveryActive && (
-                    <div className="mb-3">
-                      <textarea
-                        value={recoveryResponse}
-                        onChange={e => setRecoveryResponse(e.target.value)}
-                        placeholder="What's your recovery plan? Be specific about each stakeholder..."
-                        className="w-full h-24 rounded-lg p-2 text-xs resize-none border outline-none"
-                        style={{ backgroundColor: t.bg, borderColor: t.border, color: t.textPrimary }}
-                      />
-                    </div>
-                  )}
-
-                  <button
-                    onClick={handleAdvanceAct}
-                    className="w-full py-2 rounded-lg text-xs font-bold border transition-all flex items-center justify-center gap-1.5"
-                    style={{ backgroundColor: t.accentBg, color: t.accentText, borderColor: t.accentBorder }}
-                  >
-                    {runtime.currentAct >= 3 ? 'Complete Simulation' : 'Complete & Advance'}
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
+        {/* Removed old Right-Panel currentChallenge overlay */}
           </div>
 
-          {/* Code IDE Sandbox */}
-          {showSandbox && (
-            <div className="w-1/2 flex flex-col h-full border-l" style={{ borderColor: t.border }}>
-              <CodeIDE
-                problem={runtime.currentChallenge?.prompt || 'Analyze the situation and write your solution or response script.'}
-                difficulty="Medium"
-                language={sandboxLang}
-                initialCode={sandboxCode}
-                tags={['Simulation', 'Live']}
-                theme={t}
-                onSubmit={(code, lang) => {
-                  setSandboxCode(code); setSandboxLang(lang);
-                  setRuntime(prev => {
-                    if (!prev) return prev;
-                    const challengeId = prev.currentChallenge?.id || 'ch-sandbox';
-                    const idx = prev.challengeResponses.findIndex(r => r.challengeId === challengeId);
-                    const newResponses = [...prev.challengeResponses];
-                    if (idx > -1) newResponses[idx] = { challengeId, response: code };
-                    else newResponses.push({ challengeId, response: code });
-                    return { ...prev, challengeResponses: newResponses };
-                  });
-                }}
-              />
-            </div>
-          )}
+          {/* Removed CodeIDE Sandbox (replaced by Challenge Modal) */}
         </div>
         </>
       )}
@@ -1527,6 +1545,84 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
           </div>
         </div>
       )}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* Challenge Modal Overlay                                             */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {showChallengeModal && activeChallenge && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 backdrop-blur-sm" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }}>
+          <div
+            className="w-full max-w-3xl rounded-2xl border shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            style={{ backgroundColor: t.surface, borderColor: t.accentBorder }}
+          >
+            <div className="px-6 py-4 border-b flex justify-between items-center" style={{ borderColor: t.border, background: `linear-gradient(135deg, ${t.accentBg}, transparent)` }}>
+              <div className="flex items-center gap-3">
+                <Brain className="w-5 h-5" style={{ color: t.accent }} />
+                <h2 className="text-lg font-black uppercase tracking-wider" style={{ color: t.textPrimary }}>
+                  {activeChallenge.type ? activeChallenge.type.replace('_', ' ') : 'Critical Decision Required'}
+                </h2>
+              </div>
+              <span className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
+                Embedded Challenge · 35% Score
+              </span>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1 space-y-6">
+              <div>
+                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Situation</h3>
+                <p className="text-base leading-relaxed" style={{ color: t.textPrimary }}>{activeChallenge.prompt}</p>
+              </div>
+
+              {activeChallenge.context && (
+                <div className="rounded-xl p-4 border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
+                  <h3 className="text-xs font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Context / Data</h3>
+                  <pre className="text-xs leading-relaxed whitespace-pre-wrap font-mono" style={{ color: t.textSecondary }}>{activeChallenge.context}</pre>
+                </div>
+              )}
+
+              <div>
+                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Your Response</h3>
+                <textarea
+                  value={challengeResponseText}
+                  onChange={e => setChallengeResponseText(e.target.value)}
+                  placeholder="Write your detailed response here. Your actual words matter..."
+                  className="w-full h-40 rounded-xl p-4 text-sm border outline-none resize-none transition-all"
+                  style={{ backgroundColor: t.bg, borderColor: t.border, color: t.textPrimary }}
+                />
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t flex justify-end gap-3" style={{ borderColor: t.border, backgroundColor: t.surfaceAlt }}>
+              <button
+                onClick={() => {
+                  if (!challengeResponseText.trim()) return;
+                  setRuntime(prev => {
+                    if (!prev) return prev;
+                    const newResponses = [...prev.challengeResponses];
+                    const idx = newResponses.findIndex(r => r.challengeId === activeChallenge.id);
+                    if (idx > -1) newResponses[idx].response = challengeResponseText;
+                    else newResponses.push({ challengeId: activeChallenge.id, response: challengeResponseText });
+                    return { ...prev, challengeResponses: newResponses };
+                  });
+                  setChallengeResponseText('');
+                  setShowChallengeModal(false);
+                  setActiveChallenge(null);
+                  
+                  // If it was the currentChallenge, advance act automatically
+                  if (activeChallenge.id === runtime?.currentChallenge?.id) {
+                    if (runtime.currentAct >= 3) handleSubmitTest();
+                    else handleAdvanceAct();
+                  }
+                }}
+                className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg hover:scale-105"
+                style={{ backgroundColor: t.accent, color: '#fff' }}
+              >
+                Submit Decision
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -108,6 +108,30 @@ function LoginInner() {
     }
   };
 
+  const handleDemoLogin = async (roleEmail: string) => {
+    setEmail(roleEmail);
+    setPassword('demo1234');
+    
+    setIsLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: roleEmail, password: 'demo1234' }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Invalid email or password');
+      localStorage.setItem('interviewos_token', data.token);
+      localStorage.setItem('interviewos_user', JSON.stringify(data.user));
+      router.push(data.user.role === 'candidate' ? '/candidate' : '/recruiter');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="ios-auth-root">
       {/* Left Panel — Visual */}
@@ -155,9 +179,9 @@ function LoginInner() {
           className="ios-terminal"
         >
           <div className="ios-terminal-header">
-            <div className="ios-terminal-dot" style={{ background: '#ff5f57' }} />
-            <div className="ios-terminal-dot" style={{ background: '#febc2e' }} />
-            <div className="ios-terminal-dot" style={{ background: '#28c840' }} />
+            <div className="ios-terminal-dot" style={{ background: '#475569' }} />
+            <div className="ios-terminal-dot" style={{ background: '#475569' }} />
+            <div className="ios-terminal-dot" style={{ background: '#475569' }} />
             <span className="ios-terminal-title">session.ts — InterviewOS SDK</span>
           </div>
           <div className="ios-terminal-body">
@@ -325,8 +349,10 @@ function LoginInner() {
           {/* Demo Quick Access */}
           <div className="ios-demo-row">
             <button
+              type="button"
               className="ios-demo-btn"
-              onClick={() => { setEmail('demo.candidate@interviewos.com'); setPassword('demo1234'); }}
+              onClick={() => handleDemoLogin('demo.candidate@interviewos.com')}
+              disabled={isLoading}
             >
               <div className="ios-demo-icon ios-demo-icon-candidate">C</div>
               <div>
@@ -335,8 +361,10 @@ function LoginInner() {
               </div>
             </button>
             <button
+              type="button"
               className="ios-demo-btn"
-              onClick={() => { setEmail('demo.recruiter@interviewos.com'); setPassword('demo1234'); }}
+              onClick={() => handleDemoLogin('demo.recruiter@interviewos.com')}
+              disabled={isLoading}
             >
               <div className="ios-demo-icon ios-demo-icon-recruiter">R</div>
               <div>
@@ -412,7 +440,7 @@ function LoginInner() {
         .ios-brand { display: flex; align-items: center; gap: 10px; }
         .ios-brand-icon {
           width: 36px; height: 36px;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          background: #6366f1;
           border-radius: 10px;
           display: flex; align-items: center; justify-content: center;
           box-shadow: 0 0 20px rgba(99,102,241,0.4);
@@ -445,8 +473,7 @@ function LoginInner() {
           color: #fff; letter-spacing: -1.5px; margin: 0 0 16px;
         }
         .ios-hero-accent {
-          background: linear-gradient(135deg, #818cf8 0%, #38bdf8 60%, #a78bfa 100%);
-          -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+          color: #6366f1;
         }
         .ios-hero-desc {
           font-size: 14px; line-height: 1.7; color: #64748b; max-width: 380px;
@@ -533,7 +560,7 @@ function LoginInner() {
         .ios-form-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
         .ios-form-logo {
           width: 44px; height: 44px; flex-shrink: 0;
-          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          background: #6366f1;
           border-radius: 12px; display: flex; align-items: center; justify-content: center;
           box-shadow: 0 8px 24px rgba(99,102,241,0.35);
         }
@@ -575,7 +602,7 @@ function LoginInner() {
 
         .ios-submit-btn {
           width: 100%; padding: 14px;
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          background: #6366f1;
           border: none; border-radius: 12px; cursor: pointer;
           color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
           display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -615,8 +642,8 @@ function LoginInner() {
           display: flex; align-items: center; justify-content: center;
           font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
         }
-        .ios-demo-icon-candidate { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-        .ios-demo-icon-recruiter { background: linear-gradient(135deg, #0ea5e9, #06b6d4); }
+        .ios-demo-icon-candidate { background: #6366f1; }
+        .ios-demo-icon-recruiter { background: #6366f1; }
         .ios-demo-role { font-size: 11px; font-weight: 700; color: #94a3b8; }
         .ios-demo-hint { font-size: 10px; color: #334155; margin-top: 1px; }
 

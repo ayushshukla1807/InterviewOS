@@ -232,6 +232,26 @@ Return ONLY valid JSON:
       ...waveConsequenceEvents,
     ];
 
+    // ─── 5. Auto-Recovery Detection ──────────────────────────────────────────
+    // HYRTE is behavior-driven: if 2+ stakeholders drop below trust=40 due to
+    // candidate actions, Recovery Phase triggers automatically — no click needed.
+    const allUpdatedStakeholders = {
+      ...allStakeholders,
+      [stakeholder.id]: {
+        ...updatedStakeholder,
+        trust: result.updatedStakeholderTrust ?? updatedStakeholder.trust,
+      },
+    };
+    const lowTrustCount = Object.values(allUpdatedStakeholders).filter(
+      (s: any) => s.trust < 40
+    ).length;
+    const autoRecoveryTriggered = lowTrustCount >= 2 && !(result.recoveryPhaseTriggered);
+
+    // Auto-chaos: if manager is involved (isManager=true stakeholder has low trust) → chaos threshold
+    const managerLowTrust = Object.values(allUpdatedStakeholders).some(
+      (s: any) => s.isManager && s.trust < 50
+    );
+
     return NextResponse.json({
       updatedStakeholder: {
         ...updatedStakeholder,
@@ -240,10 +260,10 @@ Return ONLY valid JSON:
         escalationLevel: result.updatedEscalationLevel ?? updatedStakeholder.escalationLevel,
       },
       consequenceEvents: allConsequenceEvents,
-      shouldTriggerManagerEscalation: result.shouldTriggerManagerEscalation ?? false,
+      shouldTriggerManagerEscalation: result.shouldTriggerManagerEscalation ?? managerLowTrust,
       managerEscalationMessage: result.managerEscalationMessage ?? null,
       chaosThresholdReached: result.chaosThresholdReached ?? false,
-      recoveryPhaseTriggered: result.recoveryPhaseTriggered ?? false,
+      recoveryPhaseTriggered: result.recoveryPhaseTriggered ?? autoRecoveryTriggered,
       firedWaves,
       behaviorSignals,
     });
