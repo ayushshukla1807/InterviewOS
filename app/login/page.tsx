@@ -68,7 +68,13 @@ function LoginInner() {
     if (token && user) {
       try {
         const parsed = JSON.parse(user);
-        router.push(parsed.role === 'candidate' ? '/candidate' : '/recruiter');
+        if (parsed.role === 'founder') {
+          router.push('/founder');
+        } else if (parsed.role === 'candidate') {
+          router.push('/candidate');
+        } else {
+          router.push('/recruiter');
+        }
       } catch { /* ignore */ }
     }
   }, [router, searchParams]);
