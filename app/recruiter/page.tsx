@@ -1,8 +1,13 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Target, Users, Search, Filter, Layers, BarChart, FileText, ArrowRight, Activity, Zap, PlayCircle, Plus } from 'lucide-react';
+import { Shield, Target, Users, Search, Filter, Layers, BarChart as BarChartIcon, FileText, ArrowRight, Activity, Zap, PlayCircle, Plus } from 'lucide-react';
 import Link from 'next/link';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart, Line
+} from 'recharts';
 
 // Mock active sessions reading from localStorage for demo purposes
 interface ActiveSession {
@@ -15,7 +20,7 @@ interface ActiveSession {
 }
 
 export default function RecruiterDashboard() {
-  const [activeTab, setActiveTab] = useState<'candidates' | 'live' | 'templates' | 'users'>('live');
+  const [activeTab, setActiveTab] = useState<'live' | 'candidates' | 'users' | 'templates'>('live');
   const [liveSessions, setLiveSessions] = useState<ActiveSession[]>([]);
   const [dbReports, setDbReports] = useState<any[]>([]);
   const [dbUsers, setDbUsers] = useState<any[]>([]);
@@ -59,7 +64,6 @@ export default function RecruiterDashboard() {
     }
   }, [activeTab]);
 
-  // Feature 2: CSV Export
   const exportToCSV = () => {
     if (!dbReports.length) return;
     const headers = ['Candidate Name', 'Role', 'Company', 'Score', 'Direct Skill', 'Embedded Skills', 'Workplace Intelligence', 'Date Completed', 'Session ID'];
@@ -83,14 +87,24 @@ export default function RecruiterDashboard() {
     link.remove();
   };
 
-  // Feature 3: Global Analytics Calculations
   const avgScore = dbReports.length ? Math.round(dbReports.reduce((sum, r) => sum + r.score, 0) / dbReports.length) : 0;
   const topRoleEntry = dbReports.length ? Object.entries(dbReports.reduce((acc, r) => {
     acc[r.role] = (acc[r.role] || 0) + 1; return acc;
   }, {} as Record<string, number>)).sort((a: any, b: any) => b[1] - a[1])[0] : null;
   const topRole = topRoleEntry ? topRoleEntry[0] : '--';
 
-  // Poll localStorage for active simulations (demo of "live" tracking)
+  // Bar Chart Data Preparation
+  const getScoreDistribution = () => {
+    const bins = { '0-40': 0, '41-60': 0, '61-80': 0, '81-100': 0 };
+    dbReports.forEach(r => {
+      if (r.score <= 40) bins['0-40']++;
+      else if (r.score <= 60) bins['41-60']++;
+      else if (r.score <= 80) bins['61-80']++;
+      else bins['81-100']++;
+    });
+    return Object.keys(bins).map(key => ({ range: key, candidates: bins[key as keyof typeof bins] }));
+  };
+
   useEffect(() => {
     if (activeTab !== 'live') return;
 
@@ -102,7 +116,6 @@ export default function RecruiterDashboard() {
           try {
             const data = JSON.parse(localStorage.getItem(key) || '{}');
             if (data.candidateActions) {
-              // It's a runtime state
               const stakeholders = Object.values(data.stakeholderStates || {}) as any[];
               const avgTrust = stakeholders.length ? Math.round(stakeholders.reduce((sum, s) => sum + s.trust, 0) / stakeholders.length) : 100;
               sessions.push({
@@ -114,9 +127,7 @@ export default function RecruiterDashboard() {
                 trust: avgTrust,
               });
             }
-          } catch (e) {
-            // ignore
-          }
+          } catch (e) {}
         }
       }
       setLiveSessions(sessions);
@@ -128,29 +139,32 @@ export default function RecruiterDashboard() {
   }, [activeTab]);
 
   return (
-    <div data-theme="dark" className="min-h-screen bg-[#0a0a0c] text-white font-sans selection:bg-violet-500/30">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-violet-500/30 transition-colors duration-500">
+      
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl">
+      <nav className="fixed top-0 w-full z-50 border-b border-[var(--border-color)] bg-[var(--bg)]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-violet-500 to-fuchsia-600 font-black text-xs">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-black text-xs shadow-md group-hover:scale-105 transition-transform">
               OS
             </div>
             <span className="font-bold text-sm tracking-widest uppercase">InterviewOS</span>
-          </div>
+          </Link>
           
-          <div className="flex items-center gap-1 p-1 bg-white/5 rounded-lg border border-white/10">
+          <div className="hidden md:flex items-center gap-1 p-1 bg-[var(--card-bg)] rounded-lg border border-[var(--border-color)] shadow-sm">
             {[
               { id: 'live', label: 'Live Monitor', icon: Activity },
               { id: 'candidates', label: 'Hiring Reports', icon: FileText },
-              { id: 'users', label: 'User Directory', icon: Users },
-              { id: 'templates', label: 'Role Blueprints', icon: Layers },
+              { id: 'users', label: 'Directory', icon: Users },
+              { id: 'templates', label: 'Blueprints', icon: Layers },
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-all ${
-                  activeTab === tab.id ? 'bg-white/10 text-white font-semibold' : 'text-white/50 hover:text-white/80'
+                  activeTab === tab.id 
+                    ? 'bg-violet-600 text-white font-semibold shadow-md' 
+                    : 'text-slate-500 hover:text-violet-500 hover:bg-violet-500/10'
                 }`}
               >
                 <tab.icon className="w-4 h-4" /> {tab.label}
@@ -161,23 +175,19 @@ export default function RecruiterDashboard() {
           <div className="flex items-center gap-4">
             <button 
               onClick={async () => {
-                try {
-                  await fetch('/api/auth/logout', { method: 'POST' });
-                } catch (e) {
-                  // ignore
-                }
+                try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
                 localStorage.clear();
                 window.location.href = '/login';
               }}
-              className="text-xs font-semibold text-white/50 hover:text-rose-400 transition-colors"
+              className="text-xs font-semibold text-slate-500 hover:text-rose-500 transition-colors"
             >
               Log out
             </button>
             <button 
               onClick={() => setActiveTab('templates')}
-              className="flex items-center gap-2 px-4 py-1.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold"
+              className="hidden sm:flex items-center gap-2 px-4 py-1.5 bg-[var(--text)] text-[var(--bg)] hover:opacity-80 transition-colors rounded-lg text-sm font-semibold active:scale-95 shadow-sm"
             >
-              <Plus className="w-4 h-4" /> New Simulation
+              <Plus className="w-4 h-4" /> New Session
             </button>
           </div>
         </div>
@@ -196,15 +206,15 @@ export default function RecruiterDashboard() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
-              <div className="flex items-end justify-between">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Live Monitor</h1>
-                  <p className="text-white/50">Watch candidates navigate simulations in real-time.</p>
+                  <h1 className="text-3xl font-black tracking-tight mb-2">Live Monitor</h1>
+                  <p className="text-slate-500 text-sm">Watch candidates navigate simulations in real-time.</p>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-white/50">
-                  <span className="relative flex h-3 w-3">
+                <div className="flex items-center gap-2 text-sm text-emerald-500 font-bold bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full shadow-sm">
+                  <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                   </span>
                   Live Polling Active
                 </div>
@@ -212,17 +222,19 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {liveSessions.length === 0 ? (
-                  <div className="col-span-full py-20 text-center border border-white/5 rounded-2xl bg-white/[0.02]">
-                    <Activity className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-white/80 mb-2">No Active Simulations</h3>
-                    <p className="text-white/40">Candidates taking a test right now will appear here.</p>
+                  <div className="col-span-full py-20 text-center border border-[var(--border-color)] rounded-3xl bg-[var(--card-bg)] shadow-sm">
+                    <div className="w-16 h-16 bg-[var(--bg)] rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--border-color)] shadow-inner">
+                      <Activity className="w-8 h-8 text-slate-400" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">No Active Simulations</h3>
+                    <p className="text-slate-500 text-sm">Candidates taking a test right now will appear here instantly.</p>
                   </div>
                 ) : (
                   liveSessions.map(session => (
-                    <div key={session.sessionId} className="border border-white/10 bg-[#111115] rounded-2xl p-6 flex flex-col relative overflow-hidden group">
+                    <div key={session.sessionId} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-6 flex flex-col relative overflow-hidden group hover:shadow-md transition-shadow">
                       
                       {/* Live Phase Gradient Line */}
-                      <div className={`absolute top-0 left-0 w-full h-1 ${
+                      <div className={`absolute top-0 left-0 w-full h-1.5 ${
                         session.phase === 'chaos' ? 'bg-gradient-to-r from-red-500 to-orange-500' :
                         session.phase === 'recovery' ? 'bg-gradient-to-r from-amber-500 to-yellow-500' :
                         'bg-gradient-to-r from-emerald-500 to-teal-500'
@@ -231,35 +243,35 @@ export default function RecruiterDashboard() {
                       <div className="flex justify-between items-start mb-6">
                         <div>
                           <h3 className="text-lg font-bold">{session.name}</h3>
-                          <p className="text-xs text-white/50">{session.role}</p>
+                          <p className="text-xs text-slate-500">{session.role}</p>
                         </div>
-                        <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${
-                          session.phase === 'chaos' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
-                          session.phase === 'recovery' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                          'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                        <div className={`px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest ${
+                          session.phase === 'chaos' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
+                          session.phase === 'recovery' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
+                          'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
                         }`}>
                           {session.phase === 'pre_skill' ? 'Skill Test' : session.phase}
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div className="bg-black/40 rounded-xl p-3 border border-white/5">
-                          <div className="text-xs text-white/40 mb-1">Live Trust</div>
-                          <div className={`text-xl font-bold ${session.trust < 40 ? 'text-red-400' : 'text-emerald-400'}`}>
+                        <div className="bg-[var(--bg)] rounded-2xl p-4 border border-[var(--border-color)]">
+                          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Live Trust</div>
+                          <div className={`text-2xl font-black ${session.trust < 40 ? 'text-red-500' : 'text-emerald-500'}`}>
                             {session.trust}%
                           </div>
                         </div>
-                        <div className="bg-black/40 rounded-xl p-3 border border-white/5">
-                          <div className="text-xs text-white/40 mb-1">Score Projection</div>
-                          <div className="text-xl font-bold text-violet-400">
+                        <div className="bg-[var(--bg)] rounded-2xl p-4 border border-[var(--border-color)]">
+                          <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Proj. Score</div>
+                          <div className="text-2xl font-black text-violet-500">
                             {session.score || '--'}
                           </div>
                         </div>
                       </div>
 
                       <Link href={`/report?sessionId=${session.sessionId}&name=${encodeURIComponent(session.name)}&role=${encodeURIComponent(session.role)}&company=InterviewOS`} className="mt-auto">
-                        <button className="w-full py-2.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-sm font-semibold flex items-center justify-center gap-2">
-                          <FileText className="w-4 h-4" /> View Full Report <ArrowRight className="w-4 h-4" />
+                        <button className="w-full py-3 rounded-xl bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                          <Zap className="w-4 h-4" /> Live Spectate
                         </button>
                       </Link>
                     </div>
@@ -278,49 +290,60 @@ export default function RecruiterDashboard() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-8"
             >
-              <div className="flex items-end justify-between">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Leaderboard & Reports</h1>
-                  <p className="text-white/50">Candidates ranked by overall evaluation score.</p>
+                  <h1 className="text-3xl font-black tracking-tight mb-2">Platform Leaderboard</h1>
+                  <p className="text-slate-500 text-sm">Visual analytics and comprehensive hiring reports.</p>
                 </div>
                 <button 
                   onClick={exportToCSV}
                   disabled={dbReports.length === 0}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 disabled:opacity-50 transition-colors rounded-lg text-sm font-semibold border border-white/10"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[var(--card-bg)] hover:bg-[var(--hover-bg)] disabled:opacity-50 transition-colors rounded-xl text-xs font-bold uppercase tracking-widest border border-[var(--border-color)] shadow-sm active:scale-95"
                 >
-                  <BarChart className="w-4 h-4" /> Export CSV Leaderboard
+                  <BarChartIcon className="w-4 h-4" /> Export CSV
                 </button>
               </div>
 
-              {/* Feature 3: Analytics Overview */}
+              {/* Data Visualization Grid */}
               {!isLoadingDb && dbReports.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-violet-500/20 flex items-center justify-center border border-violet-500/30">
-                      <Users className="w-6 h-6 text-violet-400" />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                  {/* KPI Cards */}
+                  <div className="lg:col-span-1 flex flex-col gap-4">
+                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-violet-500/50 transition-colors">
+                      <div className="w-14 h-14 rounded-xl bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
+                        <Users className="w-7 h-7 text-violet-500" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Total Processed</div>
+                        <div className="text-3xl font-black">{dbReports.length}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Total Candidates</div>
-                      <div className="text-2xl font-black">{dbReports.length}</div>
+                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-emerald-500/50 transition-colors">
+                      <div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
+                        <Target className="w-7 h-7 text-emerald-500" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Avg Quality Score</div>
+                        <div className="text-3xl font-black text-emerald-500">{avgScore}</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                      <Activity className="w-6 h-6 text-emerald-400" />
-                    </div>
-                    <div>
-                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Avg Platform Score</div>
-                      <div className="text-2xl font-black">{avgScore}</div>
-                    </div>
-                  </div>
-                  <div className="bg-[#111115] border border-white/10 rounded-xl p-4 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
-                      <Target className="w-6 h-6 text-amber-400" />
-                    </div>
-                    <div>
-                      <div className="text-xs text-white/50 uppercase tracking-widest font-bold">Most Active Role</div>
-                      <div className="text-md font-bold truncate max-w-[150px]">{topRole}</div>
-                    </div>
+
+                  {/* Recharts Bar Chart */}
+                  <div className="lg:col-span-2 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 h-64">
+                    <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Score Distribution</h3>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={getScoreDistribution()}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
+                        <XAxis dataKey="range" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text)' }} />
+                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: 'var(--text)' }} />
+                        <Tooltip 
+                          cursor={{ fill: 'var(--bg)' }}
+                          contentStyle={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', borderRadius: '12px' }} 
+                        />
+                        <Bar dataKey="candidates" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
               )}
@@ -328,36 +351,36 @@ export default function RecruiterDashboard() {
               {isLoadingDb ? (
                 <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
               ) : dbReports.length === 0 ? (
-                <div className="border border-white/10 bg-[#111115] rounded-2xl p-8 text-center">
-                  <FileText className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-white/80 mb-2">No Reports Yet</h3>
-                  <p className="text-white/40 max-w-md mx-auto mb-6">Reports will appear here once candidates complete their simulations.</p>
+                <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
+                  <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold mb-2">No Reports Yet</h3>
+                  <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">Candidate merit reports will appear here automatically once a simulation is completed.</p>
                   <button 
                     onClick={() => setActiveTab('templates')}
-                    className="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 transition-colors rounded-lg text-sm font-semibold inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white transition-colors rounded-xl text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 inline-flex items-center gap-2"
                   >
-                    Configure Role & Invite Candidates
+                    Send Role Invites
                   </button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {dbReports.map((report: any) => (
-                    <div key={report._id} className="border border-white/10 bg-[#111115] rounded-2xl p-6 flex flex-col hover:border-white/20 transition-colors">
+                    <div key={report._id} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-6 flex flex-col hover:shadow-md transition-shadow group">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <h3 className="text-lg font-bold">{report.candidateName}</h3>
-                          <p className="text-xs text-white/50">{report.role} · {report.company}</p>
+                          <h3 className="text-lg font-black tracking-tight">{report.candidateName}</h3>
+                          <p className="text-xs font-semibold text-slate-500 mt-0.5">{report.role} · {report.company}</p>
                         </div>
-                        <div className={`text-xl font-black ${report.score >= 80 ? 'text-emerald-400' : report.score >= 60 ? 'text-amber-400' : 'text-red-400'}`}>
+                        <div className={`px-2.5 py-1 rounded-lg font-black text-lg ${report.score >= 80 ? 'bg-emerald-500/10 text-emerald-500' : report.score >= 60 ? 'bg-amber-500/10 text-amber-500' : 'bg-red-500/10 text-red-500'}`}>
                           {report.score}
                         </div>
                       </div>
-                      <div className="text-xs text-white/40 mb-6">
+                      <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6 border-b border-[var(--border-color)] pb-4">
                         Completed: {new Date(report.createdAt).toLocaleDateString()}
                       </div>
                       <Link href={`/report?sessionId=${report.sessionId}&name=${encodeURIComponent(report.candidateName)}&role=${encodeURIComponent(report.role)}&company=${encodeURIComponent(report.company)}`} className="mt-auto">
-                        <button className="w-full py-2.5 rounded-lg bg-violet-600/10 text-violet-400 hover:bg-violet-600/20 transition-colors border border-violet-500/20 text-sm font-semibold flex items-center justify-center gap-2">
-                          <FileText className="w-4 h-4" /> View Full Report
+                        <button className="w-full py-3 rounded-xl bg-[var(--bg)] hover:bg-violet-600/10 text-[var(--text)] group-hover:text-violet-600 transition-colors border border-[var(--border-color)] group-hover:border-violet-500/50 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                          <FileText className="w-4 h-4" /> Full Merit Report
                         </button>
                       </Link>
                     </div>
@@ -378,40 +401,46 @@ export default function RecruiterDashboard() {
             >
               <div className="flex items-end justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">User Directory</h1>
-                  <p className="text-white/50">All registered users (login/signup data) in the Database.</p>
+                  <h1 className="text-3xl font-black tracking-tight mb-2">User Directory</h1>
+                  <p className="text-slate-500 text-sm">Manage registered candidate and recruiter accounts.</p>
                 </div>
               </div>
 
               {isLoadingDb ? (
                 <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
               ) : dbUsers.length === 0 ? (
-                <div className="border border-white/10 bg-[#111115] rounded-2xl p-8 text-center">
-                  <Users className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-white/80 mb-2">No Users Found</h3>
+                <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
+                  <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold mb-2">No Users Found</h3>
                 </div>
               ) : (
-                <div className="overflow-x-auto border border-white/10 rounded-2xl bg-[#111115]">
+                <div className="overflow-x-auto border border-[var(--border-color)] shadow-sm rounded-2xl bg-[var(--card-bg)]">
                   <table className="w-full text-left text-sm">
-                    <thead className="bg-white/5 border-b border-white/10">
+                    <thead className="bg-[var(--bg)] border-b border-[var(--border-color)]">
                       <tr>
-                        <th className="px-6 py-4 font-semibold text-white/80">Name</th>
-                        <th className="px-6 py-4 font-semibold text-white/80">Email</th>
-                        <th className="px-6 py-4 font-semibold text-white/80">Role</th>
-                        <th className="px-6 py-4 font-semibold text-white/80">Registered At</th>
+                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Name</th>
+                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Email</th>
+                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Role</th>
+                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-slate-500">Joined</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-[var(--border-color)]">
                       {dbUsers.map((user: any) => (
-                        <tr key={user._id} className="hover:bg-white/[0.02]">
-                          <td className="px-6 py-4 font-medium">{user.name}</td>
-                          <td className="px-6 py-4 text-white/50">{user.email}</td>
+                        <tr key={user._id} className="hover:bg-[var(--hover-bg)] transition-colors">
+                          <td className="px-6 py-4 font-bold">{user.name}</td>
+                          <td className="px-6 py-4 text-slate-500">{user.email}</td>
                           <td className="px-6 py-4">
-                            <span className="px-2 py-1 rounded bg-white/5 border border-white/10 text-xs text-white/70 capitalize">
+                            <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+                              user.role === 'recruiter' 
+                                ? 'bg-violet-500/10 text-violet-600 border-violet-500/20' 
+                                : user.role === 'founder'
+                                ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                                : 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20'
+                            }`}>
                               {user.role || 'candidate'}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-white/50">{new Date(user.createdAt).toLocaleDateString()}</td>
+                          <td className="px-6 py-4 text-slate-500 text-xs font-semibold">{new Date(user.createdAt).toLocaleDateString()}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -432,29 +461,29 @@ export default function RecruiterDashboard() {
             >
               <div className="flex items-end justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold mb-2">Role Blueprints</h1>
-                  <p className="text-white/50">Templates configured for standard scoring metrics.</p>
+                  <h1 className="text-3xl font-black tracking-tight mb-2">Role Blueprints</h1>
+                  <p className="text-slate-500 text-sm">Launch simulations using pre-configured AI evaluators.</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { role: 'Product Manager', type: 'Tech', focus: 'Prioritization & Stakeholders', color: 'from-violet-500 to-indigo-600', trackId: 'it_pm' },
-                  { role: 'Software Engineer', type: 'Tech', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600', trackId: 'fullstack' },
+                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-violet-500 to-indigo-600', trackId: 'it_pm' },
+                  { role: 'Software Engineer', type: 'Engineering', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600', trackId: 'fullstack' },
                   { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-500 to-red-600', trackId: 'backend' },
-                  { role: 'HR Business Partner', type: 'Ops', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600', trackId: 'qa_engineer' },
+                  { role: 'HR Business Partner', type: 'Operations', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600', trackId: 'qa_engineer' },
                 ].map(b => (
-                  <div key={b.role} className="border border-white/10 bg-[#111115] rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-colors">
-                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${b.color} opacity-20 blur-3xl -mr-10 -mt-10`} />
-                    <div className="inline-block px-2.5 py-1 bg-white/5 border border-white/10 rounded text-xs font-semibold mb-4">
+                  <div key={b.role} className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-3xl p-8 relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${b.color} opacity-10 blur-2xl -mr-8 -mt-8 group-hover:opacity-20 transition-opacity`} />
+                    <div className="inline-block px-3 py-1 bg-[var(--bg)] border border-[var(--border-color)] rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-500 mb-6 shadow-sm">
                       {b.type}
                     </div>
-                    <h3 className="text-xl font-bold mb-1">{b.role}</h3>
-                    <p className="text-sm text-white/50 mb-6">Tests for: {b.focus}</p>
+                    <h3 className="text-xl font-black tracking-tight mb-2">{b.role}</h3>
+                    <p className="text-xs font-semibold text-slate-500 mb-8 h-8">Evaluates: <span className="text-[var(--text)]">{b.focus}</span></p>
                     
                     <Link href={`/instructions?name=Test%20Candidate&track=${b.trackId}`}>
-                      <button className="w-full py-2.5 rounded-lg bg-white/10 hover:bg-white/15 transition-colors text-sm font-semibold flex items-center justify-center gap-2 group-hover:bg-white/20">
-                        <PlayCircle className="w-4 h-4" /> Test Simulation
+                      <button className="w-full py-3 rounded-xl bg-[var(--text)] text-[var(--bg)] hover:scale-[1.02] active:scale-95 transition-all text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 shadow-md">
+                        <PlayCircle className="w-4 h-4" /> Start Simulation
                       </button>
                     </Link>
                   </div>
