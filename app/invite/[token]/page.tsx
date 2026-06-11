@@ -64,12 +64,12 @@ export default function InviteGateway() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card w-full max-w-xl rounded-[2.5rem] border border-white/10 shadow-2xl p-8 md:p-12 relative overflow-hidden"
+        className="glass-card w-full max-w-xl rounded-[2.5rem] border-none shadow-2xl p-8 md:p-12 relative overflow-hidden"
       >
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-500" />
         
         <div className="flex items-center gap-4 mb-10">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-blue-500/30 flex items-center justify-center">
             <Lock className="w-6 h-6 text-blue-400" />
           </div>
           <div>
@@ -79,13 +79,13 @@ export default function InviteGateway() {
         </div>
 
         <div className="space-y-6 mb-10">
-          <div className="bg-black/20 rounded-2xl p-6 border border-white/5">
+          <div className="bg-[#020617]/20 rounded-2xl p-6 border border-white/5">
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Candidate</p>
             <p className="text-lg font-black text-white">{data.name}</p>
             <p className="text-xs text-slate-400">{data.email}</p>
           </div>
           
-          <div className="bg-black/20 rounded-2xl p-6 border border-white/5">
+          <div className="bg-[#020617]/20 rounded-2xl p-6 border border-white/5">
             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Target Role</p>
             <p className="text-lg font-black text-cyan-400">{data.role}</p>
           </div>

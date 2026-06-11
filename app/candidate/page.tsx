@@ -270,7 +270,7 @@ export default function CandidateDashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleResumeUpload}
-                className={`w-full p-8 bg-black/20 hover:bg-black/40 border-2 border-dashed ${isUploading ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'border-white/20'} hover:border-emerald-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
+                className={`w-full p-8 bg-black/20 hover:bg-[#020617]/80 border-2 border-dashed ${isUploading ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'border-white/20'} hover:border-emerald-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-4">
@@ -302,7 +302,7 @@ export default function CandidateDashboard() {
                 <Link href="/instructions?track=JS">
                   <motion.div 
                     whileHover={{ scale: 1.02 }}
-                    className="w-full p-5 bg-black/20 hover:bg-black/40 border border-white/10 hover:border-blue-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm mb-4"
+                    className="w-full p-5 bg-black/20 hover:bg-[#020617]/80 border-none hover:border-blue-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm mb-4"
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-blue-500/10 rounded-xl">
@@ -320,7 +320,7 @@ export default function CandidateDashboard() {
                 <Link href="/instructions?track=DSA">
                   <motion.div 
                     whileHover={{ scale: 1.02 }}
-                    className="w-full p-5 bg-black/20 hover:bg-black/40 border border-white/10 hover:border-emerald-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm"
+                    className="w-full p-5 bg-black/20 hover:bg-[#020617]/80 border-none hover:border-emerald-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm"
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-emerald-500/10 rounded-xl">
@@ -418,7 +418,7 @@ export default function CandidateDashboard() {
                   <motion.div 
                     whileHover={{ scale: 1.01 }}
                     key={record.id} 
-                    className="p-6 bg-black/30 border border-white/10 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-indigo-500/50 transition-all shadow-lg group relative overflow-hidden"
+                    className="p-6 bg-black/30 border-none rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-indigo-500/50 transition-all shadow-lg group relative overflow-hidden"
                   >
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     
@@ -435,7 +435,7 @@ export default function CandidateDashboard() {
                       
                       <div className="flex flex-wrap gap-2 pt-2">
                         {Object.entries(record.skills).map(([skill, val]: any) => (
-                          <span key={skill} className="text-[10px] bg-white/5 border border-white/10 px-3 py-1.5 rounded-md text-slate-300 font-bold uppercase tracking-wider">
+                          <span key={skill} className="text-[10px] bg-white/5 border-none px-3 py-1.5 rounded-md text-slate-300 font-bold uppercase tracking-wider">
                             {skill}: <strong className="text-white ml-1">{val}%</strong>
                           </span>
                         ))}
@@ -453,7 +453,7 @@ export default function CandidateDashboard() {
                           <motion.button 
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors text-white"
+                            className="px-5 py-3 bg-white/5 hover:bg-white/10 border-none rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors text-white"
                           >
                             Feedback <ClipboardList className="w-4 h-4" />
                           </motion.button>

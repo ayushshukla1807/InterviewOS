@@ -25,6 +25,7 @@ export default function RootLayout({
         <ThemeProvider>
           <ThemeBackground />
           <div className="mesh-bg" />
+          <div className="noise-overlay" />
           {children}
         </ThemeProvider>
       </body>

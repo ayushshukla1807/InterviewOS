@@ -137,7 +137,7 @@ export default function RecruiterDashboard() {
       <div className="mesh-bg" />
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#020617]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-black text-xs shadow-[0_0_15px_rgba(34,211,238,0.4)] group-hover:scale-105 transition-transform">
@@ -146,7 +146,7 @@ export default function RecruiterDashboard() {
             <span className="font-bold text-sm tracking-widest uppercase text-white">Recruiter OS</span>
           </Link>
           
-          <div className="hidden md:flex items-center gap-1 p-1 bg-black/30 rounded-xl border border-white/10 shadow-inner">
+          <div className="hidden md:flex items-center gap-1 p-1 bg-black/30 rounded-xl border-none shadow-inner">
             {[
               { id: 'live', label: 'Live Monitor', icon: Activity },
               { id: 'candidates', label: 'Hiring Reports', icon: FileText },
@@ -186,7 +186,7 @@ export default function RecruiterDashboard() {
             </button>
             <button 
               onClick={() => setActiveTab('templates')}
-              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
+              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-[#06b6d4] text-[#020617] hover:bg-[#22d3ee] shadow-[0_0_20px_rgba(6,182,212,0.6)] sci-fi-glow text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
             >
               <Layers className="w-3.5 h-3.5" /> New Blueprint
             </button>
@@ -205,7 +205,7 @@ export default function RecruiterDashboard() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-slate-900 border border-white/10 p-8 rounded-3xl w-full max-w-md shadow-2xl relative"
+                className="bg-slate-900 border-none p-8 rounded-3xl w-full max-w-md shadow-2xl relative"
               >
                 <button onClick={() => {setShowInviteModal(false); setGeneratedLink('');}} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
                 <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">Generate Invite Link</h2>
@@ -214,15 +214,15 @@ export default function RecruiterDashboard() {
                 <div className="space-y-4 mb-6">
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Name</label>
-                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="John Doe" />
+                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="John Doe" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Email</label>
-                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="john@example.com" />
+                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="john@example.com" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Role</label>
-                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="Software Engineer" />
+                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="Software Engineer" />
                   </div>
                 </div>
 
@@ -233,7 +233,7 @@ export default function RecruiterDashboard() {
                       const token = btoa(JSON.stringify(inviteData));
                       setGeneratedLink(`${window.location.origin}/invite/${token}`);
                     }}
-                    className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white text-xs font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:opacity-90 transition-opacity"
+                    className="w-full py-4 bg-[#06b6d4] text-[#020617] hover:bg-[#22d3ee] shadow-[0_0_20px_rgba(6,182,212,0.6)] sci-fi-glow rounded-xl text-white text-xs font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:opacity-90 transition-opacity"
                   >
                     Generate Secure Link
                   </button>
@@ -244,7 +244,7 @@ export default function RecruiterDashboard() {
                     </div>
                     <button 
                       onClick={() => navigator.clipboard.writeText(generatedLink).then(() => alert('Copied to clipboard!'))}
-                      className="w-full py-4 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-colors"
+                      className="w-full py-4 bg-white/5 border-none rounded-xl text-white text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-colors"
                     >
                       Copy Link
                     </button>
@@ -265,7 +265,7 @@ export default function RecruiterDashboard() {
             >
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Live Monitor</h1>
+                  <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-500 uppercase tracking-widest mb-2">Live Monitor</h1>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Watch candidates navigate simulations in real-time.</p>
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-emerald-400 font-black uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 px-4 py-2 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.2)]">
@@ -279,7 +279,7 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {liveSessions.length === 0 ? (
-                  <div className="col-span-full py-24 text-center border border-white/10 rounded-[2rem] glass-card shadow-sm flex flex-col items-center justify-center">
+                  <div className="col-span-full py-24 text-center border-none rounded-xl glass-card shadow-sm flex flex-col items-center justify-center">
                     <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20 shadow-inner">
                       <Activity className="w-10 h-10 text-blue-400" />
                     </div>
@@ -291,7 +291,7 @@ export default function RecruiterDashboard() {
                     <motion.div 
                       whileHover={{ scale: 1.02 }}
                       key={session.sessionId} 
-                      className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 flex flex-col relative overflow-hidden group"
+                      className="glass-card border-none shadow-lg rounded-xl p-8 flex flex-col relative overflow-hidden group"
                     >
                       {/* Live Phase Gradient Line */}
                       <div className={`absolute top-0 left-0 w-full h-1.5 ${
@@ -356,7 +356,7 @@ export default function RecruiterDashboard() {
             >
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Platform Leaderboard</h1>
+                  <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-500 uppercase tracking-widest mb-2">Platform Leaderboard</h1>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Visual analytics and comprehensive hiring reports.</p>
                 </div>
                 <motion.button 
@@ -364,7 +364,7 @@ export default function RecruiterDashboard() {
                   whileTap={{ scale: 0.95 }}
                   onClick={exportToCSV}
                   disabled={dbReports.length === 0}
-                  className="flex items-center gap-2 px-5 py-3 glass-card disabled:opacity-50 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest border border-white/10 text-white shadow-lg"
+                  className="flex items-center gap-2 px-5 py-3 glass-card disabled:opacity-50 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest border-none text-white shadow-lg"
                 >
                   <BarChartIcon className="w-4 h-4" /> Export CSV
                 </motion.button>
@@ -375,7 +375,7 @@ export default function RecruiterDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
                   {/* KPI Cards */}
                   <div className="lg:col-span-1 flex flex-col gap-6">
-                    <div className="glass-card border border-white/10 shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-cyan-500/50 transition-colors">
+                    <div className="glass-card border-none shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-cyan-500/50 transition-colors">
                       <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
                         <Users className="w-8 h-8 text-cyan-400" />
                       </div>
@@ -384,7 +384,7 @@ export default function RecruiterDashboard() {
                         <div className="text-4xl font-black text-white">{dbReports.length}</div>
                       </div>
                     </div>
-                    <div className="glass-card border border-white/10 shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-emerald-500/50 transition-colors">
+                    <div className="glass-card border-none shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-emerald-500/50 transition-colors">
                       <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                         <Target className="w-8 h-8 text-emerald-400" />
                       </div>
@@ -396,7 +396,7 @@ export default function RecruiterDashboard() {
                   </div>
 
                   {/* Recharts Bar Chart */}
-                  <div className="lg:col-span-2 glass-card border border-white/10 shadow-lg rounded-3xl p-8 h-[300px] flex flex-col">
+                  <div className="lg:col-span-2 glass-card border-none shadow-lg rounded-3xl p-8 h-[300px] flex flex-col">
                     <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Score Distribution</h3>
                     <div className="flex-1 relative">
                       <ResponsiveContainer width="100%" height="100%">
@@ -427,7 +427,7 @@ export default function RecruiterDashboard() {
               {isLoadingDb ? (
                 <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbReports.length === 0 ? (
-                <div className="border border-white/10 glass-card shadow-lg rounded-[2rem] p-16 text-center flex flex-col items-center">
+                <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
                   <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
                     <FileText className="w-10 h-10 text-blue-400" />
                   </div>
@@ -437,7 +437,7 @@ export default function RecruiterDashboard() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveTab('templates')}
-                    className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white transition-all rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(34,211,238,0.4)] inline-flex items-center gap-2"
+                    className="px-8 py-4 bg-[#06b6d4] text-[#020617] hover:bg-[#22d3ee] shadow-[0_0_20px_rgba(6,182,212,0.6)] sci-fi-glow text-white transition-all rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(34,211,238,0.4)] inline-flex items-center gap-2"
                   >
                     Send Role Invites
                   </motion.button>
@@ -448,7 +448,7 @@ export default function RecruiterDashboard() {
                     <motion.div 
                       whileHover={{ scale: 1.02 }}
                       key={report._id} 
-                      className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 flex flex-col group relative overflow-hidden"
+                      className="glass-card border-none shadow-lg rounded-xl p-8 flex flex-col group relative overflow-hidden"
                     >
                       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[40px] rounded-full pointer-events-none transition-all duration-500 group-hover:bg-blue-500/20" />
                       
@@ -477,7 +477,7 @@ export default function RecruiterDashboard() {
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="w-full py-4 rounded-xl bg-white/5 hover:bg-cyan-500/10 text-white group-hover:text-cyan-400 transition-colors border border-white/10 group-hover:border-cyan-500/50 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm"
+                          className="w-full py-4 rounded-xl bg-white/5 hover:bg-cyan-500/10 text-white group-hover:text-cyan-400 transition-colors border-none group-hover:border-cyan-500/50 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm"
                         >
                           <FileText className="w-4 h-4" /> Full Merit Report
                         </motion.button>
@@ -500,7 +500,7 @@ export default function RecruiterDashboard() {
             >
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">User Directory</h1>
+                  <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-500 uppercase tracking-widest mb-2">User Directory</h1>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Manage registered candidate and recruiter accounts.</p>
                 </div>
               </div>
@@ -508,17 +508,17 @@ export default function RecruiterDashboard() {
               {isLoadingDb ? (
                 <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbUsers.length === 0 ? (
-                <div className="border border-white/10 glass-card shadow-lg rounded-[2rem] p-16 text-center flex flex-col items-center">
+                <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
                   <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
                     <Users className="w-10 h-10 text-blue-400" />
                   </div>
                   <h3 className="text-xl font-black uppercase text-white mb-2 tracking-tight">No Users Found</h3>
                 </div>
               ) : (
-                <div className="overflow-hidden border border-white/10 shadow-xl rounded-[2rem] glass-card">
+                <div className="overflow-hidden border-none shadow-xl rounded-xl glass-card">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                      <thead className="bg-black/40 border-b border-white/10">
+                      <thead className="bg-[#020617]/80 border-b border-white/10">
                         <tr>
                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Name</th>
                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Email</th>
@@ -564,7 +564,7 @@ export default function RecruiterDashboard() {
             >
               <div className="flex items-end justify-between mb-4">
                 <div>
-                  <h1 className="text-4xl font-black text-gradient uppercase tracking-tight mb-2">Role Blueprints</h1>
+                  <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-zinc-100 to-zinc-500 uppercase tracking-widest mb-2">Role Blueprints</h1>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Launch simulations using pre-configured AI evaluators.</p>
                 </div>
               </div>
@@ -579,10 +579,10 @@ export default function RecruiterDashboard() {
                   <motion.div 
                     whileHover={{ scale: 1.02 }}
                     key={b.role} 
-                    className="glass-card border border-white/10 shadow-lg rounded-[2rem] p-8 relative overflow-hidden group"
+                    className="glass-card border-none shadow-lg rounded-xl p-8 relative overflow-hidden group"
                   >
                     <div className={`absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br ${b.color} opacity-20 blur-[50px] group-hover:opacity-40 transition-opacity duration-500`} />
-                    <div className="inline-block px-3 py-1.5 bg-black/40 border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-300 mb-6 shadow-sm backdrop-blur-md">
+                    <div className="inline-block px-3 py-1.5 bg-[#020617]/80 border-none rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-300 mb-6 shadow-sm backdrop-blur-md">
                       {b.type}
                     </div>
                     <h3 className="text-2xl font-black tracking-tight mb-2 text-white">{b.role}</h3>
