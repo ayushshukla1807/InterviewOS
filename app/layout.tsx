@@ -3,7 +3,6 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider } from "./components/ThemeProvider";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { ThemeBackground } from "./components/ThemeBackground";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
@@ -26,7 +25,6 @@ export default function RootLayout({
           <ThemeBackground />
           <div className="mesh-bg" />
           {children}
-          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>
