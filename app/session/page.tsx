@@ -1,5 +1,6 @@
 'use client';
 
+import { sfx } from "../utils/sfx";
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';

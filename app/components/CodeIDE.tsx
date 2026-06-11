@@ -166,18 +166,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     };
     document.addEventListener('mousedown', h);
   
-  const handleEditorWillMount = (monaco: any) => {
-    // Enable advanced JS/TS diagnostics
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-    });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2020,
-      allowNonTsExtensions: true
-    });
-  };
-
+  
   useEffect(() => {
     // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
     // For strictly blocking paste in the whole IDE component:
@@ -217,18 +206,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
   
-  const handleEditorWillMount = (monaco: any) => {
-    // Enable advanced JS/TS diagnostics
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-    });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2020,
-      allowNonTsExtensions: true
-    });
-  };
-
+  
   useEffect(() => {
     // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
     // For strictly blocking paste in the whole IDE component:
@@ -270,18 +248,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     window.addEventListener('mousemove', move);
     window.addEventListener('mouseup', up);
   
-  const handleEditorWillMount = (monaco: any) => {
-    // Enable advanced JS/TS diagnostics
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-    });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2020,
-      allowNonTsExtensions: true
-    });
-  };
-
+  
   useEffect(() => {
     // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
     // For strictly blocking paste in the whole IDE component:
@@ -313,18 +280,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
     };
     window.addEventListener('keydown', h);
   
-  const handleEditorWillMount = (monaco: any) => {
-    // Enable advanced JS/TS diagnostics
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-    });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2020,
-      allowNonTsExtensions: true
-    });
-  };
-
+  
   useEffect(() => {
     // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
     // For strictly blocking paste in the whole IDE component:
@@ -415,18 +371,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
   const diffColor = DIFF_COLOR[difficulty] || '#ffc01e';
 
 
-  const handleEditorWillMount = (monaco: any) => {
-    // Enable advanced JS/TS diagnostics
-    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: false,
-    });
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2020,
-      allowNonTsExtensions: true
-    });
-  };
-
+  
   useEffect(() => {
     // Prevent Copy/Paste outside of Monaco if needed, though Monaco handles its own.
     // For strictly blocking paste in the whole IDE component:
@@ -588,7 +533,7 @@ export default function CodeIDE({ problem, difficulty = 'Medium', testCases = []
               value={code}
               onChange={val => setCode(val || '')}
               onMount={editor => { editorRef.current = editor; }}
-              beforeMount={handleEditorWillMount}
+
               options={{
                 minimap: { enabled: false },
                 automaticLayout: true,
