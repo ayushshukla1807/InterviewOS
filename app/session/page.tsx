@@ -525,19 +525,16 @@ function SessionContent() {
   }, []);
 
   useEffect(() => {
-    if (!isStarted || isPaused) return;
-    const t = setInterval(() => {
-      setTimeLeft(p => {
-        if (p <= 1) {
-          clearInterval(t);
-          handleFinish();
-          return 0;
-        }
-        return p - 1;
-      });
-    }, 1000);
+    if (!isStarted) return;
+    const t = setInterval(() => setTimeLeft(p => p > 0 ? p - 1 : 0), 1000);
     return () => clearInterval(t);
-  }, [isStarted, isPaused]);
+  }, [isStarted]);
+
+  useEffect(() => {
+    if (timeLeft === 0 && isStarted) {
+      handleFinish();
+    }
+  }, [timeLeft, isStarted]);
 
   const enterFullscreen = () => {
     document.documentElement.requestFullscreen().catch(() => {});
