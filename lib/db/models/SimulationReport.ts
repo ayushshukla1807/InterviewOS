@@ -11,6 +11,7 @@ export interface ISimulationReport {
   fullReportData: any; // The HyrteSkillScore object
   runtimeSummary: string;
   phaseCompletedAt: string; // The phase they reached (e.g. 'recovery', 'chaos', 'workspace')
+  violations?: string[];
   createdAt: Date;
 }
 
@@ -24,6 +25,7 @@ const SimulationReportSchema = new Schema<ISimulationReport>({
   fullReportData: { type: Schema.Types.Mixed, required: true },
   runtimeSummary: { type: String, required: true },
   phaseCompletedAt: { type: String, required: true },
+  violations: { type: [String], default: [] },
   createdAt: { type: Date, default: Date.now },
 });
 

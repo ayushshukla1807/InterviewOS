@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
-    const { userId, candidateName, sessionId, role, company, score, fullReportData, runtimeSummary, phaseCompletedAt } = await req.json();
+    const { userId, candidateName, sessionId, role, company, score, fullReportData, runtimeSummary, phaseCompletedAt, violations } = await req.json();
 
     if (!sessionId || !role || !company || score === undefined || !fullReportData) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       fullReportData,
       runtimeSummary,
       phaseCompletedAt,
+      violations: violations || [],
     });
 
     await report.save();

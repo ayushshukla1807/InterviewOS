@@ -24,6 +24,9 @@ export default function RecruiterDashboard() {
   const [dbReports, setDbReports] = useState<any[]>([]);
   const [dbUsers, setDbUsers] = useState<any[]>([]);
   const [isLoadingDb, setIsLoadingDb] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteData, setInviteData] = useState({ name: '', email: '', role: 'Software Engineer' });
+  const [generatedLink, setGeneratedLink] = useState('');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('interviewos_user');
@@ -176,10 +179,16 @@ export default function RecruiterDashboard() {
               Log out
             </button>
             <button 
+              onClick={() => setShowInviteModal(true)}
+              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95"
+            >
+              <Plus className="w-3.5 h-3.5" /> Invite Candidate
+            </button>
+            <button 
               onClick={() => setActiveTab('templates')}
               className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
             >
-              <Plus className="w-3.5 h-3.5" /> New Session
+              <Layers className="w-3.5 h-3.5" /> New Blueprint
             </button>
           </div>
         </div>
@@ -188,6 +197,62 @@ export default function RecruiterDashboard() {
       {/* ── Main Content ────────────────────────────────────────────────────── */}
       <main className="pt-28 pb-20 max-w-7xl mx-auto px-6 relative z-10">
         <AnimatePresence mode="wait">
+
+          {/* ── INVITE MODAL ──────────────────────────────────────────────── */}
+          {showInviteModal && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-slate-900 border border-white/10 p-8 rounded-3xl w-full max-w-md shadow-2xl relative"
+              >
+                <button onClick={() => {setShowInviteModal(false); setGeneratedLink('');}} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
+                <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">Generate Invite Link</h2>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Create a unique, secure assessment gateway for a candidate.</p>
+                
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Name</label>
+                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="John Doe" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Email</label>
+                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="john@example.com" />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Role</label>
+                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="Software Engineer" />
+                  </div>
+                </div>
+
+                {!generatedLink ? (
+                  <button 
+                    onClick={() => {
+                      if (!inviteData.name || !inviteData.email || !inviteData.role) return alert('Please fill all fields');
+                      const token = btoa(JSON.stringify(inviteData));
+                      setGeneratedLink(`${window.location.origin}/invite/${token}`);
+                    }}
+                    className="w-full py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white text-xs font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] hover:opacity-90 transition-opacity"
+                  >
+                    Generate Secure Link
+                  </button>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl break-all">
+                      <p className="text-emerald-400 text-xs font-mono">{generatedLink}</p>
+                    </div>
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(generatedLink).then(() => alert('Copied to clipboard!'))}
+                      className="w-full py-4 bg-white/5 border border-white/10 rounded-xl text-white text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-colors"
+                    >
+                      Copy Link
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          )}
           
           {/* ── LIVE MONITOR ──────────────────────────────────────────────── */}
           {activeTab === 'live' && (
@@ -392,8 +457,15 @@ export default function RecruiterDashboard() {
                           <h3 className="text-xl font-black text-white tracking-tight">{report.candidateName}</h3>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">{report.role} · {report.company}</p>
                         </div>
-                        <div className={`px-3 py-1.5 rounded-xl font-black text-xl shadow-sm ${report.score >= 80 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : report.score >= 60 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}`}>
-                          {report.score}
+                        <div className="flex items-center gap-3">
+                          {report.violations && report.violations.length > 0 && (
+                            <div className="px-2 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center gap-1 text-[8px] font-black text-rose-400 uppercase tracking-widest group-hover:animate-pulse">
+                              <Shield className="w-3 h-3" /> Flagged
+                            </div>
+                          )}
+                          <div className={`px-3 py-1.5 rounded-xl font-black text-xl shadow-sm ${report.score >= 80 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : report.score >= 60 ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' : 'bg-red-500/10 text-red-400 border border-red-500/30'}`}>
+                            {report.score}
+                          </div>
                         </div>
                       </div>
                       

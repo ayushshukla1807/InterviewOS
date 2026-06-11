@@ -518,10 +518,26 @@ function SessionContent() {
       document.removeEventListener('visibilitychange', handleVisibility);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       window.removeEventListener('blur', handleBlur);
+      document.removeEventListener('blur', handleBlur);
       document.removeEventListener('contextmenu', noContext);
       document.removeEventListener('keydown', noKeys);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isStarted || isPaused) return;
+    const t = setInterval(() => {
+      setTimeLeft(p => {
+        if (p <= 1) {
+          clearInterval(t);
+          handleFinish();
+          return 0;
+        }
+        return p - 1;
+      });
+    }, 1000);
+    return () => clearInterval(t);
+  }, [isStarted, isPaused]);
 
   const enterFullscreen = () => {
     document.documentElement.requestFullscreen().catch(() => {});
@@ -539,12 +555,6 @@ function SessionContent() {
     // Give the browser 2s to settle before blur violations count
     setTimeout(() => { proctorReadyRef.current = true; }, 2000);
   };
-
-  useEffect(() => {
-    if (!isRunning) return;
-    const t = setInterval(() => setTimeLeft(p => p > 0 ? p - 1 : 0), 1000);
-    return () => clearInterval(t);
-  }, [isRunning]);
 
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
@@ -1270,11 +1280,7 @@ function SessionContent() {
               )}
            </div>
 
-           {timeLeft < 300 && !showTimeExtension && (
-              <button onClick={() => { setTimeLeft(p => p + 900); setShowTimeExtension(true); }} className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 text-amber-500 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all animate-pulse">
-                 +15 Min Extension
-              </button>
-           )}
+
            <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-blue-700 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
               <TrendingUp className="w-3.5 h-3.5" /> Negotiate Salary
            </button>
