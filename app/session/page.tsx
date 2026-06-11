@@ -1255,23 +1255,28 @@ function SessionContent() {
         </div>
 
         <div className="flex items-center gap-4">
-           {/* Enterprise Toggles */}
-           <div className="hidden lg:flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
+           {/* Workspace Toggles */}
+           <div className="flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
               <button 
-                onClick={() => setIsStressMode(!isStressMode)}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${isStressMode ? 'bg-rose-500/20 text-rose-400' : 'text-slate-500 hover:text-slate-300'}`}
-                title="Stress Test Mode"
+                onClick={() => setActiveTab('voice')}
+                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-indigo-500/20 text-indigo-400' : 'text-slate-500 hover:text-slate-300'}`}
               >
-                Stress
+                <Mic className="w-3 h-3 inline-block mr-1.5" /> Face to Face
               </button>
-              <select 
-                value={interviewLanguage} onChange={e => setInterviewLanguage(e.target.value)}
-                className="bg-transparent border-none text-[9px] font-black uppercase tracking-widest text-slate-500 outline-none focus:ring-0 cursor-pointer"
+              <button 
+                onClick={() => setActiveTab('code')}
+                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'code' ? 'bg-emerald-500/20 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
               >
-                <option value="English(UK)">English(UK)</option>
-                <option value="English(US)">English(US)</option>
-                <option value="Hindi">Hindi</option>
-              </select>
+                <Code2 className="w-3 h-3 inline-block mr-1.5" /> Code
+              </button>
+              {track === 'DYNAMIC' && (
+                 <button 
+                   onClick={() => setActiveTab('simulation')}
+                   className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'simulation' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
+                 >
+                   <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Whiteboard
+                 </button>
+              )}
            </div>
 
            {timeLeft < 300 && !showTimeExtension && (
@@ -1299,134 +1304,11 @@ function SessionContent() {
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* Left: Code & Question */}
-        <div className="flex-1 flex flex-col bg-[var(--bg)] overflow-hidden relative">
-            {/* Tab Bar */}
-            <div className="px-6 pt-4 flex gap-1 shrink-0 border-b border-white/5 bg-slate-950/40">
-               {((track === 'DYNAMIC' ? ['voice', 'simulation', 'code'] : ['voice', 'code']) as TabType[]).map(tab => (
-                 <button 
-                   key={tab} 
-                   onClick={() => setActiveTab(tab)}
-                   className={`px-8 py-3 rounded-t-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 border-b-2 ${
-                     activeTab === tab 
-                       ? 'bg-white/5 border-indigo-500 text-white' 
-                       : 'bg-transparent border-transparent text-slate-500 hover:text-slate-300'
-                   }`}
-                 >
-                   {tab === 'simulation' && <Briefcase className="w-3.5 h-3.5 text-indigo-400" />}
-                   {tab === 'code' && <Code2 className="w-3.5 h-3.5 text-emerald-400" />}
-                   {tab === 'voice' && <Mic className="w-3.5 h-3.5 text-rose-400" />}
-                   {tab === 'simulation' ? 'Job Simulation' : tab === 'code' ? 'IDE / Code Editor' : 'Live Voice Interview'}
-                 </button>
-               ))}
-            </div>
-
-            <div className="flex-1 overflow-y-auto bg-[var(--bg)] p-8 custom-scrollbar">
+        {/* Left: Workspace Area (Hidden in Voice mode) */}
+        <div className={`${activeTab === 'voice' ? 'w-0 opacity-0 pointer-events-none' : 'flex-1 opacity-100'} transition-all duration-700 ease-in-out flex flex-col bg-[var(--bg)] relative overflow-hidden`}>
+            <div className="flex-1 overflow-y-auto bg-[var(--bg)] p-6 custom-scrollbar relative">
                <AnimatePresence mode="wait">
-                  {activeTab === 'voice' ? (
-                     <motion.div 
-                       key="voice"
-                       initial={{ opacity: 0, y: 10 }}
-                       animate={{ opacity: 1, y: 0 }}
-                       exit={{ opacity: 0, y: -10 }}
-                       className="h-full flex gap-8 p-8"
-                     >
-                        {/* LEFT: Interview Interaction Area */}
-                        <div className="flex-1 flex flex-col items-center justify-center space-y-16">
-                           <div className="text-center space-y-2">
-                              <h2 className="text-4xl font-black tracking-tighter">Live Session</h2>
-                              <p className="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">Adaptive follow-ups, natural conversations, and real-time probing.</p>
-                           </div>
-
-                           {/* Avatars & Waveform */}
-                           <div className="flex items-center justify-center w-full gap-8">
-                              {/* Interviewer Avatar with Circular Audio Ring */}
-                              <div className="flex flex-col items-center gap-4 relative">
-                                 <div className={`absolute -inset-4 rounded-full border-2 border-indigo-500/20 ${isSpeaking ? 'animate-[spin_4s_linear_infinite]' : ''}`} style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
-                                 <div className={`absolute -inset-2 rounded-full border-2 border-purple-500/30 ${isSpeaking ? 'animate-[spin_3s_linear_infinite_reverse]' : ''}`} style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
-                                 <div className={`relative w-40 h-40 rounded-full p-2 z-10 ${isSpeaking ? 'bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-[0_0_60px_rgba(99,102,241,0.5)]' : 'bg-white/10'}`}>
-                                    <img src={interviewer?.avatar || 'https://ui-avatars.com/api/?name=Syed&background=4f46e5&color=fff&size=200&bold=true'} alt="Interviewer" className="w-full h-full rounded-full object-cover border-4 border-[#0a0a0c]" />
-                                    <div className="absolute -bottom-2 -right-2 bg-indigo-600 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 shadow-lg shadow-indigo-500/20 text-white">AI</div>
-                                 </div>
-                                 <p className="text-xs font-black uppercase tracking-widest text-slate-400">{interviewer?.name || 'Syed'}</p>
-                              </div>
-
-                              {/* Dynamic Waveform Center */}
-                              <div className="flex flex-col items-center justify-center w-48 h-32 gap-2">
-                                 <div className="flex items-center gap-1.5 h-16">
-                                    {[...Array(24)].map((_, i) => {
-                                       const isCenter = i >= 8 && i <= 15;
-                                       return (
-                                          <motion.div 
-                                             key={i} 
-                                             className={`w-1 rounded-full ${isSpeaking ? 'bg-indigo-500' : isListening ? 'bg-emerald-500' : 'bg-slate-700/50'}`}
-                                             animate={{ height: isSpeaking || isListening ? [4, Math.random() * (isCenter ? 60 : 30) + 10, 4] : 4 }}
-                                             transition={{ repeat: Infinity, duration: Math.random() * 0.4 + 0.2, ease: 'easeInOut' }}
-                                          />
-                                       );
-                                    })}
-                                 </div>
-                                 {(isSpeaking || isListening) && (
-                                   <div className="text-[9px] font-black uppercase tracking-widest animate-pulse mt-4 text-slate-500">
-                                     {isSpeaking ? 'AI Transmitting' : 'Acoustic Feed Active'}
-                                   </div>
-                                 )}
-                              </div>
-
-                              {/* Candidate Avatar with Circular Audio Ring */}
-                              <div className="flex flex-col items-center gap-4 relative">
-                                 <div className={`absolute -inset-4 rounded-full border-2 border-emerald-500/20 ${isListening && !isSpeaking ? 'animate-[spin_4s_linear_infinite]' : ''}`} style={{ borderTopColor: 'transparent', borderLeftColor: 'transparent' }} />
-                                 <div className={`absolute -inset-2 rounded-full border-2 border-teal-500/30 ${isListening && !isSpeaking ? 'animate-[spin_3s_linear_infinite_reverse]' : ''}`} style={{ borderBottomColor: 'transparent', borderRightColor: 'transparent' }} />
-                                 <div className={`relative w-40 h-40 rounded-full p-2 z-10 ${isListening && !isSpeaking ? 'bg-gradient-to-tr from-emerald-500 to-teal-500 shadow-[0_0_60px_rgba(16,185,129,0.5)]' : 'bg-white/10'}`}>
-                                    <video ref={videoRefMirror} autoPlay playsInline muted className="w-full h-full rounded-full object-cover border-4 border-[#0a0a0c] bg-slate-800 scale-x-[-1]" />
-                                    <div className="absolute -bottom-2 -left-2 bg-emerald-600 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border-2 border-slate-900 shadow-lg shadow-emerald-500/20 text-white">YOU</div>
-                                 </div>
-                                 <p className="text-xs font-black uppercase tracking-widest text-slate-400">{name}</p>
-                              </div>
-                           </div>
-
-                           {/* Live Chat Bubbles below */}
-                           <div className="w-full max-w-2xl space-y-4">
-                              {messages.slice(-2).map((msg, idx) => (
-                                 <motion.div 
-                                    key={idx} 
-                                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                                    className={`p-5 rounded-2xl max-w-[85%] ${msg.role === 'assistant' ? 'bg-indigo-500/10 border border-indigo-500/20 self-start rounded-tl-sm backdrop-blur-md' : 'bg-emerald-500/10 border border-emerald-500/20 self-end ml-auto rounded-tr-sm text-right backdrop-blur-md'}`}
-                                 >
-                                    <p className="text-sm font-medium leading-relaxed">{msg.content}</p>
-                                 </motion.div>
-                              ))}
-                              {isThinking && (
-                                 <div className="p-4 bg-white/5 border border-white/5 rounded-2xl w-24 rounded-tl-sm flex items-center justify-center gap-1.5 backdrop-blur-md">
-                                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" />
-                                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                                 </div>
-                              )}
-                              {isListening && !isSpeaking && input && (
-                                 <div className="p-5 rounded-2xl max-w-[85%] bg-emerald-500/10 border border-emerald-500/20 self-end ml-auto rounded-tr-sm text-right backdrop-blur-md">
-                                    <p className="text-sm font-medium leading-relaxed opacity-80">{input}</p>
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-emerald-500 mt-2">Transcribing...</p>
-                                 </div>
-                              )}
-                           </div>
-                           
-                           {/* Voice Controls */}
-                           <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#0a0a0c]/80 backdrop-blur-xl p-3 border border-white/10 rounded-full shadow-2xl z-50">
-                              <button onClick={toggleListening} className={`w-14 h-14 flex items-center justify-center rounded-full shadow-lg transition-all ${isListening ? 'bg-emerald-500 hover:bg-emerald-600 shadow-emerald-500/20 text-white' : 'bg-rose-500 hover:bg-rose-600 shadow-rose-500/20 text-white'}`}>
-                                 <Mic className="w-6 h-6" />
-                              </button>
-                              {isListening && input && (
-                                 <button onClick={send} className="px-6 h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-full hover:bg-indigo-50 transition-all flex items-center gap-2">
-                                    <Send className="w-4 h-4" /> Send Reply
-                                 </button>
-                              )}
-                           </div>
-                        </div>
-
-
-                     </motion.div>
-                  ) : activeTab === 'simulation' ? (
+                  {activeTab === 'simulation' ? (
                     <motion.div 
                       key="sim"
                       initial={{ opacity: 0, y: 15 }}
@@ -2021,11 +1903,11 @@ function SessionContent() {
            </div>
         </div>
 
-        {/* Right: Neural Assessment Hub */}
-         <div className="w-[450px] border-l border-white/5 bg-[#0a0a0c]/50 backdrop-blur-3xl flex flex-col overflow-hidden relative shadow-2xl shrink-0">
+        {/* Right: Neural Assessment Hub / Sidebar */}
+         <div className={`transition-all duration-700 ease-in-out border-l border-white/5 bg-[#0a0a0c]/50 backdrop-blur-3xl flex flex-col overflow-hidden relative shadow-2xl shrink-0 ${activeTab === 'voice' ? 'w-full border-none' : 'w-[450px]'}`}>
             
             {/* Interviewer & Sync Status */}
-            <div className="h-[260px] w-full bg-slate-950 relative overflow-hidden shrink-0 border-b border-white/5">
+            <div className={`w-full bg-slate-950 relative overflow-hidden shrink-0 border-b border-white/5 transition-all duration-700 ease-in-out flex ${activeTab === 'voice' ? 'h-[450px] flex-col justify-center items-center' : 'h-[260px] flex-col'}`}>
                {/* Ambient Neural Pulsing */}
                <AnimatePresence>
                  {isSpeaking && (
@@ -2034,7 +1916,7 @@ function SessionContent() {
                  )}
                </AnimatePresence>
 
-               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4" style={{ perspective: 1000 }}>
+               <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4 transition-all duration-700 ${activeTab === 'voice' ? 'scale-125' : 'scale-100'}`} style={{ perspective: 1000 }}>
                   <motion.div 
                      className="relative"
                      animate={{ rotateY: isSpeaking ? [0, 15, -15, 0] : [0, 2, -2, 0], rotateX: isSpeaking ? [0, 5, -5, 0] : 0 }}
@@ -2091,8 +1973,8 @@ function SessionContent() {
             </div>
 
 
-            {/* Dialogue Nexus */}
-            <div ref={chatRef} className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar bg-[#020204]/80 backdrop-blur-3xl">
+               {/* Dialogue Nexus (Chat) */}
+            <div ref={chatRef} className={`flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar bg-[#020204]/80 backdrop-blur-3xl transition-all duration-700 ${activeTab === 'voice' ? 'max-w-4xl mx-auto w-full' : ''}`}>
                {messages.map((m, i) => (
                  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} key={i} 
                    className={`flex ${m.role === 'assistant' ? 'justify-start' : 'justify-end'} gap-4`}>
@@ -2415,6 +2297,18 @@ function SessionContent() {
                </div>
             </div>
          </motion.div>
+         {/* Global Voice Controls */}
+         <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#0a0a0c]/80 backdrop-blur-xl p-3 border border-white/10 rounded-full shadow-2xl z-[200]">
+            <button onClick={toggleListening} className={`w-14 h-14 flex items-center justify-center rounded-full shadow-lg transition-all ${isListening ? 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.4)] text-white scale-110' : 'bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white'}`}>
+               <Mic className="w-6 h-6" />
+            </button>
+            {isListening && input && (
+               <button onClick={send} className="px-6 h-14 bg-white text-black font-black uppercase tracking-widest text-[11px] rounded-full hover:bg-indigo-50 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                  <Send className="w-4 h-4" /> Send Reply
+               </button>
+            )}
+         </div>
+
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
