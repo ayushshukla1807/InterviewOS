@@ -148,14 +148,14 @@ export default function CandidateDashboard() {
   const radarData = calculateRadarData();
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-blue-600/30 transition-colors duration-500">
       
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
         
         {/* Navigation & Header */}
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-[var(--border-color)]">
           <div className="flex items-center gap-6">
-            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:scale-105 transition-transform">
+            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:scale-105 transition-transform">
               <Shield className="w-7 h-7 text-white" />
             </Link>
             <div>
@@ -187,7 +187,7 @@ export default function CandidateDashboard() {
             </button>
             <Link 
               href="/simulation"
-              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/40 active:scale-95"
+              className="px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-700/20 hover:shadow-blue-700/40 active:scale-95"
             >
               Start New Simulation
             </Link>
@@ -206,7 +206,7 @@ export default function CandidateDashboard() {
               
               <div className="flex items-center justify-between p-4 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center font-bold text-indigo-500 uppercase text-lg">
+                  <div className="w-12 h-12 bg-blue-600/10 border border-blue-600/20 rounded-xl flex items-center justify-center font-bold text-blue-600 uppercase text-lg">
                     {candidateContext?.name?.[0] || 'C'}
                   </div>
                   <div>
@@ -222,7 +222,7 @@ export default function CandidateDashboard() {
                   navigator.clipboard.writeText(url);
                   alert('Public Profile Link copied to clipboard!');
                 }}
-                className="w-full py-3 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 active:scale-95"
+                className="w-full py-3 bg-blue-700/10 hover:bg-blue-700/20 text-blue-700 dark:text-blue-400 border border-blue-600/20 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 active:scale-95"
               >
                 <Share2 className="w-3.5 h-3.5" /> Share Verified Profile
               </button>
@@ -282,16 +282,16 @@ export default function CandidateDashboard() {
               <div className="space-y-3">
                 <Link 
                   href="/instructions?track=JS"
-                  className="w-full p-4 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] hover:border-indigo-500/50 rounded-2xl flex items-center justify-between group transition-all"
+                  className="w-full p-4 bg-[var(--bg)] hover:bg-[var(--hover-bg)] border border-[var(--border-color)] hover:border-blue-600/50 rounded-2xl flex items-center justify-between group transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <Code2 className="w-5 h-5 text-indigo-500" />
+                    <Code2 className="w-5 h-5 text-blue-600" />
                     <div className="text-left">
                       <p className="text-xs font-black text-[var(--text)]">JavaScript & UI Stacks</p>
                       <p className="text-[9px] text-slate-500">Node, React internals, Optimization</p>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 group-hover:text-indigo-500 transition-all" />
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 group-hover:text-blue-600 transition-all" />
                 </Link>
 
                 <Link 
@@ -374,10 +374,10 @@ export default function CandidateDashboard() {
               
               <div className="space-y-4">
                 {pastInterviews.length > 0 ? pastInterviews.map((record, idx) => (
-                  <div key={record.id} className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-indigo-500/50 transition-all shadow-sm hover:shadow-md group">
+                  <div key={record.id} className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-blue-600/50 transition-all shadow-sm hover:shadow-md group">
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
-                        <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[8px] font-black uppercase tracking-widest rounded border border-indigo-500/20">
+                        <span className="px-2 py-0.5 bg-blue-600/10 text-blue-700 dark:text-blue-400 text-[8px] font-black uppercase tracking-widest rounded border border-blue-600/20">
                           {record.id}
                         </span>
                         <span className="text-[10px] text-slate-500 flex items-center gap-1">
@@ -410,7 +410,7 @@ export default function CandidateDashboard() {
                         </Link>
                         <Link 
                           href={record.feedbackUrl} 
-                          className="px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-indigo-600/10 transition-colors active:scale-95"
+                          className="px-4 py-3 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5 shadow-lg shadow-blue-700/10 transition-colors active:scale-95"
                         >
                           Certificate <Award className="w-3.5 h-3.5" />
                         </Link>

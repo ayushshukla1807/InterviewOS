@@ -435,22 +435,22 @@ function LoginInner() {
         .light .ios-demo-role { color: #0f172a; }
         .light .ios-demo-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
         .light .ios-switch-text { color: #64748b; }
-        .light .ios-switch-link { color: #6366f1; }
+        .light .ios-switch-link { color: #2563eb; }
         .light .ios-divider-line { background: #e2e8f0; }
         .light .ios-divider-text { color: #94a3b8; }
-        .light .ios-auth-left::after { background: linear-gradient(135deg, rgba(248,250,252,0.8) 0%, rgba(99,102,241,0.05) 50%, rgba(248,250,252,0.95) 100%); }
+        .light .ios-auth-left::after { background: linear-gradient(135deg, rgba(248,250,252,0.8) 0%, rgba(37,99,235,0.05) 50%, rgba(248,250,252,0.95) 100%); }
 
         /* ── LEFT PANEL ── */
         .ios-auth-left {
           display: none;
-          flex: 1;
           flex-direction: column;
           justify-content: space-between;
           padding: 40px 48px;
           position: relative;
           overflow: hidden;
+          background: #020617;
         }
-        @media (min-width: 1024px) { .ios-auth-left { display: flex; } }
+        @media (min-width: 1024px) { .ios-auth-left { display: flex; flex: 1; } }
 
         .ios-auth-left-bg {
           position: absolute;
@@ -465,7 +465,7 @@ function LoginInner() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, rgba(5,5,8,0.55) 0%, rgba(99,102,241,0.08) 50%, rgba(5,5,8,0.8) 100%);
+          background: linear-gradient(135deg, rgba(5,5,8,0.55) 0%, rgba(37,99,235,0.08) 50%, rgba(5,5,8,0.8) 100%);
           z-index: 1;
           transition: background 0.3s ease;
         }
@@ -477,8 +477,8 @@ function LoginInner() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+            linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
           background-size: 48px 48px;
           z-index: 1;
         }
@@ -489,16 +489,16 @@ function LoginInner() {
         .ios-brand { display: flex; align-items: center; gap: 10px; }
         .ios-brand-icon {
           width: 36px; height: 36px;
-          background: #6366f1;
+          background: #2563eb;
           border-radius: 10px;
           display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 0 20px rgba(99,102,241,0.4);
+          box-shadow: 0 0 20px rgba(37,99,235,0.4);
         }
         .ios-brand-name { font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
         .ios-brand-badge {
           font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
-          color: #6366f1; background: rgba(99,102,241,0.12);
-          border: 1px solid rgba(99,102,241,0.25);
+          color: #2563eb; background: rgba(37,99,235,0.12);
+          border: 1px solid rgba(37,99,235,0.25);
           padding: 2px 8px; border-radius: 20px; margin-left: 4px;
         }
 
@@ -506,13 +506,13 @@ function LoginInner() {
         .ios-hero-tag {
           display: inline-flex; align-items: center; gap: 6px;
           font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-          color: #818cf8; background: rgba(99,102,241,0.1);
-          border: 1px solid rgba(99,102,241,0.2);
+          color: #60a5fa; background: rgba(37,99,235,0.1);
+          border: 1px solid rgba(37,99,235,0.2);
           padding: 5px 12px; border-radius: 20px; margin-bottom: 20px;
         }
         .ios-hero-tag::before {
           content: ''; width: 6px; height: 6px; border-radius: 50%;
-          background: #6366f1; box-shadow: 0 0 6px #6366f1;
+          background: #2563eb; box-shadow: 0 0 6px #2563eb;
           animation: pulse-dot 2s ease-in-out infinite;
         }
         @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -522,7 +522,7 @@ function LoginInner() {
           color: #fff; letter-spacing: -1.5px; margin: 0 0 16px;
         }
         .ios-hero-accent {
-          color: #6366f1;
+          color: #2563eb;
         }
         .ios-hero-desc {
           font-size: 14px; line-height: 1.7; color: #64748b; max-width: 380px;
@@ -531,7 +531,7 @@ function LoginInner() {
         /* Terminal */
         .ios-terminal {
           background: rgba(2,4,10,0.75);
-          border: 1px solid rgba(99,102,241,0.15);
+          border: 1px solid rgba(37,99,235,0.15);
           border-radius: 14px;
           overflow: hidden;
           box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03);
@@ -550,7 +550,7 @@ function LoginInner() {
         .ios-terminal-lnum { color: #334155; min-width: 20px; user-select: none; }
         .ios-cursor {
           display: inline-block; width: 7px; height: 14px;
-          background: #6366f1; vertical-align: middle; margin-left: 1px;
+          background: #2563eb; vertical-align: middle; margin-left: 1px;
           animation: blink 1s step-end infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -574,10 +574,10 @@ function LoginInner() {
         }
         .ios-ticker-inner { display: flex; align-items: center; gap: 8px; }
         .ios-ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e; }
-        .ios-ticker-icon { color: #818cf8; }
+        .ios-ticker-icon { color: #60a5fa; }
         .ios-ticker-label { font-size: 11px; font-weight: 600; color: #94a3b8; }
         .ios-ticker-sep { color: #334155; font-size: 11px; }
-        .ios-ticker-val { font-size: 11px; font-weight: 700; color: #c7d2fe; }
+        .ios-ticker-val { font-size: 11px; font-weight: 700; color: #bfdbfe; }
 
         /* ── RIGHT PANEL ── */
         .ios-auth-right {
@@ -592,7 +592,7 @@ function LoginInner() {
           position: absolute;
           top: -200px; right: -200px;
           width: 500px; height: 500px;
-          background: radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
           pointer-events: none;
         }
 
@@ -609,9 +609,9 @@ function LoginInner() {
         .ios-form-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
         .ios-form-logo {
           width: 44px; height: 44px; flex-shrink: 0;
-          background: #6366f1;
+          background: #2563eb;
           border-radius: 12px; display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 8px 24px rgba(99,102,241,0.35);
+          box-shadow: 0 8px 24px rgba(37,99,235,0.35);
         }
         .ios-form-title { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin: 0 0 2px; }
         .ios-form-sub { font-size: 12px; color: #475569; margin: 0; }
@@ -640,7 +640,7 @@ function LoginInner() {
         }
         .ios-input::placeholder { color: #334155; }
         .ios-input:hover { border-color: rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); }
-        .ios-input:focus { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.04); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .ios-input:focus { border-color: rgba(37,99,235,0.5); background: rgba(37,99,235,0.04); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
 
         .ios-eye-btn {
           position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
@@ -651,11 +651,11 @@ function LoginInner() {
 
         .ios-submit-btn {
           width: 100%; padding: 14px;
-          background: #6366f1;
+          background: #2563eb;
           border: none; border-radius: 12px; cursor: pointer;
           color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
           display: flex; align-items: center; justify-content: center; gap: 8px;
-          transition: all 0.2s; box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+          transition: all 0.2s; box-shadow: 0 8px 24px rgba(37,99,235,0.3);
           font-family: 'Inter', sans-serif; margin-top: 4px;
         }
         .ios-submit-btn:hover:not(:disabled) {

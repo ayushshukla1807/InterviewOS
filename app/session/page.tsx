@@ -821,7 +821,8 @@ function SessionContent() {
             ? { ...candidateProfile, name, interviewerName: interviewer?.name, interviewerPersona: interviewer?.persona } 
             : { name, interviewerName: interviewer?.name, interviewerPersona: interviewer?.persona },
           simulationSummary: simulationSummary,
-          system: !candidateProfile ? (INTERVIEWER_PERSONA.replace(/Syed/gi, interviewer?.name || 'Syed') + systemCtx.replace(/Syed/gi, interviewer?.name || 'Syed') + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}\n\n[CANDIDATE'S CURRENT CODE STATE]:\n\`\`\`javascript\n${code}\n\`\`\`\nRefer to the code if relevant.`) : undefined,
+          system: !candidateProfile ? (INTERVIEWER_PERSONA.replace(/Syed/gi, interviewer?.name || 'Syed') + systemCtx.replace(/Syed/gi, interviewer?.name || 'Syed') + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}`) : undefined,
+          code: code,
         }),
       });
       const data = await res.json();
@@ -1055,8 +1056,8 @@ function SessionContent() {
           animate={{ scale: 1, opacity: 1 }}
           className="relative"
         >
-          <div className="w-24 h-24 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-          <User className="absolute inset-0 m-auto w-8 h-8 text-indigo-500 animate-pulse" />
+          <div className="w-24 h-24 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
+          <User className="absolute inset-0 m-auto w-8 h-8 text-blue-600 animate-pulse" />
         </motion.div>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -1074,9 +1075,9 @@ function SessionContent() {
   if (isGeneratingQuestions || !question) {
     return (
       <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
-        <div className="w-16 h-16 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mb-8" />
+        <div className="w-16 h-16 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin mb-8" />
         <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Matching Profile to Job Description</p>
-        <p className="text-indigo-400 font-bold uppercase tracking-widest text-[9px] mt-2 animate-pulse">Generating Custom Interview Protocol...</p>
+        <p className="text-blue-400 font-bold uppercase tracking-widest text-[9px] mt-2 animate-pulse">Generating Custom Interview Protocol...</p>
       </div>
     );
   }
@@ -1103,14 +1104,14 @@ function SessionContent() {
   if (!isFullscreen) {
     return (
       <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
-        <div className="w-20 h-20 rounded-full bg-indigo-600/10 border-2 border-indigo-500/30 flex items-center justify-center">
-          <Maximize2 className="w-10 h-10 text-indigo-400" />
+        <div className="w-20 h-20 rounded-full bg-blue-700/10 border-2 border-blue-600/30 flex items-center justify-center">
+          <Maximize2 className="w-10 h-10 text-blue-400" />
         </div>
         <div className="space-y-4">
           <h1 className="text-2xl font-black text-[var(--text)] tracking-tighter">Fullscreen Required</h1>
           <p className="text-slate-500 text-sm font-medium max-w-sm mx-auto leading-relaxed">This interview must be conducted in fullscreen mode. Exiting fullscreen will be logged as a violation.</p>
         </div>
-        <button onClick={enterFullscreen} className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-indigo-600/20 flex items-center gap-3">
+        <button onClick={enterFullscreen} className="px-8 py-4 bg-blue-700 hover:bg-blue-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-blue-700/20 flex items-center gap-3">
           <Maximize2 className="w-4 h-4" /> Enter Fullscreen & Start Interview
         </button>
         <p className="text-slate-500 text-[9px] font-bold uppercase tracking-widest">Tab switching, window changes & copy-paste are blocked during the session.</p>
@@ -1119,7 +1120,7 @@ function SessionContent() {
   }
 
   return (
-    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-indigo-500/30 transition-colors duration-500">
+    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-blue-600/30 transition-colors duration-500">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -1154,7 +1155,7 @@ function SessionContent() {
               exit={{ scale: 0.95, y: 20 }}
               className="w-full max-w-lg bg-[#0a0a0c] border border-white/10 rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-500" />
               
               <div className="flex justify-between items-start">
                  <div>
@@ -1173,7 +1174,7 @@ function SessionContent() {
                       type="text" 
                       value={targetSalary}
                       onChange={(e) => setTargetSalary(e.target.value)}
-                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all"
+                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-blue-600 transition-all"
                     />
                  </div>
                  <div className="space-y-2">
@@ -1182,15 +1183,15 @@ function SessionContent() {
                       type="text" 
                       value={targetEquity}
                       onChange={(e) => setTargetEquity(e.target.value)}
-                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-indigo-500 transition-all"
+                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-blue-600 transition-all"
                     />
                  </div>
               </div>
 
               {negotiationPhase === 'analyzing' && (
-                 <div className="p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center gap-3">
-                    <div className="w-4 h-4 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin shrink-0" />
-                    <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Analyzing Market Band & Candidate Performance...</p>
+                 <div className="p-4 bg-blue-600/10 border border-blue-600/20 rounded-xl flex items-center gap-3">
+                    <div className="w-4 h-4 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin shrink-0" />
+                    <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Analyzing Market Band & Candidate Performance...</p>
                  </div>
               )}
 
@@ -1221,7 +1222,7 @@ function SessionContent() {
                    <button onClick={() => {
                      setNegotiationPhase('analyzing');
                      setTimeout(() => setNegotiationPhase('counter'), 2500);
-                   }} className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Submit Request</button>
+                   }} className="px-6 py-3 bg-blue-700 hover:bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Submit Request</button>
                  ) : negotiationPhase === 'counter' ? (
                    <button onClick={() => setNegotiationPhase('approved')} className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Accept Counter</button>
                  ) : null}
@@ -1234,7 +1235,7 @@ function SessionContent() {
       {/* Top Navigation */}
       <header className="px-8 py-3 border-b border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl flex items-center justify-between shrink-0 z-50">
         <div className="flex items-center gap-6">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20 shrink-0">
+          <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center shadow-lg shadow-blue-700/20 shrink-0">
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div className="hidden md:block">
@@ -1244,11 +1245,11 @@ function SessionContent() {
           <div className="h-6 w-px bg-white/5" />
           <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
              <div className="flex gap-1 items-center">
-                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Protocol Stage:</p>
+                <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Protocol Stage:</p>
                 <p className="text-[10px] font-black text-white uppercase tracking-widest">{currentQ + 1} <span className="text-slate-600">/</span> {questions.length || 0}</p>
              </div>
              <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <motion.div className="h-full bg-indigo-500" 
+                <motion.div className="h-full bg-blue-600" 
                   initial={{ width: 0 }} animate={{ width: `${((currentQ + 1) / (questions.length || 1)) * 100}%` }} />
              </div>
           </div>
@@ -1259,7 +1260,7 @@ function SessionContent() {
            <div className="flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
               <button 
                 onClick={() => setActiveTab('voice')}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-indigo-500/20 text-indigo-400' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-blue-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
               >
                 <Mic className="w-3 h-3 inline-block mr-1.5" /> Face to Face
               </button>
@@ -1284,7 +1285,7 @@ function SessionContent() {
                  +15 Min Extension
               </button>
            )}
-           <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-indigo-600 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
+           <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-blue-700 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
               <TrendingUp className="w-3.5 h-3.5" /> Negotiate Salary
            </button>
            <div className={`flex items-center gap-2 px-4 py-1.5 rounded-lg border tabular-nums transition-all ${timeLeft < 300 ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' : 'bg-white/5 border-white/5 text-slate-400'}`}>
@@ -1320,7 +1321,7 @@ function SessionContent() {
                        {/* 1. Header: Mission Control Hub */}
                        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/40 p-6 backdrop-blur-md shadow-[0_0_30px_rgba(99,102,241,0.1)]">
                           {/* Ambient glow backing */}
-                          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+                          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-blue-600/10 blur-3xl" />
                           <div className="absolute -left-20 -bottom-20 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
                           
                           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
@@ -1329,10 +1330,10 @@ function SessionContent() {
                                    <span className="text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-md">
                                       {scenario?.company || 'Corporate Client'}
                                    </span>
-                                   <span className="text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-md">
+                                   <span className="text-blue-400 bg-blue-600/10 border border-blue-600/20 px-2.5 py-1 rounded-md">
                                       {scenario?.role || 'Developer'} Track
                                    </span>
-                                   <span className="text-violet-400 bg-violet-500/10 border border-violet-500/20 px-2.5 py-1 rounded-md">
+                                   <span className="text-violet-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-md">
                                       {scenario?.difficulty || 'Advanced'}
                                    </span>
                                 </div>
@@ -1358,7 +1359,7 @@ function SessionContent() {
                                 </div>
                                 <div className="text-left pr-4 border-r border-white/5">
                                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">SLA Threshold</p>
-                                   <p className="text-[10px] font-black text-indigo-400 flex items-center gap-1 mt-0.5">
+                                   <p className="text-[10px] font-black text-blue-400 flex items-center gap-1 mt-0.5">
                                       <Clock className="w-3 h-3" />
                                       &lt; 50ms
                                    </p>
@@ -1374,12 +1375,12 @@ function SessionContent() {
                        {/* 2. Simulation Background: Operational Briefing File */}
                        <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-slate-950/20 p-6 shadow-inner group hover:border-white/10 transition-all duration-300">
                           {/* Vertical Accent Glow Bar */}
-                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-indigo-500 via-cyan-500 to-transparent group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300" />
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 via-cyan-500 to-transparent group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300" />
                           
                           <div className="space-y-4">
                              <div className="flex items-center justify-between">
                                 <h3 className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
-                                   <Briefcase className="w-4 h-4 text-indigo-400" />
+                                   <Briefcase className="w-4 h-4 text-blue-400" />
                                    Operational Parameters & Briefing
                                 </h3>
                                 <span className="text-[8px] font-black text-slate-500 tracking-widest uppercase">CLASSIFIED // B2B SIMULATION</span>
@@ -1408,12 +1409,12 @@ function SessionContent() {
                                  <motion.div 
                                    key={idx}
                                    whileHover={{ y: -4, scale: 1.01 }}
-                                   className="relative p-5 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-indigo-500/20 hover:shadow-[0_0_25px_rgba(99,102,241,0.05)] transition-all duration-300 group"
+                                   className="relative p-5 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-blue-600/20 hover:shadow-[0_0_25px_rgba(99,102,241,0.05)] transition-all duration-300 group"
                                  >
                                     <div className="space-y-1">
                                        <div className="flex items-center justify-between">
                                           <p className="text-xs font-bold text-white leading-tight group-hover:text-indigo-300 transition-colors">{skill.name}</p>
-                                          <span className="text-[7px] font-black bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded uppercase">
+                                          <span className="text-[7px] font-black bg-blue-600/10 text-blue-400 border border-blue-600/20 px-1.5 py-0.5 rounded uppercase">
                                              {skill.level}
                                           </span>
                                        </div>
@@ -1425,7 +1426,7 @@ function SessionContent() {
                                     <div className="space-y-2">
                                        <div className="flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400">
                                           <span>Evaluation Weight</span>
-                                          <span className="text-indigo-400">{skill.weight}%</span>
+                                          <span className="text-blue-400">{skill.weight}%</span>
                                        </div>
                                        
                                        {/* Segmented hardware-style visualization bar */}
@@ -1437,7 +1438,7 @@ function SessionContent() {
                                                    key={segmentIdx} 
                                                    className={`h-full flex-1 rounded-sm transition-all duration-500 ${
                                                       isFilled 
-                                                         ? 'bg-gradient-to-t from-indigo-600 to-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]' 
+                                                         ? 'bg-gradient-to-t from-blue-700 to-blue-400 shadow-[0_0_8px_rgba(99,102,241,0.5)]' 
                                                          : 'bg-white/5'
                                                    }`}
                                                 />
@@ -1588,7 +1589,7 @@ function SessionContent() {
                       {/* Left side: Problem Description */}
                       <div className="w-1/4 border-r border-[var(--border-color)] bg-[var(--card-bg)] p-6 overflow-y-auto flex flex-col">
                         <div className="flex items-center gap-3 mb-6">
-                           <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-violet-500/20">
+                           <span className="px-3 py-1 bg-cyan-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-cyan-500/20">
                               {question.difficulty || 'Hard'}
                            </span>
                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -1622,7 +1623,7 @@ function SessionContent() {
                            <div className="flex gap-2">
                               <select 
                                 value={language} onChange={e => setLanguage(e.target.value)}
-                                className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-[10px] font-black text-indigo-400 uppercase tracking-widest outline-none focus:border-indigo-500 transition-all">
+                                className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-[10px] font-black text-blue-400 uppercase tracking-widest outline-none focus:border-blue-600 transition-all">
                                  <option value="javascript">JavaScript (Node 20)</option>
                                  <option value="typescript">TypeScript (5.0)</option>
                                  <option value="python">Python (3.11)</option>
@@ -1633,7 +1634,7 @@ function SessionContent() {
                               </select>
                               <div className="flex gap-1 bg-[var(--card-bg)] p-1 rounded-lg border border-[var(--border-color)]">
                                  <button onClick={() => setActiveEditorTab('scratch')} 
-                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'scratch' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeEditorTab === 'scratch' ? 'bg-blue-700 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
                                    Scratchpad
                                  </button>
                                  <button onClick={() => setActiveEditorTab('final')} 
@@ -1645,7 +1646,7 @@ function SessionContent() {
                                    <Terminal className="w-3 h-3" /> Sandbox
                                  </button>
                                  <button onClick={() => setActiveEditorTab('canvas')} 
-                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1 ${activeEditorTab === 'canvas' ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
+                                   className={`px-3 py-1 rounded text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1 ${activeEditorTab === 'canvas' ? 'bg-blue-700 text-white' : 'text-slate-500 hover:text-[var(--text)]'}`}>
                                    <LayoutDashboard className="w-3 h-3" /> Canvas
                                  </button>
                               </div>
@@ -1683,11 +1684,11 @@ function SessionContent() {
                                    ? <><CheckCircle className="w-3 h-3" /> Ran OK {execTime !== null ? `· ${execTime}ms` : ''}</>
                                    : execSuccess === false
                                    ? <><AlertCircle className="w-3 h-3" /> Run Code</>
-                                   : <><Play className="w-3 h-3 text-indigo-400" /> Run Code</>
+                                   : <><Play className="w-3 h-3 text-blue-400" /> Run Code</>
                                  }
                                </button>
                               <button onClick={handleFinish}
-                                className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/20">
+                                className="px-4 py-1.5 bg-blue-700 hover:bg-blue-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-blue-700/20">
                                  <Send className="w-3 h-3" /> Submit Final Solution
                               </button>
                            </div>
@@ -1749,7 +1750,7 @@ function SessionContent() {
                             <div className="absolute bottom-4 right-8 flex items-center gap-4 px-3 py-1.5 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)] backdrop-blur-md">
                                <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest">UTF-8</span>
                                <div className="w-px h-2 bg-white/10" />
-                               <span className="text-[7px] font-black text-indigo-400 uppercase tracking-widest">Line {code.split('\n').length}, Col {code.length}</span>
+                               <span className="text-[7px] font-black text-blue-400 uppercase tracking-widest">Line {code.split('\n').length}, Col {code.length}</span>
                                <div className="w-px h-2 bg-white/10" />
                                <span className={`text-[7px] font-black uppercase tracking-widest flex items-center gap-1 ${lintErrors.length > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
                                   {lintErrors.length > 0 ? <><AlertCircle className="w-2.5 h-2.5" /> {lintErrors.length} Warnings</> : <><CheckCircle className="w-2.5 h-2.5" /> No Issues</>}
@@ -1773,8 +1774,8 @@ function SessionContent() {
                              <div className="flex-1 flex flex-col bg-black/20">
                                 <div className="px-4 py-2 border-b border-[var(--border-color)] flex items-center justify-between">
                                    <div className="flex items-center gap-2">
-                                     <Monitor className="w-3 h-3 text-indigo-500" />
-                                     <span className="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Execution Output</span>
+                                     <Monitor className="w-3 h-3 text-blue-600" />
+                                     <span className="text-[8px] font-black text-blue-600 uppercase tracking-widest">Execution Output</span>
                                    </div>
                                    <div className="flex items-center gap-3">
                                      {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
@@ -1833,7 +1834,7 @@ function SessionContent() {
                                          <div className="grid grid-cols-2 gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                                             <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
                                                <span className="text-[7px] text-slate-500 block mb-0.5">Target Time</span>
-                                               <span className="text-indigo-400 text-xs font-mono lowercase">{prampData.targetTime}</span>
+                                               <span className="text-blue-400 text-xs font-mono lowercase">{prampData.targetTime}</span>
                                             </div>
                                             <div className="bg-black/30 p-2.5 rounded-xl border border-white/5">
                                                <span className="text-[7px] text-slate-500 block mb-0.5">Target Space</span>
@@ -1912,7 +1913,7 @@ function SessionContent() {
                <AnimatePresence>
                  {isSpeaking && (
                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                     className="absolute inset-0 bg-indigo-600/10 pointer-events-none" />
+                     className="absolute inset-0 bg-blue-700/10 pointer-events-none" />
                  )}
                </AnimatePresence>
 
@@ -1924,12 +1925,12 @@ function SessionContent() {
                      style={{ transformStyle: 'preserve-3d' }}
                   >
                     {isSpeaking && (
-                      <motion.div className="absolute inset-[-20px] rounded-full border border-indigo-500/40"
+                      <motion.div className="absolute inset-[-20px] rounded-full border border-blue-600/40"
                         animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0, 0.8], rotateZ: [0, 180, 360] }}
                         transition={{ repeat: Infinity, duration: 3, ease: 'linear' }} 
                         style={{ translateZ: -50 }} />
                     )}
-                     <div className={`w-28 h-28 rounded-full overflow-hidden border-2 transition-all duration-500 ${isSpeaking ? 'border-indigo-500 shadow-[0_0_60px_rgba(79,70,229,0.8)]' : 'border-white/10 shadow-xl shadow-black/50'}`}>
+                     <div className={`w-28 h-28 rounded-full overflow-hidden border-2 transition-all duration-500 ${isSpeaking ? 'border-blue-600 shadow-[0_0_60px_rgba(79,70,229,0.8)]' : 'border-white/10 shadow-xl shadow-black/50'}`}>
                        <motion.img 
                          src={interviewer?.avatar || 'https://ui-avatars.com/api/?name=Syed&background=4f46e5&color=fff&size=200&bold=true&font-size=0.4'}
                          alt="Interviewer" 
@@ -1940,7 +1941,7 @@ function SessionContent() {
                      </div>
                      {/* 3D Holographic Base glow */}
                      {isSpeaking && (
-                       <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-24 h-3 bg-indigo-500/40 blur-xl rounded-full" />
+                       <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-24 h-3 bg-blue-600/40 blur-xl rounded-full" />
                      )}
                   </motion.div>
                    <div>
@@ -1960,7 +1961,7 @@ function SessionContent() {
                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
                   <div className="flex gap-1 items-end h-6">
                      {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                       <motion.div key={i} className="w-0.5 bg-indigo-500/30 rounded-full"
+                       <motion.div key={i} className="w-0.5 bg-blue-600/30 rounded-full"
                          animate={{ height: isSpeaking ? [4, 18, 4] : 4 }}
                          transition={{ repeat: Infinity, duration: 0.4, delay: i * 0.1 }} />
                      ))}
@@ -1981,7 +1982,7 @@ function SessionContent() {
                    
                    {/* System Avatar */}
                    {m.role === 'assistant' && (
-                     <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-indigo-500 border border-white/10 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                     <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-blue-600 border border-white/10 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
                         <img src={interviewer?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Syed'} alt="AI" className="w-full h-full object-cover bg-slate-900" />
                      </div>
                    )}
@@ -1991,10 +1992,10 @@ function SessionContent() {
                           <span className="text-[7px] font-black text-slate-500 uppercase tracking-[0.3em]">
                             {m.role === 'assistant' ? `SYSTEM: ${interviewer?.name || 'SYED'}` : `CANDIDATE: ${name.split(' ')[0]}`}
                           </span>
-                          <div className={`w-1 h-1 rounded-full ${m.role === 'assistant' ? 'bg-indigo-500 shadow-[0_0_5px_rgba(79,70,229,1)]' : 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,1)]'}`} />
+                          <div className={`w-1 h-1 rounded-full ${m.role === 'assistant' ? 'bg-blue-600 shadow-[0_0_5px_rgba(79,70,229,1)]' : 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,1)]'}`} />
                        </div>
                        <div className={`p-5 rounded-2xl text-[12px] font-medium leading-relaxed tracking-tight shadow-xl ${
-                         m.role === 'assistant' ? 'bg-white/[0.02] border border-white/10 text-slate-300 rounded-tl-sm backdrop-blur-md' : 'bg-indigo-600 border border-indigo-500 text-white shadow-[0_5px_20px_rgba(79,70,229,0.3)] rounded-tr-sm'
+                         m.role === 'assistant' ? 'bg-white/[0.02] border border-white/10 text-slate-300 rounded-tl-sm backdrop-blur-md' : 'bg-blue-700 border border-blue-600 text-white shadow-[0_5px_20px_rgba(79,70,229,0.3)] rounded-tr-sm'
                        }`}>
                           {m.content}
                        </div>
@@ -2010,7 +2011,7 @@ function SessionContent() {
                ))}
                {isThinking && (
                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start gap-4">
-                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-indigo-500 border border-white/10 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-blue-600 border border-white/10 shadow-[0_0_15px_rgba(79,70,229,0.4)]">
                         <img src={interviewer?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Syed'} alt="AI" className="w-full h-full object-cover bg-slate-900" />
                     </div>
                     <div className="flex flex-col items-start max-w-[85%]">
@@ -2020,7 +2021,7 @@ function SessionContent() {
                         </div>
                         <div className="p-5 rounded-2xl rounded-tl-sm bg-white/[0.02] border border-white/10 flex gap-1.5 items-center shadow-xl backdrop-blur-md">
                            {[0, 1, 2].map(i => (
-                             <motion.div key={i} className="w-1.5 h-1.5 bg-indigo-500 rounded-full"
+                             <motion.div key={i} className="w-1.5 h-1.5 bg-blue-600 rounded-full"
                                animate={{ y: [0, -3, 0], opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.15 }} />
                            ))}
                         </div>
@@ -2037,7 +2038,7 @@ function SessionContent() {
                      {isListening && (
                        <div className="absolute left-6 top-1/2 -translate-y-1/2 flex gap-1 items-end h-4 pointer-events-none z-10">
                           {[1, 2, 3, 4, 5].map(i => (
-                            <motion.div key={i} className="w-0.5 bg-indigo-500/60 rounded-full"
+                            <motion.div key={i} className="w-0.5 bg-blue-600/60 rounded-full"
                               animate={{ height: [4, 16, 4] }}
                               transition={{ repeat: Infinity, duration: 0.4, delay: i * 0.1 }} />
                           ))}
@@ -2045,8 +2046,8 @@ function SessionContent() {
                      )}
                      <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send())}
                        placeholder={isListening ? "" : "Input Response Protocol..."}
-                       className={`w-full bg-[#050508] border ${isListening ? 'border-indigo-500 shadow-[0_0_30px_rgba(79,70,229,0.25)]' : 'border-white/5'} rounded-[20px] px-6 py-5 text-[12px] text-white focus:ring-1 focus:ring-indigo-500/40 outline-none transition-all placeholder:text-slate-700 font-medium ${isListening ? 'pl-16' : ''}`} />
-                     <button onClick={toggleListening} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-all p-2 rounded-xl ${isListening ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-600 hover:text-indigo-400'}`}>
+                       className={`w-full bg-[#050508] border ${isListening ? 'border-blue-600 shadow-[0_0_30px_rgba(79,70,229,0.25)]' : 'border-white/5'} rounded-[20px] px-6 py-5 text-[12px] text-white focus:ring-1 focus:ring-blue-600/40 outline-none transition-all placeholder:text-slate-700 font-medium ${isListening ? 'pl-16' : ''}`} />
+                     <button onClick={toggleListening} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-all p-2 rounded-xl ${isListening ? 'bg-blue-700 text-white shadow-lg' : 'text-slate-600 hover:text-blue-400'}`}>
                        <Mic className={`w-4 h-4 ${isListening ? 'animate-pulse' : ''}`} />
                      </button>
                   </div>
@@ -2058,13 +2059,13 @@ function SessionContent() {
 
             {/* Neural Load Indicator */}
             <div className="h-1.5 w-full bg-white/5 overflow-hidden">
-               <motion.div className="h-full bg-indigo-600 shadow-[0_0_10px_rgba(79,70,229,0.8)]" 
+               <motion.div className="h-full bg-blue-700 shadow-[0_0_10px_rgba(79,70,229,0.8)]" 
                  animate={{ width: questions.length ? `${((currentQ + 1) / questions.length) * 100}%` : '0%' }} transition={{ duration: 1.2, ease: 'circOut' }} />
             </div>
 
            {/* Metrics Bar */}
-           <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-600/10 overflow-hidden">
-              <div className="w-full bg-indigo-500" style={{ height: '40%' }} />
+           <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-700/10 overflow-hidden">
+              <div className="w-full bg-blue-600" style={{ height: '40%' }} />
            </div>
         </div>
       </div>
@@ -2078,7 +2079,7 @@ function SessionContent() {
             </div>
             <div className="h-4 w-px bg-white/5" />
             <div className="flex items-center gap-2">
-               <Shield className="w-3 h-3 text-indigo-400" />
+               <Shield className="w-3 h-3 text-blue-400" />
                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Proctoring Active</span>
             </div>
             <div className="h-4 w-px bg-white/5" />
@@ -2126,10 +2127,10 @@ function SessionContent() {
                       <div className="space-y-2">
                          <div className="flex justify-between">
                             <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Speaking Speed</span>
-                            <span className="text-[10px] font-black text-indigo-400">{voiceSpeed.toFixed(2)}x</span>
+                            <span className="text-[10px] font-black text-blue-400">{voiceSpeed.toFixed(2)}x</span>
                          </div>
                          <input type="range" min="0.6" max="1.4" step="0.05" value={voiceSpeed} onChange={e => setVoiceSpeed(parseFloat(e.target.value))}
-                           className="w-full accent-indigo-500 cursor-pointer" />
+                           className="w-full accent-blue-600 cursor-pointer" />
                          <div className="flex justify-between text-[7px] font-black text-slate-600 uppercase tracking-widest">
                             <span>Slow</span><span>Normal</span><span>Fast</span>
                          </div>
@@ -2141,7 +2142,7 @@ function SessionContent() {
                             {(['default', 'male', 'female'] as const).map(g => (
                               <button key={g} onClick={() => setVoiceGender(g)}
                                 className={`py-2 rounded-xl border text-[8px] font-black uppercase tracking-widest transition-all capitalize ${
-                                  voiceGender === g ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/20'
+                                  voiceGender === g ? 'bg-blue-700 border-blue-600 text-white' : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/20'
                                 }`}>{g}</button>
                             ))}
                          </div>
@@ -2152,7 +2153,7 @@ function SessionContent() {
            </AnimatePresence>
            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
              onClick={() => setIsVoicePanelOpen(!isVoicePanelOpen)}
-             className="w-14 h-14 bg-gradient-to-br from-violet-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.4)] border-2 border-violet-500/50 relative group">
+             className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.4)] border-2 border-cyan-500/50 relative group">
               <div className="absolute inset-0 rounded-full border-2 border-violet-400/20 animate-ping pointer-events-none" />
               {voiceMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white group-hover:animate-pulse" />}
            </motion.button>
@@ -2164,9 +2165,9 @@ function SessionContent() {
               {isSupportOpen && (
                 <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   className="mb-4 w-80 bg-[#0e0e11]/95 backdrop-blur-3xl border border-white/10 rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-[450px]">
-                   <div className="p-5 bg-indigo-600 flex items-center justify-between">
+                   <div className="p-5 bg-blue-700 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                         <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-lg bg-indigo-500">
+                         <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-lg bg-blue-600">
                            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Aura" alt="Aura" className="w-full h-full object-cover" />
                          </div>
                          <div>
@@ -2182,16 +2183,16 @@ function SessionContent() {
                       </button>
                    </div>
 
-                   <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-indigo-600/5">
+                   <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-gradient-to-b from-transparent to-blue-700/5">
                       {supportMessages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'aura' ? 'justify-start' : 'justify-end'} gap-2`}>
                            {msg.role === 'aura' && (
-                             <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mt-1 shadow-sm bg-indigo-500/20">
+                             <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mt-1 shadow-sm bg-blue-600/20">
                                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Aura" alt="Aura" className="w-full h-full object-cover" />
                              </div>
                            )}
                            <div className={`max-w-[80%] p-3.5 rounded-2xl text-[11px] font-medium leading-relaxed ${
-                             msg.role === 'aura' ? 'bg-white/5 border border-white/5 text-slate-300 rounded-tl-sm' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/10 rounded-tr-sm'
+                             msg.role === 'aura' ? 'bg-white/5 border border-white/5 text-slate-300 rounded-tl-sm' : 'bg-blue-700 text-white shadow-lg shadow-blue-700/10 rounded-tr-sm'
                            }`}>
                               {msg.content}
                            </div>
@@ -2216,9 +2217,9 @@ function SessionContent() {
                              }
                            }}
                            placeholder="Describe your issue..."
-                           className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl pl-5 pr-12 py-3 text-[10px] text-white focus:border-indigo-500 outline-none transition-all placeholder:text-slate-700"
+                           className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl pl-5 pr-12 py-3 text-[10px] text-white focus:border-blue-600 outline-none transition-all placeholder:text-slate-700"
                          />
-                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-500">
+                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600">
                             <Send className="w-3.5 h-3.5" />
                          </button>
                       </div>
@@ -2230,10 +2231,10 @@ function SessionContent() {
            <motion.button 
              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
              onClick={() => setIsSupportOpen(!isSupportOpen)}
-             className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_40px_rgba(79,70,229,0.5)] border-2 border-indigo-400/50 group relative"
+             className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_40px_rgba(79,70,229,0.5)] border-2 border-blue-400/50 group relative"
            >
               {/* Pulsing ring for the bot */}
-              <div className="absolute inset-0 rounded-full border-2 border-indigo-400/30 animate-ping pointer-events-none" />
+              <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping pointer-events-none" />
               <AnimatePresence mode="wait">
                  {isSupportOpen ? (
                    <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
@@ -2242,7 +2243,7 @@ function SessionContent() {
                  ) : (
                    <motion.div key="h" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 1.2, opacity: 0 }} className="relative w-full h-full rounded-full overflow-hidden border-2 border-transparent">
                       <img src="https://api.dicebear.com/7.x/lorelei-neutral/svg?seed=Aura&backgroundColor=4f46e5" alt="Aura" className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                      <div className="absolute top-1 right-1 w-3 h-3 bg-emerald-500 border-2 border-indigo-600 rounded-full shadow-[0_0_10px_rgba(16,185,129,1)]" />
+                      <div className="absolute top-1 right-1 w-3 h-3 bg-emerald-500 border-2 border-blue-700 rounded-full shadow-[0_0_10px_rgba(16,185,129,1)]" />
                    </motion.div>
                  )}
               </AnimatePresence>
@@ -2253,8 +2254,8 @@ function SessionContent() {
          <motion.div 
             drag
             dragMomentum={false}
-            dragConstraints={{ left: -2000, right: 20, top: -20, bottom: 2000 }}
-            className="fixed top-6 right-[420px] z-[150] w-[280px] rounded-2xl overflow-hidden border border-white/20 bg-[#070709]/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-indigo-500/50 transition-colors"
+            dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
+            className="fixed bottom-6 right-[420px] z-[150] w-[280px] rounded-2xl overflow-hidden border border-white/20 bg-[#070709]/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-blue-500/50 transition-colors"
          >
             {/* Drag Handle (Visible on Hover) */}
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
@@ -2263,16 +2264,15 @@ function SessionContent() {
 
             {/* Video Feed */}
             <div className="relative w-full aspect-[4/3] bg-slate-900 pointer-events-none">
-               {stream ? (
-                  <video 
-                     ref={videoRef} 
-                     autoPlay 
-                     playsInline 
-                     muted 
-                     className="w-full h-full object-cover scale-x-[-1]" 
-                  />
-               ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/80">
+               <video 
+                  ref={videoRef} 
+                  autoPlay 
+                  playsInline 
+                  muted 
+                  className={`w-full h-full object-cover scale-x-[-1] ${stream ? 'block' : 'hidden'}`} 
+               />
+               {!stream && (
+                  <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-slate-900/80">
                      <User className="text-slate-600 w-10 h-10 animate-pulse mb-2" />
                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Initializing Camera...</p>
                   </div>

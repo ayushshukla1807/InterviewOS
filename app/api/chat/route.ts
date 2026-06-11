@@ -75,7 +75,7 @@ function generateOfflineResponse(messages: any[], candidateProfile: any, roleNam
 // ─── Main Route ──────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
-    const { messages, track, system, candidateProfile, simulationSummary } = await req.json();
+    const { messages, track, system, candidateProfile, simulationSummary, code } = await req.json();
 
     let systemPrompt: string;
 
@@ -106,6 +106,18 @@ The candidate just completed a 30-minute immersive workplace simulation. Here is
 ${simulationSummary}
 
 INSTRUCTION: During this technical interview, you MUST ask at least one behavioral cross-question referencing their specific actions in the simulation. For example, if they ignored a client email, ask them why and how they handle competing priorities.`;
+    }
+
+    // Live Code Analysis Integration (Phase 3)
+    if (code && code.trim().length > 0) {
+      systemPrompt += `\n\nCRITICAL CONTEXT FOR THIS INTERVIEW (LIVE CODING ROUND):
+The candidate is currently writing code in the IDE.
+[CANDIDATE'S CURRENT CODE STATE]:
+\`\`\`javascript
+${code}
+\`\`\`
+
+INSTRUCTION: You must actively review this code. Do NOT ignore it. If the candidate makes a mistake, point it out gently. Ask them why they chose their specific approach (e.g., "I see you used a Map there, why not an Array?"). Guide them, ask them about time/space complexity of their current code, and evaluate their real-time logic.`;
     }
 
     const contents = messages.map((m: any) => ({

@@ -110,21 +110,21 @@ export default function ApplyPage() {
   if (!job) {
     return (
       <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center transition-colors duration-500">
-        <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans flex flex-col transition-colors duration-500 selection:bg-indigo-500/30 relative">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans flex flex-col transition-colors duration-500 selection:bg-blue-600/30 relative">
       {/* Background gradients */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/10 blur-[100px] rounded-full" />
-         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-500/10 blur-[100px] rounded-full" />
+         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/10 blur-[100px] rounded-full" />
+         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 blur-[100px] rounded-full" />
       </div>
 
       <header className="relative z-10 px-8 py-5 border-b backdrop-blur-xl flex items-center gap-4" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)', borderColor: 'var(--border-color)' }}>
-        <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-600/20">
+        <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center shadow-lg shadow-blue-700/20">
           <Shield className="w-4 h-4 text-white" />
         </div>
         <div>
@@ -136,9 +136,9 @@ export default function ApplyPage() {
       <main className="relative z-10 flex-1 max-w-5xl w-full mx-auto p-8 lg:p-16 grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-12">
         {/* Job Details */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="space-y-8 flex flex-col justify-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-indigo-500/10 border-indigo-500/20 w-max">
-             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-             <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Actively Hiring</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border bg-blue-600/10 border-blue-600/20 w-max">
+             <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+             <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">Actively Hiring</span>
           </div>
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter" style={{ color: 'var(--text)' }}>{job.title}</h1>
@@ -148,20 +148,20 @@ export default function ApplyPage() {
             <h3 className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Application Process</h3>
             <ul className="space-y-4 text-xs font-medium" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>
               <li className="flex items-center gap-3">
-                 <div className="w-6 h-6 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0">
-                    <CheckCircle className="w-3.5 h-3.5 text-indigo-500" />
+                 <div className="w-6 h-6 rounded-full bg-blue-600/10 flex items-center justify-center shrink-0">
+                    <CheckCircle className="w-3.5 h-3.5 text-blue-600" />
                  </div>
                  <span>Upload Resume (PDF format)</span>
               </li>
               <li className="flex items-center gap-3">
-                 <div className="w-6 h-6 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0">
-                    <CheckCircle className="w-3.5 h-3.5 text-indigo-500" />
+                 <div className="w-6 h-6 rounded-full bg-blue-600/10 flex items-center justify-center shrink-0">
+                    <CheckCircle className="w-3.5 h-3.5 text-blue-600" />
                  </div>
                  <span>AI-Driven Technical Interview</span>
               </li>
               <li className="flex items-center gap-3">
-                 <div className="w-6 h-6 rounded-full bg-indigo-500/10 flex items-center justify-center shrink-0">
-                    <CheckCircle className="w-3.5 h-3.5 text-indigo-500" />
+                 <div className="w-6 h-6 rounded-full bg-blue-600/10 flex items-center justify-center shrink-0">
+                    <CheckCircle className="w-3.5 h-3.5 text-blue-600" />
                  </div>
                  <span>Recruiter Review & Decision</span>
               </li>
@@ -185,7 +185,7 @@ export default function ApplyPage() {
                    </label>
                    <input 
                      value={name} onChange={e => setName(e.target.value)}
-                     className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
+                     className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 outline-none transition-all"
                      style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)', borderColor: 'var(--border-color)', color: 'var(--text)' }}
                      required
                    />
@@ -197,7 +197,7 @@ export default function ApplyPage() {
                    <input 
                      type="email"
                      value={email} onChange={e => setEmail(e.target.value)}
-                     className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 outline-none transition-all"
+                     className="w-full border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-600/30 focus:border-blue-600 outline-none transition-all"
                      style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)', borderColor: 'var(--border-color)', color: 'var(--text)' }}
                      required
                    />
@@ -206,9 +206,9 @@ export default function ApplyPage() {
                    <label className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>
                      <FileText className="w-3.5 h-3.5" /> Resume (PDF)
                    </label>
-                   <label className={`w-full flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl cursor-pointer transition-all ${file ? 'border-indigo-500 bg-indigo-500/5' : 'hover:border-indigo-500/50'}`} style={{ borderColor: file ? undefined : 'var(--border-color)', backgroundColor: file ? undefined : 'color-mix(in srgb, var(--bg) 50%, transparent)' }}>
+                   <label className={`w-full flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl cursor-pointer transition-all ${file ? 'border-blue-600 bg-blue-600/5' : 'hover:border-blue-600/50'}`} style={{ borderColor: file ? undefined : 'var(--border-color)', backgroundColor: file ? undefined : 'color-mix(in srgb, var(--bg) 50%, transparent)' }}>
                      <input type="file" accept=".pdf" className="hidden" onChange={e => setFile(e.target.files?.[0] || null)} required />
-                     <Upload className={`w-6 h-6 mb-3 transition-colors ${file ? 'text-indigo-500' : 'text-slate-400'}`} />
+                     <Upload className={`w-6 h-6 mb-3 transition-colors ${file ? 'text-blue-600' : 'text-slate-400'}`} />
                      <span className="text-xs font-bold" style={{ color: file ? 'var(--primary)' : 'color-mix(in srgb, var(--text) 70%, transparent)' }}>
                         {file ? file.name : 'Click to upload PDF resume'}
                      </span>
@@ -218,7 +218,7 @@ export default function ApplyPage() {
 
                <button type="submit" disabled={isSubmitting || !name || !email || !file} 
                  className={`w-full py-4 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg ${
-                   isSubmitting ? 'bg-indigo-600/50 text-white/50 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/20'
+                   isSubmitting ? 'bg-blue-700/50 text-white/50 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-600 text-white shadow-blue-700/20'
                  }`}>
                  {isSubmitting ? (
                    <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Processing...</>

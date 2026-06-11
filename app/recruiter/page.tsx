@@ -139,13 +139,13 @@ export default function RecruiterDashboard() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-violet-500/30 transition-colors duration-500">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-cyan-500/30 transition-colors duration-500">
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 w-full z-50 border-b border-[var(--border-color)] bg-[var(--bg)]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-violet-500 to-fuchsia-600 text-white font-black text-xs shadow-md group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-500 to-fuchsia-600 text-white font-black text-xs shadow-md group-hover:scale-105 transition-transform">
               OS
             </div>
             <span className="font-bold text-sm tracking-widest uppercase">InterviewOS</span>
@@ -163,8 +163,8 @@ export default function RecruiterDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-violet-600 text-white font-semibold shadow-md' 
-                    : 'text-slate-500 hover:text-violet-500 hover:bg-violet-500/10'
+                    ? 'bg-cyan-600 text-white font-semibold shadow-md' 
+                    : 'text-slate-500 hover:text-cyan-500 hover:bg-cyan-500/10'
                 }`}
               >
                 <tab.icon className="w-4 h-4" /> {tab.label}
@@ -263,14 +263,14 @@ export default function RecruiterDashboard() {
                         </div>
                         <div className="bg-[var(--bg)] rounded-2xl p-4 border border-[var(--border-color)]">
                           <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Proj. Score</div>
-                          <div className="text-2xl font-black text-violet-500">
+                          <div className="text-2xl font-black text-cyan-500">
                             {session.score || '--'}
                           </div>
                         </div>
                       </div>
 
                       <Link href={`/report?sessionId=${session.sessionId}&name=${encodeURIComponent(session.name)}&role=${encodeURIComponent(session.role)}&company=InterviewOS`} className="mt-auto">
-                        <button className="w-full py-3 rounded-xl bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                        <button className="w-full py-3 rounded-xl bg-blue-700/10 hover:bg-blue-700/20 text-blue-700 dark:text-blue-400 border border-blue-600/20 transition-colors text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
                           <Zap className="w-4 h-4" /> Live Spectate
                         </button>
                       </Link>
@@ -309,9 +309,9 @@ export default function RecruiterDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                   {/* KPI Cards */}
                   <div className="lg:col-span-1 flex flex-col gap-4">
-                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-violet-500/50 transition-colors">
-                      <div className="w-14 h-14 rounded-xl bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
-                        <Users className="w-7 h-7 text-violet-500" />
+                    <div className="bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm rounded-2xl p-6 flex items-center gap-4 hover:border-cyan-500/50 transition-colors">
+                      <div className="w-14 h-14 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                        <Users className="w-7 h-7 text-cyan-500" />
                       </div>
                       <div>
                         <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Total Processed</div>
@@ -349,7 +349,7 @@ export default function RecruiterDashboard() {
               )}
 
               {isLoadingDb ? (
-                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
+                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div></div>
               ) : dbReports.length === 0 ? (
                 <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
                   <FileText className="w-12 h-12 text-slate-400 mx-auto mb-4" />
@@ -357,7 +357,7 @@ export default function RecruiterDashboard() {
                   <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">Candidate merit reports will appear here automatically once a simulation is completed.</p>
                   <button 
                     onClick={() => setActiveTab('templates')}
-                    className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white transition-colors rounded-xl text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 inline-flex items-center gap-2"
+                    className="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white transition-colors rounded-xl text-xs font-bold uppercase tracking-widest shadow-md active:scale-95 inline-flex items-center gap-2"
                   >
                     Send Role Invites
                   </button>
@@ -379,7 +379,7 @@ export default function RecruiterDashboard() {
                         Completed: {new Date(report.createdAt).toLocaleDateString()}
                       </div>
                       <Link href={`/report?sessionId=${report.sessionId}&name=${encodeURIComponent(report.candidateName)}&role=${encodeURIComponent(report.role)}&company=${encodeURIComponent(report.company)}`} className="mt-auto">
-                        <button className="w-full py-3 rounded-xl bg-[var(--bg)] hover:bg-violet-600/10 text-[var(--text)] group-hover:text-violet-600 transition-colors border border-[var(--border-color)] group-hover:border-violet-500/50 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
+                        <button className="w-full py-3 rounded-xl bg-[var(--bg)] hover:bg-cyan-600/10 text-[var(--text)] group-hover:text-cyan-600 transition-colors border border-[var(--border-color)] group-hover:border-cyan-500/50 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95">
                           <FileText className="w-4 h-4" /> Full Merit Report
                         </button>
                       </Link>
@@ -407,7 +407,7 @@ export default function RecruiterDashboard() {
               </div>
 
               {isLoadingDb ? (
-                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin"></div></div>
+                <div className="py-20 flex justify-center"><div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin"></div></div>
               ) : dbUsers.length === 0 ? (
                 <div className="border border-[var(--border-color)] bg-[var(--card-bg)] shadow-sm rounded-3xl p-12 text-center">
                   <Users className="w-12 h-12 text-slate-400 mx-auto mb-4" />
@@ -432,7 +432,7 @@ export default function RecruiterDashboard() {
                           <td className="px-6 py-4">
                             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
                               user.role === 'recruiter' 
-                                ? 'bg-violet-500/10 text-violet-600 border-violet-500/20' 
+                                ? 'bg-cyan-500/10 text-cyan-600 border-cyan-500/20' 
                                 : user.role === 'founder'
                                 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
                                 : 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20'
@@ -468,7 +468,7 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-violet-500 to-indigo-600', trackId: 'it_pm' },
+                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-cyan-500 to-blue-700', trackId: 'it_pm' },
                   { role: 'Software Engineer', type: 'Engineering', focus: 'Technical Judgment & Pressure', color: 'from-emerald-500 to-teal-600', trackId: 'fullstack' },
                   { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-500 to-red-600', trackId: 'backend' },
                   { role: 'HR Business Partner', type: 'Operations', focus: 'Conflict & Compliance', color: 'from-fuchsia-500 to-pink-600', trackId: 'qa_engineer' },
