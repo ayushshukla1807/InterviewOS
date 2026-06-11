@@ -320,8 +320,8 @@ function Card({ children, className = '', style = {} }: { children: React.ReactN
     <div
       className={className}
       style={{
-        background: '#111115',
-        border: '1px solid rgba(255,255,255,0.06)',
+        background: 'var(--card-bg)',
+        border: '1px solid var(--border-color)',
         borderRadius: 24,
         padding: 28,
         ...style,
@@ -368,7 +368,7 @@ function ReportContent() {
 
   if (!loaded) {
     return (
-      <div style={{ minHeight: '100vh', background: '#0a0a0c', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ width: 44, height: 44, border: '3px solid rgba(99,102,241,0.2)', borderTopColor: '#6366f1', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -377,9 +377,9 @@ function ReportContent() {
 
   if (!score) {
     return (
-      <div className={outfit.className} style={{ minHeight: '100vh', background: '#0a0a0c', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+      <div className={outfit.className} style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
         <div style={{ fontSize: 56, marginBottom: 4 }}>📋</div>
-        <h2 style={{ color: 'white', fontSize: 22, fontWeight: 800, margin: 0 }}>No Report Data Found</h2>
+        <h2 style={{ color: 'var(--text)', fontSize: 22, fontWeight: 800, margin: 0 }}>No Report Data Found</h2>
         <p style={{ color: 'rgba(148,163,184,0.6)', fontSize: 13, margin: 0 }}>
           Could not find assessment data for session <code style={{ color: '#6366f1' }}>{sessionId || '(none)'}</code>
         </p>
@@ -422,7 +422,7 @@ function ReportContent() {
     <div
       className={outfit.className}
       id="report-root"
-      style={{ minHeight: '100vh', background: '#0a0a0c', color: 'white' }}
+      style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}
     >
       <style>{`
         @media print {
@@ -498,8 +498,8 @@ function ReportContent() {
 
             {/* Hero header */}
             <div style={{
-              background: 'linear-gradient(135deg, #111115 0%, #0d0d14 100%)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              background: 'var(--card-bg)',
+              border: '1px solid var(--border-color)',
               borderRadius: 28,
               padding: '40px 44px',
               position: 'relative',
@@ -557,7 +557,7 @@ function ReportContent() {
                     <div style={{
                       width: 96, height: 96,
                       borderRadius: '50%',
-                      background: '#0a0a0c',
+                      background: 'var(--bg)',
                       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <span style={{ fontSize: 34, fontWeight: 900, color: scoreColor(score.total), lineHeight: 1 }}>{score.total}</span>
@@ -583,7 +583,7 @@ function ReportContent() {
                   <Zap size={15} color="#6366f1" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'white' }}>Direct Skill</p>
+                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>Direct Skill</p>
                   <p style={{ margin: 0, fontSize: 9, color: 'rgba(148,163,184,0.45)', fontWeight: 600, letterSpacing: '0.1em' }}>WEIGHT 15%</p>
                 </div>
               </div>
@@ -603,7 +603,7 @@ function ReportContent() {
                   <Brain size={15} color="#34d399" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'white' }}>Embedded Skills</p>
+                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>Embedded Skills</p>
                   <p style={{ margin: 0, fontSize: 9, color: 'rgba(148,163,184,0.45)', fontWeight: 600, letterSpacing: '0.1em' }}>WEIGHT 35%</p>
                 </div>
               </div>
@@ -623,7 +623,7 @@ function ReportContent() {
                   <TrendingUp size={15} color="#f59e0b" />
                 </div>
                 <div>
-                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'white' }}>Workplace Intelligence</p>
+                  <p style={{ margin: 0, fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>Workplace Intelligence</p>
                   <p style={{ margin: 0, fontSize: 9, color: 'rgba(148,163,184,0.45)', fontWeight: 600, letterSpacing: '0.1em' }}>WEIGHT 50%</p>
                 </div>
               </div>
