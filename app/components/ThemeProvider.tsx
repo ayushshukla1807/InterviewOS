@@ -16,17 +16,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = (localStorage.getItem('theme') as Theme) || 'light';
-    const finalTheme = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'light';
-    setThemeState(finalTheme);
-    document.documentElement.setAttribute('data-theme', finalTheme);
+    setThemeState('dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
     setMounted(true);
   }, []);
 
   const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    setThemeState('dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
   };
 
   return (

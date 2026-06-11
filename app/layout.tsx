@@ -26,7 +26,6 @@ export default function RootLayout({
           <ThemeBackground />
           <div className="mesh-bg" />
           {children}
-          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>
