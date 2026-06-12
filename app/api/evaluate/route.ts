@@ -19,8 +19,8 @@ Analyze the FULL interview transcript, code, and simulation data. Return EXACTLY
   "hiringRisk": "Low" | "Medium" | "High",
 
   "communication": {
-    "clarity": <0-100>,
-    "conciseness": <0-100>,
+    "vocalDelivery": <0-100>,
+    "expressionClarity": <0-100>,
     "structuredCommunication": <0-100>,
     "relevanceToQuestion": <0-100>,
     "verbalFluency": <0-100>,
@@ -28,6 +28,16 @@ Analyze the FULL interview transcript, code, and simulation data. Return EXACTLY
     "totalScore": <0-100>,
     "recruiterInterpretation": "<2-3 sentence strict recruiter interpretation>"
   },
+
+  "interviewQuestionsAsked": [
+    {
+      "question": "<The question asked by the interviewer>",
+      "candidateCode": "<The code candidate wrote for this question, or N/A if not a coding question>",
+      "hintsUtilized": "<Did they use hints or assistance? e.g. 'Needed 2 hints on React state'>",
+      "reactStateReasoning": "<Evaluation of their logic and reasoning>",
+      "implementationCompleteness": "<Evaluation of code completeness>"
+    }
+  ],
 
   "technical": {
     "conceptualUnderstanding": <0-100>,

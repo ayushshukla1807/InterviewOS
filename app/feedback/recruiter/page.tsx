@@ -139,6 +139,29 @@ function RecruiterContent() {
             </div>
           )}
 
+          {/* Communication Skills Highlight */}
+          <div className="bg-[#111111] border border-white/5 rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Communication Skills</p>
+              <span className="text-sm font-black text-indigo-400">Score {((comm.totalScore || 0) / 20).toFixed(1)}/5</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { label: 'Vocal Delivery', value: comm.vocalDelivery || comm.verbalFluency || 0 },
+                { label: 'Expression Clarity', value: comm.expressionClarity || comm.clarity || 0 },
+                { label: 'Structured Communication', value: comm.structuredCommunication || 0 },
+              ].map((m, i) => (
+                <div key={i} className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-bold text-slate-400">{m.label}</span>
+                    <span className="text-[11px] font-black text-white">{(m.value / 20).toFixed(1)}/5</span>
+                  </div>
+                  <ScoreBar value={m.value} color="indigo" />
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Integrity Trust Index & Koyo AI Signals */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="p-6 bg-indigo-600/5 border border-indigo-500/10 rounded-2xl flex items-center justify-between">
@@ -629,9 +652,52 @@ function RecruiterContent() {
           </>
         )}
 
+        {/* ── INTERVIEW QUESTIONS ASKED ── */}
+        {ev.interviewQuestionsAsked && ev.interviewQuestionsAsked.length > 0 && (
+          <section className="space-y-4">
+            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Interview Questions Asked</h2>
+            <div className="space-y-6">
+              {ev.interviewQuestionsAsked.map((q: any, i: number) => (
+                <div key={i} className="bg-[#111111] border border-white/5 rounded-3xl p-6 space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">Question {i + 1}</p>
+                      <h3 className="text-sm font-medium text-white">{q.question}</h3>
+                    </div>
+                  </div>
+                  
+                  {q.candidateCode && q.candidateCode !== "N/A" && (
+                    <div className="space-y-2">
+                      <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Candidate's Code</p>
+                      <pre className="text-[11px] font-mono text-indigo-300/90 overflow-x-auto leading-relaxed bg-[#050508] p-4 rounded-xl border border-white/5">
+                        {q.candidateCode}
+                      </pre>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-white/5 pt-4">
+                    <div className="space-y-1">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Hints Utilized</p>
+                      <p className="text-[11px] font-medium text-slate-300">{q.hintsUtilized}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Logic / State Reasoning</p>
+                      <p className="text-[11px] font-medium text-slate-300">{q.reactStateReasoning}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Implementation Completeness</p>
+                      <p className="text-[11px] font-medium text-slate-300">{q.implementationCompleteness}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ── FINAL VERDICT ── */}
         <section className="space-y-4">
-          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">6. Final Verdict</h2>
+          <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Final Verdict</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-2xl p-6 space-y-3">
               <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Suitable For</p>
