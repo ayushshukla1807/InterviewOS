@@ -12,12 +12,11 @@ import {
   Briefcase, ListTodo, CheckCircle2, Cpu, FileCode, Check, AlertTriangle, RefreshCw, Activity, GripHorizontal
 } from 'lucide-react';
 import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
-
 type Message = { role: 'assistant' | 'user'; content: string; };
-type TabType = 'simulation' | 'code' | 'voice';
+type TabType = 'simulation' | 'code' | 'voice' | 'architecture';
 
 import dynamic from 'next/dynamic';
-const Excalidraw = dynamic(() => import('@excalidraw/excalidraw').then(mod => mod.Excalidraw), { ssr: false });
+import WhiteboardIDE from '../components/WhiteboardIDE';
 import CodeIDE from '../components/CodeIDE';
 
 import { questionEngine } from '../../lib/db/questions';
@@ -657,7 +656,7 @@ function SessionContent() {
            videoRef.current.play();
            initMLTrackers(s, videoRef.current);
         }
-                if (videoRefMirror.current) {
+        if (videoRefMirror.current) {
            videoRefMirror.current.srcObject = s;
            videoRefMirror.current.play();
         }
@@ -673,28 +672,50 @@ function SessionContent() {
            const dataArray = new Uint8Array(bufferLength);
            
            const checkVolume = () => {
-             if (isSpeakingRef.current) {
-                analyser.getByteFrequencyData(dataArray);
-                let sum = 0;
-                for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
-                const avg = sum / bufferLength;
+             if (!isRunning) return; // Stop if terminated
+             analyser.getByteFrequencyData(dataArray);
+             let sum = 0;
+             for (let i = 0; i < bufferLength; i++) sum += dataArray[i];
+             const avg = sum / bufferLength;
+
+             // 1. AI Interruption detection
+             if (isSpeakingRef.current && avg > 40) {
+                console.log('Interruption detected!');
+                window.speechSynthesis.cancel();
+                const fallbackAudio = document.getElementById('ai-voice') as HTMLAudioElement;
+                if (fallbackAudio) fallbackAudio.pause();
                 
-                // If candidate speaks loudly while AI is talking
-                if (avg > 40) {
-                   console.log('Interruption detected!');
-                   window.speechSynthesis.cancel();
-                   const fallbackAudio = document.getElementById('ai-voice') as HTMLAudioElement;
-                   if (fallbackAudio) fallbackAudio.pause();
-                   
-                   // Automatically restart recognition
-                   const micBtn = document.getElementById('mic-toggle-btn');
-                   if (micBtn) micBtn.click();
-                }
+                const micBtn = document.getElementById('mic-toggle-btn');
+                if (micBtn) micBtn.click();
              }
+
+             // 2. Audio Integrity & Voice Proctoring (Detect background whispering/talking)
+             // We flag if: AI is NOT speaking, candidate is NOT supposed to be answering (isListeningRef is false), and volume is high consistently
+             if (!isSpeakingRef.current && !isListeningRef.current && avg > 25) {
+                (window as any).suspiciousAudioFrames = ((window as any).suspiciousAudioFrames || 0) + 1;
+                if ((window as any).suspiciousAudioFrames > 120) { // ~2 seconds of continuous noise
+                   setProctoringLogs(prev => [...prev, { time: new Date().toLocaleTimeString(), event: "Anomalous Audio Detected (Whispering/Background Voices)" }]);
+                   setViolations(prev => {
+                     const next = prev + 1;
+                     setWarningMsg(`Anomalous Audio Detected. Secondary voices or continuous whispering is strictly prohibited. (Warning ${next}/5)`);
+                     setShowWarning(true);
+                     setTimeout(() => setShowWarning(false), 5000);
+                     if (next >= 5) {
+                       setTerminated(true);
+                       setIsRunning(false);
+                     }
+                     return next;
+                   });
+                   (window as any).suspiciousAudioFrames = 0;
+                }
+             } else {
+                (window as any).suspiciousAudioFrames = 0;
+             }
+
              requestAnimationFrame(checkVolume);
            };
            checkVolume();
-        } catch(e) { console.error('Audio interrupt init failed', e); }
+         } catch(e) { console.error('Audio interrupt init failed', e); }
       } catch (err) {
         console.error("Hardware access denied:", err);
         setTerminated(true);
@@ -1325,16 +1346,21 @@ function SessionContent() {
               >
                 <Code2 className="w-3 h-3 inline-block mr-1.5" /> Code
               </button>
+              <button 
+                onClick={() => setActiveTab('architecture')}
+                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'architecture' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
+              >
+                <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Architecture
+              </button>
               {track === 'DYNAMIC' && (
                  <button 
                    onClick={() => setActiveTab('simulation')}
                    className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'simulation' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
                  >
-                   <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Whiteboard
+                   <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Simulation
                  </button>
               )}
            </div>
-
 
            <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-blue-700 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
               <TrendingUp className="w-3.5 h-3.5" /> Negotiate Salary
@@ -1630,6 +1656,15 @@ function SessionContent() {
                           </div>
                        )}
                     </motion.div>
+                  ) : activeTab === 'architecture' ? (
+                     <motion.div 
+                       key="arch"
+                       initial={{ opacity: 0 }}
+                       animate={{ opacity: 1 }}
+                       className="h-full flex overflow-hidden bg-[#050508] relative"
+                     >
+                       <WhiteboardIDE />
+                     </motion.div>
                   ) : (
                    <motion.div 
                      key="c"
