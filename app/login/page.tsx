@@ -147,7 +147,11 @@ function LoginInner() {
     <div className="ios-auth-root">
       {/* Left Panel — Visual */}
       <div className="ios-auth-left">
-        <div className="ios-auth-left-bg" />
+        <div className="ios-auth-left-bg overflow-hidden relative">
+          <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-rose-500/20 blur-[120px] rounded-full mix-blend-screen" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-amber-500/20 blur-[120px] rounded-full mix-blend-screen" />
+          <div className="absolute top-[40%] left-[20%] w-[500px] h-[500px] bg-fuchsia-500/20 blur-[120px] rounded-full mix-blend-screen" />
+        </div>
 
         {/* Brand */}
         <motion.div

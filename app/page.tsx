@@ -105,7 +105,9 @@ function LandingPageContent() {
           style={{ backgroundImage: 'url(/hero-bg.png)', mixBlendMode: 'overlay' }} 
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg)]/70 to-[var(--bg)]" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-indigo-500/10 blur-[120px] rounded-full" />
+        <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-fuchsia-500/10 blur-[150px] rounded-full mix-blend-screen" />
+        <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-rose-500/10 blur-[150px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-[-10%] left-[20%] w-[800px] h-[800px] bg-amber-500/10 blur-[150px] rounded-full mix-blend-screen" />
       </div>
 
       {/* Nav */}
@@ -140,7 +142,7 @@ function LandingPageContent() {
           </div>
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1]" style={{ color: 'var(--text)' }}>
             Experience the <br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(to right, var(--primary), #8b5cf6)' }}>
+            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6)' }}>
               Future of AI Hiring
             </span>
           </h1>
@@ -228,7 +230,7 @@ function LandingPageContent() {
                       className={`p-4 rounded-2xl border text-left transition-all space-y-2 ${
                         selectedRole?.id === role.id
                           ? `${CAT_RING[role.color]} border-2 shadow-md`
-                          : 'shadow-sm hover:shadow-md'
+                          : 'shadow-lg hover:shadow-2xl'
                       }`}
                       style={{ backgroundColor: 'var(--card-bg)', borderColor: selectedRole?.id === role.id ? undefined : 'var(--border-color)' }}
                     >
@@ -356,12 +358,12 @@ function LandingPageContent() {
                   <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">View past assessments, download verified certificates, and follow your AI learning roadmap</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
                     <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Personalised Paths</span>
                     <p className="text-sm font-bold text-[var(--text)]">AI Learning Roadmap</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Customised skill improvement checklists based on your actual interview results.</p>
                   </Link>
-                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
                     <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Verified Badge</span>
                     <p className="text-sm font-bold text-[var(--text)]">Shareable Certificate</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Download and share elegant completion certificates with unique verification hashes.</p>
@@ -381,12 +383,12 @@ function LandingPageContent() {
                   <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Create job listings, send candidate invite links, audit proctor logs, evaluate competency radars</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
                     <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Visual Proctoring</span>
                     <p className="text-sm font-bold text-[var(--text)]">Neural Integrity Audit Log</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Gaze tracking, tab-switch violations, and screen-sharing audit snapshots.</p>
                   </Link>
-                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
+                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-indigo-500">
                     <span className="text-[10px] font-bold text-violet-500 uppercase tracking-widest">Analytics</span>
                     <p className="text-sm font-bold text-[var(--text)]">Competency Radar Grid</p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">16-point merit reports with hiring-readiness scores and risk flags.</p>

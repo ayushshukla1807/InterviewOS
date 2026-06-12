@@ -157,7 +157,7 @@ export default function CandidateDashboard() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-6"
           >
-            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(59,130,246,0.4)] hover:scale-105 transition-all duration-300">
+            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-violet-600 via-fuchsia-600 to-rose-600 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(217,70,239,0.4)] hover:scale-105 transition-all duration-300">
               <Shield className="w-7 h-7 text-white" />
             </Link>
             <div>
@@ -195,7 +195,7 @@ export default function CandidateDashboard() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(79,70,229,0.4)] hover:shadow-[0_0_30px_rgba(79,70,229,0.6)]"
+                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-105 active:scale-95"
               >
                 Start New Simulation
               </motion.button>
@@ -213,7 +213,7 @@ export default function CandidateDashboard() {
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} className="glass-card p-8 space-y-6 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <Star className="w-4 h-4 text-blue-400" /> Account Profile
+                <Star className="w-4 h-4 text-amber-400" /> Account Profile
               </h2>
               
               <div className="flex items-center justify-between p-4 bg-black/20 border border-white/5 rounded-2xl backdrop-blur-md">
@@ -236,17 +236,17 @@ export default function CandidateDashboard() {
                   navigator.clipboard.writeText(url);
                   alert('Public Profile Link copied to clipboard!');
                 }}
-                className="w-full py-4 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-xl text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]"
               >
                 <Share2 className="w-4 h-4" /> Share Verified Profile
               </motion.button>
 
               <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-5 bg-black/20 border border-white/5 rounded-2xl">
+                <div className="p-5 bg-black/40 border border-white/10 rounded-2xl shadow-xl hover:border-fuchsia-500/30 transition-colors">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Completed</span>
                   <p className="text-3xl font-black text-white mt-2">{pastInterviews.length}</p>
                 </div>
-                <div className="p-5 bg-black/20 border border-white/5 rounded-2xl">
+                <div className="p-5 bg-black/40 border border-white/10 rounded-2xl shadow-xl hover:border-fuchsia-500/30 transition-colors">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Avg Score</span>
                   <p className="text-3xl font-black text-emerald-400 mt-2 text-shadow-sm">
                     {pastInterviews.length > 0 
