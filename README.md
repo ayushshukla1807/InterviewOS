@@ -1,76 +1,105 @@
-# InterviewOS V2 🚀
+<div align="center">
+  <img src="public/icon.svg" alt="InterviewOS Logo" width="100" />
+  <h1>InterviewOS</h1>
+  <p><strong>AI-Native Technical Hiring Platform & Workplace Simulation Engine</strong></p>
+</div>
 
-A simulation-first platform designed to test candidates by dropping them into a living workplace environment, followed by a voice-based technical interview that grills them on their decisions. 
+---
 
-Standard multiple-choice tests and algorithmic coding puzzles are easy to game. InterviewOS does something different: it compresses weeks of workplace decisions, stakeholder conflicts, and coding tasks into a stateful 40-minute simulation, analyzing behavioral traits and real-world execution.
+**InterviewOS** is a next-generation hiring platform that replaces static algorithmic tests with a fully dynamic, AI-driven workplace simulation. Candidates are dropped into a simulated environment complete with stakeholder conflicts, realistic codebase changes, and a post-simulation live AI voice interview that grills them on their decisions.
 
 Live Demo: [interviewos-ytph.onrender.com](https://interviewos-ytph.onrender.com)
 
 ---
 
-## The Workflow
+## 🌟 Core Features
 
-### 1. The Immersive Workspace (Act 1 / 2 / 3)
-Instead of answering questions, the candidate enters a simulated operating system complete with:
-*   **Inbox & Slack Channels:** Where stakeholders (Product Managers, Engineers, VPs, and Clients) send messages, file bugs, and demand updates.
-*   **Dynamic Stakeholder Memory:** Each stakeholder has active states tracking their Trust, Frustration, and Cooperation. Your responses (or lack thereof) modify these states.
-*   **Consequence & Escalation Engine:** Ignoring an urgent client bug causes them to lose trust, eventually resulting in angry follow-up emails and a direct escalation to your VP.
-*   **Ambiguity Engine:** Messages are intentionally messy. They contain missing requirements, contradictory requests from product and sales, or unclear priorities.
-*   **Integrated Monaco Code IDE:** Mid-simulation events trigger coding challenges. Candidates write code in a full split-screen Monaco editor with syntax highlighting, autocomplete, and live error checking.
+### 1. The Immersive Workspace (Simulation Engine)
+Instead of answering multiple-choice questions, the candidate enters a stateful simulated operating system:
+*   **Inbox & Slack Channels:** Stakeholders (Product Managers, Engineers, VPs, and Clients) send messages, file bugs, and demand updates dynamically.
+*   **Dynamic Stakeholder Memory:** Each stakeholder tracks Trust, Frustration, and Cooperation states based on candidate responses.
+*   **Ambiguity & Conflict Engine:** Messages contain missing requirements and contradictory requests to evaluate how candidates manage uncertainty.
+*   **Integrated Monaco IDE:** Built-in Monaco editor for live coding tasks triggered by simulation events (e.g., "A critical bug in production!").
 
-### 2. Live Voice Interview (Context Carryover)
-Immediately after the simulation, the candidate enters a voice interview with an AI recruiter. 
-*   **Simulation Behavior Ingestion (RAG):** The AI doesn't just read a list of static questions. It natively ingests the exact log of the candidate's simulation (response times, communication style, priorities, code output, and stakeholder relations).
-*   **Direct Cross-Questioning:** The interviewer questions the candidate about their actual trade-offs. (e.g. *"I noticed you ignored Priya's design feedback to rush Sarah's CSV export feature. Why did you prioritize the client's feature over team alignment?"*).
-*   **Interruptible Audio:** The system uses a Web Audio API `AnalyserNode` to constantly monitor candidate microphone volume. If the candidate speaks over the AI, it instantly cancels its own speech and listens to the candidate.
-*   **Dynamic Audio Visualizer:** A glowing waveform visualizer reacts in real-time when the AI speaks, giving the UI an immersive "JARVIS" aesthetic.
+### 2. Live AI Voice Interview (RAG & WebRTC)
+Immediately after the simulation, the candidate enters a real-time voice interview with an AI.
+*   **Contextual Cross-Questioning:** The AI natively ingests the exact log of the candidate's simulation (priorities, code output, stakeholder relations) and questions their trade-offs. (e.g. *"I noticed you ignored Priya's design feedback to rush the CSV export feature. Why did you prioritize the client's feature over team alignment?"*).
+*   **Interruptible Audio:** Powered by a Web Audio API `AnalyserNode`, the AI constantly monitors microphone volume and stops speaking instantly if the candidate interrupts.
+*   **Dynamic UI Elements:** A glowing waveform visualizer reacts in real-time when the AI speaks.
 
 ### 3. Fortress Proctoring
-*   **Visual Gaze Tracking:** Uses a WebAssembly build of **MediaPipe FaceLandmarker** in the browser to track eye movement and detect when a candidate keeps looking away.
-*   **Window Integrity:** Uses the native Page Visibility API to detect tab switching, incrementing violation strikes.
-*   **Copy/Paste Blocks:** Natively intercepts and prevents copy/paste actions to prevent external code injection.
-*   *Everything runs client-side inside the browser. No video is ever sent to a server, keeping candidate data secure and private.*
+*   **Visual Gaze Tracking:** Uses a WebAssembly build of **MediaPipe FaceLandmarker** locally in the browser to track eye movement and detect when a candidate looks away.
+*   **Window Integrity:** Uses the Page Visibility API to detect tab switching.
+*   **Strict Execution:** All tracking runs entirely client-side. No video is transmitted, preserving maximum candidate privacy.
 
-### 4. Recruiter Analytics
-*   **Behavioral Intelligence Graph:** Visualizes the candidate's trade-off handling (long-term roadmap vs. immediate fire fighting, client happiness vs. internal technical debt, flexibility under pressure).
-*   **Predictive Match Score:** Combines behavioral scores, code quality, resume fit, and proctoring integrity flags to output hiring probability.
-
----
-
-## Tech Stack
-
-*   **App Core:** Next.js 16 (App Router with Turbopack)
-*   **Database & API:** Serverless Next.js route handlers
-*   **AI Models:** Gemini 2.5 Flash (Conversational Core & RAG), OpenAI TTS `tts-1` (Natural voice generation)
-*   **In-Browser ML:** MediaPipe FaceLandmarker WebAssembly, Web Audio API AnalyzerNode
-*   **Procedural Audio:** Custom `SFXEngine` using `OscillatorNode` for zero-dependency UI sounds
-*   **Editor:** Monaco Editor (`@monaco-editor/react`)
-*   **Styling:** HSL-based Tailwind CSS, Framer Motion
+### 4. Recruiter Analytics & Real-Time Tracking
+*   **Behavioral Intelligence Graph:** Analyzes trade-offs (long-term roadmap vs. immediate fire fighting).
+*   **Live Dashboard:** Real-time monitoring of active candidate sessions.
 
 ---
 
-## Running Locally
+## 🏗️ Architecture & Tech Stack
 
-1. Clone the repository:
+This platform is architected to handle complex, asynchronous AI workloads at scale with secure execution environments.
+
+### Frontend
+*   **Framework:** Next.js 16 (App Router with Turbopack)
+*   **Editor & Whiteboard:** `@monaco-editor/react`, `@excalidraw/excalidraw`
+*   **Styling & Animation:** Tailwind CSS (v4), Framer Motion, Recharts
+*   **Audio/Video:** Web Audio API, `MediaPipe` WebAssembly
+
+### Backend & AI
+*   **Runtime:** Serverless Next.js Edge Route Handlers
+*   **Database:** MongoDB (Mongoose ODM)
+*   **AI Models:** Google Gemini 2.5 Flash (Conversational Core & RAG), OpenAI TTS `tts-1` (Natural voice generation)
+*   **Authentication:** Custom JWT-based Edge Authentication using `jose` and `bcryptjs`
+*   **Payments & Storage:** Stripe API, AWS S3 (Presigned URLs)
+
+---
+
+## 🚀 Running Locally
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/ayushshukla1807/InterviewOS.git
    cd InterviewOS
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. Create a `.env.local` file in the root:
+3. **Configure Environment Variables:**
+   Create a `.env.local` file in the root directory:
    ```env
+   # AI Providers
    GEMINI_API_KEY=your_gemini_api_key
    OPENAI_API_KEY=your_openai_api_key
+
+   # Database & Auth
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your_secure_jwt_secret
+
+   # Storage (AWS S3)
+   AWS_REGION=your_aws_region
+   AWS_ACCESS_KEY_ID=your_access_key
+   AWS_SECRET_ACCESS_KEY=your_secret_key
+   AWS_S3_BUCKET=your_s3_bucket_name
+   
+   # Payments (Optional for dev)
+   STRIPE_SECRET_KEY=your_stripe_secret
    ```
 
-4. Launch the development server:
+4. **Launch the development server:**
    ```bash
    npm run dev
    ```
 
-5. Visit `http://localhost:3000` inside your browser.
+5. **Visit the app:**
+   Open `http://localhost:3000` in your browser.
+
+---
+
+## 📄 License
+This project is for demonstration and portfolio purposes.
