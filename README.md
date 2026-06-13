@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="public/icon.svg" alt="InterviewOS Logo" width="100" />
   <h1>InterviewOS</h1>
   <p><strong>AI-Native Technical Hiring Platform & Workplace Simulation Engine</strong></p>
 </div>
