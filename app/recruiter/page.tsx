@@ -135,16 +135,16 @@ export default function RecruiterDashboard() {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-cyan-500/30 transition-colors duration-500 relative bg-[#020617] overflow-hidden">
-      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none" />
+    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-emerald-500/30 transition-colors duration-500 relative bg-[var(--theme-bg)] overflow-hidden">
+      <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-emerald-600/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="mesh-bg" />
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[#020617]/80 backdrop-blur-xl">
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[var(--theme-bg)]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-cyan-400 to-blue-600 text-white font-black text-xs shadow-[0_0_15px_rgba(34,211,238,0.4)] group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-black text-xs shadow-[0_0_15px_rgba(34,211,238,0.4)] group-hover:scale-105 transition-transform">
               OS
             </div>
             <span className="font-bold text-sm tracking-widest uppercase text-white">Recruiter OS</span>
@@ -162,8 +162,8 @@ export default function RecruiterDashboard() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-cyan-500/20 text-cyan-400 shadow-md border border-cyan-500/30' 
-                    : 'text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent'
+                    ? 'bg-emerald-500/20 text-emerald-400 shadow-md border border-emerald-500/30' 
+                    : 'text-slate-400 hover:text-cyan-300 hover:bg-emerald-500/10 border border-transparent'
                 }`}
               >
                 <tab.icon className="w-3.5 h-3.5" /> {tab.label}
@@ -184,7 +184,7 @@ export default function RecruiterDashboard() {
             </button>
             <button 
               onClick={() => setShowBulkInviteModal(true)}
-              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.3)] active:scale-95"
+              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-500 to-sky-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.3)] active:scale-95"
             >
               <Users className="w-3.5 h-3.5" /> Bulk Invite (CSV)
             </button>
@@ -224,15 +224,15 @@ export default function RecruiterDashboard() {
                 <div className="space-y-4 mb-6">
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Name</label>
-                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="John Doe" />
+                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-[var(--theme-bg)]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none" placeholder="John Doe" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Candidate Email</label>
-                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="john@example.com" />
+                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-[var(--theme-bg)]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none" placeholder="john@example.com" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Target Role</label>
-                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-[#020617]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-cyan-500 outline-none" placeholder="Software Engineer" />
+                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-[var(--theme-bg)]/80 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none" placeholder="Software Engineer" />
                   </div>
                 </div>
 
@@ -379,13 +379,13 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {liveSessions.length === 0 ? (
-                  <div className="col-span-full py-32 text-center rounded-[40px] border border-cyan-500/10 bg-[#020617]/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(6,182,212,0.05)] flex flex-col items-center justify-center relative overflow-hidden group">
+                  <div className="col-span-full py-32 text-center rounded-[40px] border border-emerald-500/10 bg-[var(--theme-bg)]/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(6,182,212,0.05)] flex flex-col items-center justify-center relative overflow-hidden group">
                     {/* Scanning Background Grid */}
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
                     
                     {/* Radar Sweep Effect */}
                     <motion.div 
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/10 to-transparent w-[200%] h-[200%] origin-center -ml-[50%] -mt-[50%]"
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/10 to-transparent w-[200%] h-[200%] origin-center -ml-[50%] -mt-[50%]"
                       animate={{ rotate: 360 }}
                       transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
                       style={{ transformOrigin: 'center' }}
@@ -394,24 +394,24 @@ export default function RecruiterDashboard() {
                     {/* Central Icon Hologram */}
                     <div className="relative mb-8 z-10">
                       {/* Pulse Rings */}
-                      <motion.div className="absolute -inset-8 border border-cyan-500/30 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }} transition={{ duration: 4, repeat: Infinity }} />
-                      <motion.div className="absolute -inset-16 border border-blue-500/20 rounded-full" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }} transition={{ duration: 4, delay: 1, repeat: Infinity }} />
+                      <motion.div className="absolute -inset-8 border border-emerald-500/30 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }} transition={{ duration: 4, repeat: Infinity }} />
+                      <motion.div className="absolute -inset-16 border border-emerald-500/20 rounded-full" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }} transition={{ duration: 4, delay: 1, repeat: Infinity }} />
                       
-                      <div className="w-24 h-24 bg-[#050b14] rounded-full flex items-center justify-center border-2 border-cyan-500/40 shadow-[0_0_40px_rgba(6,182,212,0.4)] relative z-10">
-                        <Activity className="w-10 h-10 text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                      <div className="w-24 h-24 bg-[#050b14] rounded-full flex items-center justify-center border-2 border-emerald-500/40 shadow-[0_0_40px_rgba(6,182,212,0.4)] relative z-10">
+                        <Activity className="w-10 h-10 text-emerald-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
                       </div>
                     </div>
 
-                    <h3 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500 uppercase tracking-[0.2em] mb-4 z-10 drop-shadow-lg">Awaiting Neural Link</h3>
+                    <h3 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-emerald-500 uppercase tracking-[0.2em] mb-4 z-10 drop-shadow-lg">Awaiting Neural Link</h3>
                     <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.3em] z-10 max-w-sm leading-relaxed text-center">System is actively scanning for incoming candidate simulation streams. Live feeds will materialize here instantaneously.</p>
                     
-                    <div className="mt-10 flex items-center gap-3 z-10 bg-cyan-500/10 border border-cyan-500/20 px-6 py-2 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                    <div className="mt-10 flex items-center gap-3 z-10 bg-emerald-500/10 border border-emerald-500/20 px-6 py-2 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.15)]">
                       <div className="flex gap-1.5 items-center">
                         {[0,1,2].map(i => (
-                          <motion.div key={i} className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)]" animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }} />
+                          <motion.div key={i} className="w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)]" animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }} />
                         ))}
                       </div>
-                      <span className="text-[9px] font-black uppercase text-cyan-400 tracking-[0.2em]">Scanning Sector Alpha</span>
+                      <span className="text-[9px] font-black uppercase text-emerald-400 tracking-[0.2em]">Scanning Sector Alpha</span>
                     </div>
                   </div>
                 ) : (
@@ -451,7 +451,7 @@ export default function RecruiterDashboard() {
                         </div>
                         <div className="bg-black/20 rounded-2xl p-5 border border-white/5">
                           <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2">Proj. Score</div>
-                          <div className="text-3xl font-black text-cyan-400">
+                          <div className="text-3xl font-black text-emerald-400">
                             {session.score || '--'}
                           </div>
                         </div>
@@ -461,7 +461,7 @@ export default function RecruiterDashboard() {
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="w-full py-4 rounded-xl bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+                          className="w-full py-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-blue-400 border border-emerald-500/30 transition-all text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(59,130,246,0.2)]"
                         >
                           <Zap className="w-4 h-4" /> Live Spectate
                         </motion.button>
@@ -503,9 +503,9 @@ export default function RecruiterDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
                   {/* KPI Cards */}
                   <div className="lg:col-span-1 flex flex-col gap-6">
-                    <div className="glass-card border-none shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-cyan-500/50 transition-colors">
-                      <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
-                        <Users className="w-8 h-8 text-cyan-400" />
+                    <div className="glass-card border-none shadow-lg rounded-3xl p-8 flex items-center gap-6 hover:border-emerald-500/50 transition-colors">
+                      <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+                        <Users className="w-8 h-8 text-emerald-400" />
                       </div>
                       <div>
                         <div className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1">Total Processed</div>
@@ -553,10 +553,10 @@ export default function RecruiterDashboard() {
               )}
 
               {isLoadingDb ? (
-                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbReports.length === 0 ? (
                 <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
-                  <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
+                  <div className="w-20 h-20 bg-emerald-500/10 rounded-3xl flex items-center justify-center mb-6 border border-emerald-500/20">
                     <FileText className="w-10 h-10 text-blue-400" />
                   </div>
                   <h3 className="text-xl font-black uppercase text-white mb-3 tracking-tight">No Reports Yet</h3>
@@ -580,13 +580,13 @@ export default function RecruiterDashboard() {
                       key={report._id} 
                       className="glass-card border-none shadow-lg rounded-xl p-8 flex flex-col group relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[40px] rounded-full pointer-events-none transition-all duration-500 group-hover:bg-blue-500/20" />
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[40px] rounded-full pointer-events-none transition-all duration-500 group-hover:bg-emerald-500/20" />
                       
                       <div className="flex justify-between items-start mb-6">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="text-xl font-black text-white tracking-tight">{report.candidateName}</h3>
-                            <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/30 rounded text-[8px] font-black uppercase tracking-widest">Top {topPercentile}%</span>
+                            <span className="px-2 py-0.5 bg-emerald-500/10 text-blue-400 border border-emerald-500/30 rounded text-[8px] font-black uppercase tracking-widest">Top {topPercentile}%</span>
                           </div>
                           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{report.role} · {report.company}</p>
                         </div>
@@ -610,7 +610,7 @@ export default function RecruiterDashboard() {
                         <motion.button 
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="w-full py-4 rounded-xl bg-white/5 hover:bg-cyan-500/10 text-white group-hover:text-cyan-400 transition-colors border-none group-hover:border-cyan-500/50 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm"
+                          className="w-full py-4 rounded-xl bg-white/5 hover:bg-emerald-500/10 text-white group-hover:text-emerald-400 transition-colors border-none group-hover:border-emerald-500/50 text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-sm"
                         >
                           <FileText className="w-4 h-4" /> Full Merit Report
                         </motion.button>
@@ -640,10 +640,10 @@ export default function RecruiterDashboard() {
               </div>
 
               {isLoadingDb ? (
-                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(34,211,238,0.5)]"></div></div>
               ) : dbUsers.length === 0 ? (
                 <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
-                  <div className="w-20 h-20 bg-blue-500/10 rounded-3xl flex items-center justify-center mb-6 border border-blue-500/20">
+                  <div className="w-20 h-20 bg-emerald-500/10 rounded-3xl flex items-center justify-center mb-6 border border-emerald-500/20">
                     <Users className="w-10 h-10 text-blue-400" />
                   </div>
                   <h3 className="text-xl font-black uppercase text-white mb-2 tracking-tight">No Users Found</h3>
@@ -652,7 +652,7 @@ export default function RecruiterDashboard() {
                 <div className="overflow-hidden border-none shadow-xl rounded-xl glass-card">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                      <thead className="bg-[#020617]/80 border-b border-white/10">
+                      <thead className="bg-[var(--theme-bg)]/80 border-b border-white/10">
                         <tr>
                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Name</th>
                           <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-slate-400">Email</th>
@@ -668,7 +668,7 @@ export default function RecruiterDashboard() {
                             <td className="px-8 py-5">
                               <span className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border shadow-sm ${
                                 user.role === 'recruiter' 
-                                  ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' 
+                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
                                   : user.role === 'founder'
                                   ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                                   : 'bg-slate-500/10 text-slate-300 border-slate-500/30'
@@ -705,7 +705,7 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[
-                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-cyan-500 to-blue-600', trackId: 'it_pm' },
+                  { role: 'Product Manager', type: 'Tech & Strategy', focus: 'Prioritization & Stakeholders', color: 'from-emerald-500 to-emerald-600', trackId: 'it_pm' },
                   { role: 'Software Engineer', type: 'Engineering', focus: 'Technical Judgment & Pressure', color: 'from-emerald-400 to-teal-600', trackId: 'fullstack' },
                   { role: 'Account Executive', type: 'Sales', focus: 'Pipeline & Communication', color: 'from-orange-400 to-red-600', trackId: 'backend' },
                   { role: 'HR Business Partner', type: 'Operations', focus: 'Conflict & Compliance', color: 'from-fuchsia-400 to-pink-600', trackId: 'qa_engineer' },
@@ -716,7 +716,7 @@ export default function RecruiterDashboard() {
                     className="glass-card border-none shadow-lg rounded-xl p-8 relative overflow-hidden group"
                   >
                     <div className={`absolute -top-10 -right-10 w-48 h-48 bg-gradient-to-br ${b.color} opacity-20 blur-[50px] group-hover:opacity-40 transition-opacity duration-500`} />
-                    <div className="inline-block px-3 py-1.5 bg-[#020617]/80 border-none rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-300 mb-6 shadow-sm backdrop-blur-md">
+                    <div className="inline-block px-3 py-1.5 bg-[var(--theme-bg)]/80 border-none rounded-lg text-[9px] font-black uppercase tracking-widest text-slate-300 mb-6 shadow-sm backdrop-blur-md">
                       {b.type}
                     </div>
                     <h3 className="text-2xl font-black tracking-tight mb-2 text-white">{b.role}</h3>

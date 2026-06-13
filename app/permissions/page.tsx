@@ -81,7 +81,7 @@ function PermissionsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col font-sans selection:bg-indigo-500/30 transition-colors duration-500">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col font-sans selection:bg-sky-500/30 transition-colors duration-500">
       
       {/* Top Banner */}
       <div className="text-center py-12 px-6">
@@ -91,8 +91,8 @@ function PermissionsContent() {
           className="space-y-4"
         >
           <div className="flex justify-center">
-             <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-indigo-500" />
+             <div className="w-12 h-12 rounded-2xl bg-sky-600/10 border border-sky-500/20 flex items-center justify-center">
+                <Shield className="w-6 h-6 text-sky-500" />
              </div>
           </div>
           <div>
@@ -166,7 +166,7 @@ function PermissionsContent() {
                         Active
                       </>
                     ) : (
-                      <button onClick={requestHardware} className="px-4 py-2 bg-indigo-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Enable Feed</button>
+                      <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Enable Feed</button>
                     )}
                   </div>
                 </div>
@@ -188,7 +188,7 @@ function PermissionsContent() {
                       Synced
                     </>
                   ) : (
-                    <button onClick={requestHardware} className="px-4 py-2 bg-indigo-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Sync Mic</button>
+                    <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Sync Mic</button>
                   )}
                 </div>
               </div>
@@ -205,7 +205,7 @@ function PermissionsContent() {
                 {!permissions.screen ? (
                   <button 
                     onClick={handleScreenShare}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-indigo-500 transition-all"
+                    className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all"
                   >
                     Share Screen
                   </button>
@@ -229,7 +229,7 @@ function PermissionsContent() {
                 {!permissions.fullscreen ? (
                   <button 
                     onClick={handleFullScreen}
-                    className="px-4 py-2 bg-indigo-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase tracking-widest hover:opacity-90 transition-all"
+                    className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase tracking-widest hover:opacity-90 transition-all"
                   >
                     Enter Focus
                   </button>
@@ -242,7 +242,7 @@ function PermissionsContent() {
               </div>
 
               <div className="pt-8 flex items-center gap-3 bg-[var(--card-bg)] p-4 rounded-2xl border border-[var(--border-color)]">
-                 <Info className="w-4 h-4 text-indigo-500 shrink-0" />
+                 <Info className="w-4 h-4 text-sky-500 shrink-0" />
                  <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-wider">
                    By proceeding, you agree to the proctoring guidelines. AI will monitor gaze, environmental audio, and screen integrity to ensure a fair assessment for all candidates.
                  </p>
@@ -268,7 +268,7 @@ function PermissionsContent() {
               disabled={!allGranted || isInitializing}
               className={`min-w-[200px] px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all relative overflow-hidden ${
                 allGranted 
-                  ? 'bg-indigo-600 text-white shadow-[0_0_40px_rgba(79,70,229,0.4)] cursor-pointer' 
+                  ? 'bg-sky-600 text-white shadow-[0_0_40px_rgba(79,70,229,0.4)] cursor-pointer' 
                   : 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-[var(--border-color)]'
               }`}
             >

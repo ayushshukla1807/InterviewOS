@@ -588,6 +588,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
+          recruiterId: blueprint.recruiterId,
+          jobId: blueprint.jobId,
           candidateName: blueprint.candidateName || 'Candidate',
           sessionId,
           role: blueprint.role,
@@ -650,7 +652,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         {/* Header */}
         <div className="border-b px-8 py-4 flex items-center justify-between" style={{ borderColor: t.border, backgroundColor: t.surface }}>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-xs font-black">OS</div>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-sky-600 flex items-center justify-center text-xs font-black">OS</div>
             <div>
               <div className="text-sm font-semibold text-gray-100">HYRTE Simulation</div>
               <div className="text-xs text-gray-500">{blueprint.role} · {blueprint.company}</div>
@@ -688,11 +690,11 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {questions.map((q, qi) => (
               <div key={q.id} className="glass-card hud-border p-6 space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-xs font-black text-indigo-400 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-xs font-black text-sky-400 shrink-0">
                     {qi + 1}
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-indigo-400 mb-2">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2">
                       {q.type === 'priority_decision' ? '⚡ Priority Decision' :
                        q.type === 'data_analysis' ? '📊 Data Analysis' :
                        q.type === 'scenario_judgment' ? '🎯 Scenario Judgment' : '💬 Open Ended'}
@@ -738,7 +740,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     {q.options.map((opt, oi) => (
                       <label key={oi} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
                         preSkillAnswers[q.id] === opt
-                          ? 'border-indigo-500/50 bg-indigo-500/10'
+                          ? 'border-sky-500/50 bg-sky-500/10'
                           : 'border-white/6 bg-transparent hover:border-white/15'
                       }`}>
                         <input
@@ -747,7 +749,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                           value={opt}
                           checked={preSkillAnswers[q.id] === opt}
                           onChange={() => setPreSkillAnswers(prev => ({ ...prev, [q.id]: opt }))}
-                          className="mt-0.5 accent-indigo-500"
+                          className="mt-0.5 accent-sky-500"
                         />
                         <span className="text-sm text-gray-300">{opt}</span>
                       </label>
@@ -757,7 +759,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       value={preSkillAnswers[`${q.id}_reason`] || ''}
                       onChange={e => setPreSkillAnswers(prev => ({ ...prev, [`${q.id}_reason`]: e.target.value }))}
                       placeholder="Explain your reasoning... (evaluated for depth and data-driven thinking)"
-                      className="w-full mt-2 h-24 bg-black/40 border border-[var(--border-color)] rounded-xl p-3 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-cyan-500/40"
+                      className="w-full mt-2 h-24 bg-black/40 border border-[var(--border-color)] rounded-xl p-3 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-emerald-500/40"
                     />
                   </div>
                 ) : (
@@ -767,7 +769,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       onChange={e => setPreSkillAnswers(prev => ({ ...prev, [q.id]: e.target.value }))}
                       placeholder="Your answer..."
                       rows={5}
-                      className="w-full bg-black/40 border border-[var(--border-color)] rounded-xl p-4 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-cyan-500/40"
+                      className="w-full bg-black/40 border border-[var(--border-color)] rounded-xl p-4 text-sm font-mono text-cyan-50 outline-none resize-none placeholder-slate-600 focus:border-emerald-500/40"
                     />
                   </div>
                 )}
@@ -1634,7 +1636,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
          drag
          dragMomentum={false}
          dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
-         className="fixed bottom-6 right-6 z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-cyan-500/50 transition-colors"
+         className="fixed bottom-6 right-6 z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-emerald-500/50 transition-colors"
       >
          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <GripHorizontal className="w-5 h-5 text-white/70 drop-shadow-md" />
@@ -1655,13 +1657,13 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                </div>
             )}
             <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.6)] z-10" />
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[#020617]/80/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[var(--theme-bg)]/80/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
                <div className="w-1.5 h-1.5 rounded-full animate-pulse bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                <span className="text-[7px] font-black tracking-widest text-slate-200 uppercase drop-shadow-sm">
                   Secure Pilot
                </span>
             </div>
-            <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-[#020617]/80/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
+            <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-[var(--theme-bg)]/80/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
                Feed: Candidate Camera
             </div>
          </div>

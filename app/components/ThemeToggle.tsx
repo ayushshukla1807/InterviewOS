@@ -27,7 +27,7 @@ export function ThemeToggle() {
         onClick={() => setTheme('dark')}
         className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all ${
           theme === 'dark' 
-            ? 'bg-indigo-500 text-white shadow-sm' 
+            ? 'bg-sky-500 text-white shadow-sm' 
             : 'text-slate-500 hover:text-slate-800'
         }`}
       >

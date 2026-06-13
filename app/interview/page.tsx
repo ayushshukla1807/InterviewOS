@@ -75,7 +75,7 @@ export default function InterviewPage() {
 
   if (!track) {
     return (
-      <div className="min-h-screen bg-[#020617] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[var(--theme-bg)] flex items-center justify-center p-6">
         <div className="max-w-4xl w-full space-y-12">
           <div className="text-center space-y-4">
             <h1 className="text-4xl font-black text-white tracking-tighter uppercase">Select Your Evaluation Track</h1>
@@ -88,17 +88,17 @@ export default function InterviewPage() {
                 key={key}
                 disabled={isUploading}
                 onClick={() => startInterview(key)}
-                className={`glass-card p-10 rounded-[40px] text-left hover:border-indigo-500 transition-all group relative overflow-hidden ${isUploading ? 'opacity-50 grayscale' : ''}`}
+                className={`glass-card p-10 rounded-[40px] text-left hover:border-sky-500 transition-all group relative overflow-hidden ${isUploading ? 'opacity-50 grayscale' : ''}`}
               >
                 {isUploading && (
-                  <div className="absolute inset-0 bg-indigo-600/20 backdrop-blur-sm flex items-center justify-center z-10">
+                  <div className="absolute inset-0 bg-sky-600/20 backdrop-blur-sm flex items-center justify-center z-10">
                     <div className="flex flex-col items-center gap-4">
-                      <div className="w-10 h-10 border-4 border-indigo-500 border-t-white rounded-full animate-spin" />
+                      <div className="w-10 h-10 border-4 border-sky-500 border-t-white rounded-full animate-spin" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-white">Neural Parsing...</span>
                     </div>
                   </div>
                 )}
-                <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-100 group-hover:text-indigo-400 transition-all">
+                <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-100 group-hover:text-sky-400 transition-all">
                   <Sparkles className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-black text-white mb-4 leading-tight">{TRACKS[key].title}</h3>
@@ -116,7 +116,7 @@ export default function InterviewPage() {
   }
 
   return (
-    <div className="h-screen bg-[#020617] flex flex-col">
+    <div className="h-screen bg-[var(--theme-bg)] flex flex-col">
       {/* Header */}
       <header className="px-10 py-6 border-b border-white/5 flex items-center justify-between backdrop-blur-md">
         <div className="flex items-center gap-6">
@@ -136,8 +136,8 @@ export default function InterviewPage() {
           <Link href="/report" className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-all">
             End & Generate Report
           </Link>
-          <div className="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
-            <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Depth: Senior</span>
+          <div className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 rounded-xl">
+            <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Depth: Senior</span>
           </div>
           <button className="p-2.5 bg-white/5 rounded-xl border border-white/10 text-slate-400 hover:text-white transition-all">
             <LayoutDashboard className="w-5 h-5" />
@@ -157,7 +157,7 @@ export default function InterviewPage() {
                 key={i} 
                 className={`flex ${m.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
               >
-                <div className={`max-w-2xl p-6 rounded-3xl ${m.role === 'assistant' ? 'glass-card text-slate-200' : 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/20'}`}>
+                <div className={`max-w-2xl p-6 rounded-3xl ${m.role === 'assistant' ? 'glass-card text-slate-200' : 'bg-sky-600 text-white shadow-xl shadow-sky-600/20'}`}>
                   <div className="flex items-center gap-3 mb-3 opacity-50">
                     {m.role === 'assistant' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
                     <span className="text-[9px] font-black uppercase tracking-widest">{m.role === 'assistant' ? 'InterviewOS AI' : 'Candidate'}</span>
@@ -171,9 +171,9 @@ export default function InterviewPage() {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
                 <div className="glass-card p-6 rounded-3xl flex items-center gap-3">
                   <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                   <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Processing</span>
                 </div>
@@ -188,16 +188,16 @@ export default function InterviewPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your response..."
-                className="w-full bg-slate-900 border border-white/10 rounded-[32px] px-8 py-6 pr-40 text-sm text-white focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500/50 outline-none transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-900 border border-white/10 rounded-[32px] px-8 py-6 pr-40 text-sm text-white focus:ring-4 focus:ring-sky-500/20 focus:border-sky-500/50 outline-none transition-all placeholder:text-slate-600"
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                <button type="button" className="p-3 text-slate-500 hover:text-indigo-400 transition-colors">
+                <button type="button" className="p-3 text-slate-500 hover:text-sky-400 transition-colors">
                   <Mic className="w-5 h-5" />
                 </button>
                 <button 
                   type="submit"
                   disabled={!input.trim() || isThinking}
-                  className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-500 transition-all disabled:opacity-50 disabled:bg-slate-800"
+                  className="bg-sky-600 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-sky-500 transition-all disabled:opacity-50 disabled:bg-slate-800"
                 >
                   Analyze
                 </button>
@@ -211,7 +211,7 @@ export default function InterviewPage() {
           <div className="space-y-4">
              <div className="flex items-center justify-between">
                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Signals</h3>
-               <Sparkles className="text-indigo-500 w-4 h-4 animate-pulse" />
+               <Sparkles className="text-sky-500 w-4 h-4 animate-pulse" />
              </div>
              <div className="space-y-3">
                <AnimatePresence mode="popLayout">
@@ -223,7 +223,7 @@ export default function InterviewPage() {
                      key={s + i} 
                      className="flex items-start gap-3 p-4 bg-white/5 rounded-2xl border border-white/5"
                    >
-                     <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full mt-1.5 shrink-0" />
+                     <div className="w-1.5 h-1.5 bg-sky-500 rounded-full mt-1.5 shrink-0" />
                      <p className="text-[11px] font-semibold text-slate-400 leading-relaxed">{s}</p>
                    </motion.div>
                  ))}
@@ -237,7 +237,7 @@ export default function InterviewPage() {
                 {[
                   { label: "Face Detection", status: "Locked", color: "text-emerald-400" },
                   { label: "Eye Tracking", status: "Active", color: "text-emerald-400" },
-                  { label: "Ambient Noise", status: "Filtered", color: "text-indigo-400" }
+                  { label: "Ambient Noise", status: "Filtered", color: "text-sky-400" }
                 ].map((p, i) => (
                   <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{p.label}</span>
@@ -261,10 +261,10 @@ export default function InterviewPage() {
              </div>
           </div>
 
-          <div className="p-6 bg-indigo-600/5 border border-indigo-500/20 rounded-3xl mt-auto">
+          <div className="p-6 bg-sky-600/5 border border-sky-500/20 rounded-3xl mt-auto">
              <div className="flex items-center gap-3 mb-3">
-               <TrendingUp className="text-indigo-400 w-4 h-4" />
-               <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Adaptive Insight</span>
+               <TrendingUp className="text-sky-400 w-4 h-4" />
+               <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Adaptive Insight</span>
              </div>
              <p className="text-[11px] text-slate-400 leading-relaxed font-medium italic">
                "Candidate shows high conceptual clarity but needs probing on execution details."

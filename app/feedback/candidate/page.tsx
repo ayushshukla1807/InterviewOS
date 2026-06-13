@@ -25,7 +25,7 @@ function CandidateContent() {
 
   if (!report) return (
     <div data-theme="dark" className="min-h-screen bg-[#050508] flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
     </div>
   );
 
@@ -60,7 +60,7 @@ function CandidateContent() {
       {/* Header */}
       <header className="sticky top-0 z-50 px-8 py-4 border-b border-white/5 bg-[#050508]/90 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -71,7 +71,7 @@ function CandidateContent() {
         <div className="flex items-center gap-2">
           {(['snapshot', 'deepdive'] as const).map(m => (
             <button key={m} onClick={() => setMode(m)}
-              className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${mode === m ? 'bg-indigo-600 text-white' : 'bg-white/5 text-slate-500 hover:text-white'}`}>
+              className={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${mode === m ? 'bg-sky-600 text-white' : 'bg-white/5 text-slate-500 hover:text-white'}`}>
               {m === 'snapshot' ? 'Snapshot' : 'Full Report'}
             </button>
           ))}
@@ -86,7 +86,7 @@ function CandidateContent() {
             <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] print:hidden">Credentials & Certification</h2>
             <div className="relative bg-[#0e0e12] border-2 border-amber-500/20 rounded-[32px] p-8 md:p-12 overflow-hidden shadow-2xl print:border-slate-800 print:bg-white print:text-black">
               {/* Premium Background Sheen */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-indigo-500/5 to-transparent pointer-events-none print:hidden" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/5 via-sky-500/5 to-transparent pointer-events-none print:hidden" />
               <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-amber-500/[0.03] rounded-full blur-[80px] pointer-events-none print:hidden" />
               
               {/* Certificate Border Accents */}
@@ -111,7 +111,7 @@ function CandidateContent() {
                 <div className="py-4 border-y border-white/5 max-w-lg mx-auto print:border-slate-200">
                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest print:text-slate-600">Proudly Presented To</p>
                   <p className="text-2xl font-black text-white tracking-tight mt-2 print:text-black">{name}</p>
-                  <p className="text-[11px] font-bold text-indigo-400 uppercase tracking-widest mt-2 print:text-indigo-600">
+                  <p className="text-[11px] font-bold text-sky-400 uppercase tracking-widest mt-2 print:text-sky-600">
                     For executing the {report.simulation.title || `${report.metadata?.track || 'Developer'} Track`}
                   </p>
                 </div>
@@ -150,7 +150,7 @@ function CandidateContent() {
                 <p className="text-xs font-bold text-slate-400 w-40 shrink-0">{a.label}</p>
                 <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
                   <motion.div initial={{ width: 0 }} animate={{ width: `${a.value}%` }} transition={{ duration: 1, ease: 'easeOut', delay: i * 0.07 }}
-                    className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full" />
+                    className="h-full bg-gradient-to-r from-sky-500 to-violet-500 rounded-full" />
                 </div>
                 <div className="flex items-center gap-3 w-32 justify-end">
                   <span className="text-[11px] font-black text-white tabular-nums">{a.value}/100</span>
@@ -214,7 +214,7 @@ function CandidateContent() {
             {plan.map((step: string, i: number) => (
               <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
                 className="bg-[#111111] border border-white/5 rounded-xl px-5 py-4 flex items-center gap-4">
-                <div className="w-7 h-7 rounded-lg bg-indigo-600/20 border border-indigo-500/20 flex items-center justify-center text-[10px] font-black text-indigo-400 shrink-0">{i + 1}</div>
+                <div className="w-7 h-7 rounded-lg bg-sky-600/20 border border-sky-500/20 flex items-center justify-center text-[10px] font-black text-sky-400 shrink-0">{i + 1}</div>
                 <p className="text-xs font-medium text-slate-300">{step}</p>
               </motion.div>
             ))}
@@ -226,7 +226,7 @@ function CandidateContent() {
           <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">7. Tailored Learning Paths & Recommendations</h2>
           <div className="bg-[#111111] border border-white/5 rounded-3xl p-6 space-y-6">
             <div className="flex items-center gap-3">
-              <BookOpen className="w-5 h-5 text-indigo-400" />
+              <BookOpen className="w-5 h-5 text-sky-400" />
               <div>
                 <h3 className="text-sm font-black text-white">Custom Growth Path: {report.metadata?.track?.toUpperCase() || 'General'}</h3>
                 <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5 font-bold">Based on simulated task outcomes</p>
@@ -256,19 +256,19 @@ function CandidateContent() {
                 return (
                   <>
                     <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl space-y-2">
-                      <p className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Phase 1: Foundation Enhancement</p>
+                      <p className="text-[8px] font-black text-sky-400 uppercase tracking-widest">Phase 1: Foundation Enhancement</p>
                       <p className="text-xs text-slate-400 leading-relaxed font-medium">{recommendations.p1}</p>
                     </div>
                     <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl space-y-2">
                       <p className="text-[8px] font-black text-violet-400 uppercase tracking-widest">Phase 2: Mastery Progression</p>
                       <p className="text-xs text-slate-400 leading-relaxed font-medium">{recommendations.p2}</p>
                     </div>
-                    <div className="md:col-span-2 p-5 bg-indigo-500/5 border border-indigo-500/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="md:col-span-2 p-5 bg-sky-500/5 border border-sky-500/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
                         <p className="text-[8px] font-black text-indigo-300 uppercase tracking-widest">Recommended Capstone Project</p>
                         <p className="text-xs font-bold text-white mt-1">{recommendations.proj}</p>
                       </div>
-                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all">
+                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all">
                         Launch Resources
                         <ExternalLink className="w-3 h-3" />
                       </a>

@@ -18,6 +18,7 @@ export default function CandidateDashboard() {
   const router = useRouter();
   const [candidateContext, setCandidateContext] = useState<any>(null);
   const [pastInterviews, setPastInterviews] = useState<any[]>([]);
+  const [opportunities, setOpportunities] = useState<any[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -107,6 +108,23 @@ export default function CandidateDashboard() {
         setPastInterviews([]);
       }
     };
+
+    const fetchOpportunities = async () => {
+      try {
+        const res = await fetch('/api/jobs');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.jobs) {
+            setOpportunities(data.jobs);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch opportunities:', err);
+      }
+    };
+
+    verifyAuth();
+    fetchOpportunities();
   }, []);
 
   const handleResumeUpload = () => {
@@ -145,7 +163,7 @@ export default function CandidateDashboard() {
   const radarData = calculateRadarData();
 
   return (
-    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-blue-600/30 transition-colors duration-500 relative">
+    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-emerald-600/30 transition-colors duration-500 relative">
       <div className="mesh-bg" />
       
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
@@ -211,14 +229,14 @@ export default function CandidateDashboard() {
             
             {/* Candidate Metadata */}
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} className="glass-card p-8 space-y-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 blur-[50px] rounded-full pointer-events-none" />
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
                 <Star className="w-4 h-4 text-amber-400" /> Account Profile
               </h2>
               
               <div className="flex items-center justify-between p-4 bg-black/20 border border-white/5 rounded-2xl backdrop-blur-md">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center font-black text-blue-400 uppercase text-2xl shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-600/20 to-sky-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center font-black text-blue-400 uppercase text-2xl shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                     {candidateContext?.name?.[0] || 'C'}
                   </div>
                   <div>
@@ -271,7 +289,7 @@ export default function CandidateDashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleResumeUpload}
-                className={`w-full p-8 bg-black/20 hover:bg-[#020617]/80 border-2 border-dashed ${isUploading ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'border-white/20'} hover:border-emerald-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
+                className={`w-full p-8 bg-black/20 hover:bg-[var(--theme-bg)] border-2 border-dashed ${isUploading ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'border-white/20'} hover:border-emerald-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-4">
@@ -294,7 +312,7 @@ export default function CandidateDashboard() {
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="glass-card p-8 space-y-6">
               <div>
                 <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                  <Code2 className="w-4 h-4 text-indigo-400" /> Quick Simulator
+                  <Code2 className="w-4 h-4 text-sky-400" /> Quick Simulator
                 </h2>
                 <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-wider leading-relaxed">Launch a standard 4-question interview</p>
               </div>
@@ -303,10 +321,10 @@ export default function CandidateDashboard() {
                 <Link href="/instructions?track=JS">
                   <motion.div 
                     whileHover={{ scale: 1.02 }}
-                    className="w-full p-5 bg-black/20 hover:bg-[#020617]/80 border-none hover:border-blue-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm mb-4"
+                    className="w-full p-5 bg-black/20 hover:bg-[var(--theme-bg)] border-none hover:border-emerald-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm mb-4"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-blue-500/10 rounded-xl">
+                      <div className="p-2 bg-emerald-500/10 rounded-xl">
                         <Code2 className="w-6 h-6 text-blue-400" />
                       </div>
                       <div className="text-left">
@@ -321,7 +339,7 @@ export default function CandidateDashboard() {
                 <Link href="/instructions?track=DSA">
                   <motion.div 
                     whileHover={{ scale: 1.02 }}
-                    className="w-full p-5 bg-black/20 hover:bg-[#020617]/80 border-none hover:border-emerald-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm"
+                    className="w-full p-5 bg-black/20 hover:bg-[var(--theme-bg)] border-none hover:border-emerald-500/50 rounded-2xl flex items-center justify-between group transition-all cursor-pointer shadow-sm"
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-emerald-500/10 rounded-xl">
@@ -341,11 +359,40 @@ export default function CandidateDashboard() {
 
           {/* Right Panel: Analytics & Past Sessions */}
           <div className="lg:col-span-2 space-y-8">
+
+            {/* Available Opportunities */}
+            <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} className="glass-card p-8 space-y-6 border-emerald-500/30">
+              <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-emerald-400" /> Active Opportunities
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {opportunities.length > 0 ? opportunities.map(job => (
+                  <div key={job.jobId} className="p-5 bg-black/40 border border-white/10 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition-colors shadow-lg">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">
+                          {job.jobId}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-black text-white leading-tight mb-2">{job.title}</h3>
+                      <p className="text-xs text-slate-400 line-clamp-2">{job.description}</p>
+                    </div>
+                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-white/5 hover:bg-emerald-600 border border-white/10 hover:border-emerald-500 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all text-white flex justify-center items-center gap-2">
+                      Apply Now <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                )) : (
+                  <div className="col-span-2 p-6 text-center text-slate-500 bg-black/20 border border-white/5 rounded-xl">
+                    <p className="text-[10px] font-bold uppercase tracking-widest">No active custom roles available right now.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
             
             {/* Analytics Dashboard */}
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.1}} className="glass-card p-8 space-y-8">
               <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <BarChartIcon className="w-4 h-4 text-cyan-400" /> Performance Analytics
+                <BarChartIcon className="w-4 h-4 text-emerald-400" /> Performance Analytics
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-[300px]">
@@ -419,13 +466,13 @@ export default function CandidateDashboard() {
                   <motion.div 
                     whileHover={{ scale: 1.01 }}
                     key={record.id} 
-                    className="p-6 bg-black/30 border-none rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-indigo-500/50 transition-all shadow-lg group relative overflow-hidden"
+                    className="p-6 bg-black/30 border-none rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-sky-500/50 transition-all shadow-lg group relative overflow-hidden"
                   >
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-500 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div className="space-y-3 pl-2">
                       <div className="flex items-center gap-4">
-                        <span className="px-3 py-1 bg-blue-500/20 text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md border border-blue-500/30">
+                        <span className="px-3 py-1 bg-emerald-500/20 text-blue-300 text-[9px] font-black uppercase tracking-widest rounded-md border border-emerald-500/30">
                           {record.id}
                         </span>
                         <span className="text-xs text-slate-400 flex items-center gap-1.5 font-semibold">
@@ -463,7 +510,7 @@ export default function CandidateDashboard() {
                           <motion.button 
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_15px_rgba(79,70,229,0.4)] transition-all"
+                            className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-sky-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_15px_rgba(79,70,229,0.4)] transition-all"
                           >
                             Certificate <Award className="w-4 h-4" />
                           </motion.button>

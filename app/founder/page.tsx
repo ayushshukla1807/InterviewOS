@@ -45,20 +45,20 @@ export default function FounderDashboard() {
   const totalRecruiters = dbUsers.filter(u => u.role === 'recruiter').length;
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 overflow-hidden relative">
+    <div className="min-h-screen bg-[var(--theme-bg)] text-slate-200 font-sans selection:bg-sky-500/30 overflow-hidden relative">
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-indigo-900/20 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Top Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#020617]/80 backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[var(--theme-bg)]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-              <Shield className="w-4 h-4 text-indigo-400" />
+            <div className="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center border border-sky-500/20">
+              <Shield className="w-4 h-4 text-sky-400" />
             </div>
             <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-              InterviewOS <span className="text-indigo-400 font-mono text-sm ml-2 px-2 py-0.5 bg-indigo-500/10 rounded-full border border-indigo-500/20">FOUNDER</span>
+              InterviewOS <span className="text-sky-400 font-mono text-sm ml-2 px-2 py-0.5 bg-sky-500/10 rounded-full border border-sky-500/20">FOUNDER</span>
             </span>
           </div>
 
@@ -96,9 +96,9 @@ export default function FounderDashboard() {
               <div className="text-2xl font-bold text-white font-mono">{dbReports.length}</div>
             </div>
             <div className="px-5 py-3 rounded-xl bg-white/[0.02] border border-white/5 backdrop-blur-sm">
-              <div className="text-xs text-indigo-400/80 mb-1 font-medium">System Health</div>
-              <div className="text-2xl font-bold text-indigo-400 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+              <div className="text-xs text-sky-400/80 mb-1 font-medium">System Health</div>
+              <div className="text-2xl font-bold text-sky-400 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
                 100%
               </div>
             </div>
@@ -119,7 +119,7 @@ export default function FounderDashboard() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-5 py-3 text-sm font-medium transition-colors relative whitespace-nowrap ${
-                  isActive ? 'text-indigo-400' : 'text-slate-400 hover:text-white'
+                  isActive ? 'text-sky-400' : 'text-slate-400 hover:text-white'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function FounderDashboard() {
                 {isActive && (
                   <motion.div
                     layoutId="founderTabUnderline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-sky-500"
                     initial={false}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
@@ -144,7 +144,7 @@ export default function FounderDashboard() {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="py-20 flex flex-col items-center justify-center text-slate-500 gap-4"
             >
-              <div className="w-8 h-8 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-sky-500/30 border-t-sky-500 rounded-full animate-spin" />
               <div className="text-xs font-mono tracking-widest uppercase">Querying Database...</div>
             </motion.div>
           ) : (
@@ -160,7 +160,7 @@ export default function FounderDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="col-span-1 md:col-span-2 p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md">
                     <h3 className="text-sm font-semibold text-white mb-6 flex items-center gap-2">
-                      <Terminal className="w-4 h-4 text-indigo-400" />
+                      <Terminal className="w-4 h-4 text-sky-400" />
                       Platform Metrics
                     </h3>
                     <div className="grid grid-cols-2 gap-4">
@@ -185,11 +185,11 @@ export default function FounderDashboard() {
 
                   <div className="col-span-1 p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md flex flex-col">
                     <h3 className="text-sm font-semibold text-white mb-6 flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-indigo-400" />
+                      <Zap className="w-4 h-4 text-sky-400" />
                       Quick Actions
                     </h3>
                     <div className="space-y-3 flex-1">
-                      <Link href="/recruiter" className="w-full flex items-center justify-between p-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 hover:bg-indigo-500/20 transition-colors">
+                      <Link href="/recruiter" className="w-full flex items-center justify-between p-3 rounded-lg bg-sky-500/10 border border-sky-500/20 text-indigo-300 hover:bg-sky-500/20 transition-colors">
                         <span className="text-sm font-medium">Recruiter View</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -207,7 +207,7 @@ export default function FounderDashboard() {
                 <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Users className="w-4 h-4 text-indigo-400" />
+                      <Users className="w-4 h-4 text-sky-400" />
                       User Directory & Logs
                     </h3>
                     <div className="text-xs text-slate-500">{dbUsers.length} total registered</div>
@@ -232,7 +232,7 @@ export default function FounderDashboard() {
                             </td>
                             <td className="p-4">
                               <span className={`px-2 py-1 rounded border text-[10px] uppercase font-bold tracking-wider ${
-                                u.role === 'founder' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' :
+                                u.role === 'founder' ? 'bg-sky-500/10 border-sky-500/20 text-sky-400' :
                                 u.role === 'recruiter' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
                                 'bg-slate-500/10 border-slate-500/20 text-slate-400'
                               }`}>
@@ -260,7 +260,7 @@ export default function FounderDashboard() {
                 <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-md">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-                      <Database className="w-4 h-4 text-indigo-400" />
+                      <Database className="w-4 h-4 text-sky-400" />
                       Global Database Reports
                     </h3>
                     <div className="text-xs text-slate-500">{dbReports.length} simulations globally</div>

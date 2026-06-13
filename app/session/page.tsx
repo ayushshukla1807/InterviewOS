@@ -1083,6 +1083,7 @@ function SessionContent() {
       const newApp = {
         id: `APP-${Math.floor(Math.random() * 10000)}`,
         jobId: dynamicContext?.jobId || 'GENERAL',
+        recruiterId: dynamicContext?.recruiterId,
         candidateName: name,
         candidateEmail: dynamicContext?.candidateEmail || 'unknown@interviewos.com',
         score: reportPayload.score,
@@ -1132,8 +1133,8 @@ function SessionContent() {
           animate={{ scale: 1, opacity: 1 }}
           className="relative"
         >
-          <div className="w-24 h-24 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
-          <User className="absolute inset-0 m-auto w-8 h-8 text-blue-600 animate-pulse" />
+          <div className="w-24 h-24 border-4 border-emerald-600/20 border-t-emerald-600 rounded-full animate-spin" />
+          <User className="absolute inset-0 m-auto w-8 h-8 text-emerald-600 animate-pulse" />
         </motion.div>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
@@ -1151,7 +1152,7 @@ function SessionContent() {
   if (isGeneratingQuestions || !question) {
     return (
       <div data-theme="dark" className="min-h-screen bg-[#020204] text-white flex flex-col items-center justify-center p-6 text-center transition-colors duration-500">
-        <div className="w-16 h-16 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin mb-8" />
+        <div className="w-16 h-16 border-4 border-emerald-600/20 border-t-emerald-600 rounded-full animate-spin mb-8" />
         <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Matching Profile to Job Description</p>
         <p className="text-blue-400 font-bold uppercase tracking-widest text-[9px] mt-2 animate-pulse">Generating Custom Interview Protocol...</p>
       </div>
@@ -1180,14 +1181,14 @@ function SessionContent() {
   if (!isFullscreen) {
     return (
       <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col items-center justify-center p-6 text-center space-y-8 transition-colors duration-500">
-        <div className="w-20 h-20 rounded-full bg-blue-700/10 border-2 border-blue-600/30 flex items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-blue-700/10 border-2 border-emerald-600/30 flex items-center justify-center">
           <Maximize2 className="w-10 h-10 text-blue-400" />
         </div>
         <div className="space-y-4">
           <h1 className="text-2xl font-black text-[var(--text)] tracking-tighter">Fullscreen Required</h1>
           <p className="text-slate-500 text-sm font-medium max-w-sm mx-auto leading-relaxed">This interview must be conducted in fullscreen mode. Exiting fullscreen will be logged as a violation.</p>
         </div>
-        <button onClick={enterFullscreen} className="px-8 py-4 bg-blue-700 hover:bg-cyan-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-blue-700/20 flex items-center gap-3">
+        <button onClick={enterFullscreen} className="px-8 py-4 bg-blue-700 hover:bg-emerald-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-lg shadow-blue-700/20 flex items-center gap-3">
           <Maximize2 className="w-4 h-4" /> Enter Fullscreen & Start Interview
         </button>
         <p className="text-slate-500 text-[9px] font-bold uppercase tracking-widest">Tab switching, window changes & copy-paste are blocked during the session.</p>
@@ -1196,7 +1197,7 @@ function SessionContent() {
   }
 
   return (
-    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-cyan-600/30 transition-colors duration-500">
+    <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-emerald-600/30 transition-colors duration-500">
       
       {/* Proctoring Violation Toast */}
       <AnimatePresence>
@@ -1231,7 +1232,7 @@ function SessionContent() {
               exit={{ scale: 0.95, y: 20 }}
               className="w-full max-w-lg bg-[#0a0a0c] border-none rounded-3xl p-8 space-y-6 shadow-2xl relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 to-purple-500" />
               
               <div className="flex justify-between items-start">
                  <div>
@@ -1250,7 +1251,7 @@ function SessionContent() {
                       type="text" 
                       value={targetSalary}
                       onChange={(e) => setTargetSalary(e.target.value)}
-                      className="w-full bg-[#050508] border-none rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-blue-600 transition-all"
+                      className="w-full bg-[#050508] border-none rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-emerald-600 transition-all"
                     />
                  </div>
                  <div className="space-y-2">
@@ -1259,14 +1260,14 @@ function SessionContent() {
                       type="text" 
                       value={targetEquity}
                       onChange={(e) => setTargetEquity(e.target.value)}
-                      className="w-full bg-[#050508] border-none rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-blue-600 transition-all"
+                      className="w-full bg-[#050508] border-none rounded-xl px-4 py-3 text-sm font-bold text-white focus:outline-none focus:border-emerald-600 transition-all"
                     />
                  </div>
               </div>
 
               {negotiationPhase === 'analyzing' && (
-                 <div className="p-4 bg-cyan-600/10 border border-blue-600/20 rounded-xl flex items-center gap-3">
-                    <div className="w-4 h-4 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin shrink-0" />
+                 <div className="p-4 bg-emerald-600/10 border border-emerald-600/20 rounded-xl flex items-center gap-3">
+                    <div className="w-4 h-4 border-2 border-emerald-600/30 border-t-emerald-600 rounded-full animate-spin shrink-0" />
                     <p className="text-[10px] font-black uppercase tracking-widest text-blue-400">Analyzing Market Band & Candidate Performance...</p>
                  </div>
               )}
@@ -1298,7 +1299,7 @@ function SessionContent() {
                    <button onClick={() => {
                      setNegotiationPhase('analyzing');
                      setTimeout(() => setNegotiationPhase('counter'), 2500);
-                   }} className="px-6 py-3 bg-blue-700 hover:bg-cyan-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Submit Request</button>
+                   }} className="px-6 py-3 bg-blue-700 hover:bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Submit Request</button>
                  ) : negotiationPhase === 'counter' ? (
                    <button onClick={() => setNegotiationPhase('approved')} className="px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Accept Counter</button>
                  ) : null}
@@ -1325,7 +1326,7 @@ function SessionContent() {
                 <p className="text-[10px] font-black text-white uppercase tracking-widest">{currentQ + 1} <span className="text-slate-600">/</span> {questions.length || 0}</p>
              </div>
              <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <motion.div className="h-full bg-cyan-600" 
+                <motion.div className="h-full bg-emerald-600" 
                   initial={{ width: 0 }} animate={{ width: `${((currentQ + 1) / (questions.length || 1)) * 100}%` }} />
              </div>
           </div>
@@ -1336,7 +1337,7 @@ function SessionContent() {
            <div className="flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
               <button 
                 onClick={() => setActiveTab('voice')}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-cyan-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-emerald-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
               >
                 <Mic className="w-3 h-3 inline-block mr-1.5" /> Face to Face
               </button>
@@ -1398,19 +1399,19 @@ function SessionContent() {
                        {/* 1. Header: Mission Control Hub */}
                        <div className="relative overflow-hidden rounded-3xl border-none bg-slate-950/40 p-6 backdrop-blur-md shadow-[0_0_30px_rgba(99,102,241,0.1)]">
                           {/* Ambient glow backing */}
-                          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-cyan-600/10 blur-3xl" />
-                          <div className="absolute -left-20 -bottom-20 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl" />
+                          <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-emerald-600/10 blur-3xl" />
+                          <div className="absolute -left-20 -bottom-20 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" />
                           
                           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
                              <div className="space-y-3 flex-1">
                                 <div className="flex flex-wrap items-center gap-2 text-[9px] font-black tracking-widest uppercase">
-                                   <span className="text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-md">
+                                   <span className="text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md">
                                       {scenario?.company || 'Corporate Client'}
                                    </span>
-                                   <span className="text-blue-400 bg-cyan-600/10 border border-blue-600/20 px-2.5 py-1 rounded-md">
+                                   <span className="text-blue-400 bg-emerald-600/10 border border-emerald-600/20 px-2.5 py-1 rounded-md">
                                       {scenario?.role || 'Developer'} Track
                                    </span>
-                                   <span className="text-violet-400 bg-cyan-500/10 border border-cyan-500/20 px-2.5 py-1 rounded-md">
+                                   <span className="text-violet-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-md">
                                       {scenario?.difficulty || 'Advanced'}
                                    </span>
                                 </div>
@@ -1420,13 +1421,13 @@ function SessionContent() {
                                 </h2>
                                 
                                 <p className="text-[10px] font-bold text-slate-400 tracking-wider uppercase flex items-center gap-1.5">
-                                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                                   <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                                    {scenario?.subtitle}
                                 </p>
                              </div>
 
                              {/* System Diagnostic Panel */}
-                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex items-center gap-3 bg-[#020617]/80/40 border border-white/5 rounded-2xl p-4 min-w-[280px]">
+                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex items-center gap-3 bg-[var(--theme-bg)]/80/40 border border-white/5 rounded-2xl p-4 min-w-[280px]">
                                 <div className="text-left pr-4 border-r border-white/5">
                                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Environment</p>
                                    <p className="text-[10px] font-black text-emerald-400 flex items-center gap-1 mt-0.5">
@@ -1452,7 +1453,7 @@ function SessionContent() {
                        {/* 2. Simulation Background: Operational Briefing File */}
                        <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-slate-950/20 p-6 shadow-inner group hover:border-white/10 transition-all duration-300">
                           {/* Vertical Accent Glow Bar */}
-                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-600 via-cyan-500 to-transparent group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300" />
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-600 via-emerald-500 to-transparent group-hover:shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300" />
                           
                           <div className="space-y-4">
                              <div className="flex items-center justify-between">
@@ -1472,7 +1473,7 @@ function SessionContent() {
                        {/* 3. Mapped Skills: Core Competency Diagnostics */}
                        <div className="space-y-4">
                           <div className="flex items-center gap-2">
-                             <Activity className="w-4 h-4 text-cyan-400" />
+                             <Activity className="w-4 h-4 text-emerald-400" />
                              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Core Competency Diagnostics</h3>
                           </div>
                           
@@ -1486,12 +1487,12 @@ function SessionContent() {
                                  <motion.div 
                                    key={idx}
                                    whileHover={{ y: -4, scale: 1.01 }}
-                                   className="relative p-5 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-blue-600/20 hover:shadow-[0_0_25px_rgba(99,102,241,0.05)] transition-all duration-300 group"
+                                   className="relative p-5 bg-slate-950/60 border border-white/5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-emerald-600/20 hover:shadow-[0_0_25px_rgba(99,102,241,0.05)] transition-all duration-300 group"
                                  >
                                     <div className="space-y-1">
                                        <div className="flex items-center justify-between">
                                           <p className="text-xs font-bold text-white leading-tight group-hover:text-indigo-300 transition-colors">{skill.name}</p>
-                                          <span className="text-[7px] font-black bg-cyan-600/10 text-blue-400 border border-blue-600/20 px-1.5 py-0.5 rounded uppercase">
+                                          <span className="text-[7px] font-black bg-emerald-600/10 text-blue-400 border border-emerald-600/20 px-1.5 py-0.5 rounded uppercase">
                                              {skill.level}
                                           </span>
                                        </div>
@@ -1541,7 +1542,7 @@ function SessionContent() {
                              
                              <div className="flex items-center gap-3">
                                 {/* Visual progress meter */}
-                                <div className="hidden sm:flex items-center gap-1 bg-[#020617]/80/40 border border-white/5 rounded-full px-3 py-1 text-[9px] font-mono text-slate-400">
+                                <div className="hidden sm:flex items-center gap-1 bg-[var(--theme-bg)]/80/40 border border-white/5 rounded-full px-3 py-1 text-[9px] font-mono text-slate-400">
                                    <span>PROGRESS:</span>
                                    <div className="w-16 h-1.5 bg-white/5 rounded-full overflow-hidden inline-block mx-1">
                                       <div 
@@ -1675,7 +1676,7 @@ function SessionContent() {
                       {/* Left side: Problem Description */}
                       <div className="w-1/4 border-r border-[var(--border-color)] bg-[var(--card-bg)] p-6 overflow-y-auto flex flex-col">
                         <div className="flex items-center gap-3 mb-6">
-                           <span className="px-3 py-1 bg-cyan-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-cyan-500/20">
+                           <span className="px-3 py-1 bg-emerald-500/10 text-violet-400 text-[9px] font-black uppercase tracking-widest rounded-full border border-emerald-500/20">
                               {question.difficulty || 'Hard'}
                            </span>
                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
@@ -1709,7 +1710,7 @@ function SessionContent() {
                            <div className="flex gap-2">
                               <select 
                                 value={language} onChange={e => setLanguage(e.target.value)}
-                                className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-[10px] font-black text-blue-400 uppercase tracking-widest outline-none focus:border-blue-600 transition-all">
+                                className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-[10px] font-black text-blue-400 uppercase tracking-widest outline-none focus:border-emerald-600 transition-all">
                                  <option value="javascript">JavaScript (Node 20)</option>
                                  <option value="typescript">TypeScript (5.0)</option>
                                  <option value="python">Python (3.11)</option>
@@ -1741,11 +1742,11 @@ function SessionContent() {
                                     onClick={() => setShowPrampDeck(!showPrampDeck)}
                                     className={`px-3 py-1 border rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${
                                        showPrampDeck 
-                                          ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
+                                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(34,211,238,0.15)]' 
                                           : 'bg-white/5 border-white/5 text-slate-500 hover:text-white'
                                     }`}
                                  >
-                                    <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
+                                    <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
                                     Pramp Deck
                                  </button>
                               )}
@@ -1774,7 +1775,7 @@ function SessionContent() {
                                  }
                                </button>
                               <button onClick={handleFinish}
-                                className="px-4 py-1.5 bg-blue-700 hover:bg-cyan-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-blue-700/20">
+                                className="px-4 py-1.5 bg-blue-700 hover:bg-emerald-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all shadow-lg shadow-blue-700/20">
                                  <Send className="w-3 h-3" /> Submit Final Solution
                               </button>
                            </div>
@@ -1803,7 +1804,7 @@ function SessionContent() {
                                 }}
                               />
                             ) : activeEditorTab === 'terminal' ? (
-                              <div className="w-full h-full bg-[#020617]/80/50 p-6 flex flex-col font-mono text-[12px]">
+                              <div className="w-full h-full bg-[var(--theme-bg)]/80/50 p-6 flex flex-col font-mono text-[12px]">
                                 <div className="flex-1 overflow-y-auto space-y-1">
                                   {terminalLogs.map((log, i) => (
                                     <div key={i} className={log.includes('Error') || log.includes('Exception') ? 'text-rose-400' : 'text-slate-300'}>{log}</div>
@@ -1857,11 +1858,11 @@ function SessionContent() {
                                   className="flex-1 bg-transparent p-4 text-[11px] font-mono opacity-80 outline-none resize-none"
                                 />
                              </div>
-                             <div className="flex-1 flex flex-col bg-[#020617]/80/20">
+                             <div className="flex-1 flex flex-col bg-[var(--theme-bg)]/80/20">
                                 <div className="px-4 py-2 border-b border-[var(--border-color)] flex items-center justify-between">
                                    <div className="flex items-center gap-2">
-                                     <Monitor className="w-3 h-3 text-blue-600" />
-                                     <span className="text-[8px] font-black text-blue-600 uppercase tracking-widest">Execution Output</span>
+                                     <Monitor className="w-3 h-3 text-emerald-600" />
+                                     <span className="text-[8px] font-black text-emerald-600 uppercase tracking-widest">Execution Output</span>
                                    </div>
                                    <div className="flex items-center gap-3">
                                      {execTime !== null && <span className="text-[8px] font-black text-slate-500">{execTime}ms</span>}
@@ -1880,7 +1881,7 @@ function SessionContent() {
                                {/* Header */}
                                <div className="space-y-1">
                                   <div className="flex items-center justify-between">
-                                     <h3 className="text-[10px] font-black uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
+                                     <h3 className="text-[10px] font-black uppercase tracking-widest text-emerald-400 flex items-center gap-1.5">
                                        <Activity className="w-3.5 h-3.5" /> Pramp Companion
                                      </h3>
                                      <button onClick={() => setShowPrampDeck(false)} className="text-slate-500 hover:text-white transition-all">
@@ -1898,12 +1899,12 @@ function SessionContent() {
                                         <div key={key} className="space-y-1">
                                            <div className="flex justify-between items-center text-[9px] font-bold text-slate-400 uppercase tracking-widest">
                                               <span>{key.replace(/([A-Z])/g, ' $1')}</span>
-                                              <span className="text-cyan-400 font-mono">{val}/5</span>
+                                              <span className="text-emerald-400 font-mono">{val}/5</span>
                                            </div>
                                            <input 
                                               type="range" min="1" max="5" value={val} 
                                               onChange={e => setPrampRatings(prev => ({ ...prev, [key]: parseInt(e.target.value) }))}
-                                              className="w-full accent-cyan-500 bg-white/5 h-1 rounded-full outline-none cursor-pointer"
+                                              className="w-full accent-emerald-500 bg-white/5 h-1 rounded-full outline-none cursor-pointer"
                                            />
                                         </div>
                                      ))}
@@ -1918,11 +1919,11 @@ function SessionContent() {
                                       <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3">
                                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Optimal Complexity Metrics</p>
                                          <div className="grid grid-cols-2 gap-2 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                            <div className="bg-[#020617]/80/30 p-2.5 rounded-xl border border-white/5">
+                                            <div className="bg-[var(--theme-bg)]/80/30 p-2.5 rounded-xl border border-white/5">
                                                <span className="text-[7px] text-slate-500 block mb-0.5">Target Time</span>
                                                <span className="text-blue-400 text-xs font-mono lowercase">{prampData.targetTime}</span>
                                             </div>
-                                            <div className="bg-[#020617]/80/30 p-2.5 rounded-xl border border-white/5">
+                                            <div className="bg-[var(--theme-bg)]/80/30 p-2.5 rounded-xl border border-white/5">
                                                <span className="text-[7px] text-slate-500 block mb-0.5">Target Space</span>
                                                <span className="text-violet-400 text-xs font-mono lowercase">{prampData.targetSpace}</span>
                                             </div>
@@ -1937,14 +1938,14 @@ function SessionContent() {
                                                const isRevealed = prampHintsRevealed.includes(idx);
                                                return (
                                                   <div key={idx} className={`border rounded-2xl p-3.5 transition-all ${
-                                                     isRevealed ? 'bg-[#0a0a0d] border-cyan-500/20' : 'bg-[#020617]/80/20 border-white/5'
+                                                     isRevealed ? 'bg-[#0a0a0d] border-emerald-500/20' : 'bg-[var(--theme-bg)]/80/20 border-white/5'
                                                   }`}>
                                                      <div className="flex items-center justify-between">
                                                         <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Hint #{idx + 1}</span>
                                                         {!isRevealed && (
                                                            <button 
                                                               onClick={() => setPrampHintsRevealed(prev => [...prev, idx])}
-                                                              className="text-[8px] font-black text-cyan-400 hover:text-cyan-300 uppercase tracking-widest bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md"
+                                                              className="text-[8px] font-black text-emerald-400 hover:text-cyan-300 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md"
                                                            >
                                                               Reveal Hint
                                                            </button>
@@ -1962,13 +1963,13 @@ function SessionContent() {
                                       </div>
 
                                       {/* 4. Model Solution Cheat Code */}
-                                      <div className="border border-white/5 rounded-2xl bg-[#020617]/80/40 overflow-hidden">
+                                      <div className="border border-white/5 rounded-2xl bg-[var(--theme-bg)]/80/40 overflow-hidden">
                                          <button 
                                             onClick={() => setPrampHintsRevealed(prev => prev.includes(99) ? prev.filter(x => x !== 99) : [...prev, 99])}
                                             className="w-full px-4 py-3 bg-white/5 flex items-center justify-between text-[9px] font-black text-slate-300 uppercase tracking-widest hover:bg-white/10 transition-all"
                                          >
                                             <span>Interviewer Model Solution</span>
-                                            <span className="text-cyan-400 font-mono">{prampHintsRevealed.includes(99) ? 'HIDE' : 'SHOW'}</span>
+                                            <span className="text-emerald-400 font-mono">{prampHintsRevealed.includes(99) ? 'HIDE' : 'SHOW'}</span>
                                          </button>
                                          {prampHintsRevealed.includes(99) && (
                                             <div className="p-3 bg-[#050508] border-t border-white/5">
@@ -2011,12 +2012,12 @@ function SessionContent() {
                      style={{ transformStyle: 'preserve-3d' }}
                   >
                     {isSpeaking && (
-                      <motion.div className="absolute inset-[-20px] rounded-full border border-blue-600/40"
+                      <motion.div className="absolute inset-[-20px] rounded-full border border-emerald-600/40"
                         animate={{ scale: [1, 1.3, 1], opacity: [0.8, 0, 0.8], rotateZ: [0, 180, 360] }}
                         transition={{ repeat: Infinity, duration: 3, ease: 'linear' }} 
                         style={{ translateZ: -50 }} />
                     )}
-                     <div className={`w-28 h-28 rounded-full overflow-hidden border-2 transition-all duration-500 ${isSpeaking ? 'border-blue-600 shadow-[0_0_60px_rgba(79,70,229,0.8)]' : 'border-white/10 shadow-xl shadow-black/50'}`}>
+                     <div className={`w-28 h-28 rounded-full overflow-hidden border-2 transition-all duration-500 ${isSpeaking ? 'border-emerald-600 shadow-[0_0_60px_rgba(79,70,229,0.8)]' : 'border-white/10 shadow-xl shadow-black/50'}`}>
                        <motion.img 
                          src={interviewer?.avatar || 'https://ui-avatars.com/api/?name=Syed&background=4f46e5&color=fff&size=200&bold=true&font-size=0.4'}
                          alt="Interviewer" 
@@ -2027,7 +2028,7 @@ function SessionContent() {
                      </div>
                      {/* 3D Holographic Base glow */}
                      {isSpeaking && (
-                       <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-24 h-3 bg-cyan-600/40 blur-xl rounded-full" />
+                       <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-24 h-3 bg-emerald-600/40 blur-xl rounded-full" />
                      )}
                   </motion.div>
                    <div>
@@ -2047,7 +2048,7 @@ function SessionContent() {
                <div className="absolute bottom-4 left-6 right-6 flex justify-between items-end">
                   <div className="flex gap-1 items-end h-6">
                      {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                       <motion.div key={i} className="w-0.5 bg-cyan-600/30 rounded-full"
+                       <motion.div key={i} className="w-0.5 bg-emerald-600/30 rounded-full"
                          animate={{ height: isSpeaking ? [4, 18, 4] : 4 }}
                          transition={{ repeat: Infinity, duration: 0.4, delay: i * 0.1 }} />
                      ))}
@@ -2068,7 +2069,7 @@ function SessionContent() {
                    
                    {/* System Avatar */}
                    {m.role === 'assistant' && (
-                     <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-cyan-600 border-none shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                     <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-emerald-600 border-none shadow-[0_0_15px_rgba(79,70,229,0.4)]">
                         <img src={interviewer?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Syed'} alt="AI" className="w-full h-full object-cover bg-slate-900" />
                      </div>
                    )}
@@ -2078,10 +2079,10 @@ function SessionContent() {
                           <span className="text-[7px] font-black text-slate-500 uppercase tracking-[0.3em]">
                             {m.role === 'assistant' ? `SYSTEM: ${interviewer?.name || 'SYED'}` : `CANDIDATE: ${name.split(' ')[0]}`}
                           </span>
-                          <div className={`w-1 h-1 rounded-full ${m.role === 'assistant' ? 'bg-cyan-600 shadow-[0_0_5px_rgba(79,70,229,1)]' : 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,1)]'}`} />
+                          <div className={`w-1 h-1 rounded-full ${m.role === 'assistant' ? 'bg-emerald-600 shadow-[0_0_5px_rgba(79,70,229,1)]' : 'bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,1)]'}`} />
                        </div>
                        <div className={`p-5 rounded-2xl text-[12px] font-medium leading-relaxed tracking-tight shadow-xl ${
-                         m.role === 'assistant' ? 'bg-white/[0.02] border-none text-slate-300 rounded-tl-sm backdrop-blur-md' : 'bg-blue-700 border border-blue-600 text-white shadow-[0_5px_20px_rgba(79,70,229,0.3)] rounded-tr-sm'
+                         m.role === 'assistant' ? 'bg-white/[0.02] border-none text-slate-300 rounded-tl-sm backdrop-blur-md' : 'bg-blue-700 border border-emerald-600 text-white shadow-[0_5px_20px_rgba(79,70,229,0.3)] rounded-tr-sm'
                        }`}>
                           {m.content}
                        </div>
@@ -2097,7 +2098,7 @@ function SessionContent() {
                ))}
                {isThinking && (
                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start gap-4">
-                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-cyan-600 border-none shadow-[0_0_15px_rgba(79,70,229,0.4)]">
+                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 mt-2 bg-emerald-600 border-none shadow-[0_0_15px_rgba(79,70,229,0.4)]">
                         <img src={interviewer?.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=Syed'} alt="AI" className="w-full h-full object-cover bg-slate-900" />
                     </div>
                     <div className="flex flex-col items-start max-w-[85%]">
@@ -2107,7 +2108,7 @@ function SessionContent() {
                         </div>
                         <div className="p-5 rounded-2xl rounded-tl-sm bg-white/[0.02] border-none flex gap-1.5 items-center shadow-xl backdrop-blur-md">
                            {[0, 1, 2].map(i => (
-                             <motion.div key={i} className="w-1.5 h-1.5 bg-cyan-600 rounded-full"
+                             <motion.div key={i} className="w-1.5 h-1.5 bg-emerald-600 rounded-full"
                                animate={{ y: [0, -3, 0], opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.15 }} />
                            ))}
                         </div>
@@ -2124,7 +2125,7 @@ function SessionContent() {
                      {isListening && (
                        <div className="absolute left-6 top-1/2 -translate-y-1/2 flex gap-1 items-end h-4 pointer-events-none z-10">
                           {[1, 2, 3, 4, 5].map(i => (
-                            <motion.div key={i} className="w-0.5 bg-cyan-600/60 rounded-full"
+                            <motion.div key={i} className="w-0.5 bg-emerald-600/60 rounded-full"
                               animate={{ height: [4, 16, 4] }}
                               transition={{ repeat: Infinity, duration: 0.4, delay: i * 0.1 }} />
                           ))}
@@ -2132,7 +2133,7 @@ function SessionContent() {
                      )}
                      <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), send())}
                        placeholder={isListening ? "" : "Input Response Protocol..."}
-                       className={`w-full bg-[#050508] border ${isListening ? 'border-blue-600 shadow-[0_0_30px_rgba(79,70,229,0.25)]' : 'border-white/5'} rounded-[20px] px-6 py-5 text-[12px] text-white focus:ring-1 focus:ring-blue-600/40 outline-none transition-all placeholder:text-slate-700 font-medium ${isListening ? 'pl-16' : ''}`} />
+                       className={`w-full bg-[#050508] border ${isListening ? 'border-emerald-600 shadow-[0_0_30px_rgba(79,70,229,0.25)]' : 'border-white/5'} rounded-[20px] px-6 py-5 text-[12px] text-white focus:ring-1 focus:ring-emerald-600/40 outline-none transition-all placeholder:text-slate-700 font-medium ${isListening ? 'pl-16' : ''}`} />
                      <button onClick={toggleListening} className={`absolute right-5 top-1/2 -translate-y-1/2 transition-all p-2 rounded-xl ${isListening ? 'bg-blue-700 text-white shadow-lg' : 'text-slate-600 hover:text-blue-400'}`}>
                        <Mic className={`w-4 h-4 ${isListening ? 'animate-pulse' : ''}`} />
                      </button>
@@ -2151,7 +2152,7 @@ function SessionContent() {
 
            {/* Metrics Bar */}
            <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-700/10 overflow-hidden">
-              <div className="w-full bg-cyan-600" style={{ height: '40%' }} />
+              <div className="w-full bg-emerald-600" style={{ height: '40%' }} />
            </div>
         </div>
       </div>
@@ -2216,7 +2217,7 @@ function SessionContent() {
                             <span className="text-[10px] font-black text-blue-400">{voiceSpeed.toFixed(2)}x</span>
                          </div>
                          <input type="range" min="0.6" max="1.4" step="0.05" value={voiceSpeed} onChange={e => setVoiceSpeed(parseFloat(e.target.value))}
-                           className="w-full accent-blue-600 cursor-pointer" />
+                           className="w-full accent-emerald-600 cursor-pointer" />
                          <div className="flex justify-between text-[7px] font-black text-slate-600 uppercase tracking-widest">
                             <span>Slow</span><span>Normal</span><span>Fast</span>
                          </div>
@@ -2228,7 +2229,7 @@ function SessionContent() {
                             {(['default', 'male', 'female'] as const).map(g => (
                               <button key={g} onClick={() => setVoiceGender(g)}
                                 className={`py-2 rounded-xl border text-[8px] font-black uppercase tracking-widest transition-all capitalize ${
-                                  voiceGender === g ? 'bg-blue-700 border-blue-600 text-white' : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/20'
+                                  voiceGender === g ? 'bg-blue-700 border-emerald-600 text-white' : 'bg-white/5 border-white/5 text-slate-500 hover:border-white/20'
                                 }`}>{g}</button>
                             ))}
                          </div>
@@ -2239,7 +2240,7 @@ function SessionContent() {
            </AnimatePresence>
            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
              onClick={() => setIsVoicePanelOpen(!isVoicePanelOpen)}
-             className="w-14 h-14 bg-gradient-to-br from-cyan-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.4)] border-2 border-cyan-500/50 relative group">
+             className="w-14 h-14 bg-gradient-to-br from-emerald-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.4)] border-2 border-emerald-500/50 relative group">
               <div className="absolute inset-0 rounded-full border-2 border-violet-400/20 animate-ping pointer-events-none" />
               {voiceMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white group-hover:animate-pulse" />}
            </motion.button>
@@ -2253,7 +2254,7 @@ function SessionContent() {
                   className="mb-4 w-80 bg-[#0e0e11]/95 backdrop-blur-3xl border-none rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col h-[450px]">
                    <div className="p-5 bg-blue-700 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                         <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-lg bg-cyan-600">
+                         <div className="w-10 h-10 rounded-full border-2 border-white/20 overflow-hidden shrink-0 shadow-lg bg-emerald-600">
                            <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Aura" alt="Aura" className="w-full h-full object-cover" />
                          </div>
                          <div>
@@ -2273,7 +2274,7 @@ function SessionContent() {
                       {supportMessages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.role === 'aura' ? 'justify-start' : 'justify-end'} gap-2`}>
                            {msg.role === 'aura' && (
-                             <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mt-1 shadow-sm bg-cyan-600/20">
+                             <div className="w-6 h-6 rounded-full overflow-hidden shrink-0 mt-1 shadow-sm bg-emerald-600/20">
                                <img src="https://api.dicebear.com/7.x/lorelei/svg?seed=Aura" alt="Aura" className="w-full h-full object-cover" />
                              </div>
                            )}
@@ -2286,7 +2287,7 @@ function SessionContent() {
                       ))}
                    </div>
 
-                   <div className="p-4 bg-[#020617]/80/40 border-t border-white/5">
+                   <div className="p-4 bg-[var(--theme-bg)]/80/40 border-t border-white/5">
                       <div className="relative">
                          <input 
                            value={supportInput} 
@@ -2303,9 +2304,9 @@ function SessionContent() {
                              }
                            }}
                            placeholder="Describe your issue..."
-                           className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl pl-5 pr-12 py-3 text-[10px] text-white focus:border-blue-600 outline-none transition-all placeholder:text-slate-700"
+                           className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl pl-5 pr-12 py-3 text-[10px] text-white focus:border-emerald-600 outline-none transition-all placeholder:text-slate-700"
                          />
-                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-600">
+                         <button className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600">
                             <Send className="w-3.5 h-3.5" />
                          </button>
                       </div>
@@ -2317,7 +2318,7 @@ function SessionContent() {
            <motion.button 
              whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
              onClick={() => setIsSupportOpen(!isSupportOpen)}
-             className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_40px_rgba(79,70,229,0.5)] border-2 border-blue-400/50 group relative"
+             className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-indigo-700 rounded-full flex items-center justify-center shadow-[0_10px_40px_rgba(79,70,229,0.5)] border-2 border-blue-400/50 group relative"
            >
               {/* Pulsing ring for the bot */}
               <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping pointer-events-none" />
@@ -2341,7 +2342,7 @@ function SessionContent() {
             drag
             dragMomentum={false}
             dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
-            className="fixed bottom-6 right-[420px] z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-cyan-500/50 transition-colors"
+            className="fixed bottom-6 right-[420px] z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-emerald-500/50 transition-colors"
          >
             {/* Drag Handle (Visible on Hover) */}
             <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
@@ -2369,7 +2370,7 @@ function SessionContent() {
                <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.6)] z-10" />
 
                {/* Integrity Status overlay */}
-               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[#020617]/80/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
+               <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[var(--theme-bg)]/80/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
                   <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${
                      (phoneDetected || faceCount !== 1 || violations > 0) ? 'bg-rose-500 shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'
                   }`} />
@@ -2379,7 +2380,7 @@ function SessionContent() {
                </div>
                
                {/* Camera label */}
-               <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-[#020617]/80/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
+               <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-[var(--theme-bg)]/80/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
                   Feed: Candidate Camera
                </div>
             </div>
