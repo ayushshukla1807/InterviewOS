@@ -611,8 +611,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   // ─── Error State ──────────────────────────────────────────────────────────
   if (hasLoadError) {
     return (
-      <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col items-center justify-center p-6 text-center">
-        <div className="noise-overlay" />
+      <div className="min-h-screen text-[var(--color-theme-text)] flex flex-col items-center justify-center p-6 text-center">
         <div className="w-16 h-16 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mb-6">
           <AlertCircle className="w-8 h-8 text-red-400" />
         </div>
@@ -631,8 +630,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   // ─── Loading State ────────────────────────────────────────────────────────
   if (!blueprint || !runtime) {
     return (
-      <div className="min-h-screen mesh-bg text-[var(--text)] flex items-center justify-center">
-        <div className="noise-overlay" />
+      <div className="min-h-screen text-[var(--color-theme-text)] flex items-center justify-center">
         <div className="flex items-center gap-3">
           <div className="w-6 h-6 border-2 border-violet-500/30 border-t-violet-500 rounded-full animate-spin" />
           <span className="text-gray-400">Booting HYRTE Simulation Engine...</span>
@@ -647,8 +645,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
   if (phase === 'pre_skill' && !preSkillSubmitted && blueprint.skillValidationQuestions?.length > 0) {
     const questions = blueprint.skillValidationQuestions;
     return (
-      <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col" style={{ fontFamily: t.fontFamily }}>
-        <div className="noise-overlay" />
+      <div className="min-h-screen text-[var(--color-theme-text)] flex flex-col" style={{ fontFamily: t.fontFamily }}>
         {/* Header */}
         <div className="border-b px-8 py-4 flex items-center justify-between" style={{ borderColor: t.border, backgroundColor: t.surface }}>
           <div className="flex items-center gap-4">
@@ -807,7 +804,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
   return (
     <div
-      className="min-h-screen flex flex-col relative mesh-bg"
+      className="min-h-screen flex flex-col relative"
       style={{ color: t.textPrimary, fontFamily: t.fontFamily }}
     >
       <div className="noise-overlay" />

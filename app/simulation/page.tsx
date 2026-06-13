@@ -36,11 +36,10 @@ export default function SimulationLanding() {
   };
 
   return (
-    <div className="min-h-screen mesh-bg text-[var(--text)] flex flex-col items-center justify-center p-6 relative overflow-hidden" style={{ fontFamily: '"Inter", sans-serif' }}>
-      <div className="noise-overlay" />
+    <div className="min-h-screen text-[var(--color-theme-text)] flex flex-col items-center justify-center p-6 relative overflow-hidden" style={{ fontFamily: '"Inter", sans-serif' }}>
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[var(--accent)]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-[var(--color-theme-primary)]/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl" />
       </div>
@@ -59,8 +58,7 @@ export default function SimulationLanding() {
             Drop candidates into a real workplace crisis. Watch how they handle Slack fires, angry clients, and impossible deadlines — not just MCQs.
           </p>
         </div>
-
-// Feature Cards
+        {/* Feature Cards */}
         <div className="grid grid-cols-3 gap-3">
           {[
             { icon: <MessageSquare className="w-6 h-6 text-violet-400" />, title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
@@ -81,7 +79,7 @@ export default function SimulationLanding() {
             <span className="text-xs text-gray-600">{jd.length} chars</span>
           </div>
           <textarea
-            className="w-full h-48 bg-black/40 border border-[var(--border-color)] rounded-xl p-4 text-sm font-mono text-cyan-50 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 outline-none resize-none placeholder-slate-600"
+            className="w-full h-48 bg-black/40 border border-[var(--color-theme-border)] rounded-xl p-4 text-sm font-mono text-emerald-50 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 outline-none resize-none placeholder-slate-600"
             placeholder="e.g. We are looking for a Senior Product Manager who can lead cross-functional teams, manage high-stakes client escalations, and handle sudden priority shifts..."
             value={jd}
             onChange={(e) => setJd(e.target.value)}
