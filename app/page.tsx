@@ -6,31 +6,32 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Shield, ArrowRight, Bot, UserCheck, 
   ShieldAlert, Cpu, Sparkles, FileText, 
-  Users, ExternalLink, GraduationCap, ChevronDown
+  Users, ExternalLink, GraduationCap, ChevronDown,
+  Flame, Terminal, Monitor, Code2, CheckCircle, Activity,
+  Briefcase, Plus, Server, LayoutDashboard, Award, Clock
 } from 'lucide-react';
 import Link from 'next/link';
 import { ROLES, ROLE_CATEGORIES, getRolesByCategory, type RoleConfig, type RoleCategory } from '../lib/ai/roles';
 
-// ── Color map for category badges ──────────────────────────────────────────────
+// Color map for categories
 const CAT_COLOR: Record<string, string> = {
-  indigo:  'bg-indigo-50 border-indigo-200 text-indigo-700',
-  violet:  'bg-violet-50 border-violet-200 text-violet-700',
-  sky:     'bg-sky-50 border-sky-200 text-sky-700',
-  rose:    'bg-rose-50 border-rose-200 text-rose-700',
-  emerald: 'bg-emerald-50 border-emerald-200 text-emerald-700',
-  amber:   'bg-amber-50 border-amber-200 text-amber-700',
+  indigo:  'bg-indigo-500/10 border-indigo-500/20 text-indigo-400',
+  violet:  'bg-violet-500/10 border-violet-500/20 text-violet-400',
+  sky:     'bg-sky-500/10 border-sky-500/20 text-sky-400',
+  rose:    'bg-rose-500/10 border-rose-500/20 text-rose-400',
+  emerald: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+  amber:   'bg-amber-500/10 border-amber-500/20 text-amber-400',
 };
 
 const CAT_RING: Record<string, string> = {
-  indigo:  'border-sky-500',
-  violet:  'border-violet-500',
-  sky:     'border-sky-500',
-  rose:    'border-rose-500',
-  emerald: 'border-emerald-500',
-  amber:   'border-amber-500',
+  indigo:  'border-indigo-500 shadow-indigo-500/20',
+  violet:  'border-violet-500 shadow-violet-500/20',
+  sky:     'border-sky-500 shadow-sky-500/20',
+  rose:    'border-rose-500 shadow-rose-500/20',
+  emerald: 'border-emerald-500 shadow-emerald-500/20',
+  amber:   'border-amber-500 shadow-amber-500/20',
 };
 
-// ── Candidate Profile Form ─────────────────────────────────────────────────────
 interface ProfileData {
   candidateName: string;
   education: string;
@@ -49,7 +50,6 @@ const emptyProfile: ProfileData = {
   skills: '',
 };
 
-// ── Landing Page ────────────────────────────────────────────────────────────────
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -152,7 +152,6 @@ function LandingPageContent() {
 
   const handleLaunchTryout = () => {
     if (!selectedRole) return;
-    // Save profile to localStorage so the session page can use it
     localStorage.setItem('interviewos_candidate_profile', JSON.stringify({
       ...profile,
       roleId: selectedRole.id,
@@ -166,99 +165,293 @@ function LandingPageContent() {
     router.push(`/apply/${selectedJob}`);
   };
 
+  const handleRoleCardClick = (role: RoleConfig, catId: RoleCategory) => {
+    setSelectedCategory(catId);
+    setSelectedRole(role);
+    // Smooth scroll to Tryout Command Center
+    const target = document.getElementById('command-center');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const updateProfile = (key: keyof ProfileData, val: string) =>
     setProfile(prev => ({ ...prev, [key]: val }));
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans selection:bg-sky-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
-
-      {/* Background */}
+    <div className="min-h-screen bg-[#050508] text-slate-100 font-sans selection:bg-purple-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
+      
+      {/* Visual background grid and radial blurs */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute inset-0 opacity-50 bg-cover bg-center bg-no-repeat animate-pulse" 
-          style={{ backgroundImage: 'url(/hero-bg.png)', mixBlendMode: 'overlay' }} 
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg)]/70 to-[var(--bg)]" />
-        <div className="absolute top-[-10%] left-[-10%] w-[800px] h-[800px] bg-emerald-500/10 blur-[150px] rounded-full mix-blend-screen" />
-        <div className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-sky-500/10 blur-[150px] rounded-full mix-blend-screen" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[800px] h-[800px] bg-teal-500/10 blur-[150px] rounded-full mix-blend-screen" />
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute top-[-10%] left-[-15%] w-[800px] h-[800px] bg-purple-600/10 blur-[160px] rounded-full mix-blend-screen" />
+        <div className="absolute top-[35%] right-[-10%] w-[700px] h-[700px] bg-emerald-600/10 blur-[160px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-[5%] left-[10%] w-[900px] h-[900px] bg-blue-600/10 blur-[180px] rounded-full mix-blend-screen" />
       </div>
 
       {/* Nav */}
-      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between backdrop-blur-xl border-b shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 70%, transparent)', borderColor: 'var(--border-color)' }}>
+      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between backdrop-blur-xl border-b border-white/5 bg-[#0a0a0c]/85">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-          <div className="w-10 h-10 border rounded-xl flex items-center justify-center shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--primary) 10%, transparent)', borderColor: 'color-mix(in srgb, var(--primary) 20%, transparent)' }}>
-            <Shield className="w-5 h-5" style={{ color: 'var(--primary)' }} />
+          <div className="w-10 h-10 border border-purple-500/20 rounded-xl flex items-center justify-center bg-purple-500/5 shadow-md shadow-purple-500/5">
+            <Shield className="w-5 h-5 text-purple-400" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-extrabold tracking-tight leading-none" style={{ color: 'var(--text)' }}>InterviewOS</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest mt-0.5" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>AI Platform</span>
+            <span className="text-sm font-extrabold tracking-tight leading-none text-white">InterviewOS</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
 
         <div className="flex items-center gap-6">
           {isAuthenticated ? (
             <>
-              <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="text-[11px] font-bold uppercase tracking-widest transition-colors" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>
-                {userRole === 'recruiter' ? 'Recruiter Portal' : 'Candidate Hub'}
+              <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
+                {userRole === 'recruiter' ? 'Recruiter Dashboard' : 'Candidate Workspace'}
               </Link>
               <button 
                 onClick={() => {
                   localStorage.removeItem('interviewos_token');
                   localStorage.removeItem('interviewos_user');
-                  // We should also call the logout API to clear cookies
                   fetch('/api/auth/logout', { method: 'POST' }).then(() => {
                     setIsAuthenticated(false);
                     setUserRole(null);
                   });
                 }}
-                className="text-[11px] font-bold uppercase tracking-widest text-rose-500 hover:text-rose-400 transition-colors"
+                className="text-[10px] font-black uppercase tracking-widest text-rose-500 hover:text-rose-400 transition-colors"
               >
                 Log Out
               </button>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-[11px] font-bold uppercase tracking-widest transition-colors hover:text-emerald-500" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>Log in</Link>
-              <Link href="/login" className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-md transition-all">Sign up</Link>
+              <Link href="/login" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Log in</Link>
+              <Link href="/login" className="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-[9px] font-black uppercase tracking-widest transition-all shadow-lg shadow-purple-600/20">Sign up free</Link>
             </>
           )}
         </div>
       </nav>
 
-      {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 lg:px-16 relative z-10 gap-12">
-        <motion.div
+      {/* Hero Section */}
+      <header className="relative z-10 max-w-7xl mx-auto w-full px-6 pt-16 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <motion.div 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: 'circOut' }}
-          className="max-w-4xl w-full text-center space-y-6"
+          transition={{ duration: 0.8 }}
+          className="lg:col-span-6 space-y-6 text-left"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 backdrop-blur-md border rounded-full shadow-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 80%, transparent)', borderColor: 'var(--border-color)' }}>
-            <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--primary)' }} />
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 70%, transparent)' }}>Behavioral Intelligence Platform</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-white/5 border border-white/5 rounded-full shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">Next-Gen AI Intelligence</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1]" style={{ color: 'var(--text)' }}>
-            Experience the <br />
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'linear-gradient(to right, #10B981, #F59E0B, #0EA5E9)' }}>
-              Future of AI Hiring
-            </span>
+          <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-[1.1] text-white">
+            Practice Real <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-emerald-400">
+              Technical Interviews
+            </span> <br />
+            with AI.
           </h1>
-          <p className="font-medium text-sm md:text-base max-w-lg mx-auto leading-relaxed" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>
-            Evaluate real workplace behavior, adaptability, and decision-making under pressure through dynamic AI-driven simulations.
+          <p className="text-sm font-medium text-slate-400 max-w-xl leading-relaxed">
+            Get interview ready with personalized AI evaluation, turn-by-turn live grading feedback, and real-time cloud containers. Designed to simulate real workplace environments.
           </p>
+
+          <div className="flex flex-wrap gap-4 pt-2">
+            <a href="#command-center" className="px-6 py-3.5 bg-white text-[#050508] hover:bg-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-white/5 flex items-center gap-2">
+              Start Free Mock <ArrowRight className="w-4 h-4" />
+            </a>
+            <Link href="/login" className="px-6 py-3.5 bg-white/5 hover:bg-white/10 text-white border border-white/5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all">
+              Try Sandbox VM
+            </Link>
+          </div>
+
+          {/* Monochrome partner logos */}
+          <div className="pt-6 space-y-2">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Trusted by developers from</p>
+            <div className="flex items-center gap-6 opacity-30 grayscale hover:opacity-60 transition-opacity">
+              <span className="text-sm font-bold tracking-tight text-white">Google</span>
+              <span className="text-sm font-bold tracking-tight text-white">Amazon</span>
+              <span className="text-sm font-bold tracking-tight text-white">Slack</span>
+              <span className="text-sm font-bold tracking-tight text-white">LinkedIn</span>
+            </div>
+          </div>
         </motion.div>
 
-        {/* ── CONTROL CENTER ────────────────────────────────────────────────── */}
+        {/* Hero Right: Premium Mock Workspace */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="lg:col-span-6 relative w-full aspect-[4/3] rounded-3xl border border-white/5 bg-[#0a0a0c]/80 backdrop-blur-xl p-4 shadow-2xl flex flex-col overflow-hidden group"
+        >
+          {/* Top border highlight */}
+          <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500 opacity-60" />
+          
+          {/* Browser header */}
+          <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-3 shrink-0">
+            <div className="flex gap-1.5">
+              <div className="w-3 h-3 rounded-full bg-rose-500/80" />
+              <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+              <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+            </div>
+            <div className="text-[10px] text-slate-500 font-mono">candidate_session_workspace</div>
+            <div className="w-10" />
+          </div>
+
+          {/* Split mock editor/terminal */}
+          <div className="flex-1 flex gap-3 overflow-hidden">
+            {/* Editor Area */}
+            <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-400 space-y-2 relative border border-white/5">
+              <div className="text-emerald-500">// Optimal JS Batch Engine</div>
+              <div><span className="text-purple-400">class</span> <span className="text-blue-400">TransactionAggregator</span> &#123;</div>
+              <div className="pl-4"><span className="text-purple-400">constructor</span>() &#123;</div>
+              <div className="pl-8"><span className="text-purple-400">this</span>.transactions = [];</div>
+              <div className="pl-4">&#125;</div>
+              <div className="pl-4"><span className="text-blue-400">process</span>(tx) &#123;</div>
+              <div className="pl-8"><span className="text-purple-400">this</span>.transactions.push(tx);</div>
+              <div className="pl-8">// Batch under clean scopes</div>
+              <div className="pl-4">&#125;</div>
+              <div>&#125;</div>
+              
+              <div className="absolute bottom-3 right-3 px-2 py-1 bg-white/5 border border-white/5 rounded text-[8px] font-black uppercase text-blue-400">JavaScript</div>
+            </div>
+            
+            {/* Telemetry/AI output mock */}
+            <div className="w-44 flex flex-col gap-3">
+              <div className="flex-1 rounded-2xl bg-white/5 border border-white/5 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                <Activity className="w-5 h-5 text-emerald-400 animate-pulse" />
+                <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Voice Confidence</span>
+                <span className="text-lg font-black text-white">92%</span>
+              </div>
+              <div className="flex-1 rounded-2xl bg-white/5 border border-white/5 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                <Sparkles className="w-5 h-5 text-purple-400 animate-pulse" />
+                <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Stress telemetry</span>
+                <span className="text-sm font-black text-purple-300">Neutral / Focused</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Badges */}
+          {/* Top evaluation score card */}
+          <div className="absolute top-12 right-6 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px]">
+            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <CheckCircle className="w-4.5 h-4.5 text-emerald-400" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-[8px] font-black tracking-widest text-slate-400 uppercase">Evaluation Score</span>
+              <span className="text-sm font-black text-white">94/100</span>
+            </div>
+          </div>
+
+          {/* Bottom Left: Confidence Badge */}
+          <div className="absolute bottom-8 left-6 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[4px]">
+            <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+              <Award className="w-4.5 h-4.5 text-purple-400" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-[8px] font-black tracking-widest text-slate-400 uppercase">Confidence</span>
+              <span className="text-sm font-black text-white">Elite</span>
+            </div>
+          </div>
+
+          {/* Bottom Right: Streak Card */}
+          <div className="absolute bottom-20 right-6 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-x-[-4px]">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+              <Flame className="w-4.5 h-4.5 text-amber-400 animate-bounce" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-[8px] font-black tracking-widest text-slate-400 uppercase">Daily Streak</span>
+              <span className="text-sm font-black text-white">5 Days Active</span>
+            </div>
+          </div>
+        </motion.div>
+      </header>
+
+      {/* How it Works Section */}
+      <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 text-center space-y-12">
+        <div className="space-y-3">
+          <h2 className="text-3xl md:text-5xl font-black text-white">How InterviewOS Works</h2>
+          <p className="text-sm font-medium text-slate-400 max-w-lg mx-auto">Start your journey to becoming interview-ready in three simple steps.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { step: '01', title: 'Choose Your Role', desc: 'Select your target engineering domain from Frontend, Backend, Full Stack to Android.' },
+            { step: '02', title: 'Job or Internship?', desc: 'Tailor the simulation for professional career shifts or early-career internships.' },
+            { step: '03', title: 'Select Your Stack', desc: 'Lock in the specific technologies you use to receive specialized technical probing.' }
+          ].map(item => (
+            <div key={item.step} className="p-8 bg-[#0a0a0c]/50 border border-white/5 rounded-3xl text-center space-y-4 shadow-lg flex flex-col items-center">
+              <div className="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-xs font-black text-purple-400">
+                {item.step}
+              </div>
+              <p className="text-md font-bold text-white">{item.title}</p>
+              <p className="text-[11px] font-medium text-slate-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Specialized Interview Path Cards */}
+      <section className="relative z-10 max-w-7xl mx-auto w-full px-6 pb-20 lg:px-12 space-y-8 text-left">
+        <div className="flex justify-between items-end">
+          <div className="space-y-1">
+            <h2 className="text-2xl md:text-4xl font-black text-white">Choose Your Path</h2>
+            <p className="text-xs font-bold uppercase tracking-widest text-slate-500">Specialized interview loops designed for every engineering domain.</p>
+          </div>
+          <a href="#command-center" className="text-[10px] font-black uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-1.5">
+            View All 20+ Roles <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { title: 'Frontend Developer Intern', category: 'software_engineering', roleId: 'FE_INTERN', tags: ['HTML/CSS', 'JS', 'REACT'], duration: '30m Simulation', icon: '💻' },
+            { title: 'Frontend Developer', category: 'software_engineering', roleId: 'FE', tags: ['NEXT.JS', 'TAILWIND', 'TS'], duration: '45m Simulation', icon: '⚡' },
+            { title: 'Backend Developer Intern', category: 'software_engineering', roleId: 'BE_INTERN', tags: ['NODE.JS', 'SQL', 'APIS'], duration: '45m Simulation', icon: '⚙️' },
+            { title: 'Full Stack Developer', category: 'software_engineering', roleId: 'FS', tags: ['MERN', 'POSTGRESQL', 'DOCKER'], duration: '60m Simulation', icon: '🚀' },
+            { title: 'Full Stack Developer Intern', category: 'software_engineering', roleId: 'FS_INTERN', tags: ['REACT', 'EXPRESS', 'AUTH'], duration: '45m Simulation', icon: '💎' },
+            { title: 'Android App Developer', category: 'software_engineering', roleId: 'ANDROID', tags: ['KOTLIN', 'JETPACK', 'MVVM'], duration: '45m Simulation', icon: '📱' },
+          ].map(role => {
+            const roleMeta = ROLES.find(r => r.id === role.roleId);
+            return (
+              <div 
+                key={role.roleId}
+                onClick={() => roleMeta && handleRoleCardClick(roleMeta, role.category as any)}
+                className="p-6 bg-[#0a0a0c]/50 border border-white/5 rounded-3xl hover:border-purple-500/40 hover:bg-[#0c0c10]/70 cursor-pointer transition-all duration-300 shadow-md group flex flex-col justify-between h-48"
+              >
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <span className="text-2xl">{role.icon}</span>
+                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                      <Clock className="w-2.5 h-2.5" /> {role.duration}
+                    </span>
+                  </div>
+                  <h3 className="text-md font-bold text-white group-hover:text-purple-400 transition-colors leading-snug">{role.title}</h3>
+                </div>
+                
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {role.tags.map(t => (
+                    <span key={t} className="text-[8px] px-2 py-0.5 bg-white/5 border border-white/5 rounded text-slate-400 font-semibold tracking-wider uppercase">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Command Center (Interactive Tryout Area) */}
+      <section id="command-center" className="relative z-10 max-w-5xl mx-auto w-full px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="w-full max-w-5xl bg-white/70 backdrop-blur-3xl rounded-[2.5rem] p-6 lg:p-10 shadow-2xl flex flex-col gap-8 border"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 70%, transparent)', borderColor: 'var(--border-color)' }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="w-full bg-[#0a0a0c]/85 border border-white/5 rounded-[2.5rem] p-6 lg:p-10 shadow-2xl flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
         >
-          {/* Main navigation tabs */}
-          <div className="w-full p-2 rounded-2xl flex border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500 opacity-60" />
+
+          {/* Navigation tabs */}
+          <div className="w-full p-1.5 rounded-2xl flex bg-[#050508]/60 border border-white/5">
             {[
               { id: 'tryout', icon: <Bot className="w-4 h-4" />, label: 'Practice Interview' },
               { id: 'candidate', icon: <GraduationCap className="w-4 h-4" />, label: 'My Workspace' },
@@ -268,14 +461,9 @@ function LandingPageContent() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 py-3 px-4 text-[11px] font-bold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 ${
-                  activeTab === tab.id ? 'shadow-sm border' : 'opacity-60 hover:opacity-100'
+                className={`flex-1 py-3 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${
+                  activeTab === tab.id ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' : 'text-slate-400 hover:text-white opacity-70 hover:opacity-100'
                 }`}
-                style={{
-                  backgroundColor: activeTab === tab.id ? 'var(--card-bg)' : 'transparent',
-                  borderColor: activeTab === tab.id ? 'var(--border-color)' : 'transparent',
-                  color: activeTab === tab.id ? 'var(--primary)' : 'var(--text)'
-                }}
               >
                 {tab.icon} {tab.label}
               </button>
@@ -285,7 +473,7 @@ function LandingPageContent() {
           {/* Tab content */}
           <AnimatePresence mode="wait">
 
-            {/* ── TRYOUT TAB ──────────────────────────────────────────────────── */}
+            {/* tryout tab */}
             {activeTab === 'tryout' && (
               <motion.div
                 key="tryout"
@@ -295,9 +483,9 @@ function LandingPageContent() {
                 className="space-y-8 text-left"
               >
                 <div>
-                  <h3 className="text-xl font-bold" style={{ color: 'var(--text)' }}>What is your target role?</h3>
-                  <p className="text-[11px] font-semibold uppercase tracking-widest mt-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>
-                    Select a role → fill your background → get a personalised AI mock interview
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Configure Practice Interview</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">
+                    Select a role Category → Pick a specialized path → Add background details
                   </p>
                 </div>
 
@@ -307,48 +495,48 @@ function LandingPageContent() {
                     <button
                       key={catId}
                       onClick={() => setSelectedCategory(catId)}
-                      className={`px-4 py-2 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all ${
+                      className={`px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-xl border transition-all ${
                         selectedCategory === catId
-                          ? `${CAT_COLOR[catMeta.color]} shadow-sm`
-                          : 'border hover:opacity-80'
+                          ? `${CAT_COLOR[catMeta.color]} border-purple-500/30`
+                          : 'bg-white/5 border-white/5 text-slate-400 hover:text-white'
                       }`}
-                      style={selectedCategory !== catId ? { backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text)' } : {}}
                     >
                       {catMeta.label}
                     </button>
                   ))}
                 </div>
 
-                {/* Role cards for selected category */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {/* Role selection dropdown/chips */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {(groupedRoles[selectedCategory] || []).map(role => (
                     <button
                       key={role.id}
                       onClick={() => setSelectedRole(role)}
-                      className={`p-4 rounded-2xl border text-left transition-all space-y-2 ${
+                      className={`p-4 rounded-2xl border text-left transition-all space-y-2 flex flex-col justify-between ${
                         selectedRole?.id === role.id
-                          ? `${CAT_RING[role.color]} border-2 shadow-md`
-                          : 'shadow-lg hover:shadow-2xl'
+                          ? `${CAT_RING[role.color]} border bg-[#0a0a0c]/60 shadow-lg shadow-purple-500/5`
+                          : 'bg-[#050508]/40 border-white/5 hover:border-white/10 hover:bg-[#050508]/60 shadow-md'
                       }`}
-                      style={{ backgroundColor: 'var(--card-bg)', borderColor: selectedRole?.id === role.id ? undefined : 'var(--border-color)' }}
                     >
-                      <span className="text-2xl">{role.icon}</span>
-                      <p className="text-sm font-bold leading-tight" style={{ color: 'var(--text)' }}>{role.title}</p>
-                      <p className="text-[10px] leading-relaxed" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>{role.description.slice(0, 60)}…</p>
+                      <span className="text-xl">{role.icon}</span>
+                      <div>
+                        <p className="text-xs font-bold leading-tight text-white">{role.title}</p>
+                        <p className="text-[9px] leading-relaxed text-slate-500 mt-1">{role.description.slice(0, 50)}…</p>
+                      </div>
                     </button>
                   ))}
                 </div>
 
-                {/* Selected role chip + skills */}
+                {/* Selected role details card */}
                 {selectedRole && (
-                  <div className={`p-4 rounded-2xl border ${CAT_COLOR[selectedRole.color]} border-current/20`}>
-                    <div className="flex items-center gap-2 mb-2">
+                  <div className={`p-5 rounded-2xl border ${CAT_COLOR[selectedRole.color]} border-current/25 bg-[#050508]/50`}>
+                    <div className="flex items-center gap-2 mb-3">
                       <span className="text-xl">{selectedRole.icon}</span>
-                      <span className="text-sm font-bold text-slate-900">{selectedRole.title}</span>
+                      <span className="text-xs font-black uppercase tracking-wider text-white">{selectedRole.title}</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.coreSkills.map(s => (
-                        <span key={s} className="text-[10px] px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-slate-600 font-semibold shadow-sm">
+                        <span key={s} className="text-[9px] px-2.5 py-1 bg-white/5 border border-white/5 rounded-lg text-slate-300 font-bold uppercase tracking-wider">
                           {s}
                         </span>
                       ))}
@@ -356,15 +544,15 @@ function LandingPageContent() {
                   </div>
                 )}
 
-                {/* Profile form toggle */}
+                {/* Candidate details form */}
                 {selectedRole && (
                   <div className="space-y-4">
                     <button
                       onClick={() => setShowProfileForm(v => !v)}
-                      className="flex items-center gap-2 text-[11px] font-bold text-sky-600 uppercase tracking-wider hover:text-indigo-800 transition-all"
+                      className="flex items-center gap-2 text-[10px] font-black text-purple-400 uppercase tracking-widest hover:text-purple-300 transition-all"
                     >
                       <ChevronDown className={`w-4 h-4 transition-transform ${showProfileForm ? 'rotate-180' : ''}`} />
-                      {showProfileForm ? 'Hide' : 'Add'} Your Background (Projects · Experience · Certifications)
+                      {showProfileForm ? 'Hide' : 'Add'} Customized Background (Resume / Project Context)
                     </button>
 
                     <AnimatePresence>
@@ -375,53 +563,53 @@ function LandingPageContent() {
                           exit={{ opacity: 0, height: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Your Name *</label>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/5 mt-2">
+                            <div className="space-y-1.5">
+                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Your Name *</label>
                               <input
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
                                 placeholder="Guest Candidate"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:bg-white outline-none placeholder-slate-400 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
                               />
                             </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Education</label>
+                            <div className="space-y-1.5">
+                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Education</label>
                               <input
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
-                                placeholder="B.S. Computer Science"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:bg-white outline-none placeholder-slate-400 shadow-inner"
+                                placeholder="e.g. B.S. Computer Science"
+                                className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
                               />
                             </div>
-                            <div className="space-y-1 md:col-span-2">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Projects</label>
+                            <div className="space-y-1.5 md:col-span-2">
+                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Core Projects</label>
                               <textarea
                                 value={profile.projects}
                                 onChange={e => updateProfile('projects', e.target.value)}
-                                placeholder="e.g. Built an AI-powered logistics routing application using Next.js..."
+                                placeholder="e.g. Built an AI chat application using Next.js and WebSockets..."
                                 rows={2}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Work Experience</label>
+                            <div className="space-y-1.5">
+                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Work History</label>
                               <textarea
                                 value={profile.experience}
                                 onChange={e => updateProfile('experience', e.target.value)}
-                                placeholder="e.g. Software Engineer Intern at Acme Corp — optimized database queries..."
+                                placeholder="e.g. Frontend Intern at TechCorp - built dynamic dashboards..."
                                 rows={2}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Certifications & Skills</label>
+                            <div className="space-y-1.5">
+                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Additional Skills & Certifications</label>
                               <textarea
                                 value={profile.certifications}
                                 onChange={e => updateProfile('certifications', e.target.value)}
-                                placeholder="e.g. AWS Certified Developer, React, Node.js..."
+                                placeholder="e.g. AWS Developer Assoc, Docker, Redux..."
                                 rows={2}
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-sky-500 focus:bg-white outline-none resize-none placeholder-slate-400 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                           </div>
@@ -434,113 +622,113 @@ function LandingPageContent() {
                 <button
                   onClick={handleLaunchTryout}
                   disabled={!selectedRole}
-                  className={`w-full py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+                  className={`w-full py-4 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                     selectedRole
-                      ? 'bg-sky-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg active:scale-[0.98]'
-                      : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
+                      ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-600/20 active:scale-[0.98]'
+                      : 'bg-white/5 text-slate-600 cursor-not-allowed border border-white/5'
                   }`}
                 >
                   {selectedRole
-                    ? `Start ${selectedRole.title} Interview`
-                    : 'Select a Target Role First'}
+                    ? `Start ${selectedRole.title} Mock Interview`
+                    : 'Select a Target Role Above First'}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </motion.div>
             )}
 
-            {/* ── CANDIDATE TAB ──────────────────────────────────────────── */}
+            {/* candidate tab */}
             {activeTab === 'candidate' && (
               <motion.div key="candidate" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-xl font-bold text-[var(--text)]">Candidate Portfolio Workspace</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">View past assessments, download verified certificates, and follow your AI learning roadmap</p>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Candidate Portfolio Workspace</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">View stats, monitor daily activity streaks, download certificates, and check global rankings</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-sky-500">
-                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Personalised Paths</span>
-                    <p className="text-sm font-bold text-[var(--text)]">AI Learning Roadmap</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Customised skill improvement checklists based on your actual interview results.</p>
+                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/5 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Personalised paths</span>
+                    <p className="text-sm font-bold text-white">Learning Roadmap</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
                   </Link>
-                  <Link href="/candidate" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-sky-500">
-                    <span className="text-[10px] font-bold text-sky-500 uppercase tracking-widest">Verified Badge</span>
-                    <p className="text-sm font-bold text-[var(--text)]">Shareable Certificate</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Download and share elegant completion certificates with unique verification hashes.</p>
+                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/5 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest">Verified Credentials</span>
+                    <p className="text-sm font-bold text-white">Shareable Portfolio Profile</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
                   </Link>
                 </div>
-                <Link href="/candidate" className="w-full py-4 bg-sky-600 hover:bg-sky-500 dark:bg-white dark:text-black dark:hover:bg-slate-100 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
-                  Open My Candidate Dashboard <ArrowRight className="w-4 h-4" />
+                <Link href="/candidate" className="w-full py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-600/20">
+                  Open Candidate Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
             )}
 
-            {/* ── RECRUITER TAB ──────────────────────────────────────────── */}
+            {/* recruiter tab */}
             {activeTab === 'recruiter' && (
               <motion.div key="recruiter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-xl font-bold text-[var(--text)]">Recruiter Control Dashboard</h3>
-                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Create job listings, send candidate invite links, audit proctor logs, evaluate competency radars</p>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Recruiter Assessment Center</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-sky-500">
-                    <span className="text-[10px] font-bold text-sky-500 uppercase tracking-widest">Visual Proctoring</span>
-                    <p className="text-sm font-bold text-[var(--text)]">Neural Integrity Audit Log</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">Gaze tracking, tab-switch violations, and screen-sharing audit snapshots.</p>
+                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/5 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest">Behavioral Proctoring</span>
+                    <p className="text-sm font-bold text-white">Neural Integrity Log</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
                   </Link>
-                  <Link href="/recruiter" className="p-5 bg-[var(--card-bg)] border border-[var(--border-color)] shadow-lg hover:shadow-2xl transition-shadow rounded-2xl space-y-1.5 block hover:border-sky-500">
-                    <span className="text-[10px] font-bold text-violet-500 uppercase tracking-widest">Analytics</span>
-                    <p className="text-sm font-bold text-[var(--text)]">Competency Radar Grid</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">16-point merit reports with hiring-readiness scores and risk flags.</p>
+                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/5 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest">Diagnostic Analytics</span>
+                    <p className="text-sm font-bold text-white">16-Point Competency Radar</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
                   </Link>
                 </div>
-                <Link href="/recruiter" className="w-full py-4 bg-sky-600 hover:bg-sky-500 dark:bg-white dark:text-black dark:hover:bg-slate-100 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md">
+                <Link href="/recruiter" className="w-full py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-lg shadow-purple-600/20">
                   Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
             )}
 
-            {/* ── MVP TAB ─────────────────────────────────────────────────── */}
+            {/* mvp tab */}
             {activeTab === 'mvp' && (
               <motion.div key="mvp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-xl font-bold text-[var(--text)]">JD + Resume Custom Assessment (MVP Flow)</h3>
-                    <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Upload your resume against a recruiter's job description — AI generates a 100% custom interview</p>
+                    <h3 className="text-lg font-black text-white uppercase tracking-wider">JD + Resume Custom Mock (RAG Assessment)</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Select Job Opening</label>
-                    <button onClick={() => setShowAddJob(!showAddJob)} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest hover:underline">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Select Target Job Opening</label>
+                    <button onClick={() => setShowAddJob(!showAddJob)} className="text-[9px] font-black text-emerald-400 uppercase tracking-widest hover:underline">
                       {showAddJob ? 'Cancel' : '+ Create Custom Role'}
                     </button>
                   </div>
 
                   {showAddJob ? (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-4 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-xl space-y-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Job Title</label>
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#050508] border border-white/5 rounded-2xl space-y-4">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Job Title</label>
                         <input
                           type="text"
-                          placeholder="e.g. Senior Frontend Developer"
+                          placeholder="e.g. Senior Backend Engineer"
                           value={newJobTitle}
                           onChange={e => setNewJobTitle(e.target.value)}
-                          className="w-full bg-[var(--bg)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-[var(--text)] outline-none focus:border-emerald-500"
+                          className="w-full bg-[#0a0a0c] border border-white/5 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Job Description</label>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Job Description</label>
                         <textarea
-                          placeholder="Paste the full job description or requirements here..."
+                          placeholder="Paste the full requirements or role details here..."
                           value={newJobDesc}
                           onChange={e => setNewJobDesc(e.target.value)}
                           rows={3}
-                          className="w-full bg-[var(--bg)] border border-[var(--border-color)] rounded-lg px-3 py-2 text-sm text-[var(--text)] outline-none focus:border-emerald-500 resize-none"
+                          className="w-full bg-[#0a0a0c] border border-white/5 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 resize-none"
                         />
                       </div>
                       <button
                         onClick={handleAddCustomJob}
                         disabled={!newJobTitle || !newJobDesc}
-                        className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition-all"
+                        className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-lg text-[10px] font-black uppercase tracking-wider transition-all"
                       >
                         Save & Select Role
                       </button>
@@ -549,7 +737,7 @@ function LandingPageContent() {
                     <select
                       value={selectedJob}
                       onChange={e => setSelectedJob(e.target.value)}
-                      className="w-full bg-[var(--bg)] border border-[var(--border-color)] rounded-xl px-4 py-3 text-sm text-[var(--text)] focus:border-emerald-500 focus:bg-[var(--card-bg)] outline-none shadow-inner"
+                      className="w-full bg-[#050508] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 focus:bg-[#0a0a0c] outline-none shadow-inner"
                     >
                       {mergedJobs.map(job => (
                         <option key={job.id} value={job.id}>{job.id}: {job.title}</option>
@@ -557,14 +745,14 @@ function LandingPageContent() {
                     </select>
                   )}
                 </div>
-                <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
-                  <p className="text-[13px] text-emerald-600 dark:text-emerald-400 leading-relaxed font-medium">
-                    You will land on the job application page, enter your details, and upload a <strong>PDF Resume</strong>. The AI parses your resume, matches it against the JD requirements, and generates a personalised 4-question technical assessment covering exactly the intersection of your skills and the role's needs.
+                <div className="p-4 bg-purple-500/5 border border-purple-500/10 rounded-xl">
+                  <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                    You will be redirected to the custom job application portal. There, you can upload your <strong>PDF resume</strong>. The system automatically structures your skills, parses work history, and dynamically prompts you with tailored scenarios reflecting the intersection of your experience and the job description.
                   </p>
                 </div>
                 <button
                   onClick={handleLaunchMVP}
-                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-[0.98] transition-all"
                 >
                   Go to Job Application Portal <ExternalLink className="w-4 h-4" />
                 </button>
@@ -572,28 +760,36 @@ function LandingPageContent() {
             )}
           </AnimatePresence>
         </motion.div>
+      </section>
 
-        {/* Feature pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full">
+      {/* Feature pillars */}
+      <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
+        <div className="text-center space-y-3">
+          <h2 className="text-2xl md:text-4xl font-black text-white">Don't Just Practice. Improve.</h2>
+          <p className="text-xs font-black uppercase tracking-widest text-slate-500">Actionable Insights & Dynamic Simulations</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
           {[
-            { icon: <Bot className="w-6 h-6 text-sky-600" />, bg: 'bg-indigo-50 border-indigo-200 dark:bg-indigo-950/30 dark:border-indigo-900/50', title: 'Sentient AI Interviewer', desc: 'Syed probes your actual projects, not textbook definitions.' },
-            { icon: <ShieldAlert className="w-6 h-6 text-emerald-600" />, bg: 'bg-emerald-50 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900/50', title: 'Neural Proctoring', desc: 'Gaze tracking, tab-switch detection, zero false positives.' },
-            { icon: <UserCheck className="w-6 h-6 text-violet-600" />, bg: 'bg-violet-50 border-violet-200 dark:bg-violet-950/30 dark:border-violet-900/50', title: '16-Point Merit Reports', desc: 'Hiring-ready competency radars delivered instantly.' },
+            { icon: <Bot className="w-6 h-6 text-purple-400" />, bg: 'bg-purple-500/5 border-purple-500/10', title: 'Adaptive AI Mock Prober', desc: 'Syed dynamically questions your projects, architecture choices, and background details rather than asking generic textbook trivia.' },
+            { icon: <Server className="w-6 h-6 text-emerald-400" />, bg: 'bg-emerald-500/5 border-emerald-500/10', title: 'Interactive Cloud Sandbox', desc: 'Write backend code, compile modules, execute shell commands, and deploy mini-apps inside a secure StackBlitz WebContainer.' },
+            { icon: <UserCheck className="w-6 h-6 text-sky-400" />, bg: 'bg-sky-500/5 border-sky-500/10', title: 'Turn-by-Turn Grading Badges', desc: 'Get live visual check badges (STRONG, VAGUE, INCORRECT) and inline coaching recommendations underneath every answer you submit.' },
           ].map(f => (
-            <div key={f.title} className="group flex flex-col items-center gap-4 p-8 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl hover:border-sky-500/50 hover:shadow-xl transition-all duration-300 text-center shadow-md">
+            <div key={f.title} className="group flex flex-col items-center gap-4 p-8 bg-[#0a0a0c]/50 border border-white/5 rounded-3xl hover:border-purple-500/40 hover:bg-[#0c0c10]/70 transition-all duration-300 text-center shadow-lg">
               <div className={`w-14 h-14 ${f.bg} rounded-2xl flex items-center justify-center border group-hover:scale-110 transition-transform`}>{f.icon}</div>
               <div className="space-y-1.5">
-                <p className="text-sm font-bold text-[var(--text)] tracking-tight">{f.title}</p>
-                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
+                <p className="text-sm font-black text-white tracking-tight">{f.title}</p>
+                <p className="text-[11px] font-medium text-slate-400 leading-relaxed">{f.desc}</p>
               </div>
             </div>
           ))}
         </div>
-      </main>
+      </section>
 
-      <footer className="p-12 border-t border-[var(--border-color)] text-center bg-[var(--card-bg)]">
+      {/* Footer */}
+      <footer className="p-12 border-t border-white/5 text-center bg-[#0a0a0c] z-10 relative">
         <div className="flex flex-col items-center gap-4">
-          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">© 2026 InterviewOS Inc. All rights reserved.</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">© 2026 InterviewOS Inc. All rights reserved.</p>
         </div>
       </footer>
     </div>
@@ -602,7 +798,7 @@ function LandingPageContent() {
 
 export default function LandingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#020204]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#050508]" />}>
       <LandingPageContent />
     </Suspense>
   );
