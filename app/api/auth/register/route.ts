@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { connectDB } from '../../../../lib/db/mongoose';
 import User from '../../../../lib/db/models/User';
+import Session from '../../../../lib/db/models/Session';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
 
@@ -83,6 +84,17 @@ export async function POST(req: Request) {
       JWT_SECRET,
       { expiresIn: '7d' }
     );
+
+    const userAgent = req.headers.get('user-agent') || 'Unknown Device';
+    const ipAddress = req.headers.get('x-forwarded-for')?.split(',')[0] || req.headers.get('x-real-ip') || '127.0.0.1';
+
+    await Session.create({
+      userId: newUser._id,
+      token: token.split('.').pop(),
+      userAgent,
+      ipAddress,
+      lastActiveAt: new Date(),
+    });
 
     const response = NextResponse.json({
       token,

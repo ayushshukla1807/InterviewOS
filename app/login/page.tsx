@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Eye, EyeOff, Cpu, Zap, BarChart3, Brain, Code2, Shield } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Cpu, Zap, BarChart3, Brain, Code2, Shield, Key } from 'lucide-react';
 
 const TICKER_ITEMS = [
   { icon: Brain, label: 'Behavioral AI', value: '99.2% accuracy' },
@@ -53,6 +53,22 @@ function LoginInner() {
   const [codeIndex, setCodeIndex] = useState(0);
   const [tickerIndex, setTickerIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Security Suite States
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [mfaCode, setMfaCode] = useState('');
+  const [tempMfaToken, setTempMfaToken] = useState('');
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotSuccess, setForgotSuccess] = useState('');
+  const [devResetLink, setDevResetLink] = useState('');
+  
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
+
+  const resetToken = searchParams.get('resetToken');
+  const resetEmail = searchParams.get('email');
 
   useEffect(() => {
     // If middleware redirected here (via 'from' param), the httpOnly cookie is missing/expired.
@@ -112,6 +128,13 @@ function LoginInner() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Invalid credentials');
       
+      if (data.mfaRequired) {
+        setMfaRequired(true);
+        setTempMfaToken(data.tempToken);
+        setLoginStatus('idle');
+        return;
+      }
+      
       localStorage.setItem('interviewos_token', data.token);
       localStorage.setItem('interviewos_user', JSON.stringify(data.user));
       
@@ -128,6 +151,106 @@ function LoginInner() {
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Login failed');
       setLoginStatus('idle');
+    }
+  };
+
+  const handleMfaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mfaCode || mfaCode.length < 6) return;
+    setLoginStatus('authenticating');
+    setError('');
+    try {
+      const res = await fetch('/api/auth/mfa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'verify-login',
+          code: mfaCode,
+          tempToken: tempMfaToken,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Invalid code');
+
+      localStorage.setItem('interviewos_token', data.token);
+      localStorage.setItem('interviewos_user', JSON.stringify(data.user));
+
+      setLoginStatus('success');
+
+      setTimeout(() => {
+        if (data.user.role === 'founder') {
+          router.push('/founder');
+        } else {
+          router.push(data.user.role === 'candidate' ? '/candidate' : '/recruiter');
+        }
+      }, 800);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Verification failed');
+      setLoginStatus('idle');
+    }
+  };
+
+  const handleForgotSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!forgotEmail) return;
+    setIsLoading(true);
+    setError('');
+    setForgotSuccess('');
+    setDevResetLink('');
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'request',
+          email: forgotEmail,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Request failed');
+      
+      setForgotSuccess(data.message);
+      if (data.developmentLink) {
+        setDevResetLink(data.developmentLink);
+      }
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to request reset');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPassword || !confirmPassword) return;
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    setIsLoading(true);
+    setError('');
+    setResetSuccess('');
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'reset',
+          email: resetEmail,
+          token: resetToken,
+          password: newPassword,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to reset password');
+      setResetSuccess(data.message);
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Reset password failed');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -264,148 +387,451 @@ function LoginInner() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="ios-form-card"
         >
-          {/* Header */}
-          <div className="ios-form-header">
-            <div className="ios-form-logo">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <div>
-              <h2 className="ios-form-title">Welcome back</h2>
-              <p className="ios-form-sub">Sign in to your InterviewOS account</p>
-            </div>
-          </div>
-
-          {/* Error */}
-          <AnimatePresence>
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="ios-error"
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-                {error}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="ios-form">
-            <div className="ios-field">
-              <label className="ios-label">Email address</label>
-              <div className="ios-input-wrap">
-                <Mail size={15} className="ios-input-icon" />
-                <input
-                  id="login-email"
-                  type="email"
-                  required
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  className="ios-input"
-                  autoComplete="email"
-                />
+          {resetToken && resetEmail ? (
+            /* RESET PASSWORD VIEW */
+            <>
+              <div className="ios-form-header">
+                <div className="ios-form-logo">
+                  <Shield size={18} className="text-white" />
+                </div>
+                <div>
+                  <h2 className="ios-form-title">Reset password</h2>
+                  <p className="ios-form-sub">Configure a new password for {resetEmail}</p>
+                </div>
               </div>
-            </div>
 
-            <div className="ios-field">
-              <label className="ios-label">Password</label>
-              <div className="ios-input-wrap">
-                <Lock size={15} className="ios-input-icon" />
-                <input
-                  id="login-password"
-                  type={showPass ? 'text' : 'password'}
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  className="ios-input"
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass(v => !v)}
-                  className="ios-eye-btn"
-                  tabIndex={-1}
-                >
-                  {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              id="login-submit"
-              type="submit"
-              disabled={loginStatus !== 'idle'}
-              className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
-                loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
-              }`}
-            >
-              <AnimatePresence mode="wait">
-                {loginStatus === 'idle' && (
-                  <motion.div key="idle" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
-                    Enter Platform <ArrowRight size={16} />
-                  </motion.div>
-                )}
-                {loginStatus === 'authenticating' && (
-                  <motion.div key="auth" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
-                    <span className="ios-spinner" /> Authenticating Neural Engine...
-                  </motion.div>
-                )}
-                {loginStatus === 'success' && (
-                  <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                    ACCESS GRANTED
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="ios-error"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    {error}
                   </motion.div>
                 )}
               </AnimatePresence>
-            </button>
-          </form>
 
-          {/* Divider */}
-          <div className="ios-divider">
-            <div className="ios-divider-line" />
-            <span className="ios-divider-text">OR CONTINUE WITH</span>
-            <div className="ios-divider-line" />
-          </div>
+              {resetSuccess ? (
+                <div className="ios-success-message">
+                  <p className="text-emerald-400 font-medium">{resetSuccess}</p>
+                  <p className="text-slate-400 text-[11px] mt-2">Redirecting to login page...</p>
+                </div>
+              ) : (
+                <form onSubmit={handleResetPasswordSubmit} className="ios-form">
+                  <div className="ios-field">
+                    <label className="ios-label">New Password</label>
+                    <div className="ios-input-wrap">
+                      <Lock size={15} className="ios-input-icon" />
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={newPassword}
+                        onChange={e => setNewPassword(e.target.value)}
+                        className="ios-input"
+                      />
+                    </div>
+                  </div>
 
-          {/* Demo Quick Access */}
-          <div className="ios-demo-row">
-            <button
-              type="button"
-              className="ios-demo-btn group"
-              onClick={() => handleDemoLogin('demo.candidate@interviewos.com')}
-              disabled={loginStatus !== 'idle'}
-            >
-              <div className="ios-demo-icon ios-demo-icon-candidate">C</div>
-              <div>
-                <div className="ios-demo-role">Candidate Demo</div>
-                <div className="ios-demo-hint">Practice interviews</div>
+                  <div className="ios-field">
+                    <label className="ios-label">Confirm Password</label>
+                    <div className="ios-input-wrap">
+                      <Lock size={15} className="ios-input-icon" />
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)}
+                        className="ios-input"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="ios-submit-btn"
+                  >
+                    {isLoading ? <span className="ios-spinner" /> : 'Update Password'}
+                  </button>
+                  
+                  <button
+                    type="button"
+                    className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    onClick={() => router.push('/login')}
+                  >
+                    Back to Login
+                  </button>
+                </form>
+              )}
+            </>
+          ) : mfaRequired ? (
+            /* MFA VERIFICATION VIEW */
+            <>
+              <div className="ios-form-header">
+                <div className="ios-form-logo">
+                  <Shield size={18} className="text-white" />
+                </div>
+                <div>
+                  <h2 className="ios-form-title">Verification Code</h2>
+                  <p className="ios-form-sub">Enter the 6-digit code from your authenticator app</p>
+                </div>
               </div>
-            </button>
-            <button
-              type="button"
-              className="ios-demo-btn group"
-              onClick={() => handleDemoLogin('demo.recruiter@interviewos.com')}
-              disabled={loginStatus !== 'idle'}
-            >
-              <div className="ios-demo-icon ios-demo-icon-recruiter">R</div>
-              <div>
-                <div className="ios-demo-role text-slate-200 group-hover:text-white transition-colors">Recruiter Demo</div>
-                <div className="ios-demo-hint">Proctor dashboard</div>
-              </div>
-            </button>
-          </div>
 
-          <p className="ios-switch-text">
-            No account?{' '}
-            <Link href="/signup" className="ios-switch-link">Create one free</Link>
-          </p>
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="ios-error"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    {error}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <form onSubmit={handleMfaSubmit} className="ios-form">
+                <div className="ios-field">
+                  <label className="ios-label">6-Digit Code</label>
+                  <div className="ios-input-wrap">
+                    <Shield size={15} className="ios-input-icon" />
+                    <input
+                      type="text"
+                      required
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      placeholder="123456"
+                      value={mfaCode}
+                      onChange={e => setMfaCode(e.target.value.replace(/\D/g, ''))}
+                      className="ios-input font-mono text-center tracking-[0.4em] text-lg pl-0"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loginStatus !== 'idle'}
+                  className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
+                    loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
+                  }`}
+                >
+                  <AnimatePresence mode="wait">
+                    {loginStatus === 'idle' && (
+                      <motion.div key="idle" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
+                        Verify Code
+                      </motion.div>
+                    )}
+                    {loginStatus === 'authenticating' && (
+                      <motion.div key="auth" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
+                        <span className="ios-spinner" /> Verifying Code...
+                      </motion.div>
+                    )}
+                    {loginStatus === 'success' && (
+                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        ACCESS GRANTED
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+
+                <button
+                  type="button"
+                  className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                  onClick={() => {
+                    setMfaRequired(false);
+                    setMfaCode('');
+                    setTempMfaToken('');
+                  }}
+                >
+                  Back to Login
+                </button>
+              </form>
+            </>
+          ) : showForgotModal ? (
+            /* FORGOT PASSWORD VIEW */
+            <>
+              <div className="ios-form-header">
+                <div className="ios-form-logo">
+                  <Key size={18} className="text-white" />
+                </div>
+                <div>
+                  <h2 className="ios-form-title">Reset password</h2>
+                  <p className="ios-form-sub">Enter email to receive security recovery link</p>
+                </div>
+              </div>
+
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="ios-error"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    {error}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {forgotSuccess ? (
+                <div className="space-y-4">
+                  <div className="ios-success-message">
+                    <p className="text-emerald-400 font-medium">{forgotSuccess}</p>
+                  </div>
+                  {devResetLink && (
+                    <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 space-y-2">
+                      <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider">🛠️ Dev Sandbox Bypass Link</p>
+                      <p className="text-[11px] text-slate-400 leading-relaxed">No SMTP credentials configured. Click below to reset directly:</p>
+                      <Link href={devResetLink} className="block text-center text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 px-4 rounded-lg transition-colors">
+                        Reset Password Now
+                      </Link>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="w-full text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    onClick={() => {
+                      setShowForgotModal(false);
+                      setForgotSuccess('');
+                      setDevResetLink('');
+                    }}
+                  >
+                    Back to Login
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotSubmit} className="ios-form">
+                  <div className="ios-field">
+                    <label className="ios-label">Email address</label>
+                    <div className="ios-input-wrap">
+                      <Mail size={15} className="ios-input-icon" />
+                      <input
+                        type="email"
+                        required
+                        placeholder="you@company.com"
+                        value={forgotEmail}
+                        onChange={e => setForgotEmail(e.target.value)}
+                        className="ios-input"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="ios-submit-btn"
+                  >
+                    {isLoading ? <span className="ios-spinner" /> : 'Send Recovery Link'}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    onClick={() => setShowForgotModal(false)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
+            </>
+          ) : (
+            /* STANDARD LOGIN VIEW */
+            <>
+              <div className="ios-form-header">
+                <div className="ios-form-logo">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="ios-form-title">Welcome back</h2>
+                  <p className="ios-form-sub">Sign in to your InterviewOS account</p>
+                </div>
+              </div>
+
+              {/* Error */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="ios-error"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    {error}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="ios-form">
+                <div className="ios-field">
+                  <label className="ios-label">Email address</label>
+                  <div className="ios-input-wrap">
+                    <Mail size={15} className="ios-input-icon" />
+                    <input
+                      id="login-email"
+                      type="email"
+                      required
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      className="ios-input"
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+
+                <div className="ios-field">
+                  <div className="flex justify-between items-center">
+                    <label className="ios-label">Password</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotModal(true)}
+                      className="text-xs text-emerald-500 hover:text-emerald-400 font-semibold transition-colors"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                  <div className="ios-input-wrap">
+                    <Lock size={15} className="ios-input-icon" />
+                    <input
+                      id="login-password"
+                      type={showPass ? 'text' : 'password'}
+                      required
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      className="ios-input"
+                      autoComplete="current-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass(v => !v)}
+                      className="ios-eye-btn"
+                      tabIndex={-1}
+                    >
+                      {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  id="login-submit"
+                  type="submit"
+                  disabled={loginStatus !== 'idle'}
+                  className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
+                    loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
+                  }`}
+                >
+                  <AnimatePresence mode="wait">
+                    {loginStatus === 'idle' && (
+                      <motion.div key="idle" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
+                        Enter Platform <ArrowRight size={16} />
+                      </motion.div>
+                    )}
+                    {loginStatus === 'authenticating' && (
+                      <motion.div key="auth" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-2">
+                        <span className="ios-spinner" /> Authenticating Neural Engine...
+                      </motion.div>
+                    )}
+                    {loginStatus === 'success' && (
+                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        ACCESS GRANTED
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </button>
+              </form>
+
+              {/* Divider */}
+              <div className="ios-divider">
+                <div className="ios-divider-line" />
+                <span className="ios-divider-text">OR CONTINUE WITH</span>
+                <div className="ios-divider-line" />
+              </div>
+
+              {/* Social Logins */}
+              <div className="ios-social-row">
+                <button
+                  type="button"
+                  className="ios-social-btn"
+                  onClick={() => window.location.href = '/api/auth/oauth?provider=google'}
+                  disabled={loginStatus !== 'idle'}
+                >
+                  <svg className="w-4 h-4 mr-2 text-rose-500 fill-current" viewBox="0 0 24 24">
+                    <path d="M12.24 10.285V13.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.859-3.579-7.859-7.989s3.53-7.99 7.859-7.99c2.46 0 4.105 1.025 5.047 1.926l2.427-2.334C18.155 2.502 15.427 1.25 12.24 1.25 6.082 1.25 1.1 6.232 1.1 12.39s4.982 11.14 11.14 11.14c6.43 0 10.7-4.52 10.7-10.89 0-.733-.078-1.293-.174-1.854h-10.53V10.28z"/>
+                  </svg>
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="ios-social-btn"
+                  onClick={() => window.location.href = '/api/auth/oauth?provider=github'}
+                  disabled={loginStatus !== 'idle'}
+                >
+                  <svg className="w-4 h-4 mr-2 text-slate-100 fill-current" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.167 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.164 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                  </svg>
+                  GitHub
+                </button>
+              </div>
+
+              {/* Demo Quick Access */}
+              <div className="ios-demo-row mt-4">
+                <button
+                  type="button"
+                  className="ios-demo-btn group"
+                  onClick={() => handleDemoLogin('demo.candidate@interviewos.com')}
+                  disabled={loginStatus !== 'idle'}
+                >
+                  <div className="ios-demo-icon ios-demo-icon-candidate">C</div>
+                  <div>
+                    <div className="ios-demo-role">Candidate Demo</div>
+                    <div className="ios-demo-hint">Practice interviews</div>
+                  </div>
+                </button>
+                <button
+                  type="button"
+                  className="ios-demo-btn group"
+                  onClick={() => handleDemoLogin('demo.recruiter@interviewos.com')}
+                  disabled={loginStatus !== 'idle'}
+                >
+                  <div className="ios-demo-icon ios-demo-icon-recruiter">R</div>
+                  <div>
+                    <div className="ios-demo-role text-slate-200 group-hover:text-white transition-colors">Recruiter Demo</div>
+                    <div className="ios-demo-hint">Proctor dashboard</div>
+                  </div>
+                </button>
+              </div>
+
+              <p className="ios-switch-text">
+                No account?{' '}
+                <Link href="/signup" className="ios-switch-link">Create one free</Link>
+              </p>
+            </>
+          )}
         </motion.div>
       </div>
 
@@ -681,6 +1107,21 @@ function LoginInner() {
         .ios-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; }
         .ios-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
         .ios-divider-text { font-size: 9px; font-weight: 700; color: #334155; letter-spacing: 1.5px; white-space: nowrap; }
+
+        .ios-social-row { display: flex; gap: 10px; }
+        .ios-social-btn {
+          flex: 1; display: flex; align-items: center; justify-content: center;
+          background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 12px; padding: 10px 12px; cursor: pointer;
+          color: #fff; font-size: 12px; font-weight: 600;
+          transition: all 0.2s;
+        }
+        .ios-social-btn:hover { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.2); }
+        .ios-success-message {
+          background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);
+          color: #fff; font-size: 13px; text-align: center;
+          padding: 12px 14px; border-radius: 10px; margin-bottom: 20px;
+        }
 
         .ios-demo-row { display: flex; gap: 10px; }
         .ios-demo-btn {

@@ -1645,9 +1645,9 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                autoPlay 
                playsInline 
                muted 
-               className={`w-full h-full object-cover scale-x-[-1] ${stream ? 'block' : 'hidden'}`} 
+               className={`w-full h-full object-cover scale-x-[-1] ${cameraStream ? 'block' : 'hidden'}`} 
             />
-            {!stream && (
+            {!cameraStream && (
                <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-slate-900/80">
                   <User className="text-slate-600 w-10 h-10 animate-pulse mb-2" />
                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Initializing Camera...</p>

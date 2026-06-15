@@ -1828,8 +1828,8 @@ function SessionContent() {
                                 </div>
                               </div>
                             ) : activeEditorTab === 'canvas' ? (
-                              <div className="w-full h-full bg-white relative">
-                                 <Excalidraw />
+                              <div className="w-full h-full relative">
+                                 <WhiteboardIDE />
                               </div>
                             ) : null}
                             

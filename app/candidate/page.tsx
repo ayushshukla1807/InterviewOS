@@ -180,7 +180,7 @@ export default function CandidateDashboard() {
             </Link>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-4xl font-black text-gradient uppercase">Candidate Hub</h1>
+                <h1 className="text-4xl font-black text-gradient uppercase whitespace-nowrap">Candidate Hub</h1>
                 <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Profile Active</span>
@@ -195,6 +195,12 @@ export default function CandidateDashboard() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-4"
           >
+            <Link 
+              href="/candidate/security"
+              className="px-5 py-3 glass-card text-[10px] font-black uppercase tracking-wider hover:text-emerald-400 hover:border-emerald-500/50 transition-all flex items-center gap-2"
+            >
+              <Shield className="w-3.5 h-3.5 text-emerald-400" /> Security
+            </Link>
             <button 
               onClick={async () => {
                 try {

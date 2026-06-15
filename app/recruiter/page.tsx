@@ -142,15 +142,17 @@ export default function RecruiterDashboard() {
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-[var(--theme-bg)]/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-black text-xs shadow-[0_0_15px_rgba(34,211,238,0.4)] group-hover:scale-105 transition-transform">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
+          {/* Logo / Brand */}
+          <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-black text-xs shadow-[0_0_15px_rgba(16,185,129,0.4)] group-hover:scale-105 transition-transform">
               OS
             </div>
-            <span className="font-bold text-sm tracking-widest uppercase text-white">Recruiter OS</span>
+            <span className="font-bold text-sm tracking-widest uppercase text-white whitespace-nowrap">Recruiter OS</span>
           </Link>
           
-          <div className="hidden md:flex items-center gap-1 p-1 bg-black/30 rounded-xl border-none shadow-inner">
+          {/* Navigation Tabs (Center) */}
+          <div className="hidden md:flex items-center gap-1 p-1 bg-black/35 rounded-xl border border-white/5 shadow-inner">
             {[
               { id: 'live', label: 'Live Monitor', icon: Activity },
               { id: 'candidates', label: 'Hiring Reports', icon: FileText },
@@ -160,45 +162,51 @@ export default function RecruiterDashboard() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${
                   activeTab === tab.id 
-                    ? 'bg-emerald-500/20 text-emerald-400 shadow-md border border-emerald-500/30' 
-                    : 'text-slate-400 hover:text-cyan-300 hover:bg-emerald-500/10 border border-transparent'
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm shadow-emerald-500/15' 
+                    : 'text-slate-400 hover:text-emerald-400 hover:bg-emerald-500/5 border border-transparent'
                 }`}
               >
-                <tab.icon className="w-3.5 h-3.5" /> {tab.label}
+                <tab.icon className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">{tab.label}</span>
               </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* Action Buttons & Logout (Right) */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <button 
+              onClick={() => setShowBulkInviteModal(true)}
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 transition-all rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95"
+            >
+              <Users className="w-3.5 h-3.5" /> CSV Invite
+            </button>
+            <button 
+              onClick={() => setShowInviteModal(true)}
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95"
+            >
+              <Plus className="w-3.5 h-3.5" /> Invite
+            </button>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-white/10 hidden sm:block mx-1" />
+
+            <Link 
+              href="/recruiter/security"
+              className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-400 transition-colors px-2 py-1 flex items-center gap-1.5"
+            >
+              <Shield className="w-3.5 h-3.5 text-emerald-400" /> Security
+            </Link>
             <button 
               onClick={async () => {
                 try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (e) {}
                 localStorage.clear();
                 window.location.href = '/login';
               }}
-              className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-400 transition-colors"
+              className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-400 transition-colors px-2 py-1"
             >
               Log out
-            </button>
-            <button 
-              onClick={() => setShowBulkInviteModal(true)}
-              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-purple-500 to-sky-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(139,92,246,0.3)] active:scale-95"
-            >
-              <Users className="w-3.5 h-3.5" /> Bulk Invite (CSV)
-            </button>
-            <button 
-              onClick={() => setShowInviteModal(true)}
-              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-95"
-            >
-              <Plus className="w-3.5 h-3.5" /> Invite Candidate
-            </button>
-            <button 
-              onClick={() => setActiveTab('templates')}
-              className="hidden sm:flex items-center gap-2 px-5 py-2 bg-[#06b6d4] text-[#020617] hover:bg-[#22d3ee] shadow-[0_0_20px_rgba(6,182,212,0.6)] sci-fi-glow text-white hover:opacity-90 transition-colors rounded-xl text-[10px] font-black uppercase tracking-widest shadow-[0_0_15px_rgba(34,211,238,0.3)] active:scale-95"
-            >
-              <Layers className="w-3.5 h-3.5" /> New Blueprint
             </button>
           </div>
         </div>
@@ -296,9 +304,9 @@ export default function RecruiterDashboard() {
                           rows.forEach((row, i) => {
                              if (i === 0 && row[0].toLowerCase().includes('name')) return; // Skip header
                              if (row.length >= 3) {
-                               const name = row[0].strip ? row[0].strip() : row[0].trim();
-                               const email = row[1].strip ? row[1].strip() : row[1].trim();
-                               const role = row[2].strip ? row[2].strip() : row[2].trim();
+                               const name = row[0].trim();
+                               const email = row[1].trim();
+                               const role = row[2].trim();
                                if (name && email && role) {
                                   const token = btoa(JSON.stringify({name, email, role}));
                                   newLinks.push({name, email, role, link: `${window.location.origin}/invite/${token}`});

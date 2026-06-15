@@ -272,6 +272,8 @@ export interface SimulationAct {
 // ─── Blueprint ────────────────────────────────────────────────────────────────
 
 export interface SimulationBlueprint {
+  recruiterId?: string;
+  jobId?: string;
   role: string;
   workspace: WorkspaceType;
   companyCultureProfile: string;

@@ -13,6 +13,10 @@ export interface IUser {
   plan: 'free' | 'pro';
   stripeCustomerId?: string;
   stripeSubscriptionId?: string;
+  mfaEnabled?: boolean;
+  mfaSecret?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -27,6 +31,10 @@ const UserSchema = new Schema<IUser>({
   plan:         { type: String, enum: ['free', 'pro'], default: 'free' },
   stripeCustomerId: { type: String },
   stripeSubscriptionId: { type: String },
+  mfaEnabled:   { type: Boolean, default: false },
+  mfaSecret:    { type: String },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
 const User: Model<IUser> = mongoose.models.User ?? mongoose.model<IUser>('User', UserSchema);
