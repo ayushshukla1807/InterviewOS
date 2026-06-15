@@ -15,13 +15,17 @@ const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
 export async function GET(req: Request) {
   try {
     const urlObj = new URL(req.url);
+    const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || urlObj.host;
+    const proto = req.headers.get('x-forwarded-proto') || 'http';
+    const origin = `${proto}://${host}`;
+
     const provider = urlObj.searchParams.get('provider');
     const code = urlObj.searchParams.get('code');
     const state = urlObj.searchParams.get('state');
 
     // ─── 1. INITIATE REDIRECTS ────────────────────────────────────────────────
     if (provider) {
-      const redirectUri = `${urlObj.origin}/api/auth/oauth`;
+      const redirectUri = `${origin}/api/auth/oauth`;
       
       if (provider === 'google') {
         if (!GOOGLE_CLIENT_ID) {
@@ -57,7 +61,7 @@ export async function GET(req: Request) {
       let email = '';
       let name = '';
       
-      const redirectUri = `${urlObj.origin}/api/auth/oauth`;
+      const redirectUri = `${origin}/api/auth/oauth`;
 
       // A. Google Callback
       if (state === 'google' || state.startsWith('mock_google_')) {
@@ -181,7 +185,7 @@ export async function GET(req: Request) {
 
       // Redirect client to their dashboard and set cookie
       const redirectDashboard = user.role === 'founder' ? '/founder' : user.role === 'recruiter' ? '/recruiter' : '/candidate';
-      const response = NextResponse.redirect(new URL(redirectDashboard, req.url));
+      const response = NextResponse.redirect(new URL(redirectDashboard, origin));
       
       response.cookies.set('interviewos_token', token, {
         httpOnly: true,
