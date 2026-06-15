@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '../../../../lib/db/mongoose';
 import SimulationReport from '../../../../lib/db/models/SimulationReport';
+import User from '../../../../lib/db/models/User';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +31,69 @@ export async function POST(req: Request) {
     });
 
     await report.save();
+
+    // Gamification rewards calculations
+    if (userId && userId !== 'demo_candidate_id') {
+      try {
+        const user = await User.findById(userId);
+        if (user) {
+          const xpAmount = Math.floor(score * 10);
+          const newXP = (user.xp || 0) + xpAmount;
+          const newLevel = Math.floor(Math.sqrt(newXP / 100)) + 1;
+          const oldLevel = user.level || 1;
+
+          const now = new Date();
+          let newStreak = user.streak || 0;
+          if (user.lastActivityAt) {
+            const lastActivity = new Date(user.lastActivityAt);
+            const diffInDays = Math.floor((now.getTime() - lastActivity.getTime()) / (1000 * 3600 * 24));
+            if (diffInDays === 1) {
+              newStreak += 1;
+            } else if (diffInDays > 1) {
+              newStreak = 1;
+            } else if (user.streak === 0) {
+              newStreak = 1;
+            }
+          } else {
+            newStreak = 1;
+          }
+
+          const currentBadges = user.badges || [];
+          const badgesToAdd = [];
+
+          if (score >= 90 && !currentBadges.find(b => b.id === 'elite-performer')) {
+            badgesToAdd.push({
+              id: 'elite-performer',
+              name: 'Elite Performer',
+              description: 'Scored 90+ in an interview',
+              icon: 'star',
+              earnedAt: now
+            });
+          }
+
+          if (newLevel > oldLevel && !currentBadges.find(b => b.id === `level-${newLevel}`)) {
+            badgesToAdd.push({
+              id: `level-${newLevel}`,
+              name: `Level ${newLevel} Achieved`,
+              description: `Reached Level ${newLevel}`,
+              icon: 'award',
+              earnedAt: now
+            });
+          }
+
+          user.xp = newXP;
+          user.level = newLevel;
+          user.streak = newStreak;
+          user.lastActivityAt = now;
+          if (badgesToAdd.length > 0) {
+            user.badges = [...currentBadges, ...badgesToAdd];
+          }
+          await user.save();
+        }
+      } catch (dbErr) {
+        console.error('Failed to update user gamification details:', dbErr);
+      }
+    }
 
     return NextResponse.json({ message: 'Report saved successfully', reportId: report._id }, { status: 201 });
   } catch (error: any) {

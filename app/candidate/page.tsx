@@ -281,6 +281,98 @@ export default function CandidateDashboard() {
               </div>
             </motion.div>
 
+            {/* Gamification Progress Card */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: 0.05 }} 
+              className="glass-card p-8 space-y-6 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[45px] rounded-full pointer-events-none" />
+              
+              <div className="flex justify-between items-center">
+                <h2 className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-indigo-400" /> Gamer Level & XP
+                </h2>
+                <div className="px-3 py-1 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] font-black uppercase tracking-wider rounded-lg flex items-center gap-1.5 shadow-[0_0_15px_rgba(249,115,22,0.15)] animate-pulse">
+                  🔥 {candidateContext?.streak || 0} Day Streak
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6 bg-black/20 p-5 rounded-2xl border border-white/5">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex flex-col items-center justify-center shadow-lg shadow-indigo-600/30 text-white relative">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-200">Level</span>
+                  <span className="text-2xl font-black">{candidateContext?.level || 1}</span>
+                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-slate-900" />
+                </div>
+                <div className="flex-1 space-y-1.5">
+                  <div className="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <span>XP Progress</span>
+                    <span className="text-white">{candidateContext?.xp || 0} XP</span>
+                  </div>
+                  {(() => {
+                    const level = candidateContext?.level || 1;
+                    const xp = candidateContext?.xp || 0;
+                    const currentLevelMinXp = Math.pow(level - 1, 2) * 100;
+                    const nextLevelMinXp = Math.pow(level, 2) * 100;
+                    const levelProgress = nextLevelMinXp - currentLevelMinXp;
+                    const xpInCurrentLevel = xp - currentLevelMinXp;
+                    const pct = Math.min(100, Math.max(0, (xpInCurrentLevel / levelProgress) * 100));
+                    return (
+                      <div className="w-full bg-white/5 rounded-full h-2.5 overflow-hidden border border-white/5">
+                        <div 
+                          className="bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
+                          style={{ width: `${pct}%` }} 
+                        />
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Badges Earned */}
+              <div className="space-y-3">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">Unlocked Badges ({candidateContext?.badges?.length || 0})</span>
+                <div className="grid grid-cols-4 gap-3">
+                  {candidateContext?.badges && candidateContext.badges.length > 0 ? (
+                    candidateContext.badges.map((badge: any) => (
+                      <div 
+                        key={badge.id} 
+                        className="aspect-square bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center relative group/badge cursor-help shadow-lg hover:scale-105 transition-all"
+                        title={`${badge.name}: ${badge.description}`}
+                      >
+                        <Star className="w-5 h-5 fill-indigo-500/10" />
+                        <span className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 text-center bg-slate-900 border border-white/10 p-2.5 rounded-lg text-[10px] text-white font-bold opacity-0 pointer-events-none group-hover/badge:opacity-100 transition-opacity z-50 shadow-2xl">
+                          <p className="font-black text-indigo-400 uppercase tracking-widest mb-0.5">{badge.name}</p>
+                          {badge.description}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-4 p-4 text-center border border-white/5 rounded-2xl bg-black/10 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      Complete interviews to earn badges
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Leaderboard and Share buttons */}
+              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
+                <Link 
+                  href="/leaderboard"
+                  className="py-3 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 text-slate-300 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1.5"
+                >
+                  <BarChartIcon className="w-3.5 h-3.5" /> Rankings
+                </Link>
+                <Link 
+                  href={candidateContext?.id ? `/p/${candidateContext.id}` : '#'}
+                  className="py-3 bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/20 hover:border-indigo-500/30 text-indigo-400 rounded-xl text-[10px] font-black uppercase tracking-widest text-center transition-all flex items-center justify-center gap-1.5"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" /> Portfolio
+                </Link>
+              </div>
+            </motion.div>
+
             {/* Resume Upload (MVP Flow) */}
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.1}} className="glass-card p-8 space-y-6 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-[40px] rounded-full pointer-events-none transition-all duration-500 group-hover:bg-emerald-500/20" />

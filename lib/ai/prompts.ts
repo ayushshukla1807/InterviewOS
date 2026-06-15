@@ -30,7 +30,10 @@ JSON RESPONSE SCHEMA:
   "content": "Your natural, multilingual spoken response to the candidate",
   "signals": ["Stress Detected", "Strong Logic", "Bluffing Risk", "Contradiction", "NEXT_QUESTION", "HINDI_SWITCH"],
   "adaptation": "Internal AI thought (e.g., 'Candidate gave a textbook answer. I will apply pressure and ask for a specific edge-case implementation')",
-  "difficultyAdjustment": "increase | decrease | maintain"
+  "difficultyAdjustment": "increase | decrease | maintain",
+  "evaluationQuality": "STRONG | PARTIAL | VAGUE | INCORRECT",
+  "feedback": "Concise feedback (1-2 sentences) about the candidate's latest response. Be constructive.",
+  "score": 0..100
 }
 `;
 

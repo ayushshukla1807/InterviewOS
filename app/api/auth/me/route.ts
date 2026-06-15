@@ -44,6 +44,18 @@ export async function GET(req: Request) {
           email,
           role,
           organization: org,
+          xp: 350,
+          level: 2,
+          streak: 3,
+          badges: [
+            {
+              id: 'elite-performer',
+              name: 'Elite Performer',
+              description: 'Scored 90+ in an interview',
+              icon: 'star',
+              earnedAt: new Date()
+            }
+          ]
         }
       });
     }
@@ -61,6 +73,10 @@ export async function GET(req: Request) {
         email: user.email,
         role: user.role,
         organization: user.organization,
+        xp: user.xp || 0,
+        level: user.level || 1,
+        streak: user.streak || 0,
+        badges: user.badges || [],
       }
     });
 

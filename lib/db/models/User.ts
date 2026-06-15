@@ -17,6 +17,17 @@ export interface IUser {
   mfaSecret?: string;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
+  xp?: number;
+  level?: number;
+  streak?: number;
+  lastActivityAt?: Date;
+  badges?: Array<{
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    earnedAt: Date;
+  }>;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -35,6 +46,11 @@ const UserSchema = new Schema<IUser>({
   mfaSecret:    { type: String },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+  xp:           { type: Number, default: 0 },
+  level:        { type: Number, default: 1 },
+  streak:       { type: Number, default: 0 },
+  lastActivityAt: { type: Date, default: Date.now },
+  badges:       { type: Schema.Types.Mixed, default: [] },
 });
 
 const User: Model<IUser> = mongoose.models.User ?? mongoose.model<IUser>('User', UserSchema);
