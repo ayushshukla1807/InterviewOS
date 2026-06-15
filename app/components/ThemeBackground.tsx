@@ -62,14 +62,14 @@ export function ThemeBackground() {
         this.baseRadius = Math.random() * 1.5 + 0.8;
         this.radius = this.baseRadius;
         
-        // Randomize between emerald-green and cyan/indigo nodes to blend styles
+        // Randomize between neon green, dark green, and cyan nodes to match portfolio scene particles
         const rand = Math.random();
         if (rand < 0.6) {
-          this.color = 'rgba(0, 255, 65, '; // Neon green (portfolio)
+          this.color = 'rgba(0, 255, 65, '; // Neon green (quantum-blue)
         } else if (rand < 0.85) {
-          this.color = 'rgba(16, 185, 129, '; // Emerald
+          this.color = 'rgba(0, 143, 17, '; // Dark green (evox-purple)
         } else {
-          this.color = 'rgba(99, 102, 241, '; // Indigo
+          this.color = 'rgba(0, 242, 255, '; // Cyber cyan (quantum particles)
         }
       }
 
@@ -168,7 +168,7 @@ export function ThemeBackground() {
           
           // Subtle color variance for intersection points
           if ((x + y) % 3 === 0) {
-            ctx.fillStyle = 'rgba(99, 102, 241, 0.09)'; // soft indigo
+            ctx.fillStyle = 'rgba(0, 242, 255, 0.09)'; // soft cyan
           } else {
             ctx.fillStyle = 'rgba(0, 255, 65, 0.09)'; // soft green
           }
@@ -194,8 +194,10 @@ export function ThemeBackground() {
             const alpha = (140 - dist) / 140 * 0.15;
             
             // Connect lines blend gradiently based on node primary color type
-            if (nodes[i].color.includes('99, 102')) {
-              ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+            if (nodes[i].color.includes('0, 242, 255')) {
+              ctx.strokeStyle = `rgba(0, 242, 255, ${alpha})`;
+            } else if (nodes[i].color.includes('0, 143, 17')) {
+              ctx.strokeStyle = `rgba(0, 143, 17, ${alpha})`;
             } else {
               ctx.strokeStyle = `rgba(0, 255, 65, ${alpha})`;
             }
@@ -225,7 +227,7 @@ export function ThemeBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[-2] transition-opacity duration-1000"
-      style={{ background: '#050508' }} // Deep space background color matching the portfolio
+      style={{ background: '#050505' }} // Deep space background color matching the portfolio
     />
   );
 }
