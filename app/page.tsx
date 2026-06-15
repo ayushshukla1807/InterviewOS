@@ -379,6 +379,9 @@ function LandingPageContent() {
   // Try Interview Tab category filter
   const [activeTryTab, setActiveTryTab] = useState<'popular' | 'tech' | 'sales' | 'marketing' | 'product'>('popular');
 
+  // Product tour state
+  const [activeTourTab, setActiveTourTab] = useState<string>('live-session');
+
   // MVP state
   const [selectedJob, setSelectedJob] = useState('REQ-101');
   const [customJobs, setCustomJobs] = useState<any[]>([]);
@@ -1068,6 +1071,120 @@ function LandingPageContent() {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Tour / Interface Showcase with Pictures */}
+      <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
+        <div className="text-center space-y-3">
+          <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest">Platform Walkthrough</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            InterviewOS in Action: Product Tour
+          </h2>
+          <p className="text-xs text-slate-400 max-w-2xl mx-auto">
+            Explore the comprehensive candidate interfaces, recruiter analytics portals, and secure testing environments that drive automated hiring.
+          </p>
+        </div>
+
+        {/* Interactive Tabbed Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-center">
+          {/* Left Column: Interactive Feature List (5 cols) */}
+          <div className="lg:col-span-5 space-y-4 text-left">
+            {[
+              {
+                id: 'live-session',
+                title: 'Secure Candidate Coding & Voice Session',
+                desc: 'Live browser terminal sandbox with stack execution compiler, face mesh gaze tracking, and real-time voice response dialogues.',
+                image: '/images/session_feature.png',
+                tag: 'Candidate Environment'
+              },
+              {
+                id: 'grading-report',
+                title: 'Advanced AI Grading & Evaluation Trace',
+                desc: 'Recruiter intelligence portal with circular score gauges, competency radar charts, question checkmarks, and side-by-side code diff audits.',
+                image: '/images/dashboard_feature.png',
+                tag: 'Evaluation Analytics'
+              },
+              {
+                id: 'permissions-check',
+                title: 'Pre-Interview Integrity Permissions Verification',
+                desc: 'Mandatory automated diagnostic checking for camera feed, microphone levels, browser focus, and screen-sharing authorization.',
+                image: '/images/permissions_feature.png',
+                tag: 'Neural Proctoring Config'
+              },
+              {
+                id: 'platform-overview',
+                title: 'Gamified Candidate Hub & Streaks Leaderboard',
+                desc: 'Gamification tracking showcasing student profiles, levels, XP accumulation, daily streaks, custom achievement badges, and global rank.',
+                image: '/images/platform_collage.png',
+                tag: 'Full Platform Ecosystem'
+              }
+            ].map((feat) => (
+              <button
+                key={feat.id}
+                onClick={() => setActiveTourTab(feat.id)}
+                className={`w-full p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden group ${
+                  activeTourTab === feat.id
+                    ? 'bg-purple-900/10 border-purple-500/30 shadow-lg shadow-purple-900/5'
+                    : 'bg-[#0a0a0c]/40 border-white/5 hover:border-white/10 hover:bg-white/[0.02]'
+                }`}
+              >
+                {activeTourTab === feat.id && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-500" />
+                )}
+                <span className="text-[8px] font-black uppercase tracking-wider text-purple-400 block mb-1">
+                  {feat.tag}
+                </span>
+                <h4 className="text-sm font-black text-white group-hover:text-purple-300 transition-colors">
+                  {feat.title}
+                </h4>
+                <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+                  {feat.desc}
+                </p>
+              </button>
+            ))}
+          </div>
+
+          {/* Right Column: Visual Interface Frame (7 cols) */}
+          <div className="lg:col-span-7 bg-[#0a0a0c]/60 border border-white/5 rounded-3xl p-4 md:p-6 shadow-2xl relative group overflow-hidden flex flex-col justify-center min-h-[400px]">
+            {/* Glow effect */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
+            
+            {/* Frame navigation header mockup */}
+            <div className="flex justify-between items-center border-b border-white/5 pb-3 mb-4 text-[10px] text-slate-500 font-mono">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+              </div>
+              <div className="px-3 py-0.5 bg-white/5 rounded-md text-[9px] border border-white/5">
+                {activeTourTab === 'live-session' && 'interviewos.com/session/LIVE-9291'}
+                {activeTourTab === 'grading-report' && 'interviewos.com/recruiter/report/shubh_agarwal'}
+                {activeTourTab === 'permissions-check' && 'interviewos.com/instructions?name=Shubh'}
+                {activeTourTab === 'platform-overview' && 'interviewos.com/candidate/dashboard'}
+              </div>
+              <div className="w-12" />
+            </div>
+
+            {/* Main Image Viewport */}
+            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center group-hover:border-purple-500/20 transition-all duration-300">
+              {[
+                { id: 'live-session', image: '/images/session_feature.png' },
+                { id: 'grading-report', image: '/images/dashboard_feature.png' },
+                { id: 'permissions-check', image: '/images/permissions_feature.png' },
+                { id: 'platform-overview', image: '/images/platform_collage.png' }
+              ].map((item) => (
+                <img
+                  key={item.id}
+                  src={item.image}
+                  alt={item.id}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                    activeTourTab === item.id ? 'opacity-100 z-10 font-sans' : 'opacity-0 z-0 pointer-events-none'
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
