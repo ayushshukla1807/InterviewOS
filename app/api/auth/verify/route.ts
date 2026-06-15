@@ -6,7 +6,8 @@ export async function GET(req: Request) {
   const urlObj = new URL(req.url);
   const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || urlObj.host;
   const proto = req.headers.get('x-forwarded-proto') || 'http';
-  const origin = `${proto}://${host}`;
+  const fallbackOrigin = `${proto}://${host}`;
+  const origin = (process.env.RENDER_EXTERNAL_URL || process.env.NEXT_PUBLIC_APP_URL || fallbackOrigin).replace(/\/$/, '');
 
   const token = urlObj.searchParams.get('token');
 
