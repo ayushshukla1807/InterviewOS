@@ -75,7 +75,7 @@ function generateOfflineResponse(messages: any[], candidateProfile: any, roleNam
 // ─── Main Route ──────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
-    const { messages, track, system, candidateProfile, simulationSummary, code } = await req.json();
+    const { messages, track, system, candidateProfile, simulationSummary, code, interviewStage, selectedTracks, selectedSubSpecialties, techStacks } = await req.json();
 
     let systemPrompt: string;
 
@@ -97,6 +97,27 @@ export async function POST(req: Request) {
       systemPrompt = system;
     } else {
       systemPrompt = INTERVIEWER_PERSONA;
+    }
+
+    // Customize system instructions based on active interview stage (Intro vs. Coding)
+    if (interviewStage === 'intro-chat') {
+      systemPrompt += `\n\n[CRITICAL INTERVIEW STAGE: CONVERSATIONAL PROJECT INTRO]
+The candidate is currently introducing themselves and explaining their works/projects.
+Selected Domains: ${selectedTracks ? selectedTracks.join(', ') : 'None'}
+Selected Advanced Technologies: ${selectedSubSpecialties ? selectedSubSpecialties.join(', ') : 'None'}
+Tech Stacks: ${techStacks || 'Not specified'}
+
+INSTRUCTIONS FOR THIS STAGE:
+1. Focus entirely on chatting with the candidate about their background, projects, and works using these technologies.
+2. Ask deep-dive follow-up questions about how they built their projects, the architecture, challenges, and details.
+3. DO NOT output any coding question prompts or ask them to write code in the IDE yet.
+4. Keep it as a conversational, human-like dialogue.
+5. In your responses, you can acknowledge their project details (e.g. "Okay, you made this project nice, let's talk about...") and test their understanding.
+6. Let them know they can click "Begin Coding Challenge" in the UI whenever they feel ready to show their hands-on coding skills.`;
+    } else if (interviewStage === 'coding') {
+      systemPrompt += `\n\n[CRITICAL INTERVIEW STAGE: LIVE CODING CHALLENGE]
+The candidate has now proceeded to the live coding challenge. They are working on the IDE on the left panel.
+Focus on helping them design and optimize their code, asking questions about time/space complexity, and evaluating their real-time logic.`;
     }
     
     // Cross-questioning context integration (Phase 4)

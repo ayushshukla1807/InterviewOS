@@ -126,11 +126,82 @@ export class PHISecureLogger {
   return data[trackId] || data.JS;
 };
 
+const categoryIcons: Record<string, any> = {
+  "FinTech & Banking": TrendingUp,
+  "AI/ML": Cpu,
+  "Cloud & Infrastructure": Shield,
+  "Document Processing": FileCode,
+  "Additional Skills & Architecture": Activity
+};
+
+const primaryDomains = [
+  { id: 'Frontend', label: 'Frontend Track', description: 'User Interfaces, V8 performance, React, state optimization' },
+  { id: 'Backend', label: 'Backend Track', description: 'System pipelines, dynamic algorithms, scaling, memory-safe data patterns' },
+  { id: 'Full Stack', label: 'Full Stack Track', description: 'End-to-end applications, API integrations, frontend & backend architecture' },
+  { id: 'AI/ML', label: 'AI/ML Track', description: 'Predictive modeling, LLM pipelines, autonomous agents, vector DBs' },
+  { id: 'Databases', label: 'Databases Track', description: 'Storage engines, concurrency, consistent hashing, caching sync' },
+  { id: 'Data Analytics', label: 'Data Analytics Track', description: 'Data ingestion, time-series, analytics engines, forecasting models' },
+  { id: 'AI/ML Research', label: 'AI/ML Research Track', description: 'State-of-the-art architectures, custom modeling, advanced ML theory' }
+];
+
+const subSpecialtyGroups = [
+  {
+    category: "FinTech & Banking",
+    skills: [
+      { id: "AA_FRAMEWORK", label: "Account Aggregator Framework", description: "Setu, Finvu, OneMoney" },
+      { id: "PAN_VERIFICATION", label: "PAN Verification APIs", description: "NSDL / Protean" },
+      { id: "INTEGRATIONS_FIN", label: "UPI Autopay, e-NACH, Razorpay, Cashfree, or Setu integrations", description: "Payment gateways & recurring billing" },
+      { id: "TAXATION_SYS", label: "Understanding of Indian Taxation and Financial Systems", description: "Tax computation & bank reconciliation" }
+    ]
+  },
+  {
+    category: "AI/ML",
+    skills: [
+      { id: "TIME_SERIES", label: "XGBoost, Prophet, ARIMA", description: "Predictive modeling & time-series analysis" },
+      { id: "LANGCHAIN", label: "LangChain", description: "LLM orchestration & prompt workflows" },
+      { id: "LANGGRAPH", label: "LangGraph", description: "Multi-agent graph stateful workflows" },
+      { id: "VECTOR_DB", label: "Vector Databases", description: "Pinecone, Chroma, pgvector" },
+      { id: "RAG_SYS", label: "RAG Systems", description: "Retrieval Augmented Generation pipelines" },
+      { id: "AI_AGENTS", label: "AI Agent Frameworks", description: "Autonomous task-solving agents" }
+    ]
+  },
+  {
+    category: "Cloud & Infrastructure",
+    skills: [
+      { id: "AWS_GCP", label: "AWS Services (EC2, RDS, Lambda, S3) / GCP", description: "Cloud computing & serverless platforms" },
+      { id: "CONTAINERS", label: "Docker & Kubernetes", description: "Containerization & microservices orchestration" },
+      { id: "CICD", label: "CI/CD Pipelines", description: "GitHub Actions, Jenkins, deployment automation" }
+    ]
+  },
+  {
+    category: "Document Processing",
+    skills: [
+      { id: "TEXTRACT_DOCAI", label: "AWS Textract / Google Document AI", description: "AI-based data extraction & OCR" },
+      { id: "TESSERACT_OCR", label: "Tesseract OCR", description: "Open source Optical Character Recognition engines" }
+    ]
+  },
+  {
+    category: "Additional Skills & Architecture",
+    skills: [
+      { id: "MICROSERVICES", label: "Microservices Architecture", description: "Decompiled services & event-driven styling" },
+      { id: "AUTH_SECURITY", label: "Authentication & Authorization (JWT, OAuth)", description: "Secure sessions, OAuth 2.0 flow" },
+      { id: "REDIS_CACHE", label: "Redis Caching", description: "Distributed caching & cache-aside setups" },
+      { id: "SYSTEM_DESIGN", label: "System Design & Micro-frontends", description: "Scale-ready frontend/backend patterns" }
+    ]
+  }
+];
+
 function SessionContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const name = searchParams.get('name') || 'Candidate';
-  const track = (searchParams.get('track') || 'JS');
+  const [track, setTrack] = useState<string>(() => searchParams.get('track') || 'JS');
+  const [interviewStage, setInterviewStage] = useState<'track-select' | 'intro-chat' | 'coding'>('track-select');
+  const [selectedTracks, setSelectedTracks] = useState<string[]>([]);
+  const [selectedSubSpecialties, setSelectedSubSpecialties] = useState<string[]>([]);
+  const [techStacks, setTechStacks] = useState<string>('');
+  const [tempTracks, setTempTracks] = useState<string[]>([]);
+  const [tempSubSpecialties, setTempSubSpecialties] = useState<string[]>([]);
   const isMock = searchParams.get('mock') === 'true'; // controls hint visibility
   const simulationSessionId = searchParams.get('simulationSessionId') || '';
   const [simulationSummary, setSimulationSummary] = useState<string | null>(null);
@@ -342,6 +413,8 @@ function SessionContent() {
   
   // Load initial questions or generate dynamic ones
   useEffect(() => {
+    if (interviewStage === 'track-select') return;
+
     // Load scenario based on track
     const activeScenario = getScenarioByTrack(track);
     setScenario(activeScenario);
@@ -411,7 +484,7 @@ function SessionContent() {
       setQuestions(questionEngine.getQuestionsByTrack(track).slice(0, 4));
       setIsGeneratingQuestions(false);
     }
-  }, [track]);
+  }, [track, interviewStage]);
 
   const [interviewer, setInterviewer] = useState<any>(null);
 
@@ -440,22 +513,15 @@ function SessionContent() {
 
 
 
-  // Handle Fullscreen & Anti-Cheating
+  // Handle Fullscreen & Anti-Cheating & Dynamic Intro
   useEffect(() => {
-    if (isMounted && question && messages.length === 0 && interviewer) {
-      const jobTitle = dynamicContext?.jobTitle ? ` for the ${dynamicContext.jobTitle} position` : '';
-      const openingLines = [
-        `Hey ${name.split(' ')[0]}! I'm ${interviewer.name}. I'll be your lead interviewer today.`,
-        `First of all, don't sweat it. We're just here to have a solid technical chat and see how you think.`,
-        `Before we dive into the technical challenges, I'd love to learn a bit more about you.`,
-        `Could you briefly introduce yourself and highlight a recent project you're particularly proud of?`
-      ];
-      const fullGreeting = openingLines.join(' ');
-      setMessages([{ role: 'assistant', content: fullGreeting }]);
+    if (isMounted && question && messages.length === 0 && interviewer && interviewStage !== 'track-select') {
+      const greeting = `Hey ${name.split(' ')[0]}! I see you selected ${selectedTracks.join(', ')} with experience in ${techStacks || 'modern web development'} and advanced skills in ${selectedSubSpecialties.length ? selectedSubSpecialties.join(', ') : 'core software architecture'}. Before we jump into the IDE coding challenges, please tell me about yourself and your works/projects using these.`;
+      setMessages([{ role: 'assistant', content: greeting }]);
       // Auto-speak with a slight human-like hesitation/delay
-      setTimeout(() => speak(fullGreeting), 1200);
+      setTimeout(() => speak(greeting), 1200);
     }
-  }, [isMounted, question, messages.length, name, dynamicContext, interviewer]);
+  }, [isMounted, question, messages.length, name, dynamicContext, interviewer, interviewStage, selectedTracks, selectedSubSpecialties, techStacks]);
 
   // ─── PROCTORING ENGINE ─────────────────────────────────────────────
   useEffect(() => {
@@ -541,7 +607,6 @@ function SessionContent() {
   const enterFullscreen = () => {
     document.documentElement.requestFullscreen().catch(() => {});
     setIsFullscreen(true);
-    setIsStarted(true);
 
     // UNLOCK AUDIO CONTEXT IMMEDIATELY ON CLICK TO BYPASS AUTOPLAY POLICIES
     const audioEl = document.getElementById('ai-voice') as HTMLAudioElement;
@@ -551,7 +616,45 @@ function SessionContent() {
     if (window.speechSynthesis) {
       window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
     }
-    // Give the browser 2s to settle before blur violations count
+  };
+
+  const handleStartInterview = () => {
+    if (tempTracks.length === 0) {
+      alert("Please select at least one primary domain track to continue.");
+      return;
+    }
+
+    sfx?.playNotify();
+
+    // Map track(s) (Frontend -> JS, Backend -> DSA, Databases -> ADA, AI/ML -> DSA)
+    let mappedTrack = 'JS';
+    if (tempTracks.includes('Backend')) {
+      mappedTrack = 'DSA';
+    } else if (tempTracks.includes('AI/ML') || tempTracks.includes('AI/ML Research')) {
+      mappedTrack = 'DSA';
+    } else if (tempTracks.includes('Databases') || tempTracks.includes('Data Analytics')) {
+      mappedTrack = 'ADA';
+    } else if (tempTracks.includes('Frontend') || tempTracks.includes('Full Stack')) {
+      mappedTrack = 'JS';
+    }
+
+    setTrack(mappedTrack);
+    setSelectedTracks(tempTracks);
+    setSelectedSubSpecialties(tempSubSpecialties);
+    
+    // Unlock audio again
+    const audioEl = document.getElementById('ai-voice') as HTMLAudioElement;
+    if (audioEl) {
+      audioEl.play().catch(() => {});
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+    }
+
+    setIsStarted(true);
+    setInterviewStage('intro-chat');
+    
+    // Settle proctoring
     setTimeout(() => { proctorReadyRef.current = true; }, 2000);
   };
 
@@ -899,6 +1002,10 @@ function SessionContent() {
           simulationSummary: simulationSummary,
           system: !candidateProfile ? (INTERVIEWER_PERSONA.replace(/Syed/gi, interviewer?.name || 'Syed') + systemCtx.replace(/Syed/gi, interviewer?.name || 'Syed') + `\n\nCurrent question: ${question.title}\nProblem: ${question.prompt}\nExchange #${exchangeCount + 1}`) : undefined,
           code: code,
+          interviewStage,
+          selectedTracks,
+          selectedSubSpecialties,
+          techStacks
         }),
       });
       const data = await res.json();
@@ -1195,6 +1302,184 @@ function SessionContent() {
       </div>
     );
   }
+  if (interviewStage === 'track-select') {
+    return (
+      <div data-theme="dark" className="min-h-screen bg-[#030303] text-slate-100 flex flex-col items-center justify-start p-8 relative overflow-y-auto custom-scrollbar selection:bg-emerald-500/30">
+        {/* Glowing Background Accents */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-600/5 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/5 blur-[120px] pointer-events-none" />
+
+        <div className="max-w-6xl w-full mx-auto space-y-10 z-10 py-10">
+          
+          {/* Header Section */}
+          <div className="text-center space-y-4">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/40 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-widest"
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Neural Interview OS
+            </motion.div>
+            <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-400 bg-clip-text text-transparent tracking-tighter uppercase">
+              Interview Profile Wizard
+            </h1>
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm font-bold uppercase tracking-wide leading-relaxed">
+              Select your primary tracks, enter your tech stack, and choose optional specialties to customize your live evaluation protocol.
+            </p>
+          </div>
+
+          {/* Grid Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            
+            {/* Left: Primary Tracks & Tech Stack */}
+            <div className="lg:col-span-2 space-y-8">
+              
+              {/* Primary Domains Card */}
+              <div className="bg-slate-950/40 border border-white/5 backdrop-blur-2xl rounded-3xl p-6 space-y-6">
+                <div>
+                  <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    1. Primary Domain
+                  </h2>
+                  <p className="text-xs text-slate-500 font-bold mt-1 uppercase">Choose one or more areas of expertise</p>
+                </div>
+
+                <div className="space-y-3">
+                  {primaryDomains.map((dom) => {
+                    const isSelected = tempTracks.includes(dom.id);
+                    return (
+                      <button
+                        key={dom.id}
+                        onClick={() => {
+                          if (isSelected) {
+                            setTempTracks(prev => prev.filter(t => t !== dom.id));
+                          } else {
+                            setTempTracks(prev => [...prev, dom.id]);
+                          }
+                        }}
+                        className={`w-full text-left p-4 rounded-2xl border transition-all duration-300 flex items-center justify-between cursor-pointer ${
+                          isSelected 
+                            ? 'bg-emerald-950/20 border-emerald-500/50 shadow-lg shadow-emerald-500/5 text-white' 
+                            : 'bg-white/5 border-white/5 hover:bg-white/10 text-slate-300 hover:text-white'
+                        }`}
+                      >
+                        <div className="pr-4">
+                          <p className="text-xs font-black uppercase tracking-wider">{dom.label}</p>
+                          <p className="text-[10px] text-slate-500 mt-1 leading-snug">{dom.description}</p>
+                        </div>
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                          isSelected ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-700'
+                        }`}>
+                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Tech Stack Input Card */}
+              <div className="bg-slate-950/40 border border-white/5 backdrop-blur-2xl rounded-3xl p-6 space-y-6">
+                <div>
+                  <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-400" />
+                    2. Tech Stack
+                  </h2>
+                  <p className="text-xs text-slate-500 font-bold mt-1 uppercase">Specify libraries, tools or frameworks</p>
+                </div>
+
+                <div className="space-y-2">
+                  <textarea
+                    value={techStacks}
+                    onChange={(e) => setTechStacks(e.target.value)}
+                    placeholder="e.g. React, Next.js, Node.js, Express, PostgreSQL, PyTorch, LangChain, AWS S3"
+                    className="w-full h-32 bg-white/5 border border-white/5 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all resize-none custom-scrollbar"
+                  />
+                  <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Comma-separated values are parsed automatically.</p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right: Good-To-Have Specialties */}
+            <div className="lg:col-span-3 bg-slate-950/40 border border-white/5 backdrop-blur-2xl rounded-3xl p-6 space-y-6 flex flex-col justify-between">
+              
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-purple-400" />
+                    3. Advanced Specialties (Good to have)
+                  </h2>
+                  <p className="text-xs text-slate-500 font-bold mt-1 uppercase">Select specific domains you have built projects in</p>
+                </div>
+
+                {/* Sub-Specialties List */}
+                <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                  {subSpecialtyGroups.map((group) => {
+                    const IconComp = categoryIcons[group.category] || Activity;
+                    return (
+                      <div key={group.category} className="space-y-3">
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 border-b border-white/5 pb-2">
+                          <IconComp className="w-4 h-4 text-emerald-400" />
+                          {group.category}
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {group.skills.map((skill) => {
+                            const isSelected = tempSubSpecialties.includes(skill.label);
+                            return (
+                              <button
+                                key={skill.id}
+                                onClick={() => {
+                                  if (isSelected) {
+                                    setTempSubSpecialties(prev => prev.filter(s => s !== skill.label));
+                                  } else {
+                                    setTempSubSpecialties(prev => [...prev, skill.label]);
+                                  }
+                                }}
+                                className={`text-left p-3.5 rounded-2xl border transition-all duration-300 flex flex-col justify-between cursor-pointer ${
+                                  isSelected 
+                                    ? 'bg-emerald-950/25 border-emerald-500/40 text-white shadow-md' 
+                                    : 'bg-white/5 border-white/5 hover:bg-white/10 text-slate-300 hover:text-white'
+                                }`}
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <p className="text-xs font-black uppercase tracking-wider line-clamp-2 leading-tight">{skill.label}</p>
+                                  <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all ${
+                                    isSelected ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-700'
+                                  }`}>
+                                    {isSelected && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                                  </div>
+                                </div>
+                                <p className="text-[9px] text-slate-500 mt-2 line-clamp-2 leading-snug">{skill.description}</p>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Start Button */}
+              <div className="pt-6 border-t border-white/5">
+                <button
+                  onClick={handleStartInterview}
+                  className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-3 cursor-pointer border-none"
+                >
+                  <Bot className="w-4 h-4 animate-pulse" /> Launch Interview OS Session
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-[var(--bg)] flex flex-col overflow-hidden text-[var(--text)] font-sans selection:bg-emerald-600/30 transition-colors duration-500">
@@ -1334,34 +1619,36 @@ function SessionContent() {
 
         <div className="flex items-center gap-4">
            {/* Workspace Toggles */}
-           <div className="flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
-              <button 
-                onClick={() => setActiveTab('voice')}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-emerald-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
-              >
-                <Mic className="w-3 h-3 inline-block mr-1.5" /> Face to Face
-              </button>
-              <button 
-                onClick={() => setActiveTab('code')}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'code' ? 'bg-emerald-500/20 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
-              >
-                <Code2 className="w-3 h-3 inline-block mr-1.5" /> Code
-              </button>
-              <button 
-                onClick={() => setActiveTab('architecture')}
-                className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'architecture' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
-              >
-                <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Architecture
-              </button>
-              {track === 'DYNAMIC' && (
-                 <button 
-                   onClick={() => setActiveTab('simulation')}
-                   className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'simulation' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
-                 >
-                   <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Simulation
-                 </button>
-              )}
-           </div>
+           {interviewStage !== 'intro-chat' && (
+             <div className="flex items-center gap-2 bg-white/5 px-2 py-1.5 rounded-lg border border-white/5">
+                <button 
+                  onClick={() => setActiveTab('voice')}
+                  className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'voice' ? 'bg-emerald-600/20 text-blue-400' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  <Mic className="w-3 h-3 inline-block mr-1.5" /> Face to Face
+                </button>
+                <button 
+                  onClick={() => setActiveTab('code')}
+                  className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'code' ? 'bg-emerald-500/20 text-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  <Code2 className="w-3 h-3 inline-block mr-1.5" /> Code
+                </button>
+                <button 
+                  onClick={() => setActiveTab('architecture')}
+                  className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'architecture' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Architecture
+                </button>
+                {track === 'DYNAMIC' && (
+                   <button 
+                     onClick={() => setActiveTab('simulation')}
+                     className={`px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'simulation' ? 'bg-purple-500/20 text-purple-400' : 'text-slate-500 hover:text-slate-300'}`}
+                   >
+                     <Briefcase className="w-3 h-3 inline-block mr-1.5" /> Simulation
+                   </button>
+                )}
+             </div>
+           )}
 
            <button onClick={() => setIsNegotiating(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isNegotiating ? 'bg-blue-700 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400'}`}>
               <TrendingUp className="w-3.5 h-3.5" /> Negotiate Salary
@@ -1383,7 +1670,8 @@ function SessionContent() {
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* Left: Workspace Area (Hidden in Voice mode) */}
+        {/* Left: Workspace Area (Hidden in Voice mode or Intro stage) */}
+        {interviewStage !== 'intro-chat' && (
         <div className={`${activeTab === 'voice' ? 'w-0 opacity-0 pointer-events-none' : 'flex-1 opacity-100'} transition-all duration-700 ease-in-out flex flex-col bg-[var(--bg)] relative overflow-hidden`}>
             <div className="flex-1 overflow-y-auto bg-[var(--bg)] p-6 custom-scrollbar relative">
                <AnimatePresence mode="wait">
@@ -1988,14 +2276,15 @@ function SessionContent() {
                    </motion.div>
                  )}
               </AnimatePresence>
-           </div>
-        </div>
+            </div>
+         </div>
+         )}
 
         {/* Right: Neural Assessment Hub / Sidebar */}
-         <div className={`transition-all duration-700 ease-in-out border-l border-white/5 bg-[#0a0a0c]/50 backdrop-blur-3xl flex flex-col overflow-hidden relative shadow-2xl shrink-0 ${activeTab === 'voice' ? 'w-full border-none' : 'w-[450px]'}`}>
+         <div className={`transition-all duration-700 ease-in-out border-l border-white/5 bg-[#0a0a0c]/50 backdrop-blur-3xl flex flex-col overflow-hidden relative shadow-2xl shrink-0 ${(activeTab === 'voice' || interviewStage === 'intro-chat') ? 'w-full border-none' : 'w-[450px]'}`}>
             
             {/* Interviewer & Sync Status */}
-            <div className={`w-full bg-slate-950 relative overflow-hidden shrink-0 border-b border-white/5 transition-all duration-700 ease-in-out flex ${activeTab === 'voice' ? 'h-[450px] flex-col justify-center items-center' : 'h-[260px] flex-col'}`}>
+            <div className={`w-full bg-slate-950 relative overflow-hidden shrink-0 border-b border-white/5 transition-all duration-700 ease-in-out flex ${(activeTab === 'voice' || interviewStage === 'intro-chat') ? 'h-[450px] flex-col justify-center items-center' : 'h-[260px] flex-col'}`}>
                {/* Ambient Neural Pulsing */}
                <AnimatePresence>
                  {isSpeaking && (
@@ -2004,7 +2293,7 @@ function SessionContent() {
                  )}
                </AnimatePresence>
 
-               <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4 transition-all duration-700 ${activeTab === 'voice' ? 'scale-125' : 'scale-100'}`} style={{ perspective: 1000 }}>
+               <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-center space-y-4 transition-all duration-700 ${(activeTab === 'voice' || interviewStage === 'intro-chat') ? 'scale-125' : 'scale-100'}`} style={{ perspective: 1000 }}>
                   <motion.div 
                      className="relative"
                      animate={{ rotateY: isSpeaking ? [0, 15, -15, 0] : [0, 2, -2, 0], rotateX: isSpeaking ? [0, 5, -5, 0] : 0 }}
@@ -2061,8 +2350,34 @@ function SessionContent() {
             </div>
 
 
-               {/* Dialogue Nexus (Chat) */}
-            <div ref={chatRef} className={`flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar bg-[#020204]/80 backdrop-blur-3xl transition-all duration-700 ${activeTab === 'voice' ? 'max-w-4xl mx-auto w-full' : ''}`}>
+             {/* Dynamic Banner for Intro Stage */}
+             {interviewStage === 'intro-chat' && (
+                <div className="px-8 py-4 bg-emerald-600/10 border-b border-emerald-500/20 flex items-center justify-between shrink-0">
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
+                    <div className="text-left">
+                      <p className="text-xs font-black text-white uppercase tracking-wider">Conversational Introduction</p>
+                      <p className="text-[10px] text-slate-400 font-bold">Introduce yourself and discuss your works. Click proceed when you are ready to write code.</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      sfx?.playNotify();
+                      setInterviewStage('coding');
+                      // Add system message
+                      const msg = "Excellent! Let's transition to the technical challenge. I have loaded a coding problem for you on the left panel. Please read the prompt and write your solution in the IDE.";
+                      setMessages(prev => [...prev, { role: 'assistant', content: msg }]);
+                      speak(msg);
+                    }}
+                    className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2 cursor-pointer border-none"
+                  >
+                    <Code2 className="w-3.5 h-3.5" /> Begin Coding Challenge
+                  </button>
+                </div>
+             )}
+
+             {/* Dialogue Nexus (Chat) */}
+             <div ref={chatRef} className={`flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar bg-[#020204]/80 backdrop-blur-3xl transition-all duration-700 ${(activeTab === 'voice' || interviewStage === 'intro-chat') ? 'max-w-4xl mx-auto w-full' : ''}`}>
                {messages.map((m, i) => (
                  <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} key={i} 
                    className={`flex ${m.role === 'assistant' ? 'justify-start' : 'justify-end'} gap-4`}>
