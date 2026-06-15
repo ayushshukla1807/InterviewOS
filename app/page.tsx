@@ -336,10 +336,7 @@ function LandingPageContent() {
 
   // Modals state
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [bookingName, setBookingName] = useState('');
-  const [bookingEmail, setBookingEmail] = useState('');
-  const [bookingCompany, setBookingCompany] = useState('');
-  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [activeSpecTab, setActiveSpecTab] = useState<'schema' | 'payload'>('schema');
 
   // Hero interactive workspace mockup state
   const [activeHeroTab, setActiveHeroTab] = useState<'coding' | 'sales' | 'data' | 'product' | 'marketer'>('coding');
@@ -484,12 +481,6 @@ function LandingPageContent() {
     }
   };
 
-  const handleBookDemoSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!bookingName || !bookingEmail) return;
-    setBookingSuccess(true);
-  };
-
   const updateProfile = (key: keyof ProfileData, val: string) =>
     setProfile(prev => ({ ...prev, [key]: val }));
 
@@ -535,52 +526,51 @@ function LandingPageContent() {
   const activeQuestionDetails = selectedCandidate.questions.find(q => q.id === selectedQuestionId) || selectedCandidate.questions[0];
 
   return (
-    <div className="min-h-screen bg-slate-50/50 text-slate-800 font-sans selection:bg-purple-500/20 overflow-x-hidden flex flex-col relative transition-colors duration-500">
+    <div className="min-h-screen bg-transparent text-slate-100 font-sans selection:bg-emerald-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
       
-      {/* Background blurs */}
+      {/* Background blurs — visible on dark canvas */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:24px_24px]" />
-        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-purple-500/5 blur-[150px] rounded-full" />
-        <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-emerald-500/3 blur-[150px] rounded-full" />
-        <div className="absolute bottom-[20%] left-[-5%] w-[900px] h-[900px] bg-indigo-500/3 blur-[160px] rounded-full" />
+        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-purple-600/10 blur-[150px] rounded-full" />
+        <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-emerald-500/8 blur-[150px] rounded-full" />
+        <div className="absolute bottom-[20%] left-[-5%] w-[900px] h-[900px] bg-indigo-600/8 blur-[160px] rounded-full" />
       </div>
 
       {/* Nav */}
-      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between border-b border-slate-200/80 bg-white/80 backdrop-blur-xl shadow-sm">
+      <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between border-b border-white/8 bg-black/40 backdrop-blur-xl shadow-lg">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
           <div className="w-10 h-10 border border-purple-500/20 rounded-xl flex items-center justify-center bg-purple-500/5 shadow-md">
             <Shield className="w-5 h-5 text-purple-600" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-700 leading-none font-mono">InterviewOS</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">AI Platform</span>
+            <span className="text-sm font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 leading-none font-mono">InterviewOS</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-wider text-slate-600">
-          <a href="#features" className="hover:text-slate-900 transition-colors">Product</a>
-          <a href="#anti-cheating" className="hover:text-slate-900 transition-colors">Why InterviewOS?</a>
-          <a href="#integrations" className="hover:text-slate-900 transition-colors">Integrations</a>
-          <a href="#case-studies" className="hover:text-slate-900 transition-colors">Case Studies</a>
-          <a href="#faq" className="hover:text-slate-900 transition-colors">FAQ</a>
+        <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-wider text-slate-400">
+          <a href="#features" className="hover:text-emerald-400 transition-colors">Product</a>
+          <a href="#anti-cheating" className="hover:text-emerald-400 transition-colors">Why InterviewOS?</a>
+          <a href="#integrations" className="hover:text-emerald-400 transition-colors">Integrations</a>
+          <a href="#case-studies" className="hover:text-emerald-400 transition-colors">Case Studies</a>
+          <a href="#faq" className="hover:text-emerald-400 transition-colors">FAQ</a>
         </div>
 
         <div className="flex items-center gap-6">
           <button 
             onClick={() => setIsBookingOpen(true)}
-            className="hidden sm:inline-block px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm"
+            className="hidden sm:inline-block px-4 py-2.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm cursor-pointer"
           >
-            Book a Demo
+            Launch Demo
           </button>
           {isAuthenticated ? (
-            <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+            <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
               Dashboard
             </Link>
           ) : (
-            <Link href="/login" className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md shadow-slate-200/40 shadow-purple-600/20">
+            <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md shadow-emerald-500/20 cursor-pointer">
               Try AI Interview
-            </Link>
+            </button>
           )}
         </div>
       </nav>
@@ -593,38 +583,38 @@ function LandingPageContent() {
           transition={{ duration: 0.8 }}
           className="space-y-6 max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-slate-100 border border-slate-200/80 rounded-full shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-purple-500 animate-ping" />
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-600">Trained on 1 Lakh+ Interviews</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-emerald-500/10 border border-emerald-500/25 rounded-full shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Trained on 1 Lakh+ Interviews</span>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.05] text-slate-900">
-            Never take an <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 font-medium">Interview</span> again <br />
-            <span className="font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-700 font-black px-1">InterviewOS</span> takes them for you.
+          <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.05] text-white">
+            Never take an <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-medium">Interview</span> again <br />
+            <span className="font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 font-black px-1">InterviewOS</span> takes them for you.
           </h1>
 
-          <p className="text-sm md:text-base font-medium text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-base font-medium text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Fully automated human-like AI Interviews. Automated assessments, interactive coding sandboxes, proctoring telemetry, and instant candidate grading reports.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <button 
               onClick={() => setIsBookingOpen(true)}
-              className="px-8 py-4 bg-white text-[#050508] hover:bg-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-md shadow-slate-200/40 shadow-white/5"
+              className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/30 cursor-pointer"
             >
-              Book a Demo
+              Launch Demo
             </button>
             <a 
               href="#command-center"
-              className="px-8 py-4 bg-slate-100/80 hover:bg-slate-100/80 text-slate-900 border border-slate-200/80 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all"
+              className="px-8 py-4 bg-white/8 hover:bg-white/15 text-white border border-white/15 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer backdrop-blur-sm"
             >
-              Try AI Interview
+              Configure Interview
             </a>
           </div>
         </motion.div>
 
         {/* Hero Interactive Switcher Tabs */}
-        <div className="flex gap-2 p-1.5 bg-white/60 border border-slate-200/80 rounded-2xl max-w-2xl mx-auto mt-16 w-full relative z-20">
+        <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl max-w-2xl mx-auto mt-16 w-full relative z-20">
           {(['coding', 'sales', 'data', 'product', 'marketer'] as const).map(tab => (
             <button
               key={tab}
@@ -634,8 +624,8 @@ function LandingPageContent() {
               }}
               className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
                 activeHeroTab === tab
-                  ? 'bg-purple-600 text-slate-900 shadow-md shadow-slate-200/40 shadow-purple-600/20'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                  ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-white/8'
               }`}
             >
               {tab === 'coding' && 'Coding'}
@@ -652,12 +642,12 @@ function LandingPageContent() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] border border-slate-200/80 bg-white/70 backdrop-blur-xl mt-6 p-4 shadow-xl shadow-slate-200/50 flex flex-col overflow-hidden relative group"
+          className="w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] border border-white/10 bg-black/40 backdrop-blur-xl mt-6 p-4 shadow-2xl shadow-black/50 flex flex-col overflow-hidden relative group"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500 opacity-60" />
           
           {/* Header tab buttons representing different mock modes */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 mb-3 shrink-0">
+          <div className="flex items-center justify-between pb-3 border-b border-white/8 mb-3 shrink-0">
             <div className="flex gap-1.5">
               <div className="w-3.5 h-3.5 rounded-full bg-rose-500/80" />
               <div className="w-3.5 h-3.5 rounded-full bg-amber-500/80" />
@@ -677,25 +667,25 @@ function LandingPageContent() {
               // Coding Workspace Template
               <div className="flex-1 flex gap-4 overflow-hidden">
                 {/* Left side problem statement */}
-                <div className="w-1/3 bg-[#050508]/60 border border-slate-200/80 rounded-2xl p-5 font-sans space-y-3 overflow-y-auto hidden md:block">
+                <div className="w-1/3 bg-[#050508]/60 border border-white/10 rounded-2xl p-5 font-sans space-y-3 overflow-y-auto hidden md:block">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">Task 1</span>
                     <span className="text-[9px] text-slate-500 font-bold">Time Limit: 25m</span>
                   </div>
-                  <h4 className="text-sm font-black text-slate-900">Word Search by Prefix & Suffix</h4>
+                  <h4 className="text-sm font-black text-white">Word Search by Prefix & Suffix</h4>
                   <p className="text-[11px] leading-relaxed text-slate-600">
                     Design a special dictionary that searches words by a prefix and a suffix. Implement `WordFilter(words)` and `filter(prefix, suffix)` to return the maximum matching index. Optimize performance to ensure \(O(L)\) query time.
                   </p>
-                  <div className="p-3 bg-slate-100/80 border border-slate-200/80 rounded-xl text-[10px] space-y-1">
-                    <span className="font-bold text-slate-300 block">Example Case:</span>
+                  <div className="p-3 bg-white/8 border border-white/10 rounded-xl text-[10px] space-y-1">
+                    <span className="font-bold text-slate-700 block">Example Case:</span>
                     <code className="text-slate-600 block font-mono">words = ["apple"], filter("a", "e") =&gt; Index 0</code>
                   </div>
                 </div>
 
                 {/* Middle: Code Editor */}
-                <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-600 flex flex-col justify-between border border-slate-200/80 overflow-hidden">
+                <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-600 flex flex-col justify-between border border-white/10 overflow-hidden">
                   <div className="space-y-1.5 overflow-y-auto flex-1 select-none">
-                    <div className="flex items-center gap-2 pb-2 border-b border-slate-200/80 mb-2 shrink-0 text-[9px] text-slate-500 font-bold">
+                    <div className="flex items-center gap-2 pb-2 border-b border-white/8 mb-2 shrink-0 text-[9px] text-slate-500 font-bold">
                       <span className="text-purple-600">Solution.java</span>
                       <span>•</span>
                       <span>Java (OpenJDK 13.0.1)</span>
@@ -705,7 +695,7 @@ function LandingPageContent() {
                   </div>
                   
                   {/* Console logs */}
-                  <div className="bg-slate-100/50 border border-slate-200/80 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-600">
+                  <div className="bg-slate-100/50 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-600">
                     <div className="overflow-y-auto space-y-1">
                       {compilerLogs.map((log, idx) => (
                         <div key={idx} className={log.startsWith('✓') ? 'text-emerald-600' : log.startsWith('!') ? 'text-rose-600' : 'text-slate-500'}>
@@ -713,12 +703,12 @@ function LandingPageContent() {
                         </div>
                       ))}
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t border-slate-200/80 mt-1">
+                    <div className="flex justify-between items-center pt-2 border-t border-white/10 mt-1">
                       <span className="text-[8px] text-slate-600">Console Terminal Output</span>
                       <button 
                         onClick={handleRunCode}
                         disabled={isCompiling}
-                        className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded font-bold uppercase tracking-wider disabled:opacity-50"
+                        className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-black rounded font-bold uppercase tracking-wider disabled:opacity-50"
                       >
                         {isCompiling ? 'Running...' : 'Compile & Run'}
                       </button>
@@ -728,12 +718,12 @@ function LandingPageContent() {
 
                 {/* Right Side: Biometric meters */}
                 <div className="w-44 flex flex-col gap-3 shrink-0 hidden lg:flex">
-                  <div className="flex-1 rounded-2xl bg-slate-100/80 border border-slate-200/80 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                  <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
                     <Activity className="w-5 h-5 text-emerald-600 animate-pulse" />
                     <span className="text-[9px] font-black uppercase tracking-wider text-slate-600">Voice Confidence</span>
                     <span className="text-lg font-black text-slate-900">92%</span>
                   </div>
-                  <div className="flex-1 rounded-2xl bg-slate-100/80 border border-slate-200/80 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                  <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
                     <Monitor className="w-5 h-5 text-purple-600" />
                     <span className="text-[9px] font-black uppercase tracking-wider text-slate-600">Stress Tracking</span>
                     <span className="text-xs font-black text-purple-300">Focused / Stable</span>
@@ -744,7 +734,7 @@ function LandingPageContent() {
               // Video/Audio Calling Mock Grid (Sales, Data, Product, Marketer)
               <div className="flex-1 flex gap-4 overflow-hidden relative">
                 {/* Candidate Feed */}
-                <div className="flex-1 bg-slate-100/50 border border-slate-200/80 rounded-3xl overflow-hidden relative flex items-center justify-center">
+                <div className="flex-1 bg-slate-100/50 border border-white/10 rounded-3xl overflow-hidden relative flex items-center justify-center">
                   {/* Mock video background image */}
                   <img 
                     src={activeHeroTab === 'sales'
@@ -758,10 +748,10 @@ function LandingPageContent() {
                     alt="Candidate video feed stream"
                     className="w-full h-full object-cover opacity-70 filter grayscale-[20%]"
                   />
-                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-200/80 text-[9px] font-bold text-slate-900 flex items-center gap-1.5">
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[9px] font-bold text-slate-900 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" /> Candidate Video Stream
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4 bg-white/85 border border-slate-200/80 rounded-2xl p-4 backdrop-blur-md">
+                  <div className="absolute bottom-4 left-4 right-4 bg-black/50 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
                     <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
                     <p className="text-xs text-slate-900 leading-relaxed font-medium">
                       {activeHeroTab === 'sales' && '"For our B2B sales cycles, I focus on identifying high-intent outbound leads using customer intent data..."'}
@@ -773,7 +763,7 @@ function LandingPageContent() {
                 </div>
 
                 {/* AI Interviewer Feed */}
-                <div className="w-1/3 bg-slate-100/50 border border-slate-200/80 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
+                <div className="w-1/3 bg-slate-100/50 border border-white/10 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
                   <div className="flex-1 relative flex items-center justify-center">
                     <img 
                       src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300&h=300"
@@ -788,7 +778,7 @@ function LandingPageContent() {
                       <span className="text-[9px] text-slate-500 font-mono">Analyzing Audio & Tone</span>
                     </div>
                   </div>
-                  <div className="bg-[#050508] border-t border-slate-200/80 p-4 text-left space-y-2">
+                  <div className="bg-[#050508] border-t border-white/10 p-4 text-left space-y-2">
                     <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Active Question</span>
                     <p className="text-[11px] text-slate-300 font-medium">
                       {activeHeroTab === 'sales' && 'How would you qualify outbound target companies?'}
@@ -810,7 +800,7 @@ function LandingPageContent() {
                     >
                       <button 
                         onClick={() => setIsUnmuted(true)}
-                        className="px-6 py-4 bg-white hover:bg-slate-200 text-black font-black uppercase tracking-widest text-[10px] rounded-2xl flex items-center gap-3 shadow-md shadow-slate-200/40 shadow-white/5 active:scale-95 transition-all"
+                        className="px-6 py-4 bg-white hover:bg-white/15 text-black font-black uppercase tracking-widest text-[10px] rounded-2xl flex items-center gap-3 shadow-md shadow-slate-200/40 shadow-white/5 active:scale-95 transition-all"
                       >
                         <Volume2 className="w-4.5 h-4.5 text-black" />
                         Tap to unmute
@@ -824,30 +814,30 @@ function LandingPageContent() {
           </div>
 
           {/* Floating Badges */}
-          <div className="absolute top-16 right-6 bg-white/80 border border-slate-200/80 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px] hidden md:flex">
+          <div className="absolute top-16 right-6 bg-black/50 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px] hidden md:flex">
             <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-500/20 flex items-center justify-center">
               <CheckCircle className="w-4.5 h-4.5 text-emerald-600" />
             </div>
             <div className="flex flex-col text-left">
               <span className="text-[8px] font-black tracking-widest text-slate-600 uppercase">Evaluation Score</span>
-              <span className="text-sm font-black text-slate-900">80/100</span>
+              <span className="text-sm font-black text-white">80/100</span>
             </div>
           </div>
 
-          <div className="absolute bottom-24 left-6 bg-white/80 border border-slate-200/80 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[4px] hidden md:flex">
+          <div className="absolute bottom-24 left-6 bg-black/50 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[4px] hidden md:flex">
             <div className="w-8 h-8 rounded-xl bg-purple-50 border border-purple-500/20 flex items-center justify-center">
               <Award className="w-4.5 h-4.5 text-purple-600" />
             </div>
             <div className="flex flex-col text-left">
               <span className="text-[8px] font-black tracking-widest text-slate-600 uppercase">Status</span>
-              <span className="text-sm font-black text-slate-900">Strong Candidate</span>
+              <span className="text-sm font-black text-white">Strong Candidate</span>
             </div>
           </div>
         </motion.div>
       </header>
 
       {/* Trust partners Marquee */}
-      <section className="relative z-10 border-y border-slate-200/80 bg-white py-10 w-full overflow-hidden">
+      <section className="relative z-10 border-y border-white/8 bg-black/20 py-10 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center space-y-6">
           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
             InterviewOS - A Name Trusted by <span className="text-purple-600">800+</span> hiring partners
@@ -867,35 +857,35 @@ function LandingPageContent() {
       <section id="features" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Core Product Modules</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Everything you need to run interviews automatically, end-to-end
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Feature 1: Built on 3000+ Questions */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">Question Pools</span>
               <h3 className="text-xl font-bold text-slate-900">Built on 3000+ Industry Questions</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Picked from our comprehensive pool or tailored to your specific developer requirements. Ready to use and fully customizable.
               </p>
             </div>
             
             {/* Interactive tag cards group */}
             <div className="relative h-44 mt-6 flex items-center justify-center overflow-hidden">
-              <div className="absolute left-4 rotate-[-8deg] p-4 bg-slate-100/80 border border-slate-200/80 rounded-2xl w-48 shadow-md shadow-slate-200/40 shadow-black/40">
+              <div className="absolute left-4 rotate-[-8deg] p-4 bg-white/8 border border-white/10 rounded-2xl w-48 shadow-md shadow-slate-200/40 shadow-black/40">
                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">DSA / Coding</span>
                 <p className="text-[10px] font-black text-slate-900 mt-1">Java, Python, C++, SQL</p>
                 <p className="text-[9px] text-purple-600 font-bold mt-0.5">1500+ questions</p>
               </div>
-              <div className="absolute right-4 rotate-[8deg] p-4 bg-slate-100/80 border border-slate-200/80 rounded-2xl w-48 shadow-md shadow-slate-200/40 shadow-black/40 z-0">
+              <div className="absolute right-4 rotate-[8deg] p-4 bg-white/8 border border-white/10 rounded-2xl w-48 shadow-md shadow-slate-200/40 shadow-black/40 z-0">
                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Sales Ops</span>
                 <p className="text-[10px] font-black text-slate-900 mt-1">Objection handling</p>
                 <p className="text-[9px] text-amber-600 font-bold mt-0.5">300+ questions</p>
               </div>
-              <div className="absolute p-5 bg-[#0e0e12] border border-slate-200/80 rounded-2xl w-52 shadow-xl shadow-slate-200/50 z-10 scale-105">
+              <div className="absolute p-5 bg-[#0e0e12] border border-white/10 rounded-2xl w-52 shadow-xl shadow-slate-200/50 z-10 scale-105">
                 <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">System Architecture</span>
                 <p className="text-[11px] font-black text-slate-900 mt-1">Root Cause Analysis</p>
                 <p className="text-[9px] text-emerald-600 font-bold mt-0.5">500+ questions</p>
@@ -904,7 +894,7 @@ function LandingPageContent() {
           </div>
 
           {/* Feature 2: 100% Anti-Cheating Simulator with Face Mesh */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest bg-rose-50 border border-rose-500/20 px-2 py-0.5 rounded">Neural Proctoring</span>
@@ -916,15 +906,15 @@ function LandingPageContent() {
                 </button>
               </div>
               <h3 className="text-xl font-bold text-slate-900">100% Anti-Cheating</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 We monitor browser focus states, eye shift patterns, voice presence anomalies, and keystroke injection signatures in real-time.
               </p>
             </div>
 
             {/* Anti-Cheating timeline logger preview with SVG landmarks */}
-            <div className="bg-[#050508] border border-slate-200/80 rounded-2xl p-4 mt-6 space-y-4 text-left relative overflow-hidden">
+            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 space-y-4 text-left relative overflow-hidden">
               <div className="flex items-center gap-3">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100/50 border border-slate-200/80 relative shrink-0">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100/50 border border-white/10 relative shrink-0">
                   <img 
                     src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120&h=120"
                     alt="Mock proctored user"
@@ -988,7 +978,7 @@ function LandingPageContent() {
                       className={`py-1 text-[8px] font-bold uppercase tracking-wider rounded border text-center transition-all ${
                         selectedViolation.id === v.id
                           ? 'bg-rose-50 border-rose-500/30 text-rose-600'
-                          : 'bg-slate-100/80 border-slate-200/80 text-slate-500 hover:text-slate-900'
+                          : 'bg-white/8 border-white/10 text-slate-500 hover:text-slate-900'
                       }`}
                     >
                       {v.label}
@@ -1000,17 +990,17 @@ function LandingPageContent() {
           </div>
 
           {/* Feature 3: Integrated Code Editor */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">Compiler Sandbox</span>
               <h3 className="text-xl font-bold text-slate-900">Integrated Code Editor</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Built-in compiler environment and interactive editor scratchpad to evaluate structural code efficiency, edge cases, and runtime complexity.
               </p>
             </div>
 
             {/* Code mockup */}
-            <div className="bg-[#050508] border border-slate-200/80 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-slate-600 space-y-1">
+            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-slate-600 space-y-1">
               <div className="text-emerald-500">// Evaluated Code Stream</div>
               <div><span className="text-purple-600">class</span> <span className="text-blue-400">Solution</span> &#123;</div>
               <div className="pl-4"><span className="text-blue-400">int</span> <span className="text-yellow-400">sumOfDigits</span>(<span className="text-blue-400">int</span> n) &#123;</div>
@@ -1027,7 +1017,7 @@ function LandingPageContent() {
           </div>
 
           {/* Feature 4: Feels Like a Real Interview with Dialogue Player */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">Adaptive Dialogues</span>
@@ -1040,16 +1030,16 @@ function LandingPageContent() {
                 </button>
               </div>
               <h3 className="text-xl font-bold text-slate-900">Feels Like a Real Interview</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 Adaptive follow-ups, natural voice parsing, and real-time probing prompts structured to evaluate logic depth, not just memorized syntax.
               </p>
             </div>
 
             {/* Bubble Dialogue mockup with voice waves */}
-            <div className="bg-[#050508] border border-slate-200/80 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans relative">
+            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans relative">
               <div className="space-y-1 max-w-[90%]">
                 <span className="text-[8px] font-black text-purple-600 uppercase tracking-wider">AI interviewer</span>
-                <div className="p-3 bg-purple-50 border border-purple-500/20 rounded-2xl rounded-tl-none text-[10px] text-slate-200 leading-relaxed">
+                <div className="p-3 bg-purple-50 border border-purple-500/20 rounded-2xl rounded-tl-none text-[10px] text-slate-800 leading-relaxed">
                   &quot;Can you tell me about one project you&apos;re proud of and the tech stack you used?&quot;
                 </div>
               </div>
@@ -1058,7 +1048,7 @@ function LandingPageContent() {
                 dialogueStep >= 1 ? 'opacity-100' : 'opacity-30'
               }`}>
                 <span className="text-[8px] font-black text-slate-500 uppercase tracking-wider">Candidate response</span>
-                <div className="p-3 bg-white border border-slate-200/80 rounded-2xl rounded-tr-none text-[10px] text-slate-200 leading-relaxed text-left">
+                <div className="p-3 bg-white border border-white/10 rounded-2xl rounded-tr-none text-[10px] text-slate-700 leading-relaxed text-left">
                   {dialogueStep >= 2 
                     ? '"Yeah sure, I’ve worked on a P2P food delivery system... MERN stack, MongoDB, React, Node..."' 
                     : '"Thinking... evaluating project archives..."'}
@@ -1067,7 +1057,7 @@ function LandingPageContent() {
 
               {/* Glowing voice waves */}
               {dialoguePlaying && (
-                <div className="absolute top-4 right-4 flex gap-1 items-end h-6 z-20 bg-white px-3 py-1 border border-slate-200/80 rounded-full">
+                <div className="absolute top-4 right-4 flex gap-1 items-end h-6 z-20 bg-white/10 px-3 py-1 border border-white/10 rounded-full">
                   {[1, 2, 3, 4, 5, 6].map(bar => (
                     <span 
                       key={bar} 
@@ -1086,11 +1076,11 @@ function LandingPageContent() {
       </section>
 
       {/* System Architecture: Interactive Telemetry Pipeline */}
-      <section className="relative z-10 border-t border-slate-200/60 bg-white py-20">
+      <section className="relative z-10 border-t border-white/8 bg-transparent py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
           <div className="text-center space-y-3">
             <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 px-2 py-0.5 rounded border border-purple-100 inline-block">Real-time Pipeline</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Interactive Telemetry: How InterviewOS Works
             </h2>
             <p className="text-xs text-slate-600 max-w-2xl mx-auto">
@@ -1100,7 +1090,7 @@ function LandingPageContent() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-center pt-6">
             {/* SVG Pipeline Connection Nodes (7 cols) */}
-            <div className="lg:col-span-7 bg-slate-50 border border-slate-200/80 rounded-3xl p-6 relative min-h-[350px] flex flex-col justify-center shadow-sm">
+            <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-3xl p-6 relative min-h-[350px] flex flex-col justify-center shadow-sm">
               <span className="absolute top-4 left-4 text-[8px] font-mono text-slate-400 font-bold uppercase tracking-wider">[ PIPELINE-DIAGRAM // node_mesh ]</span>
               
               {/* Dynamic SVG link line */}
@@ -1142,8 +1132,8 @@ function LandingPageContent() {
                     onClick={() => setActiveTelemetryStep(node.id)}
                     className={`w-28 p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                       activeTelemetryStep === node.id
-                        ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-purple-600/20 scale-105'
-                        : 'bg-white border-slate-200/80 hover:border-slate-300 text-slate-800'
+                        ? 'bg-purple-600 border-purple-500 text-white shadow-lg shadow-emerald-500/20 scale-105'
+                        : 'bg-white border-white/10 hover:border-slate-300 text-slate-800'
                     }`}
                   >
                     <span className={`text-[7px] font-mono font-bold tracking-widest block uppercase ${activeTelemetryStep === node.id ? 'text-purple-200' : 'text-purple-600'}`}>{node.tag}</span>
@@ -1224,11 +1214,11 @@ function LandingPageContent() {
       </section>
 
       {/* Differentiator Section: AI Workplace Simulator */}
-      <section id="workplace-simulator" className="relative z-10 bg-slate-50 border-y border-slate-200/60 py-20">
+      <section id="workplace-simulator" className="relative z-10 bg-white/5 border-y border-white/8 py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
           <div className="text-center space-y-3">
             <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 inline-block">The Ultimate Differentiator</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Evaluate real workplace behavior. Not just MCQs.
             </h2>
             <p className="text-xs text-slate-600 max-w-2xl mx-auto">
@@ -1269,21 +1259,21 @@ function LandingPageContent() {
                   className={`p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden ${
                     activeSimTab === tab.id
                       ? 'bg-white border-purple-500/30 shadow-md shadow-slate-200/40'
-                      : 'bg-white/40 border-slate-200/60 hover:bg-white hover:border-slate-300'
+                      : 'bg-white/4 border-white/8 hover:bg-white hover:border-slate-300'
                   }`}
                 >
                   {activeSimTab === tab.id && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600" />
                   )}
                   <span className="text-[8px] font-bold tracking-widest uppercase text-slate-400 block mb-1">{tab.tag}</span>
-                  <h4 className="text-sm font-black text-slate-900">{tab.title}</h4>
+                  <h4 className="text-sm font-black text-white">{tab.title}</h4>
                   <p className="text-[11px] text-slate-500 leading-relaxed mt-1">{tab.desc}</p>
                 </button>
               ))}
             </div>
 
             {/* Right Interactive mockup panel (8 cols) */}
-            <div className="lg:col-span-8 bg-white border border-slate-200/80 rounded-3xl p-6 shadow-md shadow-slate-200/30 min-h-[400px] flex flex-col justify-between text-left relative overflow-hidden">
+            <div className="lg:col-span-8 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-md shadow-black/30 min-h-[400px] flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-sm">
               <span className="absolute top-4 right-4 text-[8px] font-mono text-slate-400 font-bold uppercase tracking-wider">[ INTERACTIVE SIMULATION PREVIEW ]</span>
               
               <div className="space-y-4">
@@ -1311,7 +1301,7 @@ function LandingPageContent() {
                           <span className="font-bold text-slate-900">Devin (Tech Lead)</span>
                           <span className="text-[9px] text-slate-400 font-bold">12:31 PM</span>
                         </div>
-                        <p className="text-slate-700 leading-relaxed bg-slate-50 border border-slate-200/60 p-3 rounded-2xl rounded-tl-none">
+                        <p className="text-slate-700 leading-relaxed bg-white/5 border border-white/8 p-3 rounded-2xl rounded-tl-none">
                           &quot;Hey! The payment webhook service is throwing 504 gateway timeouts on production! Acme Corp is complaining their checks are failing. What is our hotfix path?&quot;
                         </p>
                       </div>
@@ -1322,13 +1312,13 @@ function LandingPageContent() {
                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Choose candidate response:</span>
                         <button 
                           onClick={() => setSlackChoice(1)}
-                          className="w-full p-3 bg-slate-50 border border-slate-200/80 rounded-xl hover:border-purple-300 hover:bg-purple-50/20 text-left transition-all duration-200 block text-[11px]"
+                          className="w-full p-3 bg-white/5 border border-white/10 rounded-xl hover:border-purple-300 hover:bg-purple-50/20 text-left transition-all duration-200 block text-[11px]"
                         >
                           <strong>A) &quot;Let&apos;s roll back main branch immediately. Devin, prepare the git revert commands. I will notify customer operations.&quot;</strong>
                         </button>
                         <button 
                           onClick={() => setSlackChoice(2)}
-                          className="w-full p-3 bg-slate-50 border border-slate-200/80 rounded-xl hover:border-purple-300 hover:bg-purple-50/20 text-left transition-all duration-200 block text-[11px]"
+                          className="w-full p-3 bg-white/5 border border-white/10 rounded-xl hover:border-purple-300 hover:bg-purple-50/20 text-left transition-all duration-200 block text-[11px]"
                         >
                           <strong>B) &quot;Let&apos;s run some curls on the logs first. Devin, spin up logs tracing. I want to check database connection count parameters before acting.&quot;</strong>
                         </button>
@@ -1375,7 +1365,7 @@ function LandingPageContent() {
                 {/* Tab content 2: Client email */}
                 {activeSimTab === 'email' && (
                   <div className="space-y-4 font-sans text-xs">
-                    <div className="bg-slate-50 border border-slate-200/60 rounded-2xl p-4 space-y-3">
+                    <div className="bg-white/5 border border-white/8 rounded-2xl p-4 space-y-3">
                       <div>
                         <div className="flex justify-between text-slate-500 font-bold text-[10px]">
                           <span>From: ceo@acme-corp.com</span>
@@ -1399,15 +1389,15 @@ function LandingPageContent() {
                       </div>
                       
                       <div className="grid grid-cols-3 gap-2 text-[10px] font-bold text-center">
-                        <div className="bg-white/80 border border-purple-100 rounded-lg p-1">
+                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
                           <span className="text-purple-600 block">Politeness</span>
                           <span className="text-slate-700">95%</span>
                         </div>
-                        <div className="bg-white/80 border border-purple-100 rounded-lg p-1">
+                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
                           <span className="text-purple-600 block">Escalation Mitigation</span>
                           <span className="text-slate-700">92%</span>
                         </div>
-                        <div className="bg-white/80 border border-purple-100 rounded-lg p-1">
+                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
                           <span className="text-purple-600 block">Action Clarity</span>
                           <span className="text-slate-700">98%</span>
                         </div>
@@ -1425,7 +1415,7 @@ function LandingPageContent() {
                       {jiraPriorities.map((item, idx) => (
                         <div 
                           key={item} 
-                          className="flex items-center justify-between p-3.5 bg-slate-50 border border-slate-200/80 rounded-xl text-left"
+                          className="flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-xl text-left"
                         >
                           <div className="flex items-center gap-3">
                             <span className="w-5 h-5 rounded-full bg-purple-600 text-white font-extrabold text-[10px] flex items-center justify-center">{idx + 1}</span>
@@ -1441,7 +1431,7 @@ function LandingPageContent() {
                                 setJiraPriorities(newOrder);
                                 setJiraSubmitted(false);
                               }}
-                              className="text-[9px] font-bold uppercase tracking-wider text-purple-600 hover:text-purple-500 bg-white border border-slate-200/80 px-2 py-1 rounded"
+                              className="text-[9px] font-bold uppercase tracking-wider text-purple-600 hover:text-purple-500 bg-white border border-white/10 px-2 py-1 rounded"
                             >
                               Move
                             </button>
@@ -1489,7 +1479,7 @@ function LandingPageContent() {
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Platform Walkthrough</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             InterviewOS in Action: Product Tour
           </h2>
           <p className="text-xs text-slate-600 max-w-2xl mx-auto">
@@ -1537,7 +1527,7 @@ function LandingPageContent() {
                 className={`w-full p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden group ${
                   activeTourTab === feat.id
                     ? 'bg-purple-50 border-purple-500/30 shadow-md shadow-slate-200/40 shadow-purple-900/5'
-                    : 'bg-white border-slate-200/80 hover:border-slate-200/80 hover:bg-white/[0.02]'
+                    : 'bg-white border-white/10 hover:border-white/10 hover:bg-white/[0.02]'
                 }`}
               >
                 {activeTourTab === feat.id && (
@@ -1546,7 +1536,7 @@ function LandingPageContent() {
                 <span className="text-[8px] font-black uppercase tracking-wider text-purple-600 block mb-1">
                   {feat.tag}
                 </span>
-                <h4 className="text-sm font-black text-slate-900 group-hover:text-purple-300 transition-colors">
+                <h4 className="text-sm font-black text-white group-hover:text-purple-300 transition-colors">
                   {feat.title}
                 </h4>
                 <p className="text-[11px] text-slate-600 leading-relaxed mt-1">
@@ -1557,18 +1547,18 @@ function LandingPageContent() {
           </div>
 
           {/* Right Column: Visual Interface Frame (7 cols) */}
-          <div className="lg:col-span-7 bg-white border border-slate-200/80 rounded-3xl shadow-sm p-4 md:p-6 shadow-xl shadow-slate-200/50 relative group overflow-hidden flex flex-col justify-center min-h-[400px]">
+          <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 shadow-xl shadow-black/50 relative group overflow-hidden flex flex-col justify-center min-h-[400px] backdrop-blur-sm">
             {/* Glow effect */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-purple-50 rounded-full blur-[100px] pointer-events-none" />
             
             {/* Frame navigation header mockup */}
-            <div className="flex justify-between items-center border-b border-slate-200/80 pb-3 mb-4 text-[10px] text-slate-500 font-mono">
+            <div className="flex justify-between items-center border-b border-white/8 pb-3 mb-4 text-[10px] text-slate-500 font-mono">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
               </div>
-              <div className="px-3 py-0.5 bg-slate-100/80 rounded-md text-[9px] border border-slate-200/80">
+              <div className="px-3 py-0.5 bg-slate-100/80 rounded-md text-[9px] border border-white/10">
                 {activeTourTab === 'live-session' && 'interviewos.com/session/LIVE-9291'}
                 {activeTourTab === 'grading-report' && 'interviewos.com/recruiter/report/shubh_agarwal'}
                 {activeTourTab === 'permissions-check' && 'interviewos.com/instructions?name=Shubh'}
@@ -1578,7 +1568,7 @@ function LandingPageContent() {
             </div>
 
             {/* Main Image Viewport */}
-            <div className="relative aspect-video rounded-xl overflow-hidden border border-slate-200/80 bg-slate-100/50 flex items-center justify-center group-hover:border-purple-500/20 transition-all duration-300">
+            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-slate-100/50 flex items-center justify-center group-hover:border-purple-500/20 transition-all duration-300">
               {[
                 { id: 'live-session', image: '/images/session_feature.png' },
                 { id: 'grading-report', image: '/images/dashboard_feature.png' },
@@ -1600,11 +1590,11 @@ function LandingPageContent() {
       </section>
 
       {/* Evaluation Report Dashboard with Candidate Switcher & Code Diff */}
-      <section className="relative z-10 border-y border-slate-200/80 bg-white/40 py-20 border-y border-slate-200/50">
+      <section className="relative z-10 border-y border-white/8 bg-transparent py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-16">
           <div className="text-center space-y-3">
             <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Grading Dashboard</span>
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Detailed & Instance-backed Interview Evaluation
             </h2>
           </div>
@@ -1615,13 +1605,13 @@ function LandingPageContent() {
               <button
                 key={c.id}
                 onClick={() => handleCandidateSwap(c.id)}
-                className={`flex items-center gap-2 px-4 py-2 bg-slate-100/80 border rounded-2xl transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 bg-white/8 border rounded-2xl transition-all ${
                   selectedCandidate.id === c.id 
                     ? 'border-purple-500 bg-purple-600/5 text-slate-900 shadow-md shadow-slate-200/40 shadow-purple-500/10' 
-                    : 'border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                    : 'border-white/10 text-slate-600 hover:text-slate-900 hover:bg-white/10'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-slate-200/80">
+                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white/10">
                   <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[10px] font-black uppercase tracking-wider">{c.name.split(' ')[0]}</span>
@@ -1629,14 +1619,14 @@ function LandingPageContent() {
             ))}
           </div>
 
-          <div className="max-w-6xl mx-auto bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-slate-200/50 grid grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
+          <div className="max-w-6xl mx-auto bg-white/5 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-black/50 grid backdrop-blur-sm grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500 opacity-60" />
 
             {/* Left Side: Summary Card */}
-            <div className="lg:col-span-4 bg-[#050508]/60 border border-slate-200/80 rounded-3xl p-6 flex flex-col justify-between space-y-6">
+            <div className="lg:col-span-4 bg-[#050508]/60 border border-white/10 rounded-3xl p-6 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100/50 border border-slate-200/80">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100/50 border border-white/10">
                     <img 
                       src={selectedCandidate.avatar}
                       alt={selectedCandidate.name}
@@ -1713,17 +1703,17 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Skill Level Summary</span>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="p-4 bg-[#050508]/60 border border-slate-200/80 rounded-2xl space-y-1 text-left">
+                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-amber-600">Problem Solving</span>
                     <span className="text-xs font-bold text-slate-900 block">{selectedCandidate.skills.problemSolving.level}</span>
                     <p className="text-[10px] text-slate-600 leading-normal">{selectedCandidate.skills.problemSolving.desc}</p>
                   </div>
-                  <div className="p-4 bg-[#050508]/60 border border-slate-200/80 rounded-2xl space-y-1 text-left">
+                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-rose-600">Technical knowledge</span>
                     <span className="text-xs font-bold text-slate-900 block">{selectedCandidate.skills.technical.level}</span>
                     <p className="text-[10px] text-slate-600 leading-normal">{selectedCandidate.skills.technical.desc}</p>
                   </div>
-                  <div className="p-4 bg-[#050508]/60 border border-slate-200/80 rounded-2xl space-y-1 text-left">
+                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-emerald-600">Code Quality</span>
                     <span className="text-xs font-bold text-slate-900 block">{selectedCandidate.skills.codeQuality.level}</span>
                     <p className="text-[10px] text-slate-600 leading-normal">{selectedCandidate.skills.codeQuality.desc}</p>
@@ -1733,7 +1723,7 @@ function LandingPageContent() {
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 {/* Recharts Radar chart wrapper */}
-                <div className="md:col-span-5 h-44 flex items-center justify-center bg-slate-100/80 border border-slate-200/80 rounded-2xl p-2">
+                <div className="md:col-span-5 h-44 flex items-center justify-center bg-white/8 border border-white/10 rounded-2xl p-2">
                   {mounted ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={selectedCandidate.radar}>
@@ -1764,10 +1754,10 @@ function LandingPageContent() {
               {/* Questions table grid */}
               <div className="space-y-3">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Question Breakdown logs</span>
-                <div className="border border-slate-200/80 rounded-2xl overflow-hidden bg-[#050508]/40">
+                <div className="border border-white/10 rounded-2xl overflow-hidden bg-[#050508]/40">
                   <table className="w-full text-xs font-sans text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-slate-200/80 text-[9px] font-black uppercase tracking-widest text-slate-500 bg-[#050508]/80">
+                      <tr className="border-b border-white/8 text-[9px] font-black uppercase tracking-widest text-slate-500 bg-[#050508]/80">
                         <th className="p-4">Question</th>
                         <th className="p-4">Score</th>
                         <th className="p-4">Time</th>
@@ -1779,7 +1769,7 @@ function LandingPageContent() {
                         <tr 
                           key={q.id}
                           onClick={() => setSelectedQuestionId(q.id)}
-                          className={`border-b border-slate-200/80 cursor-pointer hover:bg-slate-100/80 transition-colors ${
+                          className={`border-b border-white/8 cursor-pointer hover:bg-white/10 transition-colors ${
                             selectedQuestionId === q.id ? 'bg-purple-600/5 text-slate-900' : 'text-slate-600'
                           }`}
                         >
@@ -1796,7 +1786,7 @@ function LandingPageContent() {
 
               {/* Interactive Code Diff & Transcript panel */}
               {activeQuestionDetails && (
-                <div className="p-5 bg-[#050508] border border-slate-200/80 rounded-3xl space-y-4 text-left font-sans">
+                <div className="p-5 bg-[#050508] border border-white/10 rounded-3xl space-y-4 text-left font-sans">
                   <div>
                     <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
                     <h4 className="text-xs font-black text-slate-900 mt-1">{activeQuestionDetails.title}</h4>
@@ -1833,20 +1823,20 @@ function LandingPageContent() {
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 text-center space-y-12">
         <div className="space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Try Simulator</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             AI Interview tailored for every Role
           </h2>
         </div>
 
         {/* Categories Tab Selector */}
-        <div className="flex justify-center gap-2 flex-wrap max-w-xl mx-auto p-1 bg-slate-100/80 border border-slate-200/80 rounded-2xl">
+        <div className="flex justify-center gap-2 flex-wrap max-w-xl mx-auto p-1 bg-white/8 border border-white/10 rounded-2xl">
           {(['popular', 'tech', 'sales', 'marketing', 'product'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTryTab(tab)}
               className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${
                 activeTryTab === tab
-                  ? 'bg-purple-600 text-slate-900 shadow-md shadow-slate-200/40 shadow-purple-600/20'
+                  ? 'bg-purple-600 text-slate-900 shadow-md shadow-slate-200/40 shadow-emerald-500/20'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -1863,7 +1853,7 @@ function LandingPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* Software Engineer card */}
           {activeTryTab === 'popular' || activeTryTab === 'tech' ? (
-            <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300 shadow-md shadow-slate-200/40 group text-left h-60">
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">💻</span>
@@ -1872,20 +1862,20 @@ function LandingPageContent() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">Software Engineer 1</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-purple-600 transition-colors">Software Engineer 1</h4>
                   <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
                     Evaluate algorithms, array/tree traversal, system design constraints, and clean syntax structures.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200/80">
+              <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">React</span>
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Java</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('fullstack', 'software_engineering')}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1895,7 +1885,7 @@ function LandingPageContent() {
 
           {/* BDE Sales card */}
           {activeTryTab === 'popular' || activeTryTab === 'sales' ? (
-            <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300 shadow-md shadow-slate-200/40 group text-left h-60">
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤝</span>
@@ -1904,20 +1894,20 @@ function LandingPageContent() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">BDE (Sales)</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-purple-600 transition-colors">BDE (Sales)</h4>
                   <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
                     Tests objection handling, speech confidence levels, negotiation triggers, and sales flow pipelines.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200/80">
+              <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Cold Pitching</span>
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">CRM</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('sales_associate', 'management_qa')}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1927,7 +1917,7 @@ function LandingPageContent() {
 
           {/* Performance Marketer card */}
           {activeTryTab === 'popular' || activeTryTab === 'marketing' ? (
-            <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300 shadow-md shadow-slate-200/40 group text-left h-60">
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">📈</span>
@@ -1936,20 +1926,20 @@ function LandingPageContent() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">Performance Marketer</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-purple-600 transition-colors">Performance Marketer</h4>
                   <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
                     Evaluate user acquisition frameworks, ROAS statistics, search-intent algorithms, and budget allocation.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200/80">
+              <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">ROAS</span>
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">SEO</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('performance_marketer', 'management_qa')}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1959,7 +1949,7 @@ function LandingPageContent() {
 
           {/* AI Engineer card */}
           {activeTryTab === 'tech' ? (
-            <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300 shadow-md shadow-slate-200/40 group text-left h-60">
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤖</span>
@@ -1968,20 +1958,20 @@ function LandingPageContent() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">AI / ML Engineer</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-purple-600 transition-colors">AI / ML Engineer</h4>
                   <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
                     Assess transformer architectures, pipeline training, vector database RAG structures, and prompt modeling.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200/80">
+              <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">PyTorch</span>
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Transformers</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('ai_ml_engineer', 'ai_ml')}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1991,7 +1981,7 @@ function LandingPageContent() {
 
           {/* Product Manager card */}
           {activeTryTab === 'product' ? (
-            <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between hover:border-purple-500/30 transition-all duration-300 shadow-md shadow-slate-200/40 group text-left h-60">
+            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🗺️</span>
@@ -2000,20 +1990,20 @@ function LandingPageContent() {
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition-colors">Product Manager</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-purple-600 transition-colors">Product Manager</h4>
                   <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
                     Assess roadmap prioritization frameworks, user metrics modeling, and customer feedback architectures.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-slate-200/80">
+              <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">GIST</span>
                   <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Priorities</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('product_manager', 'management_qa')}
-                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                 >
                   Try Interview now
                 </button>
@@ -2024,10 +2014,10 @@ function LandingPageContent() {
       </section>
 
       {/* Anti-Cheating Marquee Banner */}
-      <section className="relative z-10 bg-slate-100/50 py-8 border-y border-slate-200/80 overflow-hidden">
+      <section className="relative z-10 bg-slate-100/50 py-8 border-y border-white/10 overflow-hidden">
         <div className="flex gap-8 items-center whitespace-nowrap animate-[marquee_25s_linear_infinite] opacity-60">
           {VIOLATIONS.map((v, idx) => (
-            <div key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100/80 border border-slate-200/80 rounded-2xl text-[10px] text-slate-300">
+            <div key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-white/8 border border-white/10 rounded-2xl text-[10px] text-slate-800">
               <AlertCircle className="w-4 h-4 text-rose-600" />
               <span className="font-extrabold uppercase">{v.label} Detected</span>
               <span className="text-slate-500">at {v.time}</span>
@@ -2035,7 +2025,7 @@ function LandingPageContent() {
           ))}
           {/* duplicate loop to prevent gaps */}
           {VIOLATIONS.map((v, idx) => (
-            <div key={`dup-${idx}`} className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100/80 border border-slate-200/80 rounded-2xl text-[10px] text-slate-300">
+            <div key={`dup-${idx}`} className="inline-flex items-center gap-2 px-4 py-2 bg-white/8 border border-white/10 rounded-2xl text-[10px] text-slate-800">
               <AlertCircle className="w-4 h-4 text-rose-600" />
               <span className="font-extrabold uppercase">{v.label} Detected</span>
               <span className="text-slate-500">at {v.time}</span>
@@ -2048,17 +2038,17 @@ function LandingPageContent() {
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Efficiency Calculator</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Fewer steps. Faster decisions. Make hiring peaceful.
           </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-white border border-slate-200/80 rounded-[2.5rem] shadow-sm p-8 md:p-12 shadow-xl shadow-slate-200/50 relative">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-black/50 relative backdrop-blur-sm">
           
           {/* Left panel: comparison timeline bars */}
           <div className="md:col-span-7 space-y-6 text-left">
             {/* Volume scale slider */}
-            <div className="p-4 bg-slate-100/80 border border-slate-200/80 rounded-2xl space-y-3">
+            <div className="p-4 bg-white/8 border border-white/10 rounded-2xl space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Candidates to Interview (Per Month)</span>
                 <span className="text-sm font-black text-purple-600">{candidateVolume}</span>
@@ -2078,9 +2068,9 @@ function LandingPageContent() {
             <div className="space-y-2">
               <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                 <span>WITHOUT InterviewOS</span>
-                <span className="text-slate-300 font-extrabold">29 DAYS</span>
+                <span className="text-slate-600 font-extrabold">29 DAYS</span>
               </div>
-              <div className="w-full h-8 bg-slate-100/80 rounded-xl border border-slate-200/80 relative overflow-hidden flex items-center px-4">
+              <div className="w-full h-8 bg-slate-100/80 rounded-xl border border-white/10 relative overflow-hidden flex items-center px-4">
                 <div className="h-full bg-rose-500/25 absolute top-0 left-0 w-full" />
                 <span className="text-[9px] font-bold text-rose-600 uppercase tracking-wider relative z-10">
                   Shortlist → Screening Call → Round-1 → Follow-ups → Offer
@@ -2094,7 +2084,7 @@ function LandingPageContent() {
                 <span>WITH InterviewOS</span>
                 <span className="text-purple-600 font-extrabold">14 Days</span>
               </div>
-              <div className="w-full h-8 bg-slate-100/80 rounded-xl border border-slate-200/80 relative overflow-hidden flex items-center px-4">
+              <div className="w-full h-8 bg-slate-100/80 rounded-xl border border-white/10 relative overflow-hidden flex items-center px-4">
                 <div className="h-full bg-purple-600/30 absolute top-0 left-0 w-[48%]" />
                 <span className="text-[9px] font-bold text-purple-600 uppercase tracking-wider relative z-10">
                   Resume Parse + AI Round-1 Screening (1 Day) → Final Rounds
@@ -2104,14 +2094,14 @@ function LandingPageContent() {
           </div>
 
           {/* Right panel: savings indicators */}
-          <div className="md:col-span-5 bg-slate-100/80 border border-slate-200/80 rounded-3xl p-6 text-center space-y-4">
+          <div className="md:col-span-5 bg-white/8 border border-white/10 rounded-3xl p-6 text-center space-y-4">
             <div>
               <span className="text-3xl font-black text-slate-900 block">
                 {Math.round(candidateVolume * 1.8)} Hrs
               </span>
               <span className="text-[8px] font-bold uppercase text-slate-500 tracking-widest block mt-0.5">Engineering Time Saved</span>
             </div>
-            <div className="border-t border-slate-200/80 pt-4">
+            <div className="border-t border-white/10 pt-4">
               <span className="text-3xl font-black text-purple-600 block">
                 ${(candidateVolume * 35).toLocaleString()}
               </span>
@@ -2125,17 +2115,17 @@ function LandingPageContent() {
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">hiring partners feedback</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             What Hiring Teams Are Saying
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {TESTIMONIALS.map((t, idx) => (
-            <div key={idx} className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between text-left hover:border-purple-500/20 transition-all duration-300">
-              <p className="text-xs text-slate-300 leading-relaxed font-medium">"{t.quote}"</p>
-              <div className="flex items-center gap-3 mt-6 pt-4 border-t border-slate-200/80">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-slate-200/80">
+            <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between text-left hover:border-emerald-500/30 transition-all duration-300 backdrop-blur-sm">
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">"{t.quote}"</p>
+              <div className="flex items-center gap-3 mt-6 pt-4 border-t border-white/10">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-white/10">
                   <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
                 </div>
                 <div>
@@ -2150,7 +2140,7 @@ function LandingPageContent() {
 
       {/* Statistics Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 text-center">
-        <div className="max-w-6xl mx-auto bg-slate-100/80 border border-slate-200/80 rounded-[2.5rem] p-8 md:p-12 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto bg-white/8 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <span className="text-3xl md:text-5xl font-black text-slate-900 block">20,000+</span>
             <span className="text-[9px] font-black uppercase tracking-widest text-slate-500 block mt-1.5">Interviews</span>
@@ -2174,17 +2164,17 @@ function LandingPageContent() {
       <section id="integrations" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">ATS Integrations</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Integrate Effortlessly with your Hiring Workflow
           </h2>
         </div>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white border border-slate-200/80 rounded-[2.5rem] p-8 lg:p-12 shadow-xl backdrop-blur-xl">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 rounded-[2.5rem] p-8 lg:p-12 shadow-xl shadow-black/50 backdrop-blur-sm">
           
           {/* Left Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Ashby', 'greyHR', 'Freshworks', 'Workable'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-slate-200/80 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-purple-600 hover:border-purple-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-purple-600 hover:border-purple-500/30 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2197,12 +2187,12 @@ function LandingPageContent() {
             </div>
             <div className="flex flex-col items-center gap-1">
               <span className="w-1 h-8 border-l border-dashed border-purple-500/40" />
-              <div className="px-3 py-1.5 bg-slate-100/80 border border-slate-200/80 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-600">
+              <div className="px-3 py-1.5 bg-white/8 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-600">
                 Data Sync
               </div>
               <span className="w-1 h-8 border-l border-dashed border-purple-500/40" />
             </div>
-            <div className="w-20 h-20 rounded-full bg-slate-100/80 border border-slate-200/80 flex items-center justify-center text-[10px] font-black uppercase text-slate-600">
+            <div className="w-20 h-20 rounded-full bg-white/8 border border-white/10 flex items-center justify-center text-[10px] font-black uppercase text-slate-600">
               Your ATS
             </div>
           </div>
@@ -2210,7 +2200,7 @@ function LandingPageContent() {
           {/* Right Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Greenhouse', 'Breezy HR', 'Keka', 'Bullhorn'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-slate-200/80 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-purple-600 hover:border-purple-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-purple-600 hover:border-purple-500/30 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2223,7 +2213,7 @@ function LandingPageContent() {
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Candidate Experience</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Because Candidate Experience Matters
           </h2>
           <div className="flex items-center justify-center gap-2 pt-2">
@@ -2241,9 +2231,9 @@ function LandingPageContent() {
         {/* Dynamic review feed */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {FEEDBACKS.slice(0, 6).map((f, idx) => (
-            <div key={idx} className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm flex flex-col justify-between text-left h-40 hover:border-purple-500/20 transition-all duration-300">
-              <p className="text-xs text-slate-300 leading-relaxed font-medium">"{f.comment}"</p>
-              <div className="flex justify-between items-center mt-4 pt-3 border-t border-slate-200/80">
+            <div key={idx} className="p-6 bg-white border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between text-left h-40 hover:border-purple-500/20 transition-all duration-300">
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">"{f.comment}"</p>
+              <div className="flex justify-between items-center mt-4 pt-3 border-t border-white/10">
                 <span className="text-xs font-black text-slate-900">{f.name}</span>
                 <div className="flex gap-0.5">
                   {Array.from({ length: f.stars }).map((_, sIdx) => (
@@ -2260,20 +2250,20 @@ function LandingPageContent() {
       <section id="case-studies" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">proven success</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Stop wasting WEEKS on interviews
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Case Study 1 */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-left space-y-6 flex flex-col justify-between hover:border-purple-500/20 transition-all">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all backdrop-blur-sm">
             <div className="space-y-3">
               <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">17 Hires / Month</span>
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
                 How EdTech Scale-Up Saved 15 Hours/Week for Their Senior Sales Managers
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 By delegating early behavioral screening loops to InterviewOS AI, hiring managers skipped the scheduling bottlenecks, accelerating pipeline velocity.
               </p>
             </div>
@@ -2283,13 +2273,13 @@ function LandingPageContent() {
           </div>
 
           {/* Case Study 2 */}
-          <div className="p-8 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-left space-y-6 flex flex-col justify-between hover:border-purple-500/20 transition-all">
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all backdrop-blur-sm">
             <div className="space-y-3">
               <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 border border-emerald-500/20 px-2 py-0.5 rounded">Hiring in 3 Hours</span>
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
                 How Global AI SaaS Hired a Data Analyst with InterviewOS's Super TA
               </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 An immediate resume parse matched against database requirements triggered a mock assessment sandbox round, finishing evaluations within 180 minutes.
               </p>
             </div>
@@ -2307,12 +2297,12 @@ function LandingPageContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="w-full bg-white/85 border border-slate-200/80 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-slate-200/50 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
+          className="w-full bg-black/50 border border-white/10 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-slate-200/50 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500 opacity-60" />
 
           {/* Navigation tabs */}
-          <div className="w-full p-1.5 rounded-2xl flex bg-[#050508]/60 border border-slate-200/80">
+          <div className="w-full p-1.5 rounded-2xl flex bg-[#050508]/60 border border-white/10">
             {[
               { id: 'tryout', icon: <Bot className="w-4 h-4" />, label: 'Practice Interview' },
               { id: 'candidate', icon: <GraduationCap className="w-4 h-4" />, label: 'My Workspace' },
@@ -2323,7 +2313,7 @@ function LandingPageContent() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 py-3 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${
-                  activeTab === tab.id ? 'bg-purple-600 text-slate-900 shadow-md shadow-slate-200/40 shadow-purple-600/20' : 'text-slate-600 hover:text-slate-900 opacity-70 hover:opacity-100'
+                  activeTab === tab.id ? 'bg-purple-600 text-slate-900 shadow-md shadow-slate-200/40 shadow-emerald-500/20' : 'text-slate-600 hover:text-slate-900 opacity-70 hover:opacity-100'
                 }`}
               >
                 {tab.icon} {tab.label}
@@ -2344,8 +2334,8 @@ function LandingPageContent() {
                 className="space-y-8 text-left"
               >
                 <div>
-                  <h3 className="text-lg font-black text-slate-900 uppercase tracking-wider">Configure Practice Interview</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Configure Practice Interview</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">
                     Select a role Category → Pick a specialized path → Add background details
                   </p>
                 </div>
@@ -2359,7 +2349,7 @@ function LandingPageContent() {
                       className={`px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-xl border transition-all ${
                         selectedCategory === catId
                           ? 'bg-purple-50 border-purple-500/20 text-purple-600'
-                          : 'bg-slate-100/80 border-slate-200/80 text-slate-600 hover:text-slate-900'
+                          : 'bg-white/8 border-white/10 text-slate-600 hover:text-slate-900'
                       }`}
                     >
                       {catMeta.label}
@@ -2375,8 +2365,8 @@ function LandingPageContent() {
                       onClick={() => setSelectedRole(role)}
                       className={`p-4 rounded-2xl border text-left transition-all space-y-2 flex flex-col justify-between ${
                         selectedRole?.id === role.id
-                          ? 'border-purple-500 shadow-md shadow-slate-200/40 shadow-purple-500/20 bg-white/60 shadow-md shadow-slate-200/40'
-                          : 'bg-[#050508]/40 border-slate-200/80 hover:border-slate-200/80 hover:bg-[#050508]/60 shadow-md'
+                          ? 'border-purple-500 shadow-md shadow-slate-200/40 shadow-purple-500/20 bg-white/5 shadow-md shadow-slate-200/40'
+                          : 'bg-[#050508]/40 border-white/10 hover:border-white/10 hover:bg-[#050508]/60 shadow-md'
                       }`}
                     >
                       <span className="text-xl">🛠️</span>
@@ -2397,7 +2387,7 @@ function LandingPageContent() {
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.coreSkills.map(s => (
-                        <span key={s} className="text-[9px] px-2.5 py-1 bg-slate-100/80 border border-slate-200/80 rounded-lg text-slate-300 font-bold uppercase tracking-wider">
+                        <span key={s} className="text-[9px] px-2.5 py-1 bg-white/8 border border-white/10 rounded-lg text-slate-700 font-bold uppercase tracking-wider">
                           {s}
                         </span>
                       ))}
@@ -2424,14 +2414,14 @@ function LandingPageContent() {
                           exit={{ opacity: 0, height: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200/80 mt-2">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/10 mt-2">
                             <div className="space-y-1.5">
                               <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Your Name *</label>
                               <input
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
                                 placeholder="Guest Candidate"
-                                className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2440,7 +2430,7 @@ function LandingPageContent() {
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
                                 placeholder="e.g. B.S. Computer Science"
-                                className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5 md:col-span-2">
@@ -2450,7 +2440,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('projects', e.target.value)}
                                 placeholder="e.g. Built an AI chat application using Next.js and WebSockets..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2460,7 +2450,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('experience', e.target.value)}
                                 placeholder="e.g. Frontend Intern at TechCorp - built dynamic dashboards..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2470,7 +2460,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('certifications', e.target.value)}
                                 placeholder="e.g. AWS Developer Assoc, Docker, Redux..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                           </div>
@@ -2482,7 +2472,7 @@ function LandingPageContent() {
 
                 <button
                   onClick={handleLaunchTryout}
-                  className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-md shadow-slate-200/40 shadow-purple-600/20 active:scale-[0.98] transition-all"
+                  className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-md shadow-slate-200/40 shadow-emerald-500/20 active:scale-[0.98] transition-all"
                 >
                   Start Practice Interview Session
                   <ArrowRight className="w-4 h-4" />
@@ -2494,22 +2484,22 @@ function LandingPageContent() {
             {activeTab === 'candidate' && (
               <motion.div key="candidate" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-lg font-black text-slate-900 uppercase tracking-wider">Candidate Portfolio Workspace</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">View stats, monitor daily activity streaks, download certificates, and check rankings</p>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Candidate Portfolio Workspace</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">View stats, monitor daily activity streaks, download certificates, and check rankings</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-slate-200/80 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Personalised paths</span>
-                    <p className="text-sm font-bold text-slate-900">Learning Roadmap</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
+                    <p className="text-sm font-bold text-slate-100">Learning Roadmap</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
                   </Link>
-                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-slate-200/80 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Verified Credentials</span>
-                    <p className="text-sm font-bold text-slate-900">Shareable Portfolio Profile</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
+                    <p className="text-sm font-bold text-slate-100">Shareable Portfolio Profile</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
                   </Link>
                 </div>
-                <Link href="/candidate" className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-purple-600/20 text-center">
+                <Link href="/candidate" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
                   Open Candidate Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -2519,22 +2509,22 @@ function LandingPageContent() {
             {activeTab === 'recruiter' && (
               <motion.div key="recruiter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-lg font-black text-slate-900 uppercase tracking-wider">Recruiter Assessment Center</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Recruiter Assessment Center</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-slate-200/80 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest">Behavioral Proctoring</span>
-                    <p className="text-sm font-bold text-slate-900">Neural Integrity Log</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
+                    <p className="text-sm font-bold text-slate-100">Neural Integrity Log</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
                   </Link>
-                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-slate-200/80 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
+                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-purple-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Diagnostic Analytics</span>
-                    <p className="text-sm font-bold text-slate-900">16-Point Competency Radar</p>
-                    <p className="text-xs text-slate-600 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
+                    <p className="text-sm font-bold text-slate-100">16-Point Competency Radar</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
                   </Link>
                 </div>
-                <Link href="/recruiter" className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-purple-600/20 text-center">
+                <Link href="/recruiter" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
                   Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -2545,8 +2535,8 @@ function LandingPageContent() {
               <motion.div key="mvp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-black text-slate-900 uppercase tracking-wider">JD + Resume Custom Mock (RAG Assessment)</h3>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
+                    <h3 className="text-lg font-black text-white uppercase tracking-wider">JD + Resume Custom Mock (RAG Assessment)</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
                   </div>
                 </div>
                 <div className="space-y-3">
@@ -2558,7 +2548,7 @@ function LandingPageContent() {
                   </div>
 
                   {showAddJob ? (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#050508] border border-slate-200/80 rounded-2xl space-y-4">
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#050508] border border-white/10 rounded-2xl space-y-4">
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Job Title</label>
                         <input
@@ -2566,7 +2556,7 @@ function LandingPageContent() {
                           placeholder="e.g. Senior Backend Engineer"
                           value={newJobTitle}
                           onChange={e => setNewJobTitle(e.target.value)}
-                          className="w-full bg-white border border-slate-200/80 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500"
+                          className="w-full bg-white border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -2576,7 +2566,7 @@ function LandingPageContent() {
                           value={newJobDesc}
                           onChange={e => setNewJobDesc(e.target.value)}
                           rows={3}
-                          className="w-full bg-white border border-slate-200/80 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500 resize-none"
+                          className="w-full bg-white border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500 resize-none"
                         />
                       </div>
                       <button
@@ -2591,7 +2581,7 @@ function LandingPageContent() {
                     <select
                       value={selectedJob}
                       onChange={e => setSelectedJob(e.target.value)}
-                      className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-emerald-500 focus:bg-white outline-none shadow-inner"
+                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-emerald-500 focus:bg-white outline-none shadow-inner"
                     >
                       {mergedJobs.map(job => (
                         <option key={job.id} value={job.id}>{job.id}: {job.title}</option>
@@ -2600,7 +2590,7 @@ function LandingPageContent() {
                   )}
                 </div>
                 <div className="p-4 bg-purple-500/5 border border-purple-500/10 rounded-xl">
-                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  <p className="text-xs text-slate-400 leading-relaxed font-medium">
                     You will be redirected to the custom job application portal. There, you can upload your <strong>PDF resume</strong>. The system automatically structures your skills, parses work history, and dynamically prompts you with tailored scenarios reflecting the intersection of your experience and the job description.
                   </p>
                 </div>
@@ -2616,11 +2606,180 @@ function LandingPageContent() {
         </motion.div>
       </section>
 
+      {/* Technical Architecture Showcase Section ("Under the Hood") */}
+      <section id="technical-architecture" className="relative z-10 max-w-6xl mx-auto w-full px-6 py-20 space-y-16">
+        <div className="text-center space-y-3">
+          <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Under the Hood</span>
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            Technical Architecture & Specs
+          </h2>
+          <p className="text-xs text-slate-600 max-w-2xl mx-auto leading-relaxed font-medium">
+            InterviewOS is a complex multi-agent evaluation platform. We leverage sandboxed environments, real-time proctoring telemetry, and structured AI response loops to simulate real workplace conditions.
+          </p>
+        </div>
+
+        {/* 6 Feature Specs Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[
+            {
+              icon: <Terminal className="w-5 h-5 text-purple-600" />,
+              title: "Sandboxed Terminal IDE",
+              desc: "A client-side Node.js sandbox that compiles and executes code directly inside the browser using WebContainers. Candidates interact with a stateful environment that tests real problem-solving.",
+              tech: ["WebContainers", "Monaco Editor", "xterm.js"]
+            },
+            {
+              icon: <Activity className="w-5 h-5 text-emerald-600" />,
+              title: "Real-time AI Proctoring",
+              desc: "Uses MediaPipe Face Mesh to map facial keypoints in real time, checking eye gaze coordinates, tracking tab-switching losses, and mapping behavioral integrity metrics.",
+              tech: ["MediaPipe", "Webcam API", "Face Mesh"]
+            },
+            {
+              icon: <Volume2 className="w-5 h-5 text-indigo-600" />,
+              title: "Adaptive AI Speech Engine",
+              desc: "Combines Gemini API structured JSON schemas with Cartesia voice synthesis for high-performance audio delivery, natural pacing, and instant interruption detection.",
+              tech: ["Gemini API", "Cartesia TTS", "Web Audio API"]
+            },
+            {
+              icon: <LayoutDashboard className="w-5 h-5 text-blue-600" />,
+              title: "Evaluation Dashboards",
+              desc: "Analytical recruitment dashboards displaying 16-point competency radar charts, custom scoring gauges, full audio transcript audits, and side-by-side git code diffs.",
+              tech: ["Next.js", "Recharts", "MongoDB"]
+            },
+            {
+              icon: <Award className="w-5 h-5 text-amber-600" />,
+              title: "Gamification & Leaderboards",
+              desc: "Drives developer engagement with persistent profiles, levels, XP accumulation, daily streaks, custom badge triggers, and global rank tracking.",
+              tech: ["MongoDB", "Mongoose", "XP Engine"]
+            },
+            {
+              icon: <Briefcase className="w-5 h-5 text-rose-600" />,
+              title: "Crisis Triage Simulator",
+              desc: "Simulates actual developer workplaces using mock Slack alerts and Jira boards, testing how candidates handle production outages under realistic time pressure.",
+              tech: ["Framer Motion", "State Machine", "JSON Templates"]
+            }
+          ].map((item, idx) => (
+            <div key={idx} className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:shadow-xl hover:border-emerald-500/20 transition-all duration-300 flex flex-col justify-between space-y-6 backdrop-blur-sm">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 shadow-sm">
+                  {item.icon}
+                </div>
+                <h4 className="text-md font-black text-slate-900 tracking-tight">{item.title}</h4>
+                <p className="text-xs text-slate-400 leading-relaxed font-medium">{item.desc}</p>
+              </div>
+              <div className="flex flex-wrap gap-1.5 pt-2">
+                {item.tech.map((t, i) => (
+                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200/40">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* System Spec Console */}
+        <div className="bg-[#0a0a0c] border border-white/5 rounded-[2.5rem] shadow-2xl p-6 lg:p-8 space-y-6 max-w-4xl mx-auto overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+            <div>
+              <h4 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> System Spec Console
+              </h4>
+              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 mt-1">
+                Inspect database models and prompt configurations
+              </p>
+            </div>
+            <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/5 self-start sm:self-auto">
+              <button
+                onClick={() => setActiveSpecTab('schema')}
+                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'schema' ? 'bg-purple-600 text-slate-900 shadow-md shadow-purple-600/10' : 'text-slate-500 hover:text-slate-300'}`}
+              >
+                Database Schemas
+              </button>
+              <button
+                onClick={() => setActiveSpecTab('payload')}
+                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'payload' ? 'bg-purple-600 text-slate-900 shadow-md shadow-purple-600/10' : 'text-slate-500 hover:text-slate-300'}`}
+              >
+                AI Prompt Schema
+              </button>
+            </div>
+          </div>
+
+          <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-[#050507]">
+            {/* Terminal Window Header */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/5 text-[9px] font-mono text-slate-500">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-rose-500/60" />
+                <span className="w-2 h-2 rounded-full bg-amber-500/60" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500/60" />
+              </div>
+              <span>{activeSpecTab === 'schema' ? 'mongoose_models.ts' : 'gemini_payload_blueprint.json'}</span>
+              <div className="w-8" />
+            </div>
+
+            {/* Terminal Content */}
+            <div className="p-6 overflow-x-auto font-mono text-xs leading-relaxed text-slate-400 select-text max-h-[350px] custom-scrollbar text-left">
+              {activeSpecTab === 'schema' ? (
+                <pre className="space-y-1">
+                  <div><span className="text-purple-400">import</span> mongoose, &#123; Schema, Model &#125; <span className="text-purple-400">from</span> <span className="text-emerald-400">'mongoose'</span>;</div>
+                  <br />
+                  <div><span className="text-slate-500">// 1. User Profile & Streak Schema</span></div>
+                  <div><span className="text-purple-400">const</span> UserSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
+                  <div>  name:           &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
+                  <div>  email:          &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
+                  <div>  xp:             &#123; type: Number, <span className="text-purple-400">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
+                  <div>  level:          &#123; type: Number, <span className="text-purple-400">default</span>: <span className="text-amber-500">1</span> &#125;,</div>
+                  <div>  streak:         &#123; type: Number, <span className="text-purple-400">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
+                  <div>  badges:         &#123; type: Schema.Types.Mixed, <span className="text-purple-400">default</span>: [] &#125;</div>
+                  <div>&#125;);</div>
+                  <br />
+                  <div><span className="text-slate-500">// 2. Parsed Resume RAG Schema</span></div>
+                  <div><span className="text-purple-400">const</span> ResumeSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
+                  <div>  userId:         &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
+                  <div>  rawText:        &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
+                  <div>  parsedData: &#123;</div>
+                  <div>    skills:       [String],</div>
+                  <div>    experience:   [&#123; company: String, role: String, duration: String &#125;],</div>
+                  <div>    projects:     [&#123; name: String, technologies: [String] &#125;]</div>
+                  <div>  &#125;</div>
+                  <div>&#125;);</div>
+                </pre>
+              ) : (
+                <pre className="space-y-1">
+                  <div>&#123;</div>
+                  <div>  <span className="text-purple-400">"system_instruction"</span>: <span className="text-emerald-400">"You are an AI technical evaluator. Assess candidate response quality and proctoring metrics."</span>,</div>
+                  <div>  <span className="text-purple-400">"response_schema"</span>: &#123;</div>
+                  <div>    <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"OBJECT"</span>,</div>
+                  <div>    <span className="text-purple-400">"properties"</span>: &#123;</div>
+                  <div>      <span className="text-purple-400">"assessment"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;,</div>
+                  <div>      <span className="text-purple-400">"competency_scores"</span>: &#123;</div>
+                  <div>        <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"OBJECT"</span>,</div>
+                  <div>        <span className="text-purple-400">"properties"</span>: &#123;</div>
+                  <div>          <span className="text-purple-400">"problem_solving"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;,</div>
+                  <div>          <span className="text-purple-400">"code_quality"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;,</div>
+                  <div>          <span className="text-purple-400">"communication"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;</div>
+                  <div>        &#125;</div>
+                  <div>      &#125;,</div>
+                  <div>      <span className="text-purple-400">"proctoring_flags"</span>: &#123;</div>
+                  <div>        <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"ARRAY"</span>,</div>
+                  <div>        <span className="text-purple-400">"items"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;</div>
+                  <div>      &#125;,</div>
+                  <div>      <span className="text-purple-400">"next_question"</span>: &#123; <span className="text-purple-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;</div>
+                  <div>    &#125;,</div>
+                  <div>    <span className="text-purple-400">"required"</span>: [<span className="text-emerald-400">"assessment"</span>, <span className="text-emerald-400">"competency_scores"</span>, <span className="text-emerald-400">"proctoring_flags"</span>, <span className="text-emerald-400">"next_question"</span>]</div>
+                  <div>  &#125;</div>
+                  <div>&#125;</div>
+                </pre>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Accordion Section */}
       <section id="faq" className="relative z-10 max-w-4xl mx-auto w-full px-6 py-20 space-y-12">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Questions</span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Frequently Asked Questions
           </h2>
         </div>
@@ -2633,12 +2792,12 @@ function LandingPageContent() {
             { q: "Can we customize interviews and questions?", a: "Yes. Recruiter dashboard users can paste custom Job Descriptions and candidate Resumes to run dynamic, context-aware RAG interview sessions." },
             { q: "Does InterviewOS integrate with our ATS?", a: "Yes, we support effortless data sync hooks with Ashby, Greenhouse, BambooHR, greyHR, workdays, Zoho, Keka, Breezy, and major HR platforms." }
           ].map((item, idx) => (
-            <div key={idx} className="bg-white/60 border border-slate-200/80 rounded-2xl overflow-hidden text-left">
+            <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden text-left backdrop-blur-sm">
               <button 
                 onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
                 className="w-full px-6 py-5 flex justify-between items-center text-left"
               >
-                <span className="text-sm font-bold text-slate-900">{item.q}</span>
+                <span className="text-sm font-bold text-slate-100">{item.q}</span>
                 <span className="text-slate-600">
                   {activeFaq === idx ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </span>
@@ -2651,7 +2810,7 @@ function LandingPageContent() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-5 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-200/80">
+                    <div className="px-6 pb-5 pt-1 text-xs text-slate-400 leading-relaxed border-t border-white/10">
                       {item.a}
                     </div>
                   </motion.div>
@@ -2663,7 +2822,7 @@ function LandingPageContent() {
       </section>
 
       {/* Footer Section with Definition Card */}
-      <footer className="relative z-10 border-t border-slate-200/80 bg-white px-6 py-16 lg:px-12">
+      <footer className="relative z-10 border-t border-white/8 bg-black/60 backdrop-blur-xl px-6 py-16 lg:px-12">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
           
           {/* Left info column */}
@@ -2674,7 +2833,7 @@ function LandingPageContent() {
               </div>
               <span className="text-sm font-extrabold tracking-tight text-slate-900">InterviewOS</span>
             </div>
-            <p className="text-xs text-slate-600 leading-relaxed max-w-sm">
+            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
               We are here to make technical evaluations peaceful, accurate, and secure. AI-driven behavioral proctoring and compilation sandboxes.
             </p>
             <p className="text-[10px] text-slate-500 font-medium">Contact: support@interviewos.ai</p>
@@ -2697,113 +2856,93 @@ function LandingPageContent() {
           </div>
 
           {/* Right Japanese origin Card */}
-          <div className="lg:col-span-3 bg-slate-100/80 border border-slate-200/80 rounded-3xl p-6 shadow-xl relative">
+          <div className="lg:col-span-3 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl relative backdrop-blur-sm">
             <div className="flex justify-between items-center mb-3">
-              <span className="text-sm font-black text-slate-900">InterviewOS - (雇用)</span>
+              <span className="text-sm font-black text-white">InterviewOS - (雇用)</span>
               <div className="w-6 h-6 rounded-full bg-purple-50 border border-purple-500/20 flex items-center justify-center">
                 <span className="text-[9px] text-purple-600 font-black">OS</span>
               </div>
             </div>
             <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">noun</p>
-            <p className="text-[11px] text-slate-300 leading-relaxed mt-2">
+            <p className="text-[11px] text-slate-600 leading-relaxed mt-2">
               "1. a blend of 'skillful finesse' and 'employment' — symbolizing technical assessments carried out with precision, grace, and mastery."
             </p>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-slate-200/80 mt-12 pt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-600">
+        <div className="max-w-7xl mx-auto border-t border-white/8 mt-12 pt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
           © 2026 InterviewOS Inc. All rights reserved.
         </div>
       </footer>
 
-      {/* Book a Demo Modal */}
+      {/* Launch Demo Selector Modal */}
       <AnimatePresence>
         {isBookingOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/90 backdrop-blur-md p-6"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/85 backdrop-blur-md p-6"
           >
             <motion.div 
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="w-full max-w-md bg-white border border-slate-200/80 rounded-3xl p-8 space-y-6 shadow-xl shadow-slate-200/50 relative overflow-hidden"
+              className="w-full max-w-lg bg-[#0a0f0d] border border-white/15 rounded-[2.5rem] p-8 space-y-6 shadow-2xl shadow-black/80 relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-emerald-500" />
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-600 to-indigo-600" />
               
               <div className="flex justify-between items-start text-left">
                 <div>
-                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-wider">Book a Demo Slot</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">Schedule a walkthrough with our core engineering team</p>
+                  <h3 className="text-xl font-black text-white uppercase tracking-wider">Launch Demo Sandbox</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Select an experience to test our stateful evaluation models</p>
                 </div>
                 <button 
-                  onClick={() => {
-                    setIsBookingOpen(false);
-                    setBookingSuccess(false);
-                    setBookingName('');
-                    setBookingEmail('');
-                    setBookingCompany('');
-                  }} 
-                  className="w-8 h-8 rounded-full bg-slate-100/80 flex items-center justify-center hover:bg-slate-100/80 text-slate-600 hover:text-slate-900 transition-all"
+                  onClick={() => setIsBookingOpen(false)} 
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-white/15 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              {bookingSuccess ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-500/20 rounded-2xl text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto">
-                    <CheckCircle className="w-6 h-6 text-emerald-600" />
-                  </div>
-                  <h4 className="text-md font-bold text-slate-900">Demo Booked Successfully!</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">We have sent a calendar invite and details to your email address: <span className="font-bold text-slate-900">{bookingEmail}</span>.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleBookDemoSubmit} className="space-y-4 text-left">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                {/* Option A: Classic AI Technical Interview */}
+                <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 hover:border-emerald-500/30 transition-all flex flex-col justify-between backdrop-blur-sm">
                   <div className="space-y-1.5">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
-                    <input 
-                      type="text" 
-                      required
-                      value={bookingName}
-                      onChange={e => setBookingName(e.target.value)}
-                      placeholder="Jane Doe" 
-                      className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600"
-                    />
+                    <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest">Developer Screening</span>
+                    <h4 className="text-base font-black text-white">Classic AI Technical Interview</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                      Test the compiler-backed browser IDE, live audio dialogs, question generators, and real-time proctoring diagnostics.
+                    </p>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Business Email</label>
-                    <input 
-                      type="email" 
-                      required
-                      value={bookingEmail}
-                      onChange={e => setBookingEmail(e.target.value)}
-                      placeholder="jane@company.com" 
-                      className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Company Name</label>
-                    <input 
-                      type="text" 
-                      required
-                      value={bookingCompany}
-                      onChange={e => setBookingCompany(e.target.value)}
-                      placeholder="Acme Corp" 
-                      className="w-full bg-[#050508] border border-slate-200/80 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600"
-                    />
-                  </div>
-                  <button 
-                    type="submit"
-                    className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md shadow-slate-200/40 shadow-purple-600/20 transition-all"
+                  <Link 
+                    href="/instructions?name=Guest&track=JS"
+                    onClick={() => setIsBookingOpen(false)}
+                    className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all text-center"
                   >
-                    Confirm Booking
-                  </button>
-                </form>
-              )}
+                    Launch Coding Demo <Code2 className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+
+                {/* Option B: Crisis Triage Workplace Simulator */}
+                <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 hover:border-emerald-500/30 transition-all flex flex-col justify-between backdrop-blur-sm">
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Workplace Simulation</span>
+                    <h4 className="text-base font-black text-white">Workplace Simulator (Crisis Triage)</h4>
+                    <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                      Test our simulator sandbox where candidates handle production alerts, Slack triage, and Jira prioritization under pressure.
+                    </p>
+                  </div>
+                  <Link 
+                    href="/simulation"
+                    onClick={() => setIsBookingOpen(false)}
+                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all text-center"
+                  >
+                    Launch Simulator Demo <Briefcase className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
