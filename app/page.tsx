@@ -695,16 +695,16 @@ function LandingPageContent() {
                   </div>
                   
                   {/* Console logs */}
-                  <div className="bg-slate-100/50 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-600">
+                  <div className="bg-black/60 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-400">
                     <div className="overflow-y-auto space-y-1">
                       {compilerLogs.map((log, idx) => (
-                        <div key={idx} className={log.startsWith('✓') ? 'text-emerald-600' : log.startsWith('!') ? 'text-rose-600' : 'text-slate-500'}>
+                        <div key={idx} className={log.startsWith('✓') ? 'text-emerald-400' : log.startsWith('!') ? 'text-rose-400' : 'text-slate-500'}>
                           {log}
                         </div>
                       ))}
                     </div>
                     <div className="flex justify-between items-center pt-2 border-t border-white/10 mt-1">
-                      <span className="text-[8px] text-slate-600">Console Terminal Output</span>
+                      <span className="text-[8px] text-slate-500">Console Terminal Output</span>
                       <button 
                         onClick={handleRunCode}
                         disabled={isCompiling}
@@ -734,7 +734,7 @@ function LandingPageContent() {
               // Video/Audio Calling Mock Grid (Sales, Data, Product, Marketer)
               <div className="flex-1 flex gap-4 overflow-hidden relative">
                 {/* Candidate Feed */}
-                <div className="flex-1 bg-slate-100/50 border border-white/10 rounded-3xl overflow-hidden relative flex items-center justify-center">
+                <div className="flex-1 bg-black/40 border border-white/10 rounded-3xl overflow-hidden relative flex items-center justify-center">
                   {/* Mock video background image */}
                   <img 
                     src={activeHeroTab === 'sales'
@@ -748,12 +748,12 @@ function LandingPageContent() {
                     alt="Candidate video feed stream"
                     className="w-full h-full object-cover opacity-70 filter grayscale-[20%]"
                   />
-                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[9px] font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" /> Candidate Video Stream
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[9px] font-bold text-slate-200 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Candidate Video Stream
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 bg-black/50 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
-                    <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
-                    <p className="text-xs text-slate-900 leading-relaxed font-medium">
+                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
+                    <p className="text-xs text-white leading-relaxed font-medium">
                       {activeHeroTab === 'sales' && '"For our B2B sales cycles, I focus on identifying high-intent outbound leads using customer intent data..."'}
                       {activeHeroTab === 'data' && '"I analyzed the temporal schema logs and discovered a bottleneck in our indexing pipeline..."'}
                       {activeHeroTab === 'product' && '"I believe product management requires a strong focus on bridging technical complexity and customer value..."'}
@@ -763,7 +763,7 @@ function LandingPageContent() {
                 </div>
 
                 {/* AI Interviewer Feed */}
-                <div className="w-1/3 bg-slate-100/50 border border-white/10 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
+                <div className="w-1/3 bg-black/40 border border-white/10 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
                   <div className="flex-1 relative flex items-center justify-center">
                     <img 
                       src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300&h=300"
@@ -771,11 +771,11 @@ function LandingPageContent() {
                       className="w-full h-full object-cover opacity-40"
                     />
                     <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-2">
-                      <div className="w-12 h-12 rounded-full bg-purple-50 border border-purple-500/20 flex items-center justify-center animate-pulse">
-                        <Bot className="w-6 h-6 text-purple-600" />
+                      <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center animate-pulse">
+                        <Bot className="w-6 h-6 text-emerald-400" />
                       </div>
-                      <span className="text-[10px] font-black uppercase text-purple-600 tracking-wider">AI Interviewer</span>
-                      <span className="text-[9px] text-slate-500 font-mono">Analyzing Audio & Tone</span>
+                      <span className="text-[10px] font-black uppercase text-emerald-400 tracking-wider">AI Interviewer</span>
+                      <span className="text-[9px] text-slate-400 font-mono">Analyzing Audio & Tone</span>
                     </div>
                   </div>
                   <div className="bg-[#050508] border-t border-white/10 p-4 text-left space-y-2">
@@ -1340,19 +1340,19 @@ function LandingPageContent() {
                         </div>
 
                         {/* Live AI feedback evaluate block */}
-                        <div className="p-4 bg-purple-50 border border-purple-100 rounded-2xl space-y-2">
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-2xl space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-100/40 px-2 py-0.5 rounded border border-purple-100">AI Evaluation Feedback</span>
-                            <span className="text-xs font-black text-purple-600">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
+                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AI Evaluation Feedback</span>
+                            <span className="text-xs font-black text-emerald-400">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
                           </div>
-                          <p className="text-[11px] text-slate-600 leading-relaxed">
+                          <p className="text-[11px] text-slate-300 leading-relaxed">
                             {slackChoice === 1 
                               ? "Excellent response. Triage prioritizes recovery speed (rollback) and proactive alignment with customer support. Strong service reliability mindset."
                               : "Risky choice. Delaying action to inspect log traces while production is actively failing is problematic. Prioritize service uptime over logging research."}
                           </p>
                           <button 
                             onClick={() => setSlackChoice(null)}
-                            className="text-[9px] font-black text-purple-600 hover:underline uppercase tracking-wider block pt-1"
+                            className="text-[9px] font-black text-emerald-400 hover:underline uppercase tracking-wider block pt-1"
                           >
                             Reset Options
                           </button>
@@ -1378,28 +1378,28 @@ function LandingPageContent() {
                       </p>
                     </div>
 
-                    <div className="bg-purple-50 border border-purple-100 rounded-2xl p-4 space-y-3">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-100/40 px-2 py-0.5 rounded border border-purple-100">Candidate Draft Graded by AI</span>
-                        <span className="text-xs font-black text-purple-600">Draft Score: 95/100 (Strong Hire)</span>
+                        <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Candidate Draft Graded by AI</span>
+                        <span className="text-xs font-black text-emerald-400">Draft Score: 95/100 (Strong Hire)</span>
                       </div>
                       
-                      <div className="p-3 bg-white border border-purple-100 rounded-xl font-mono text-[10px] text-slate-600 leading-relaxed">
+                      <div className="p-3 bg-black/40 border border-white/10 rounded-xl font-mono text-[10px] text-slate-300 leading-relaxed">
                         &quot;Hi CEO, We have identified the deployment bug and rolled back Webhook Release v2.4. Integrations are fully restored. I am initiating a refund of $4,500 for transaction fee credits as a priority safety measure.&quot;
                       </div>
                       
                       <div className="grid grid-cols-3 gap-2 text-[10px] font-bold text-center">
-                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
-                          <span className="text-purple-600 block">Politeness</span>
-                          <span className="text-slate-700">95%</span>
+                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
+                          <span className="text-emerald-400 block">Politeness</span>
+                          <span className="text-slate-300">95%</span>
                         </div>
-                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
-                          <span className="text-purple-600 block">Escalation Mitigation</span>
-                          <span className="text-slate-700">92%</span>
+                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
+                          <span className="text-emerald-400 block">Escalation Mitigation</span>
+                          <span className="text-slate-300">92%</span>
                         </div>
-                        <div className="bg-black/50 border border-purple-100 rounded-lg p-1">
-                          <span className="text-purple-600 block">Action Clarity</span>
-                          <span className="text-slate-700">98%</span>
+                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
+                          <span className="text-emerald-400 block">Action Clarity</span>
+                          <span className="text-slate-300">98%</span>
                         </div>
                       </div>
                     </div>
@@ -2421,7 +2421,7 @@ function LandingPageContent() {
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
                                 placeholder="Guest Candidate"
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2430,7 +2430,7 @@ function LandingPageContent() {
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
                                 placeholder="e.g. B.S. Computer Science"
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5 md:col-span-2">
@@ -2440,7 +2440,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('projects', e.target.value)}
                                 placeholder="e.g. Built an AI chat application using Next.js and WebSockets..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2450,7 +2450,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('experience', e.target.value)}
                                 placeholder="e.g. Frontend Intern at TechCorp - built dynamic dashboards..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2460,7 +2460,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('certifications', e.target.value)}
                                 placeholder="e.g. AWS Developer Assoc, Docker, Redux..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:outline-none focus:border-purple-600 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                           </div>
@@ -2581,10 +2581,10 @@ function LandingPageContent() {
                     <select
                       value={selectedJob}
                       onChange={e => setSelectedJob(e.target.value)}
-                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 focus:border-emerald-500 focus:bg-white outline-none shadow-inner"
+                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:border-emerald-500 focus:bg-[#050508] outline-none shadow-inner"
                     >
                       {mergedJobs.map(job => (
-                        <option key={job.id} value={job.id}>{job.id}: {job.title}</option>
+                        <option key={job.id} value={job.id} className="bg-[#050508] text-slate-200">{job.id}: {job.title}</option>
                       ))}
                     </select>
                   )}
@@ -2660,15 +2660,15 @@ function LandingPageContent() {
           ].map((item, idx) => (
             <div key={idx} className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:shadow-xl hover:border-emerald-500/20 transition-all duration-300 flex flex-col justify-between space-y-6 backdrop-blur-sm">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 shadow-sm">
+                <div className="w-10 h-10 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/10 shadow-sm animate-pulse">
                   {item.icon}
                 </div>
-                <h4 className="text-md font-black text-slate-900 tracking-tight">{item.title}</h4>
+                <h4 className="text-md font-black text-slate-100 tracking-tight">{item.title}</h4>
                 <p className="text-xs text-slate-400 leading-relaxed font-medium">{item.desc}</p>
               </div>
               <div className="flex flex-wrap gap-1.5 pt-2">
                 {item.tech.map((t, i) => (
-                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full border border-slate-200/40">
+                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-white/5 text-slate-400 rounded-full border border-white/5">
                     {t}
                   </span>
                 ))}

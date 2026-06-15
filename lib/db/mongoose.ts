@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
-
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI is not defined in environment variables');
-}
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/interviewos';
 
 // Cached connection for Next.js hot-reload safety
 interface MongooseCache {

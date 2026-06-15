@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     if (authHeader) {
       try {
         const jwt = require('jsonwebtoken');
-        const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_super_secret_jwt_key_2026';
+        const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_secret_2026';
         const parts = authHeader.split(' ');
         const token = parts.length === 2 ? parts[1] : parts[0];
         const decoded = jwt.verify(token, JWT_SECRET);

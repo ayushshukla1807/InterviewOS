@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_super_secret_jwt_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_secret_2026';
 
 module.exports = function (req, res, next) {
   // Get token from header
