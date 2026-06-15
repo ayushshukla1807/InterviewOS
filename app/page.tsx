@@ -1041,7 +1041,7 @@ function LandingPageContent() {
               <div className="space-y-1 max-w-[90%]">
                 <span className="text-[8px] font-black text-purple-600 uppercase tracking-wider">AI interviewer</span>
                 <div className="p-3 bg-purple-50 border border-purple-500/20 rounded-2xl rounded-tl-none text-[10px] text-slate-200 leading-relaxed">
-                  "Can you tell me about one project you’re proud of and the tech stack you used?"
+                  &quot;Can you tell me about one project you&apos;re proud of and the tech stack you used?&quot;
                 </div>
               </div>
               
@@ -1392,7 +1392,7 @@ function LandingPageContent() {
                     <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
                     <h4 className="text-xs font-black text-slate-900 mt-1">{activeQuestionDetails.title}</h4>
                     <p className="text-[10px] text-slate-600 leading-relaxed mt-1"><strong>Prompt</strong>: {activeQuestionDetails.questionText}</p>
-                    <p className="text-[10px] text-slate-600 leading-relaxed mt-1"><strong>Candidate response</strong>: "{activeQuestionDetails.verbalResponse}"</p>
+                    <p className="text-[10px] text-slate-600 leading-relaxed mt-1"><strong>Candidate response</strong>: &quot;{activeQuestionDetails.verbalResponse}&quot;</p>
                   </div>
 
                   {activeQuestionDetails.candidateCode && activeQuestionDetails.optimalCode && (
