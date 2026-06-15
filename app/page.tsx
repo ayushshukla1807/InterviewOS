@@ -543,7 +543,7 @@ function LandingPageContent() {
             <Shield className="w-5 h-5 text-purple-600" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-extrabold tracking-tight text-slate-900 leading-none">InterviewOS</span>
+            <span className="text-sm font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-700 leading-none font-mono">InterviewOS</span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
@@ -590,8 +590,8 @@ function LandingPageContent() {
           </div>
 
           <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.05] text-slate-900">
-            Never take an <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-800 font-medium">Interview</span> again <br />
-            InterviewOS takes them for you.
+            Never take an <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600 font-medium">Interview</span> again <br />
+            <span className="font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-violet-700 font-black px-1">InterviewOS</span> takes them for you.
           </h1>
 
           <p className="text-sm md:text-base font-medium text-slate-600 max-w-2xl mx-auto leading-relaxed">
@@ -1862,7 +1862,7 @@ function LandingPageContent() {
             <div className="space-y-3">
               <span className="text-[9px] font-black text-purple-600 uppercase tracking-widest bg-purple-50 border border-purple-500/20 px-2 py-0.5 rounded">17 Hires / Month</span>
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
-                How Newton School Saved 15 Hours/Week for Their Senior Sales Managers
+                How EdTech Scale-Up Saved 15 Hours/Week for Their Senior Sales Managers
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
                 By delegating early behavioral screening loops to InterviewOS AI, hiring managers skipped the scheduling bottlenecks, accelerating pipeline velocity.
@@ -1878,7 +1878,7 @@ function LandingPageContent() {
             <div className="space-y-3">
               <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 border border-emerald-500/20 px-2 py-0.5 rounded">Hiring in 3 Hours</span>
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
-                How Newton School Hired a Data Analyst with InterviewOS's Super TA
+                How Global AI SaaS Hired a Data Analyst with InterviewOS's Super TA
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
                 An immediate resume parse matched against database requirements triggered a mock assessment sandbox round, finishing evaluations within 180 minutes.
