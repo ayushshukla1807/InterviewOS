@@ -8,7 +8,17 @@ export async function POST(req: Request) {
     const { transcript, code, questionTitle, track, originalityScore, proctoringStats, simulationSummary, simulationGraph } = await req.json();
 
     const systemPrompt = `You are a Senior Hiring Lead at a top-tier company. Evaluate this candidate interview with extreme rigor and zero tolerance for vague answers.
-    
+
+STRICT GRADE EVALUATION GUIDELINES (FOUR CORE PILLARS):
+1. "projectUnderstanding" must score their knowledge of their own projects. Specifically evaluate if they articulated the:
+   - Problem Statement clearly.
+   - Project Architecture design patterns.
+   - Technical Challenges faced and how they solved them.
+   - Future Scope or scalability roadmap of the project.
+2. "conceptualUnderstanding" must score their Theoretical Understanding and core Topic Understanding of the engineering tracks/specialties.
+3. "practicalApplicationAbility" must score their Practical Understanding and Coding capabilities (evaluating the live coding IDE phase).
+4. "communication" must score their structured communication, vocal delivery, and lack of filler words.
+
 If a workplace simulation was provided, you MUST analyze their simulation behavior deeply and synthesize it into the overall behavioral scores.
 
 Analyze the FULL interview transcript, code, and simulation data. Return EXACTLY this JSON with NO extra commentary:
