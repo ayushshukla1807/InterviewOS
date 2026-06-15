@@ -109,6 +109,190 @@ const FEEDBACKS = [
   { name: 'Saranya Adda', stars: 3, comment: 'I liked the structured flow of the interview and the focus on core computer science fundamentals.' }
 ];
 
+interface QuestionDetails {
+  id: string;
+  title: string;
+  score: string;
+  time: string;
+  notes: string;
+  questionText: string;
+  verbalResponse: string;
+  candidateCode?: string;
+  optimalCode?: string;
+}
+
+interface Candidate {
+  id: string;
+  name: string;
+  avatar: string;
+  background: string;
+  score: number;
+  summary: string;
+  skills: {
+    problemSolving: { level: string; desc: string };
+    technical: { level: string; desc: string };
+    codeQuality: { level: string; desc: string };
+  };
+  radar: { subject: string; A: number; B: number; fullMark: number }[];
+  questions: QuestionDetails[];
+}
+
+const CANDIDATES: Candidate[] = [
+  {
+    id: 'shubh',
+    name: 'Shubh Agarwal',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=120',
+    background: 'IIT student who built a startup platform and worked on medical AI.',
+    score: 80,
+    summary: 'Strong maybe. Solid on DSA and theory, but indexing and temporal caching knowledge was a bit shaky. But was fairly good at communicating thoughts.',
+    skills: {
+      problemSolving: { level: 'Decent', desc: 'Broke down the Indexing Problem well, but missed edge cases.' },
+      technical: { level: 'Weak', desc: 'Showed strong understanding of indexing, but lacked depth in caching concepts.' },
+      codeQuality: { level: 'Good', desc: 'Code was mostly clean, could improve naming and structure.' }
+    },
+    radar: [
+      { subject: 'Thinking', A: 4.7, B: 3.5, fullMark: 5 },
+      { subject: 'Language', A: 3.6, B: 3.8, fullMark: 5 },
+      { subject: 'Clarity', A: 3.5, B: 4.0, fullMark: 5 },
+      { subject: 'Fluency', A: 4.8, B: 3.6, fullMark: 5 },
+      { subject: 'Overall', A: 3.7, B: 3.9, fullMark: 5 },
+    ],
+    questions: [
+      {
+        id: 'q1',
+        title: 'Q1. Binary Echo Determination',
+        score: '5/5',
+        time: '27 Min',
+        notes: 'Explained the O(log n) division and bitwise checks perfectly...',
+        questionText: 'Given a streams list, determine if the signal contains binary echo repetitions. Optimize to O(log N).',
+        verbalResponse: 'I divided the stream search spaces logarithmically and applied bitwise XOR checks to spot repeating tracks. I also handled buffer boundaries.',
+        candidateCode: `public int detectEcho(int[] stream) {\n    int low = 0, high = stream.length - 1;\n    while(low <= high) {\n        int mid = low + (high - low) / 2;\n        if(stream[mid] == (stream[mid] ^ 1)) return mid;\n        low = mid + 1;\n    }\n    return -1;\n}`,
+        optimalCode: `public int detectEcho(int[] stream) {\n    int low = 0, high = stream.length - 1;\n    while(low < high) {\n        int mid = low + (high - low) / 2;\n        if (stream[mid] == stream[mid ^ 1]) {\n            low = mid + 1;\n        } else {\n            high = mid;\n        }\n    }\n    return low;\n}`
+      },
+      {
+        id: 'q2',
+        title: 'Q2. What is caching?',
+        score: '3/5',
+        time: '5 Min',
+        notes: 'Got hits/misses and TTL right, but shaky on temporal invalidations...',
+        questionText: 'Explain caching principles, hits, misses, TTL, and temporal data consistency.',
+        verbalResponse: 'Caching keeps hot data closer to the client. I explained TTL expiration using weather updates, but I got confused about database cache-locks.',
+      },
+      {
+        id: 'q3',
+        title: 'Q3. Indexing in RDBMS?',
+        score: '4/5',
+        time: '3 Min',
+        notes: 'Explained B-tree indexing, write-performance trade-offs...',
+        questionText: 'Explain indexing in RDBMS, B-Tree nodes, and how it impacts read/write costs.',
+        verbalResponse: 'I explained that index speeds up select queries using B-Tree lookup traversals but slows down insert/update queries because index trees must rebuild.',
+      }
+    ]
+  },
+  {
+    id: 'sarah',
+    name: 'Sarah Chen',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=120&h=120',
+    background: "Stanford CS Master's with 3 years engineering at Stripe, AI research focus.",
+    score: 96,
+    summary: 'Strong Hire. Solved complex system design and edge cases with optimal complexity. Outstanding Distributed Consensus reasoning.',
+    skills: {
+      problemSolving: { level: 'Elite', desc: 'Solved complex system design and edge cases with optimal complexity.' },
+      technical: { level: 'Strong', desc: 'In-depth understanding of distributed consensus, Raft, and database locks.' },
+      codeQuality: { level: 'Excellent', desc: 'Flawless modular code style with complete test coverage.' }
+    },
+    radar: [
+      { subject: 'Thinking', A: 5.0, B: 3.5, fullMark: 5 },
+      { subject: 'Language', A: 4.8, B: 3.8, fullMark: 5 },
+      { subject: 'Clarity', A: 4.7, B: 4.0, fullMark: 5 },
+      { subject: 'Fluency', A: 4.9, B: 3.6, fullMark: 5 },
+      { subject: 'Overall', A: 4.8, B: 3.9, fullMark: 5 },
+    ],
+    questions: [
+      {
+        id: 'q1',
+        title: 'Q1. Consensus Commit Protocol',
+        score: '5/5',
+        time: '15 Min',
+        notes: 'Implemented rollback transaction maps flawlessly with atomic commit states.',
+        questionText: 'Implement a simplified consensus commit log rollback system with atomic states.',
+        verbalResponse: 'I used a two-phase commit scheme with transactional state maps to roll back active nodes upon prepare failure.',
+        candidateCode: `public void commitOrRollback(Transaction tx, List<Node> cluster) {\n    boolean prepareOk = cluster.stream().allMatch(n -> n.prepare(tx));\n    if (prepareOk) {\n        cluster.forEach(n -> n.commit(tx));\n    } else {\n        cluster.forEach(n -> n.abort(tx));\n    }\n}`,
+        optimalCode: `public void commitOrRollback(Transaction tx, List<Node> cluster) {\n    boolean prepareOk = cluster.stream().allMatch(n -> n.prepare(tx));\n    if (prepareOk) {\n        cluster.forEach(n -> n.commit(tx));\n    } else {\n        cluster.forEach(n -> n.abort(tx));\n    }\n}`
+      },
+      {
+        id: 'q2',
+        title: 'Q2. JS Memory Leaks',
+        score: '5/5',
+        time: '8 Min',
+        notes: 'Explained closures, detached DOM nodes, and V8 garbage collection hooks.',
+        questionText: 'Explain typical causes of JS memory leaks in large single-page applications.',
+        verbalResponse: 'I explained detached DOM elements, global state stores retaining variables, and event listeners that fail to clean up on component unmount.'
+      },
+      {
+        id: 'q3',
+        title: 'Q3. Lock-Free Ring Buffer',
+        score: '4/5',
+        time: '20 Min',
+        notes: 'Good concurrent buffer write/read logic, but missed edge CPU spinlock checks.',
+        questionText: 'Design a lock-free single-producer single-consumer ring buffer in Java.',
+        verbalResponse: 'I implemented standard volatile read/write indices with atomic cache pad loops to prevent CPU cash conflicts.',
+        candidateCode: `public class RingBuffer {\n    private final Object[] buffer = new Object[1024];\n    private volatile int head = 0;\n    private volatile int tail = 0;\n    public boolean write(Object obj) {\n        if (tail - head == 1024) return false;\n        buffer[tail % 1024] = obj;\n        tail++;\n        return true;\n    }\n}`,
+        optimalCode: `public class RingBuffer {\n    private final Object[] buffer = new Object[1024];\n    private volatile long head = 0;\n    private volatile long tail = 0;\n    public boolean write(Object obj) {\n        if (tail - head == 1024) return false;\n        buffer[(int)(tail & 1023)] = obj;\n        tail++;\n        return true;\n    }\n}`
+      }
+    ]
+  },
+  {
+    id: 'marcus',
+    name: 'Marcus Brody',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=120&h=120',
+    background: 'Mid-level sales operations and CRM pipelines lead at Hubspot.',
+    score: 72,
+    summary: 'Candidate was good at pipeline qualification and speech metrics, but showed average performance in custom analytics workflows.',
+    skills: {
+      problemSolving: { level: 'Average', desc: 'Good pitch layout, but lacked structural qualification details.' },
+      technical: { level: 'Fair', desc: 'Excellent CRM pipeline understanding but weak on API automation hooks.' },
+      codeQuality: { level: 'N/A', desc: 'Role evaluated is Business Development. Coding not required.' }
+    },
+    radar: [
+      { subject: 'Thinking', A: 3.2, B: 3.5, fullMark: 5 },
+      { subject: 'Language', A: 4.5, B: 3.8, fullMark: 5 },
+      { subject: 'Clarity', A: 4.1, B: 4.0, fullMark: 5 },
+      { subject: 'Fluency', A: 4.4, B: 3.6, fullMark: 5 },
+      { subject: 'Overall', A: 3.6, B: 3.9, fullMark: 5 },
+    ],
+    questions: [
+      {
+        id: 'q1',
+        title: 'Q1. Outbound Intent Filtering',
+        score: '4/5',
+        time: '12 Min',
+        notes: 'Good pipeline segment flow. Highlighted key intent triggers.',
+        questionText: 'How do you filter high-intent target logos for custom B2B email sequences?',
+        verbalResponse: 'I segment target logos using active job postings, technology stack detection, and funding rounds to define intent levels before launching outbound sequences.'
+      },
+      {
+        id: 'q2',
+        title: 'Q2. Handling Budget Objections',
+        score: '3/5',
+        time: '8 Min',
+        notes: 'Lacked standard consultative discovery hooks when facing strict budget limits.',
+        questionText: 'How do you handle budget objections during a consultative discovery call?',
+        verbalResponse: 'I explain ROI value loops first and show how our tool cuts manpower costs, but I need to focus more on scoping candidate volume constraints.'
+      },
+      {
+        id: 'q3',
+        title: 'Q3. CRM Pipeline Sync',
+        score: '4/5',
+        time: '10 Min',
+        notes: 'Solid explanation of triggers, but missed data conflict overrides.',
+        questionText: 'Explain how you design CRM trigger updates between Ashby and Salesforce.',
+        verbalResponse: 'I configure standard webhook callbacks when candidates hit screening states, updating contact fields and logging proctor transcripts.'
+      }
+    ]
+  }
+];
+
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -179,10 +363,18 @@ function LandingPageContent() {
 
   // Anti-Cheating Simulator state
   const [selectedViolation, setSelectedViolation] = useState<Violation>(VIOLATIONS[2]); // Switched Tabs
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [showFaceMesh, setShowFaceMesh] = useState(true);
 
-  // Evaluation Report states
-  const [selectedQuestionId, setSelectedQuestionId] = useState<'q1' | 'q2' | 'q3'>('q1');
+  // Evaluation Report States
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate>(CANDIDATES[0]);
+  const [selectedQuestionId, setSelectedQuestionId] = useState<string>('q1');
+
+  // Interactive dialogue player state
+  const [dialoguePlaying, setDialoguePlaying] = useState(false);
+  const [dialogueStep, setDialogueStep] = useState(0);
+
+  // Hiring scale savings slider state
+  const [candidateVolume, setCandidateVolume] = useState(500);
 
   // Try Interview Tab category filter
   const [activeTryTab, setActiveTryTab] = useState<'popular' | 'tech' | 'sales' | 'marketing' | 'product'>('popular');
@@ -307,21 +499,28 @@ function LandingPageContent() {
     }, 1200);
   };
 
-  // Switch tab in mockup sandbox
-  const handleHeroFileTab = (fileName: string, code: string) => {
-    setEditorFile(fileName);
-    setEditorText(code);
-    setCompilerLogs([`Loaded file ${fileName}. Press Compile & Run to evaluate.`]);
+  // Dialogue simulated player
+  const triggerDialogueSimulation = () => {
+    setDialoguePlaying(true);
+    setDialogueStep(1);
+    setTimeout(() => {
+      setDialogueStep(2);
+      setTimeout(() => {
+        setDialoguePlaying(false);
+      }, 3000);
+    }, 2500);
   };
 
-  // Radar chart data for Shubh Agarwal
-  const radarData = [
-    { subject: 'Thinking', A: 4.7, B: 3.5, fullMark: 5 },
-    { subject: 'Language', A: 3.6, B: 3.8, fullMark: 5 },
-    { subject: 'Clarity', A: 3.5, B: 4.0, fullMark: 5 },
-    { subject: 'Fluency', A: 4.8, B: 3.6, fullMark: 5 },
-    { subject: 'Overall', A: 3.7, B: 3.9, fullMark: 5 },
-  ];
+  // Candidate swap handler
+  const handleCandidateSwap = (candId: string) => {
+    const cand = CANDIDATES.find(c => c.id === candId);
+    if (cand) {
+      setSelectedCandidate(cand);
+      setSelectedQuestionId('q1');
+    }
+  };
+
+  const activeQuestionDetails = selectedCandidate.questions.find(q => q.id === selectedQuestionId) || selectedCandidate.questions[0];
 
   return (
     <div className="min-h-screen bg-[#050508] text-slate-100 font-sans selection:bg-purple-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
@@ -329,7 +528,7 @@ function LandingPageContent() {
       {/* Background blurs */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]" />
-        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-purple-600/10 blur-[150px] rounded-full mix-blend-screen" />
+        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-purple-600/15 blur-[150px] rounded-full mix-blend-screen" />
         <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-emerald-600/5 blur-[150px] rounded-full mix-blend-screen" />
         <div className="absolute bottom-[20%] left-[-5%] w-[900px] h-[900px] bg-indigo-600/5 blur-[160px] rounded-full mix-blend-screen" />
       </div>
@@ -340,7 +539,7 @@ function LandingPageContent() {
           <div className="w-10 h-10 border border-purple-500/20 rounded-xl flex items-center justify-center bg-purple-500/5 shadow-md">
             <Shield className="w-5 h-5 text-purple-400" />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col text-left">
             <span className="text-sm font-extrabold tracking-tight text-white leading-none">InterviewOS</span>
             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">AI Platform</span>
           </div>
@@ -484,7 +683,7 @@ function LandingPageContent() {
                 {/* Middle: Code Editor */}
                 <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-400 flex flex-col justify-between border border-white/5 overflow-hidden">
                   <div className="space-y-1.5 overflow-y-auto flex-1 select-none">
-                    <div className="flex items-center gap-2 pb-2 border-b border-white/5 mb-2 shrink-0 text-[9px] text-slate-500">
+                    <div className="flex items-center gap-2 pb-2 border-b border-white/5 mb-2 shrink-0 text-[9px] text-slate-500 font-bold">
                       <span className="text-purple-400">Solution.java</span>
                       <span>•</span>
                       <span>Java (OpenJDK 13.0.1)</span>
@@ -548,7 +747,7 @@ function LandingPageContent() {
                     className="w-full h-full object-cover opacity-70 filter grayscale-[20%]"
                   />
                   <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/5 text-[9px] font-bold text-white flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-purple-500" /> Candidate Video Stream
+                    <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" /> Candidate Video Stream
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 bg-[#0a0a0c]/85 border border-white/5 rounded-2xl p-4 backdrop-blur-md">
                     <p className="text-[10px] text-slate-500 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
@@ -692,28 +891,56 @@ function LandingPageContent() {
             </div>
           </div>
 
-          {/* Feature 2: 100% Anti-Cheating Simulator */}
+          {/* Feature 2: 100% Anti-Cheating Simulator with Face Mesh */}
           <div className="p-8 bg-[#0a0a0c]/60 border border-white/5 rounded-3xl flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">Neural Proctoring</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 rounded">Neural Proctoring</span>
+                <button 
+                  onClick={() => setShowFaceMesh(!showFaceMesh)}
+                  className="text-[8px] font-black uppercase text-purple-400 hover:text-purple-300 tracking-wider flex items-center gap-1"
+                >
+                  <Cpu className="w-3 h-3" /> {showFaceMesh ? 'Hide Face Mesh' : 'Show Face Mesh'}
+                </button>
+              </div>
               <h3 className="text-xl font-bold text-white">100% Anti-Cheating</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 We monitor browser focus states, eye shift patterns, voice presence anomalies, and keystroke injection signatures in real-time.
               </p>
             </div>
 
-            {/* Anti-Cheating timeline logger preview */}
-            <div className="bg-[#050508] border border-white/5 rounded-2xl p-4 mt-6 space-y-4 text-left">
+            {/* Anti-Cheating timeline logger preview with SVG landmarks */}
+            <div className="bg-[#050508] border border-white/5 rounded-2xl p-4 mt-6 space-y-4 text-left relative overflow-hidden">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-950 border border-white/10 relative">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-950 border border-white/10 relative shrink-0">
                   <img 
                     src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120&h=120"
                     alt="Mock proctored user"
                     className="w-full h-full object-cover"
                   />
-                  {selectedViolation.id && (
-                    <div className="absolute inset-0 bg-rose-500/25 flex items-center justify-center">
-                      <AlertTriangle className="w-4 h-4 text-rose-400 animate-pulse" />
+                  {/* Face Mesh SVG Overlay */}
+                  {showFaceMesh && (
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
+                      {/* Bounding box */}
+                      <rect x="20" y="15" width="60" height="70" fill="none" stroke={selectedViolation.id ? '#f43f5e' : '#10b981'} strokeWidth="1" strokeDasharray="2 2" />
+                      
+                      {/* Connection mesh lines */}
+                      <path d="M50,20 L35,40 L40,65 L50,80 L60,65 L65,40 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                      <line x1="35" y1="40" x2="65" y2="40" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                      <line x1="40" y1="65" x2="60" y2="65" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                      
+                      {/* Eye dots (shifts left on eye shift violation) */}
+                      <circle cx={selectedViolation.videoState === 'eye-shift' ? 33 : 38} cy="38" r="2" fill={selectedViolation.id ? '#f43f5e' : '#10b981'} />
+                      <circle cx={selectedViolation.videoState === 'eye-shift' ? 57 : 62} cy="38" r="2" fill={selectedViolation.id ? '#f43f5e' : '#10b981'} />
+                      
+                      {/* Mouth dot */}
+                      <circle cx="50" cy="68" r="3" fill="none" stroke={selectedViolation.id ? '#f43f5e' : '#10b981'} strokeWidth="1" />
+                    </svg>
+                  )}
+                  {selectedViolation.videoState === 'camera-off' && (
+                    <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center text-center p-1 space-y-1">
+                      <ShieldAlert className="w-5 h-5 text-rose-500 animate-pulse" />
+                      <span className="text-[6px] font-black uppercase text-rose-500 tracking-wider">Feed Blocked</span>
                     </div>
                   )}
                 </div>
@@ -722,7 +949,13 @@ function LandingPageContent() {
                     <span className="text-[10px] font-black text-rose-400 uppercase tracking-wider">{selectedViolation.label}</span>
                     <span className="text-[9px] text-slate-500 font-mono">{selectedViolation.time} / 03:41</span>
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate mt-0.5">{selectedViolation.desc}</p>
+                  <p className="text-[10px] text-slate-400 mt-0.5">{selectedViolation.desc}</p>
+                  <div className="text-[8px] font-bold uppercase tracking-wider text-slate-500 mt-1.5 flex gap-2">
+                    <span className="text-emerald-400">FPS: 60.0</span>
+                    <span className={selectedViolation.id ? 'text-rose-400' : 'text-slate-500'}>
+                      Gaze: {selectedViolation.videoState === 'eye-shift' ? 'DEVIATING' : 'FOCUSED'}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -735,8 +968,8 @@ function LandingPageContent() {
                   />
                 </div>
                 {/* Timeline violations logs grid */}
-                <div className="grid grid-cols-4 gap-2 pt-1">
-                  {VIOLATIONS.slice(0, 4).map(v => (
+                <div className="grid grid-cols-5 gap-1.5 pt-1">
+                  {VIOLATIONS.map(v => (
                     <button
                       key={v.id}
                       onClick={() => setSelectedViolation(v)}
@@ -781,36 +1014,66 @@ function LandingPageContent() {
             </div>
           </div>
 
-          {/* Feature 4: Feels Like a Real Interview */}
+          {/* Feature 4: Feels Like a Real Interview with Dialogue Player */}
           <div className="p-8 bg-[#0a0a0c]/60 border border-white/5 rounded-3xl flex flex-col justify-between hover:border-purple-500/20 transition-all duration-300 shadow-xl min-h-[400px]">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded">Adaptive Dialogues</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded">Adaptive Dialogues</span>
+                <button 
+                  onClick={triggerDialogueSimulation}
+                  disabled={dialoguePlaying}
+                  className="text-[8px] font-black uppercase text-purple-400 hover:text-purple-300 tracking-wider flex items-center gap-1 disabled:opacity-50"
+                >
+                  <Play className="w-2.5 h-2.5" /> Play Dialogue Demo
+                </button>
+              </div>
               <h3 className="text-xl font-bold text-white">Feels Like a Real Interview</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Adaptive follow-ups, natural voice parsing, and real-time probing prompts structured to evaluate logic depth, not just memorized syntax.
               </p>
             </div>
 
-            {/* Bubble Dialogue mockup */}
-            <div className="bg-[#050508] border border-white/5 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans">
+            {/* Bubble Dialogue mockup with voice waves */}
+            <div className="bg-[#050508] border border-white/5 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans relative">
               <div className="space-y-1 max-w-[90%]">
                 <span className="text-[8px] font-black text-purple-400 uppercase tracking-wider">AI interviewer</span>
                 <div className="p-3 bg-purple-600/10 border border-purple-500/20 rounded-2xl rounded-tl-none text-[10px] text-slate-300 leading-relaxed">
                   "Can you tell me about one project you’re proud of and the tech stack you used?"
                 </div>
               </div>
-              <div className="space-y-1 max-w-[90%] ml-auto text-right">
+              
+              <div className={`space-y-1 max-w-[90%] ml-auto text-right transition-opacity duration-500 ${
+                dialogueStep >= 1 ? 'opacity-100' : 'opacity-30'
+              }`}>
                 <span className="text-[8px] font-black text-slate-500 uppercase tracking-wider">Candidate response</span>
                 <div className="p-3 bg-[#0a0a0c] border border-white/5 rounded-2xl rounded-tr-none text-[10px] text-slate-300 leading-relaxed text-left">
-                  "Yeah sure, I’ve worked on a P2P food delivery system... I used the MERN stack with MongoDB, Express, React, and Node.js. For security, we implemented Firebase OAuth and deployed to AWS EC2."
+                  {dialogueStep >= 2 
+                    ? '"Yeah sure, I’ve worked on a P2P food delivery system... MERN stack, MongoDB, React, Node..."' 
+                    : '"Thinking... evaluating project archives..."'}
                 </div>
               </div>
+
+              {/* Glowing voice waves */}
+              {dialoguePlaying && (
+                <div className="absolute top-4 right-4 flex gap-1 items-end h-6 z-20 bg-[#0a0a0c] px-3 py-1 border border-white/5 rounded-full">
+                  {[1, 2, 3, 4, 5, 6].map(bar => (
+                    <span 
+                      key={bar} 
+                      className="w-1 bg-purple-500 rounded-full animate-pulse" 
+                      style={{ 
+                        height: `${Math.floor(Math.random() * 16) + 4}px`, 
+                        animationDelay: `${bar * 100}ms` 
+                      }} 
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Evaluation Report Dashboard */}
+      {/* Evaluation Report Dashboard with Candidate Switcher & Code Diff */}
       <section className="relative z-10 border-y border-white/5 bg-[#0a0a0c]/50 py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-16">
           <div className="text-center space-y-3">
@@ -818,6 +1081,26 @@ function LandingPageContent() {
             <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Detailed & Instance-backed Interview Evaluation
             </h2>
+          </div>
+
+          {/* Candidate Profile selector pills */}
+          <div className="flex justify-center gap-3 max-w-lg mx-auto">
+            {CANDIDATES.map(c => (
+              <button
+                key={c.id}
+                onClick={() => handleCandidateSwap(c.id)}
+                className={`flex items-center gap-2 px-4 py-2 bg-white/5 border rounded-2xl transition-all ${
+                  selectedCandidate.id === c.id 
+                    ? 'border-purple-500 bg-purple-600/5 text-white shadow-lg shadow-purple-500/10' 
+                    : 'border-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+                }`}
+              >
+                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white/10">
+                  <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider">{c.name.split(' ')[0]}</span>
+              </button>
+            ))}
           </div>
 
           <div className="max-w-6xl mx-auto bg-[#0a0a0c] border border-white/5 rounded-[2.5rem] p-6 md:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
@@ -829,19 +1112,19 @@ function LandingPageContent() {
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-950 border border-white/10">
                     <img 
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=120&h=120"
-                      alt="Shubh Agarwal candidate avatar"
+                      src={selectedCandidate.avatar}
+                      alt={selectedCandidate.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <h3 className="text-md font-bold text-white">Shubh Agarwal</h3>
+                    <h3 className="text-md font-bold text-white">{selectedCandidate.name}</h3>
                     <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Candidate Scorecard</p>
                   </div>
                 </div>
                 
                 <p className="text-[10px] text-slate-400 leading-relaxed">
-                  <strong>Background</strong>: IIT student who built a startup platform and worked on medical AI.
+                  <strong>Background</strong>: {selectedCandidate.background}
                 </p>
               </div>
 
@@ -863,22 +1146,22 @@ function LandingPageContent() {
                     strokeWidth="16" 
                     strokeLinecap="round"
                   />
-                  {/* Active fill (80% score = 144 degrees of arc) */}
+                  {/* Active fill based on score */}
                   <path 
                     d="M 10 90 A 80 80 0 0 1 170 90" 
                     fill="none" 
                     stroke="url(#gaugeGradient)" 
                     strokeWidth="16" 
                     strokeLinecap="round"
-                    strokeDasharray={`${(80 / 100) * 251.2} 251.2`}
+                    strokeDasharray={`${(selectedCandidate.score / 100) * 251.2} 251.2`}
                   />
-                  {/* Center arrow indicator pointing at 144 degrees */}
+                  {/* Center arrow indicator pointing at score */}
                   <g transform="translate(90, 90)">
                     <line 
                       x1="0" 
                       y1="0" 
-                      x2="-55" 
-                      y2="-20" 
+                      x2={selectedCandidate.score >= 90 ? "-45" : selectedCandidate.score >= 80 ? "-55" : "-58"} 
+                      y2={selectedCandidate.score >= 90 ? "-45" : selectedCandidate.score >= 80 ? "-20" : "15"} 
                       stroke="#ffffff" 
                       strokeWidth="3" 
                       strokeLinecap="round"
@@ -887,13 +1170,13 @@ function LandingPageContent() {
                   </g>
                 </svg>
                 <div className="text-center mt-2">
-                  <span className="text-2xl font-black text-white block">80/100</span>
+                  <span className="text-2xl font-black text-white block">{selectedCandidate.score}/100</span>
                   <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">Final Score</span>
                 </div>
               </div>
 
               <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-400 leading-relaxed">
-                <strong>AI Assessment</strong>: "Strong maybe. Solid on DSA and theory, but indexing and temporal caching knowledge was a bit shaky. But was fairly good at communicating thoughts."
+                <strong>AI Assessment</strong>: "{selectedCandidate.summary}"
               </div>
             </div>
 
@@ -906,18 +1189,18 @@ function LandingPageContent() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-4 bg-[#050508]/60 border border-white/5 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-amber-400">Problem Solving</span>
-                    <span className="text-xs font-bold text-white block">Decent</span>
-                    <p className="text-[10px] text-slate-400 leading-normal">Broke down the Indexing Problem well, but missed edge cases</p>
+                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.problemSolving.level}</span>
+                    <p className="text-[10px] text-slate-400 leading-normal">{selectedCandidate.skills.problemSolving.desc}</p>
                   </div>
                   <div className="p-4 bg-[#050508]/60 border border-white/5 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-rose-400">Technical knowledge</span>
-                    <span className="text-xs font-bold text-white block">Weak</span>
-                    <p className="text-[10px] text-slate-400 leading-normal">Shaky understanding of temporal cache invalidations and locks</p>
+                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.technical.level}</span>
+                    <p className="text-[10px] text-slate-400 leading-normal">{selectedCandidate.skills.technical.desc}</p>
                   </div>
                   <div className="p-4 bg-[#050508]/60 border border-white/5 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-emerald-400">Code Quality</span>
-                    <span className="text-xs font-bold text-white block">Good</span>
-                    <p className="text-[10px] text-slate-400 leading-normal">Code was mostly clean, could improve naming and structure</p>
+                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.codeQuality.level}</span>
+                    <p className="text-[10px] text-slate-400 leading-normal">{selectedCandidate.skills.codeQuality.desc}</p>
                   </div>
                 </div>
               </div>
@@ -927,7 +1210,7 @@ function LandingPageContent() {
                 <div className="md:col-span-5 h-44 flex items-center justify-center bg-white/5 border border-white/5 rounded-2xl p-2">
                   {mounted ? (
                     <ResponsiveContainer width="100%" height="100%">
-                      <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                      <RadarChart cx="50%" cy="50%" outerRadius="70%" data={selectedCandidate.radar}>
                         <PolarGrid stroke="rgba(255,255,255,0.05)" />
                         <PolarAngleAxis dataKey="subject" stroke="#8c95a6" fontSize={8} />
                         <PolarRadiusAxis angle={30} domain={[0, 5]} tick={false} stroke="rgba(255,255,255,0.1)" />
@@ -966,43 +1249,54 @@ function LandingPageContent() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr 
-                        onClick={() => setSelectedQuestionId('q1')}
-                        className={`border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${
-                          selectedQuestionId === 'q1' ? 'bg-purple-600/5 text-white' : 'text-slate-400'
-                        }`}
-                      >
-                        <td className="p-4 font-bold">Q1. Binary Echo Determination</td>
-                        <td className="p-4 text-purple-400 font-extrabold">5/5</td>
-                        <td className="p-4 font-mono">27m</td>
-                        <td className="p-4 text-[10px]">Explained the O(log n) division and bitwise checks perfectly...</td>
-                      </tr>
-                      <tr 
-                        onClick={() => setSelectedQuestionId('q2')}
-                        className={`border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${
-                          selectedQuestionId === 'q2' ? 'bg-purple-600/5 text-white' : 'text-slate-400'
-                        }`}
-                      >
-                        <td className="p-4 font-bold">Q2. What is caching?</td>
-                        <td className="p-4 text-amber-400 font-extrabold">3/5</td>
-                        <td className="p-4 font-mono">5m</td>
-                        <td className="p-4 text-[10px]">Got hits/misses right, but shaky on temporal invalidations...</td>
-                      </tr>
-                      <tr 
-                        onClick={() => setSelectedQuestionId('q3')}
-                        className={`cursor-pointer hover:bg-white/5 transition-colors ${
-                          selectedQuestionId === 'q3' ? 'bg-purple-600/5 text-white' : 'text-slate-400'
-                        }`}
-                      >
-                        <td className="p-4 font-bold">Q3. Indexing in RDBMS?</td>
-                        <td className="p-4 text-emerald-400 font-extrabold">4/5</td>
-                        <td className="p-4 font-mono">3m</td>
-                        <td className="p-4 text-[10px]">Explained B-trees, leaf nodes, and write-performance trade-offs...</td>
-                      </tr>
+                      {selectedCandidate.questions.map(q => (
+                        <tr 
+                          key={q.id}
+                          onClick={() => setSelectedQuestionId(q.id)}
+                          className={`border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${
+                            selectedQuestionId === q.id ? 'bg-purple-600/5 text-white' : 'text-slate-400'
+                          }`}
+                        >
+                          <td className="p-4 font-bold">{q.title}</td>
+                          <td className="p-4 text-purple-400 font-extrabold">{q.score}</td>
+                          <td className="p-4 font-mono">{q.time}</td>
+                          <td className="p-4 text-[10px] truncate max-w-[200px]">{q.notes}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
               </div>
+
+              {/* Interactive Code Diff & Transcript panel */}
+              {activeQuestionDetails && (
+                <div className="p-5 bg-[#050508] border border-white/5 rounded-3xl space-y-4 text-left font-sans">
+                  <div>
+                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
+                    <h4 className="text-xs font-black text-white mt-1">{activeQuestionDetails.title}</h4>
+                    <p className="text-[10px] text-slate-400 leading-relaxed mt-1"><strong>Prompt</strong>: {activeQuestionDetails.questionText}</p>
+                    <p className="text-[10px] text-slate-400 leading-relaxed mt-1"><strong>Candidate response</strong>: "{activeQuestionDetails.verbalResponse}"</p>
+                  </div>
+
+                  {activeQuestionDetails.candidateCode && activeQuestionDetails.optimalCode && (
+                    <div className="space-y-2">
+                      <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest block">Code comparison (Candidate vs Optimal)</span>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[8px] overflow-x-auto">
+                        {/* Candidate solution */}
+                        <div className="p-3 bg-red-950/10 border border-red-500/10 rounded-xl space-y-1">
+                          <span className="text-rose-400 uppercase font-black text-[7px] block border-b border-red-500/10 pb-1 mb-1">Candidate solution</span>
+                          <pre className="text-red-300 leading-normal">{activeQuestionDetails.candidateCode}</pre>
+                        </div>
+                        {/* Optimal solution */}
+                        <div className="p-3 bg-emerald-950/10 border border-emerald-500/10 rounded-xl space-y-1">
+                          <span className="text-emerald-400 uppercase font-black text-[7px] block border-b border-emerald-500/10 pb-1 mb-1">Optimal solution</span>
+                          <pre className="text-emerald-300 leading-normal">{activeQuestionDetails.optimalCode}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
           </div>
@@ -1224,10 +1518,10 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Comparison Timeline Section */}
+      {/* Interactive Savings Slider Comparison Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest">Efficiency Metrics</span>
+          <span className="text-[9px] font-black text-purple-400 uppercase tracking-widest">Efficiency Calculator</span>
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Fewer steps. Faster decisions. Make hiring peaceful.
           </h2>
@@ -1236,7 +1530,24 @@ function LandingPageContent() {
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-[#0a0a0c]/60 border border-white/5 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative">
           
           {/* Left panel: comparison timeline bars */}
-          <div className="md:col-span-8 space-y-6 text-left">
+          <div className="md:col-span-7 space-y-6 text-left">
+            {/* Volume scale slider */}
+            <div className="p-4 bg-white/5 border border-white/5 rounded-2xl space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Candidates to Interview (Per Month)</span>
+                <span className="text-sm font-black text-purple-400">{candidateVolume}</span>
+              </div>
+              <input 
+                type="range"
+                min="50"
+                max="2500"
+                step="50"
+                value={candidateVolume}
+                onChange={e => setCandidateVolume(Number(e.target.value))}
+                className="w-full accent-purple-600 bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+
             {/* WITHOUT INTERVIEWOS */}
             <div className="space-y-2">
               <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider">
@@ -1267,14 +1578,18 @@ function LandingPageContent() {
           </div>
 
           {/* Right panel: savings indicators */}
-          <div className="md:col-span-4 bg-white/5 border border-white/5 rounded-3xl p-6 text-center space-y-4">
+          <div className="md:col-span-5 bg-white/5 border border-white/5 rounded-3xl p-6 text-center space-y-4">
             <div>
-              <span className="text-3xl font-black text-white block">9x</span>
-              <span className="text-[8px] font-bold uppercase text-slate-500 tracking-widest block mt-0.5">Lesser Manpower</span>
+              <span className="text-3xl font-black text-white block">
+                {Math.round(candidateVolume * 1.8)} Hrs
+              </span>
+              <span className="text-[8px] font-bold uppercase text-slate-500 tracking-widest block mt-0.5">Engineering Time Saved</span>
             </div>
             <div className="border-t border-white/5 pt-4">
-              <span className="text-3xl font-black text-purple-400 block">6x</span>
-              <span className="text-[8px] font-bold uppercase text-slate-500 tracking-widest block mt-0.5">Cheaper Cost</span>
+              <span className="text-3xl font-black text-purple-400 block">
+                ${(candidateVolume * 35).toLocaleString()}
+              </span>
+              <span className="text-[8px] font-bold uppercase text-slate-500 tracking-widest block mt-0.5">Hiring budget saved</span>
             </div>
           </div>
         </div>
@@ -1641,7 +1956,7 @@ function LandingPageContent() {
 
                 <button
                   onClick={handleLaunchTryout}
-                  className="w-full py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20 active:scale-[0.98] transition-all animate-pulse"
+                  className="w-full py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-purple-600/20 active:scale-[0.98] transition-all"
                 >
                   Start Practice Interview Session
                   <ArrowRight className="w-4 h-4" />
@@ -1765,7 +2080,7 @@ function LandingPageContent() {
                 </div>
                 <button
                   onClick={handleLaunchMVP}
-                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-[0.98] transition-all"
+                  className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-[0.98] transition-all animate-bounce"
                 >
                   Go to Job Application Portal <ExternalLink className="w-4 h-4" />
                 </button>
