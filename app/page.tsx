@@ -310,6 +310,8 @@ function LandingPageContent() {
 
   const [activeTab, setActiveTab] = useState<'tryout' | 'candidate' | 'recruiter' | 'mvp'>('tryout');
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   // Role selector state
   const [selectedRole, setSelectedRole] = useState<RoleConfig | null>(null);
