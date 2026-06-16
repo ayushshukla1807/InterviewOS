@@ -19,7 +19,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0c] text-white flex flex-col items-center pt-32 px-6">
-      <h1 className="text-4xl md:text-5xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-500 text-center">
+      <h1 className="text-4xl md:text-5xl font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-500 text-center">
         Level Up Your Interviews
       </h1>
       <p className="text-white/60 mb-16 max-w-xl text-center">
@@ -28,12 +28,12 @@ export default function PricingPage() {
 
       <div className="grid md:grid-cols-2 gap-8 max-w-4xl w-full">
         {/* Free Tier */}
-        <div className="border border-white/10 bg-white/5 rounded-3xl p-8 relative overflow-hidden">
+        <div className="border border-zinc-800 bg-zinc-900/50 rounded-3xl p-8 relative overflow-hidden">
           <h3 className="text-2xl font-bold mb-2">Basic Candidate</h3>
-          <div className="text-4xl font-black mb-6">$0<span className="text-lg text-white/40 font-normal">/mo</span></div>
+          <div className="text-4xl font-medium mb-6">$0<span className="text-lg text-white/40 font-normal">/mo</span></div>
           <ul className="space-y-4 mb-8">
-            <li className="flex items-center gap-3"><Check className="text-emerald-400 w-5 h-5"/> 1 Mock Interview / month</li>
-            <li className="flex items-center gap-3"><Check className="text-emerald-400 w-5 h-5"/> Basic ML Scoring</li>
+            <li className="flex items-center gap-3"><Check className="text-zinc-100 w-5 h-5"/> 1 Mock Interview / month</li>
+            <li className="flex items-center gap-3"><Check className="text-zinc-100 w-5 h-5"/> Basic ML Scoring</li>
             <li className="flex items-center gap-3 text-white/40"><Check className="w-5 h-5"/> No Session Recordings</li>
           </ul>
           <button className="w-full py-3 rounded-xl bg-white/10 font-bold hover:bg-white/20 transition-colors" disabled>
@@ -42,12 +42,12 @@ export default function PricingPage() {
         </div>
 
         {/* Pro Tier */}
-        <div className="border border-violet-500 bg-violet-500/10 rounded-3xl p-8 relative overflow-hidden ring-1 ring-violet-500 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
-          <div className="absolute top-0 right-0 bg-violet-500 text-xs font-black uppercase tracking-wider py-1 px-4 rounded-bl-xl">
+        <div className="border border-violet-500 bg-violet-500/10 rounded-3xl p-8 relative overflow-hidden ring-1 ring-violet-500 shadow-sm">
+          <div className="absolute top-0 right-0 bg-violet-500 text-xs font-medium  tracking-tight py-1 px-4 rounded-bl-xl">
             Popular
           </div>
           <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">Pro Candidate <Zap className="text-amber-400 w-5 h-5 fill-amber-400"/></h3>
-          <div className="text-4xl font-black mb-6">$19<span className="text-lg text-white/40 font-normal">/mo</span></div>
+          <div className="text-4xl font-medium mb-6">$19<span className="text-lg text-white/40 font-normal">/mo</span></div>
           <ul className="space-y-4 mb-8">
             <li className="flex items-center gap-3"><Check className="text-violet-400 w-5 h-5"/> Unlimited Mock Interviews</li>
             <li className="flex items-center gap-3"><Check className="text-violet-400 w-5 h-5"/> Advanced ML Behavior Analytics</li>
@@ -59,7 +59,7 @@ export default function PricingPage() {
             disabled={loading}
             className="w-full py-3 rounded-xl bg-violet-600 font-bold hover:bg-violet-500 transition-colors shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2"
           >
-            {loading ? <span className="animate-pulse">Loading...</span> : <><Sparkles className="w-4 h-4"/> Upgrade to Pro</>}
+            {loading ? <span className="">Loading...</span> : <><Sparkles className="w-4 h-4"/> Upgrade to Pro</>}
           </button>
         </div>
       </div>

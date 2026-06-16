@@ -49,8 +49,8 @@ export default function InviteGateway() {
       <div className="min-h-screen flex items-center justify-center text-white text-center px-4">
         <div className="glass-card p-12 rounded-[2rem] border border-red-500/20 max-w-lg">
           <Shield className="w-16 h-16 text-red-500 mx-auto mb-6" />
-          <h1 className="text-3xl font-black mb-4 uppercase tracking-tight">Invalid Invite Link</h1>
-          <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">This assessment link is corrupted or has expired. Please contact your recruiter for a new link.</p>
+          <h1 className="text-3xl font-medium mb-4  tracking-tight">Invalid Invite Link</h1>
+          <p className="text-zinc-400 text-sm font-bold  tracking-tight">This assessment link is corrupted or has expired. Please contact your recruiter for a new link.</p>
         </div>
       </div>
     );
@@ -69,40 +69,40 @@ export default function InviteGateway() {
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-500" />
         
         <div className="flex items-center gap-4 mb-10">
-          <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
-            <Lock className="w-6 h-6 text-blue-400" />
+          <div className="w-12 h-12 rounded-xl bg-zinc-800/50 border border-zinc-700 flex items-center justify-center">
+            <Lock className="w-6 h-6 text-zinc-300" />
           </div>
           <div>
-            <h1 className="text-2xl font-black text-white uppercase tracking-tight">Secure Gateway</h1>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">AI Assessment Portal</p>
+            <h1 className="text-2xl font-medium text-white  tracking-tight">Secure Gateway</h1>
+            <p className="text-[10px] font-bold text-zinc-400  tracking-tight">AI Assessment Portal</p>
           </div>
         </div>
 
         <div className="space-y-6 mb-10">
-          <div className="bg-[var(--theme-bg)]/20 rounded-2xl p-6 border border-white/5">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Candidate</p>
-            <p className="text-lg font-black text-white">{data.name}</p>
-            <p className="text-xs text-slate-400">{data.email}</p>
+          <div className="bg-[var(--theme-bg)]/20 rounded-2xl p-6 border border-zinc-800/50">
+            <p className="text-[10px] font-bold text-zinc-500  tracking-tight mb-1">Candidate</p>
+            <p className="text-lg font-medium text-white">{data.name}</p>
+            <p className="text-xs text-zinc-400">{data.email}</p>
           </div>
           
-          <div className="bg-[var(--theme-bg)]/20 rounded-2xl p-6 border border-white/5">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Target Role</p>
-            <p className="text-lg font-black text-emerald-400">{data.role}</p>
+          <div className="bg-[var(--theme-bg)]/20 rounded-2xl p-6 border border-zinc-800/50">
+            <p className="text-[10px] font-bold text-zinc-500  tracking-tight mb-1">Target Role</p>
+            <p className="text-lg font-medium text-zinc-100">{data.role}</p>
           </div>
         </div>
 
-        <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-10 flex gap-3">
-          <Shield className="w-5 h-5 text-emerald-400 shrink-0" />
-          <p className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest leading-relaxed">
+        <div className="p-4 bg-zinc-800/50 border border-zinc-700 rounded-xl mb-10 flex gap-3">
+          <Shield className="w-5 h-5 text-zinc-100 shrink-0" />
+          <p className="text-[10px] font-bold text-zinc-200  tracking-tight leading-relaxed">
             By proceeding, you agree to our proctoring policies. Camera and microphone access are required. Ensure you are in a quiet environment.
           </p>
         </div>
 
         <button 
           onClick={handleStart}
-          className="w-full py-5 rounded-2xl bg-white text-black font-black uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2 group"
+          className="w-full py-5 rounded-2xl bg-white text-black font-medium  tracking-tight text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-sm flex items-center justify-center gap-2 group"
         >
-          <Zap className="w-4 h-4 group-hover:text-emerald-500 transition-colors" />
+          <Zap className="w-4 h-4 group-hover:text-white transition-colors" />
           Start Technical Assessment
           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
         </button>

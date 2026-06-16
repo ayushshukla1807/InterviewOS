@@ -619,7 +619,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         <p className="text-gray-400 max-w-md mb-8">The simulation session you are trying to access is invalid or has expired. Please launch a new simulation from your dashboard.</p>
         <button
           onClick={() => router.push('/candidate')}
-          className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-semibold transition-colors"
+          className="px-6 py-3 bg-zinc-900/50 hover:bg-white/10 border border-zinc-800 rounded-xl font-semibold transition-colors"
         >
           Return to Dashboard
         </button>
@@ -649,7 +649,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         {/* Header */}
         <div className="border-b px-8 py-4 flex items-center justify-between" style={{ borderColor: t.border, backgroundColor: t.surface }}>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-sky-600 flex items-center justify-center text-xs font-black">OS</div>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-sky-600 flex items-center justify-center text-xs font-medium">OS</div>
             <div>
               <div className="text-sm font-semibold text-gray-100">HYRTE Simulation</div>
               <div className="text-xs text-gray-500">{blueprint.role} · {blueprint.company}</div>
@@ -659,7 +659,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             <div className="px-3 py-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20 text-xs font-bold text-violet-300">
               Direct Skill Validation · 15% of Score
             </div>
-            <div className={`font-mono text-lg px-3 py-1 rounded-lg border ${preSkillTimeLeft < 60 ? 'text-red-400 border-red-500/30 bg-red-500/10 animate-pulse' : 'text-gray-300 border-white/10 bg-white/5'}`}>
+            <div className={`font-mono text-lg px-3 py-1 rounded-lg border ${preSkillTimeLeft < 60 ? 'text-red-400 border-red-500/30 bg-red-500/10 ' : 'text-gray-300 border-zinc-800 bg-zinc-900/50'}`}>
               {formatTime(preSkillTimeLeft)}
             </div>
           </div>
@@ -675,7 +675,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   <Brain className="w-5 h-5 text-violet-400" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-violet-400 mb-1">Before You Enter the Workplace</div>
+                  <div className="text-xs font-bold  tracking-tight text-violet-400 mb-1">Before You Enter the Workplace</div>
                   <div className="text-base font-semibold text-gray-100 mb-1">Business Objective</div>
                   <div className="text-sm text-gray-300 leading-relaxed">{blueprint.businessObjective}</div>
                   <div className="mt-3 text-xs text-gray-500">Answer {questions.length} question{questions.length > 1 ? 's' : ''} to validate your baseline competency. This scores 15% of your total HYRTE score. Take your time — you have 5 minutes.</div>
@@ -687,11 +687,11 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {questions.map((q, qi) => (
               <div key={q.id} className="glass-card hud-border p-6 space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-xs font-black text-sky-400 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-xs font-medium text-sky-400 shrink-0">
                     {qi + 1}
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-sky-400 mb-2">
+                    <div className="text-xs font-semibold  tracking-tight text-sky-400 mb-2">
                       {q.type === 'priority_decision' ? '⚡ Priority Decision' :
                        q.type === 'data_analysis' ? '📊 Data Analysis' :
                        q.type === 'scenario_judgment' ? '🎯 Scenario Judgment' : '💬 Open Ended'}
@@ -703,12 +703,12 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                 {/* Context / Data Table */}
                 {q.context && (
                   <div className="ml-10 bg-black/40 border border-[var(--border-color)] rounded-xl p-4">
-                    <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Context / Data</div>
+                    <div className="text-xs font-bold text-gray-500  tracking-tight mb-2">Context / Data</div>
                     {q.context.includes('|') ? (
                       <div className="overflow-x-auto">
                         <table className="w-full text-left text-xs text-gray-300">
                           <thead>
-                            <tr className="border-b border-white/10">
+                            <tr className="border-b border-zinc-800">
                               {q.context.split('\n')[0]?.split('|').map((h, i) => (
                                 <th key={i} className="pb-2 pr-4 font-semibold text-gray-400">{h.trim()}</th>
                               ))}
@@ -716,7 +716,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                           </thead>
                           <tbody>
                             {q.context.split('\n').slice(1).filter(r => r.trim()).map((row, rIdx) => (
-                              <tr key={rIdx} className="border-b border-white/5 last:border-0">
+                              <tr key={rIdx} className="border-b border-zinc-800/50 last:border-0">
                                 {row.split('|').map((cell, cIdx) => (
                                   <td key={cIdx} className="py-2 pr-4 text-gray-300">{cell.trim()}</td>
                                 ))}
@@ -812,9 +812,9 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
       {chaosActive && (
         <div className="relative z-50 px-6 py-2.5 flex items-center gap-3 border-b"
           style={{ background: 'linear-gradient(90deg, rgba(239,68,68,0.15), rgba(251,146,60,0.12))', borderColor: 'rgba(239,68,68,0.3)' }}>
-          <div className="flex items-center gap-2 animate-pulse">
+          <div className="flex items-center gap-2 ">
             <Zap className="w-4 h-4 text-red-400" />
-            <span className="text-xs font-black uppercase tracking-widest text-red-400">Chaos Wave Active</span>
+            <span className="text-xs font-medium  tracking-tight text-red-400">Chaos Wave Active</span>
           </div>
           <span className="text-xs text-orange-300">Multiple stakeholders demanding attention simultaneously. Prioritize by business impact.</span>
           {lowTrustStakeholders.length > 0 && (
@@ -828,7 +828,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         <div className="relative z-50 px-6 py-2.5 flex items-center gap-3 border-b"
           style={{ background: 'linear-gradient(90deg, rgba(245,158,11,0.12), rgba(251,191,36,0.08))', borderColor: 'rgba(245,158,11,0.3)' }}>
           <RotateCcw className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: '3s' }} />
-          <span className="text-xs font-black uppercase tracking-widest text-amber-400">Recovery Phase</span>
+          <span className="text-xs font-medium  tracking-tight text-amber-400">Recovery Phase</span>
           <span className="text-xs text-amber-300">Things went wrong. How you recover is being evaluated — this is unique to HYRTE.</span>
           <span className="ml-auto text-xs text-amber-400 font-bold">Recovery quality: 50% Workplace Intelligence score</span>
         </div>
@@ -842,7 +842,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         {/* Left: Logo + Company + Act Progress */}
         <div className="flex items-center gap-5">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black text-white shrink-0"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium text-white shrink-0"
             style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})` }}
           >OS</div>
           <div>
@@ -881,16 +881,16 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
           <div className="hidden md:flex flex-col items-end gap-1 px-3 py-1.5 rounded-lg border bg-black/20"
                style={{ borderColor: t.border }}>
             <div className="flex items-center gap-2">
-              <Activity className={`w-3.5 h-3.5 ${stressLevel > 75 ? 'text-red-500 animate-pulse' : stressLevel > 40 ? 'text-amber-500' : 'text-emerald-500'}`} />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">Stress Level</span>
+              <Activity className={`w-3.5 h-3.5 ${stressLevel > 75 ? 'text-red-500 ' : stressLevel > 40 ? 'text-amber-500' : 'text-white'}`} />
+              <span className="text-[10px] font-bold  tracking-tight text-white/50">Stress Level</span>
             </div>
             <div className="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div className={`h-full transition-all duration-1000 ${stressLevel > 75 ? 'bg-red-500' : stressLevel > 40 ? 'bg-amber-500' : 'bg-emerald-500'}`} style={{ width: `${stressLevel}%` }} />
+              <div className={`h-full transition-all duration-1000 ${stressLevel > 75 ? 'bg-red-500' : stressLevel > 40 ? 'bg-amber-500' : 'bg-white'}`} style={{ width: `${stressLevel}%` }} />
             </div>
           </div>
 
           {tabSwitches > 0 && (
-            <div className="px-2.5 py-1.5 text-red-400 rounded-lg text-xs font-bold border border-red-500/20 bg-red-500/10 animate-pulse flex items-center gap-1">
+            <div className="px-2.5 py-1.5 text-red-400 rounded-lg text-xs font-bold border border-red-500/20 bg-red-500/10  flex items-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5" /> {tabSwitches}
             </div>
           )}
@@ -912,13 +912,13 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
           <div className={`px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
             phase === 'chaos' ? 'text-red-400 border-red-500/25 bg-red-500/10' :
             phase === 'recovery' ? 'text-amber-400 border-amber-500/25 bg-amber-500/10' :
-            'text-emerald-400 border-emerald-500/25 bg-emerald-500/10'
+            'text-zinc-100 border-emerald-500/25 bg-zinc-800/50'
           }`}>
             {phase === 'chaos' ? '⚡ Chaos' : phase === 'recovery' ? '↩ Recovery' : '● Live'}
           </div>
 
           <div
-            className={`text-lg font-mono px-3 py-1.5 rounded-lg border ${timeLeft < 300 ? 'animate-pulse' : ''}`}
+            className={`text-lg font-mono px-3 py-1.5 rounded-lg border ${timeLeft < 300 ? '' : ''}`}
             style={{
               backgroundColor: timeLeft < 300 ? 'rgba(239,68,68,0.1)' : t.surfaceAlt,
               color: timeLeft < 300 ? '#f87171' : t.textSecondary,
@@ -941,7 +941,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
           <button
             onClick={handleSubmitTest}
-            className="px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider text-white transition-all hover:opacity-90"
+            className="px-4 py-1.5 rounded-lg text-xs font-medium  tracking-tight text-white transition-all hover:opacity-90"
             style={{ backgroundColor: t.accent }}
           >
             Submit
@@ -967,7 +967,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               style={activeTab === tab.key ? { backgroundColor: t.accentBg, color: t.accentText, border: `1px solid ${t.accentBorder}` } : { color: t.textMuted, border: '1px solid transparent' }}>
               {tab.icon}
               {tab.count > 0 && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-pulse">{tab.count}</div>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-medium rounded-full flex items-center justify-center ">{tab.count}</div>
               )}
             </button>
           ))}
@@ -997,7 +997,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       <p className="text-sm leading-relaxed" style={{ color: t.textMuted }}>When two projects demand the same engineering resources, priority is given to the project with immediate revenue impact (Tier 1) over infrastructure improvements (Tier 2), unless the infrastructure risk exceeds an estimated 99.9% uptime failure.</p>
                   </div>
                   <div className="p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-                      <h3 className="text-lg font-bold mb-2 flex items-center gap-2" style={{ color: t.textPrimary }}><Users className="w-4 h-4 text-emerald-400" /> Culture Guide: Communication</h3>
+                      <h3 className="text-lg font-bold mb-2 flex items-center gap-2" style={{ color: t.textPrimary }}><Users className="w-4 h-4 text-zinc-100" /> Culture Guide: Communication</h3>
                       <p className="text-sm leading-relaxed" style={{ color: t.textMuted }}>We value radical candor. However, public channels are for alignment, not debate. Take disagreements to DMs or synchronous meetings. If you make a mistake, "Retract & Apologize" early rather than attempting to quietly fix it.</p>
                   </div>
                 </div>
@@ -1009,7 +1009,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         <div className="w-[320px] border-r flex flex-col shrink-0 overflow-hidden"
           style={{ backgroundColor: t.surface, borderColor: t.border }}>
           <div className="px-4 py-2.5 border-b flex justify-between items-center" style={{ borderColor: t.border }}>
-            <h2 className="text-xs font-black uppercase tracking-widest capitalize" style={{ color: t.textPrimary }}>{activeTab}</h2>
+            <h2 className="text-xs font-medium  tracking-tight capitalize" style={{ color: t.textPrimary }}>{activeTab}</h2>
             <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: t.surfaceAlt, color: t.textMuted }}>{activeEvents.length}</span>
           </div>
           <div className="flex-1 overflow-y-auto">
@@ -1027,7 +1027,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   className="w-full text-left p-3.5 border-b flex gap-3 items-start transition-all"
                   style={{ borderColor: t.border, backgroundColor: isSelected ? t.surfaceAlt : 'transparent' }}>
                   {sh ? (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white shrink-0 mt-0.5"
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium text-white shrink-0 mt-0.5"
                       style={{ backgroundColor: sh.avatarColor }}>{sh.avatar}</div>
                   ) : (
                     <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
@@ -1036,14 +1036,14 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-0.5">
                       <span className="font-semibold text-xs truncate" style={{ color: !event.isRead ? t.textPrimary : t.textSecondary }}>{sh?.name || 'System'}</span>
-                      {event.priority === 'CRITICAL' && <span className="text-[9px] px-1.5 py-0.5 rounded font-black shrink-0 bg-red-500/20 text-red-400 animate-pulse">URGENT</span>}
+                      {event.priority === 'CRITICAL' && <span className="text-[9px] px-1.5 py-0.5 rounded font-medium shrink-0 bg-red-500/20 text-red-400 ">URGENT</span>}
                       {event.priority === 'HIGH' && !event.isAnswered && <span className="text-[9px] px-1.5 py-0.5 rounded font-bold shrink-0 bg-orange-500/20 text-orange-400">HIGH</span>}
                     </div>
                     <div className="text-[10px] mb-1 truncate" style={{ color: t.textMuted }}>{event.subject || event.channel || 'DM'}</div>
                     <p className="text-xs line-clamp-2" style={{ color: t.textMuted }}>{event.message}</p>
                     {event.isAnswered && (
-                      <div className="mt-1.5 text-[9px] text-emerald-400 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Responded
+                      <div className="mt-1.5 text-[9px] text-zinc-100 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-200" /> Responded
                       </div>
                     )}
                   </div>
@@ -1069,7 +1069,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   <div className="flex items-center gap-4">
                     {runtime.stakeholderStates[selectedEvent.fromStakeholderId] && (
                       <div
-                        className="w-11 h-11 rounded-full flex items-center justify-center text-white font-black text-base shrink-0"
+                        className="w-11 h-11 rounded-full flex items-center justify-center text-white font-medium text-base shrink-0"
                         style={{ backgroundColor: runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.avatarColor }}
                       >
                         {runtime.stakeholderStates[selectedEvent.fromStakeholderId]?.avatar}
@@ -1170,7 +1170,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                 )}
 
                 {selectedEvent.isAnswered && (
-                  <div className="p-3 rounded-xl border flex items-center gap-2 text-xs text-emerald-400 shrink-0"
+                  <div className="p-3 rounded-xl border flex items-center gap-2 text-xs text-zinc-100 shrink-0"
                     style={{ borderColor: 'rgba(52,211,153,0.2)', backgroundColor: 'rgba(52,211,153,0.06)' }}>
                     <Check className="w-3.5 h-3.5" /> Response sent
                   </div>
@@ -1209,16 +1209,16 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
           {/* Panel Header */}
           <div className="px-4 py-3 border-b shrink-0" style={{ backgroundColor: t.surface, borderColor: t.border }}>
             <div className="flex items-center gap-2 mb-0.5">
-              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: t.accent }} />
-              <p className="text-[9px] font-black uppercase tracking-[0.2em]" style={{ color: t.accent }}>Live Monitor</p>
+              <div className="w-1.5 h-1.5 rounded-full " style={{ backgroundColor: t.accent }} />
+              <p className="text-[9px] font-medium  tracking-[0.2em]" style={{ color: t.accent }}>Live Monitor</p>
             </div>
-            <p className="text-[8px] uppercase tracking-widest" style={{ color: t.textMuted }}>Behavioral analysis · hidden from candidate</p>
+            <p className="text-[8px]  tracking-tight" style={{ color: t.textMuted }}>Behavioral analysis · hidden from candidate</p>
           </div>
 
           <div className="flex-1 overflow-y-auto p-3 space-y-3">
             {/* Session Vitals */}
             <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Session Vitals</p>
+              <p className="text-[8px] font-medium  tracking-tight mb-2" style={{ color: t.textMuted }}>Session Vitals</p>
               <div className="grid grid-cols-2 gap-1.5">
                 {[
                   { val: `${runtime.currentAct}/3`, label: 'Act', color: t.accent },
@@ -1229,8 +1229,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   { val: runtime.assistantUsageCount, label: 'Hints Used', color: '#a78bfa' },
                 ].map(v => (
                   <div key={v.label} className="rounded-lg p-2 text-center border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                    <p className="text-base font-black" style={{ color: v.color }}>{v.val}</p>
-                    <p className="text-[7px] uppercase tracking-wider mt-0.5" style={{ color: t.textMuted }}>{v.label}</p>
+                    <p className="text-base font-medium" style={{ color: v.color }}>{v.val}</p>
+                    <p className="text-[7px]  tracking-tight mt-0.5" style={{ color: t.textMuted }}>{v.label}</p>
                   </div>
                 ))}
               </div>
@@ -1238,7 +1238,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
             {/* Stakeholder Monitor */}
             <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Stakeholder Trust</p>
+              <p className="text-[8px] font-medium  tracking-tight mb-2" style={{ color: t.textMuted }}>Stakeholder Trust</p>
               {Object.values(runtime.stakeholderStates).map((s: StakeholderState) => {
                 const isCrit = s.frustration >= 70 || s.trust <= 30;
                 const isWarn = s.frustration >= 40 || s.trust <= 60;
@@ -1247,7 +1247,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     style={{ borderColor: isCrit ? 'rgba(239,68,68,0.3)' : isWarn ? 'rgba(245,158,11,0.2)' : t.border, backgroundColor: isCrit ? 'rgba(239,68,68,0.05)' : 'transparent' }}>
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5">
-                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-black text-white shrink-0"
+                        <div className="w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-medium text-white shrink-0"
                           style={{ backgroundColor: s.avatarColor }}>{s.avatar}</div>
                         <span className="text-[9px] font-semibold truncate max-w-[70px]" style={{ color: t.textPrimary }}>{s.name.split(' ')[0]}</span>
                       </div>
@@ -1262,7 +1262,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     </div>
                     <div className="flex justify-between">
                       <span className="text-[7px]" style={{ color: t.textMuted }}>Trust</span>
-                      {isCrit && <span className="text-[7px] text-red-400 font-bold animate-pulse">⚠ Critical</span>}
+                      {isCrit && <span className="text-[7px] text-red-400 font-bold ">⚠ Critical</span>}
                     </div>
                   </div>
                 );
@@ -1272,10 +1272,10 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {/* HYRTE Score Preview (if computed) */}
             {showScorePanel && hyrteScore && (
               <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-                <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>HYRTE Score Preview</p>
+                <p className="text-[8px] font-medium  tracking-tight mb-2" style={{ color: t.textMuted }}>HYRTE Score Preview</p>
                 <div className="text-center mb-3">
-                  <div className="text-3xl font-black" style={{ color: t.accent }}>{hyrteScore.total}</div>
-                  <div className="text-[8px] uppercase tracking-wider" style={{ color: t.textMuted }}>/ 100</div>
+                  <div className="text-3xl font-medium" style={{ color: t.accent }}>{hyrteScore.total}</div>
+                  <div className="text-[8px]  tracking-tight" style={{ color: t.textMuted }}>/ 100</div>
                 </div>
                 {/* 15/35/50 breakdown */}
                 {[
@@ -1299,7 +1299,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {/* Chaos Wave Log */}
             {runtime.consequenceWaveLog && runtime.consequenceWaveLog.length > 0 && (
               <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-                <p className="text-[8px] font-black uppercase tracking-widest mb-2 text-amber-400">Consequence Waves Fired</p>
+                <p className="text-[8px] font-medium  tracking-tight mb-2 text-amber-400">Consequence Waves Fired</p>
                 {runtime.consequenceWaveLog.map((w, i) => (
                   <div key={i} className="flex items-start gap-1.5 mb-1.5 last:mb-0">
                     <Zap className="w-2.5 h-2.5 text-amber-400 shrink-0 mt-0.5" />
@@ -1311,12 +1311,12 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
             {/* Action Log */}
             <div className="rounded-xl p-3 border" style={{ backgroundColor: t.surface, borderColor: t.border }}>
-              <p className="text-[8px] font-black uppercase tracking-widest mb-2" style={{ color: t.textMuted }}>Action Log</p>
+              <p className="text-[8px] font-medium  tracking-tight mb-2" style={{ color: t.textMuted }}>Action Log</p>
               {runtime.candidateActions.slice(-5).reverse().map((a, i) => (
                 <div key={i} className="flex items-start gap-2 mb-1.5 last:mb-0">
                   <div className={`w-1.5 h-1.5 rounded-full mt-1 shrink-0 ${
                     a.type === 'ignored' ? 'bg-red-400' :
-                    a.type === 'responded' ? 'bg-emerald-400' :
+                    a.type === 'responded' ? 'bg-zinc-200' :
                     a.type === 'asked_clarification' ? 'bg-amber-400' :
                     a.type === 'escalated' ? 'bg-orange-400' : 'bg-gray-400'
                   }`} />
@@ -1353,7 +1353,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         >
           <Sparkles className="w-5 h-5" />
           {runtime.assistantUsageCount > 0 && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 text-black text-[9px] font-black rounded-full flex items-center justify-center">
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 text-black text-[9px] font-medium rounded-full flex items-center justify-center">
               {runtime.assistantUsageCount}
             </div>
           )}
@@ -1369,7 +1369,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               style={{ borderColor: t.border, backgroundColor: t.accentBg }}>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4" style={{ color: t.accent }} />
-                <span className="text-xs font-black" style={{ color: t.accentText }}>AURA — Senior Colleague</span>
+                <span className="text-xs font-medium" style={{ color: t.accentText }}>AURA — Senior Colleague</span>
               </div>
               <span className="text-[9px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
                 Hint {runtime.assistantUsageCount + 1}
@@ -1421,7 +1421,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             <div className="px-6 py-5 border-b" style={{ borderColor: t.border, background: `linear-gradient(135deg, ${t.accentBg}, transparent)` }}>
               <div className="flex items-center gap-3 mb-1">
                 <Award className="w-6 h-6" style={{ color: t.accent }} />
-                <h2 className="text-xl font-black" style={{ color: t.textPrimary }}>HYRTE Assessment Complete</h2>
+                <h2 className="text-xl font-medium" style={{ color: t.textPrimary }}>HYRTE Assessment Complete</h2>
               </div>
               <p className="text-sm" style={{ color: t.textMuted }}>
                 {blueprint.role} · {blueprint.company} · {new Date().toLocaleDateString()}
@@ -1439,7 +1439,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                 <>
                   {/* Total Score */}
                   <div className="text-center py-6 rounded-xl border" style={{ borderColor: t.accentBorder, backgroundColor: t.accentBg }}>
-                    <div className="text-6xl font-black mb-1" style={{ color: t.accent }}>{hyrteScore.total}</div>
+                    <div className="text-6xl font-medium mb-1" style={{ color: t.accent }}>{hyrteScore.total}</div>
                     <div className="text-sm font-semibold" style={{ color: t.accentText }}>HYRTE Score / 100</div>
                   </div>
 
@@ -1452,7 +1452,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     ].map(row => (
                       <div key={row.label} className="rounded-xl p-4 border text-center" style={{ borderColor: t.border, backgroundColor: t.bg }}>
                         <div className="text-xs font-bold mb-1" style={{ color: row.color }}>{row.pct}</div>
-                        <div className="text-3xl font-black mb-1" style={{ color: row.color }}>{row.score}</div>
+                        <div className="text-3xl font-medium mb-1" style={{ color: row.color }}>{row.score}</div>
                         <div className="text-xs font-semibold mb-0.5" style={{ color: t.textPrimary }}>{row.label}</div>
                         <div className="text-[10px]" style={{ color: t.textMuted }}>{row.desc}</div>
                       </div>
@@ -1461,7 +1461,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
 
                   {/* Workplace Intelligence Dimensions */}
                   <div className="rounded-xl p-4 border" style={{ borderColor: t.border, backgroundColor: t.bg }}>
-                    <h3 className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: t.textMuted }}>Workplace Intelligence Breakdown (50%)</h3>
+                    <h3 className="text-xs font-medium  tracking-tight mb-3" style={{ color: t.textMuted }}>Workplace Intelligence Breakdown (50%)</h3>
                     <div className="grid grid-cols-2 gap-x-6 gap-y-2">
                       {Object.entries(hyrteScore.workplaceIntelligence.dimensions).map(([key, val]) => (
                         <div key={key}>
@@ -1485,7 +1485,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                       <div className="text-xs font-bold mb-0.5" style={{ color: t.textPrimary }}>Recovery Score</div>
                       <div className="text-xs" style={{ color: t.textMuted }}>How well you recovered from mistakes — unique to HYRTE</div>
                     </div>
-                    <div className="text-2xl font-black text-amber-400">{hyrteScore.recoveryScore}</div>
+                    <div className="text-2xl font-medium text-amber-400">{hyrteScore.recoveryScore}</div>
                   </div>
 
                   {/* Hiring Insight */}
@@ -1493,7 +1493,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     <div className="p-4 rounded-xl border" style={{ borderColor: t.accentBorder, backgroundColor: t.accentBg }}>
                       <div className="flex items-center gap-2 mb-2">
                         <Brain className="w-4 h-4" style={{ color: t.accentText }} />
-                        <span className="text-xs font-black uppercase tracking-wider" style={{ color: t.accentText }}>Hiring Insight</span>
+                        <span className="text-xs font-medium  tracking-tight" style={{ color: t.accentText }}>Hiring Insight</span>
                       </div>
                       <p className="text-sm leading-relaxed" style={{ color: t.textSecondary }}>{hyrteScore.hiringInsight}</p>
                     </div>
@@ -1502,7 +1502,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   {/* Observations */}
                   {hyrteScore.workplaceIntelligence.observations?.length > 0 && (
                     <div className="p-4 rounded-xl border" style={{ borderColor: t.border, backgroundColor: t.bg }}>
-                      <div className="text-xs font-black uppercase tracking-widest mb-3" style={{ color: t.textMuted }}>Key Observations</div>
+                      <div className="text-xs font-medium  tracking-tight mb-3" style={{ color: t.textMuted }}>Key Observations</div>
                       <ul className="space-y-1.5">
                         {hyrteScore.workplaceIntelligence.observations.map((obs, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs" style={{ color: t.textSecondary }}>
@@ -1530,8 +1530,8 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                   { label: 'Hints', val: runtime.assistantUsageCount },
                 ].map(s => (
                   <div key={s.label} className="rounded-xl p-3 border text-center" style={{ borderColor: t.border, backgroundColor: t.bg }}>
-                    <div className="text-xl font-black" style={{ color: t.accent }}>{s.val}</div>
-                    <div className="text-[9px] uppercase tracking-wider mt-0.5" style={{ color: t.textMuted }}>{s.label}</div>
+                    <div className="text-xl font-medium" style={{ color: t.accent }}>{s.val}</div>
+                    <div className="text-[9px]  tracking-tight mt-0.5" style={{ color: t.textMuted }}>{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -1539,7 +1539,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
               {/* CTA */}
               <button
                 onClick={handleProceedToInterview}
-                className="w-full py-4 rounded-xl font-black text-white text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90"
+                className="w-full py-4 rounded-xl font-medium text-white text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90"
                 style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})` }}
               >
                 <ChevronRight className="w-4 h-4" />
@@ -1561,30 +1561,30 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             <div className="px-6 py-4 border-b flex justify-between items-center" style={{ borderColor: t.border, background: `linear-gradient(135deg, ${t.accentBg}, transparent)` }}>
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5" style={{ color: t.accent }} />
-                <h2 className="text-lg font-black uppercase tracking-wider" style={{ color: t.textPrimary }}>
+                <h2 className="text-lg font-medium  tracking-tight" style={{ color: t.textPrimary }}>
                   {activeChallenge.type ? activeChallenge.type.replace('_', ' ') : 'Critical Decision Required'}
                 </h2>
               </div>
-              <span className="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
+              <span className="text-[10px] font-bold px-3 py-1 rounded-full  tracking-tight" style={{ backgroundColor: t.accentBorder, color: t.accentText }}>
                 Embedded Challenge · 35% Score
               </span>
             </div>
             
             <div className="p-6 overflow-y-auto flex-1 space-y-6">
               <div>
-                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Situation</h3>
+                <h3 className="text-sm font-bold mb-2  tracking-tight" style={{ color: t.textMuted }}>Situation</h3>
                 <p className="text-base leading-relaxed" style={{ color: t.textPrimary }}>{activeChallenge.prompt}</p>
               </div>
 
               {activeChallenge.context && (
                 <div className="rounded-xl p-4 border" style={{ backgroundColor: t.bg, borderColor: t.border }}>
-                  <h3 className="text-xs font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Context / Data</h3>
+                  <h3 className="text-xs font-bold mb-2  tracking-tight" style={{ color: t.textMuted }}>Context / Data</h3>
                   <pre className="text-xs leading-relaxed whitespace-pre-wrap font-mono" style={{ color: t.textSecondary }}>{activeChallenge.context}</pre>
                 </div>
               )}
 
               <div>
-                <h3 className="text-sm font-bold mb-2 uppercase tracking-wider" style={{ color: t.textMuted }}>Your Response</h3>
+                <h3 className="text-sm font-bold mb-2  tracking-tight" style={{ color: t.textMuted }}>Your Response</h3>
                 <textarea
                   value={challengeResponseText}
                   onChange={e => setChallengeResponseText(e.target.value)}
@@ -1633,12 +1633,12 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
          drag
          dragMomentum={false}
          dragConstraints={{ left: -2000, right: 20, top: -2000, bottom: 20 }}
-         className="fixed bottom-6 right-6 z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-emerald-500/50 transition-colors"
+         className="fixed bottom-6 right-6 z-[150] w-[280px] rounded-2xl overflow-hidden hud-border shadow-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col group cursor-grab active:cursor-grabbing hover:border-zinc-600 transition-colors"
       >
          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/80 to-transparent z-30 flex items-start justify-center pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <GripHorizontal className="w-5 h-5 text-white/70 drop-shadow-md" />
          </div>
-         <div className="relative w-full aspect-[4/3] bg-slate-900 pointer-events-none">
+         <div className="relative w-full aspect-[4/3] bg-zinc-950 pointer-events-none">
             <div className="crt-scanline" />
             <video 
                ref={videoRef} 
@@ -1648,19 +1648,19 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                className={`w-full h-full object-cover scale-x-[-1] ${cameraStream ? 'block' : 'hidden'}`} 
             />
             {!cameraStream && (
-               <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-slate-900/80">
-                  <User className="text-slate-600 w-10 h-10 animate-pulse mb-2" />
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Initializing Camera...</p>
+               <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-zinc-950/80">
+                  <User className="text-zinc-600 w-10 h-10  mb-2" />
+                  <p className="text-[9px] font-medium text-zinc-400  tracking-tight">Initializing Camera...</p>
                </div>
             )}
             <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.6)] z-10" />
-            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-[var(--theme-bg)]/80/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
-               <div className="w-1.5 h-1.5 rounded-full animate-pulse bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-               <span className="text-[7px] font-black tracking-widest text-slate-200 uppercase drop-shadow-sm">
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-zinc-900/50/50 backdrop-blur-md rounded-full border-none z-20 shadow-lg">
+               <div className="w-1.5 h-1.5 rounded-full  bg-white shadow-sm" />
+               <span className="text-[7px] font-medium tracking-tight text-zinc-300  drop-shadow-sm">
                   Secure Pilot
                </span>
             </div>
-            <div className="absolute bottom-3 left-3 text-[7px] font-black text-white/90 uppercase tracking-widest bg-[var(--theme-bg)]/80/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
+            <div className="absolute bottom-3 left-3 text-[7px] font-medium text-white/90  tracking-tight bg-zinc-900/50/50 backdrop-blur-md px-2 py-1 rounded-md border-none z-20 shadow-lg">
                Feed: Candidate Camera
             </div>
          </div>

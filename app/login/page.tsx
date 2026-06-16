@@ -419,8 +419,8 @@ function LoginInner() {
 
               {resetSuccess ? (
                 <div className="ios-success-message">
-                  <p className="text-emerald-400 font-medium">{resetSuccess}</p>
-                  <p className="text-slate-400 text-[11px] mt-2">Redirecting to login page...</p>
+                  <p className="text-zinc-100 font-medium">{resetSuccess}</p>
+                  <p className="text-zinc-400 text-[11px] mt-2">Redirecting to login page...</p>
                 </div>
               ) : (
                 <form onSubmit={handleResetPasswordSubmit} className="ios-form">
@@ -464,7 +464,7 @@ function LoginInner() {
                   
                   <button
                     type="button"
-                    className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    className="text-xs text-zinc-400 hover:text-white mt-2 block text-center"
                     onClick={() => router.push('/login')}
                   >
                     Back to Login
@@ -524,7 +524,7 @@ function LoginInner() {
                   type="submit"
                   disabled={loginStatus !== 'idle'}
                   className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
-                    loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
+                    loginStatus === 'success' ? 'bg-white hover:bg-zinc-200 !text-white border-emerald-400' : ''
                   }`}
                 >
                   <AnimatePresence mode="wait">
@@ -539,7 +539,7 @@ function LoginInner() {
                       </motion.div>
                     )}
                     {loginStatus === 'success' && (
-                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
+                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-tight">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         ACCESS GRANTED
                       </motion.div>
@@ -549,7 +549,7 @@ function LoginInner() {
 
                 <button
                   type="button"
-                  className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                  className="text-xs text-zinc-400 hover:text-white mt-2 block text-center"
                   onClick={() => {
                     setMfaRequired(false);
                     setMfaCode('');
@@ -593,20 +593,20 @@ function LoginInner() {
               {forgotSuccess ? (
                 <div className="space-y-4">
                   <div className="ios-success-message">
-                    <p className="text-emerald-400 font-medium">{forgotSuccess}</p>
+                    <p className="text-zinc-100 font-medium">{forgotSuccess}</p>
                   </div>
                   {devResetLink && (
-                    <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-4 space-y-2">
-                      <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider">🛠️ Dev Sandbox Bypass Link</p>
-                      <p className="text-[11px] text-slate-400 leading-relaxed">No SMTP credentials configured. Click below to reset directly:</p>
-                      <Link href={devResetLink} className="block text-center text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 px-4 rounded-lg transition-colors">
+                    <div className="bg-emerald-950/20 border border-zinc-700 rounded-xl p-4 space-y-2">
+                      <p className="text-xs text-zinc-100 font-bold  tracking-tight">🛠️ Dev Sandbox Bypass Link</p>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">No SMTP credentials configured. Click below to reset directly:</p>
+                      <Link href={devResetLink} className="block text-center text-xs bg-white hover:bg-zinc-200 text-slate-950 font-bold py-2 px-4 rounded-lg transition-colors">
                         Reset Password Now
                       </Link>
                     </div>
                   )}
                   <button
                     type="button"
-                    className="w-full text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    className="w-full text-xs text-zinc-400 hover:text-white mt-2 block text-center"
                     onClick={() => {
                       setShowForgotModal(false);
                       setForgotSuccess('');
@@ -643,7 +643,7 @@ function LoginInner() {
 
                   <button
                     type="button"
-                    className="text-xs text-slate-400 hover:text-white mt-2 block text-center"
+                    className="text-xs text-zinc-400 hover:text-white mt-2 block text-center"
                     onClick={() => setShowForgotModal(false)}
                   >
                     Cancel
@@ -708,7 +708,7 @@ function LoginInner() {
                     <button
                       type="button"
                       onClick={() => setShowForgotModal(true)}
-                      className="text-xs text-emerald-500 hover:text-emerald-400 font-semibold transition-colors"
+                      className="text-xs text-white hover:text-zinc-100 font-semibold transition-colors"
                     >
                       Forgot password?
                     </button>
@@ -741,7 +741,7 @@ function LoginInner() {
                   type="submit"
                   disabled={loginStatus !== 'idle'}
                   className={`ios-submit-btn overflow-hidden relative transition-all duration-300 ${
-                    loginStatus === 'success' ? 'bg-emerald-500 hover:bg-emerald-400 !text-white border-emerald-400' : ''
+                    loginStatus === 'success' ? 'bg-white hover:bg-zinc-200 !text-white border-emerald-400' : ''
                   }`}
                 >
                   <AnimatePresence mode="wait">
@@ -756,7 +756,7 @@ function LoginInner() {
                       </motion.div>
                     )}
                     {loginStatus === 'success' && (
-                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-widest">
+                      <motion.div key="success" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2 font-bold tracking-tight">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         ACCESS GRANTED
                       </motion.div>
@@ -820,7 +820,7 @@ function LoginInner() {
                 >
                   <div className="ios-demo-icon ios-demo-icon-recruiter">R</div>
                   <div>
-                    <div className="ios-demo-role text-slate-200 group-hover:text-white transition-colors">Recruiter Demo</div>
+                    <div className="ios-demo-role text-zinc-300 group-hover:text-white transition-colors">Recruiter Demo</div>
                     <div className="ios-demo-hint">Proctor dashboard</div>
                   </div>
                 </button>

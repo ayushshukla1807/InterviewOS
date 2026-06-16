@@ -222,25 +222,25 @@ export default function SecuritySettingsPage() {
       <div className="max-w-[1200px] mx-auto p-6 md:p-12 space-y-10 relative z-10">
         
         {/* Navigation back */}
-        <div className="flex items-center justify-between pb-6 border-b border-white/10">
+        <div className="flex items-center justify-between pb-6 border-b border-zinc-800">
           <Link 
             href="/founder"
-            className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-xs font-medium  tracking-tight text-zinc-400 hover:text-white transition-colors group"
           >
             <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
             System Control
           </Link>
           
           <div className="flex items-center gap-2">
-            <Shield size={14} className="text-emerald-400" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400">Security Suite v2.0</span>
+            <Shield size={14} className="text-zinc-100" />
+            <span className="text-[10px] font-medium  tracking-tight text-zinc-100">Security Suite v2.0</span>
           </div>
         </div>
 
         {/* Intro */}
         <div>
           <h1 className="text-3xl font-extrabold text-white tracking-tight">Security Configurations</h1>
-          <p className="text-slate-400 text-xs mt-1 uppercase tracking-widest">Configure credential protection, active logins and Multi-Factor security.</p>
+          <p className="text-zinc-400 text-xs mt-1  tracking-tight">Configure credential protection, active logins and Multi-Factor security.</p>
         </div>
 
         {/* Success & Error alerts */}
@@ -261,7 +261,7 @@ export default function SecuritySettingsPage() {
               initial={{ opacity: 0, y: -10 }} 
               animate={{ opacity: 1, y: 0 }} 
               exit={{ opacity: 0 }}
-              className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-start gap-3 text-emerald-400 text-sm"
+              className="p-4 bg-zinc-800/50 border border-zinc-700 rounded-2xl flex items-start gap-3 text-zinc-100 text-sm"
             >
               <Check className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div>{success}</div>
@@ -276,24 +276,24 @@ export default function SecuritySettingsPage() {
           <div className="lg:col-span-5 space-y-8">
             <div className="glass-card p-6 md:p-8 space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-                  <Smartphone className="w-5 h-5 text-emerald-400" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-800/50 flex items-center justify-center border border-zinc-700 shadow-sm">
+                  <Smartphone className="w-5 h-5 text-zinc-100" />
                 </div>
                 <div>
-                  <h2 className="text-base font-black text-white uppercase tracking-tight">Two-Factor Authentication</h2>
-                  <p className="text-xs text-slate-400">Secure authorization checks</p>
+                  <h2 className="text-base font-medium text-white  tracking-tight">Two-Factor Authentication</h2>
+                  <p className="text-xs text-zinc-400">Secure authorization checks</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-black/30 border border-white/5 rounded-xl">
+              <div className="flex items-center justify-between p-4 bg-black/30 border border-zinc-800/50 rounded-xl">
                 <div className="space-y-1">
-                  <p className="text-xs font-semibold text-slate-400">TOTP Authenticator Status</p>
-                  <p className={`text-xs font-black uppercase tracking-wider ${mfaEnabled ? 'text-emerald-400' : 'text-slate-500'}`}>
+                  <p className="text-xs font-semibold text-zinc-400">TOTP Authenticator Status</p>
+                  <p className={`text-xs font-medium  tracking-tight ${mfaEnabled ? 'text-zinc-100' : 'text-zinc-500'}`}>
                     {mfaEnabled ? '● Active Enabled' : '○ Deactivated'}
                   </p>
                 </div>
                 <div className="flex items-center">
-                  <div className={`w-3 h-3 rounded-full ${mfaEnabled ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]' : 'bg-slate-700'} animate-pulse`} />
+                  <div className={`w-3 h-3 rounded-full ${mfaEnabled ? 'bg-white shadow-sm' : 'bg-slate-700'} `} />
                 </div>
               </div>
 
@@ -302,19 +302,19 @@ export default function SecuritySettingsPage() {
                 <div className="space-y-6">
                   {!mfaSetupData ? (
                     <div className="space-y-4">
-                      <p className="text-xs text-slate-400 leading-relaxed">
+                      <p className="text-xs text-zinc-400 leading-relaxed">
                         Add an extra layer of security to your credentials. Logging in will require a 6-digit dynamic key generated by mobile authenticator apps.
                       </p>
                       <button
                         onClick={handleStartMfaSetup}
-                        className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] active:scale-[0.98]"
+                        className="w-full py-3 bg-white hover:bg-zinc-200 text-slate-950 font-bold rounded-xl text-xs  tracking-tight transition-all shadow-sm active:scale-[0.98]"
                       >
                         Enable MFA Protection
                       </button>
                     </div>
                   ) : (
                     /* Setup QR view */
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 border-t border-white/5 pt-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6 border-t border-zinc-800/50 pt-6">
                       <div className="flex justify-center bg-white p-3 rounded-xl max-w-[180px] mx-auto">
                         <img 
                           src={mfaSetupData.qrCodeUrl} 
@@ -323,18 +323,18 @@ export default function SecuritySettingsPage() {
                         />
                       </div>
                       <div className="space-y-2 text-center">
-                        <p className="text-xs font-bold text-slate-300">Scan QR Code</p>
-                        <p className="text-[10px] text-slate-500 leading-relaxed">
+                        <p className="text-xs font-bold text-zinc-400">Scan QR Code</p>
+                        <p className="text-[10px] text-zinc-500 leading-relaxed">
                           Scan the image with Google Authenticator. If you can't scan, configure using this raw Base32 key:
                         </p>
-                        <code className="block text-xs bg-slate-950 px-3 py-1.5 rounded-lg border border-white/5 font-mono text-emerald-400 select-all">
+                        <code className="block text-xs bg-slate-950 px-3 py-1.5 rounded-lg border border-zinc-800/50 font-mono text-zinc-100 select-all">
                           {mfaSetupData.secret}
                         </code>
                       </div>
 
                       <form onSubmit={handleVerifySetup} className="space-y-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Verification TOTP Code</label>
+                          <label className="text-[10px] font-medium  text-zinc-400 tracking-tight">Verification TOTP Code</label>
                           <input
                             type="text"
                             required
@@ -343,21 +343,21 @@ export default function SecuritySettingsPage() {
                             placeholder="Enter 6-digit code"
                             value={setupCode}
                             onChange={e => setSetupCode(e.target.value.replace(/\D/g, ''))}
-                            className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 text-center tracking-[0.5em] font-mono text-white text-base focus:border-emerald-500/50 outline-none"
+                            className="w-full bg-slate-950 border border-zinc-800 rounded-xl py-3 text-center tracking-[0.5em] font-mono text-white text-base focus:border-zinc-600 outline-none"
                           />
                         </div>
                         <div className="flex gap-3">
                           <button
                             type="button"
                             onClick={() => setMfaSetupData(null)}
-                            className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 rounded-xl text-xs uppercase tracking-wider transition-all"
+                            className="flex-1 py-3 bg-zinc-900/50 hover:bg-white/10 text-zinc-400 border border-zinc-800 rounded-xl text-xs  tracking-tight transition-all"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
                             disabled={setupCode.length < 6}
-                            className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50"
+                            className="flex-1 py-3 bg-white hover:bg-zinc-200 text-slate-950 font-bold rounded-xl text-xs  tracking-tight transition-all shadow-sm disabled:opacity-50"
                           >
                             Enable 2FA
                           </button>
@@ -371,22 +371,22 @@ export default function SecuritySettingsPage() {
                 <div className="space-y-4">
                   {!showDisableForm ? (
                     <div className="space-y-4">
-                      <p className="text-xs text-slate-400 leading-relaxed">
+                      <p className="text-xs text-zinc-400 leading-relaxed">
                         MFA is active, protecting authentication tokens. To remove this check, you must provide your dynamic authenticator key.
                       </p>
                       <button
                         onClick={() => setShowDisableForm(true)}
-                        className="w-full py-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl text-xs uppercase tracking-wider font-bold transition-all active:scale-[0.98]"
+                        className="w-full py-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl text-xs  tracking-tight font-bold transition-all active:scale-[0.98]"
                       >
                         Deactivate MFA Protection
                       </button>
                     </div>
                   ) : (
                     /* Disable verification form */
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 border-t border-white/5 pt-6">
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4 border-t border-zinc-800/50 pt-6">
                       <form onSubmit={handleDisableMfa} className="space-y-4">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Confirm TOTP Key</label>
+                          <label className="text-[10px] font-medium  text-zinc-400 tracking-tight">Confirm TOTP Key</label>
                           <input
                             type="text"
                             required
@@ -395,21 +395,21 @@ export default function SecuritySettingsPage() {
                             placeholder="Enter 6-digit code"
                             value={disableCode}
                             onChange={e => setDisableCode(e.target.value.replace(/\D/g, ''))}
-                            className="w-full bg-slate-950 border border-white/10 rounded-xl py-3 text-center tracking-[0.5em] font-mono text-white text-base focus:border-rose-500/30 outline-none"
+                            className="w-full bg-slate-950 border border-zinc-800 rounded-xl py-3 text-center tracking-[0.5em] font-mono text-white text-base focus:border-rose-500/30 outline-none"
                           />
                         </div>
                         <div className="flex gap-3">
                           <button
                             type="button"
                             onClick={() => setShowDisableForm(false)}
-                            className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-slate-300 border border-white/10 rounded-xl text-xs uppercase tracking-wider transition-all"
+                            className="flex-1 py-3 bg-zinc-900/50 hover:bg-white/10 text-zinc-400 border border-zinc-800 rounded-xl text-xs  tracking-tight transition-all"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
                             disabled={disableCode.length < 6}
-                            className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)] disabled:opacity-50"
+                            className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl text-xs  tracking-tight transition-all shadow-sm disabled:opacity-50"
                           >
                             Disable 2FA
                           </button>
@@ -427,19 +427,19 @@ export default function SecuritySettingsPage() {
             <div className="glass-card p-6 md:p-8 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center border border-sky-500/20 shadow-[0_0_15px_rgba(14,165,233,0.15)]">
+                  <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center border border-sky-500/20 shadow-sm">
                     <Monitor className="w-5 h-5 text-sky-400" />
                   </div>
                   <div>
-                    <h2 className="text-base font-black text-white uppercase tracking-tight">Active Devices</h2>
-                    <p className="text-xs text-slate-400">Current active authorization sessions</p>
+                    <h2 className="text-base font-medium text-white  tracking-tight">Active Devices</h2>
+                    <p className="text-xs text-zinc-400">Current active authorization sessions</p>
                   </div>
                 </div>
                 
                 <button
                   onClick={fetchSessions}
                   disabled={isLoadingSessions}
-                  className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                  className="p-2 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
                 >
                   <RefreshCw size={14} className={isLoadingSessions ? 'animate-spin' : ''} />
                 </button>
@@ -450,7 +450,7 @@ export default function SecuritySettingsPage() {
                   <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
               ) : sessions.length === 0 ? (
-                <div className="py-12 text-center text-slate-500 text-sm">
+                <div className="py-12 text-center text-zinc-500 text-sm">
                   No active session records found.
                 </div>
               ) : (
@@ -462,13 +462,13 @@ export default function SecuritySettingsPage() {
                         key={session.id}
                         className={`p-4 border rounded-xl flex items-center justify-between gap-4 transition-all ${
                           session.isCurrent 
-                            ? 'bg-emerald-950/10 border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
-                            : 'bg-black/30 border-white/5 hover:border-white/10'
+                            ? 'bg-emerald-950/10 border-zinc-700 shadow-sm' 
+                            : 'bg-black/30 border-zinc-800/50 hover:border-zinc-800'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center border ${
-                            session.isCurrent ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-white/5 border-white/5 text-slate-400'
+                            session.isCurrent ? 'bg-zinc-800/50 border-zinc-700 text-zinc-100' : 'bg-zinc-900/50 border-zinc-800/50 text-zinc-400'
                           }`}>
                             <Monitor size={18} />
                           </div>
@@ -476,12 +476,12 @@ export default function SecuritySettingsPage() {
                             <div className="flex items-center gap-2">
                               <span className="text-xs font-bold text-white">{os}</span>
                               {session.isCurrent && (
-                                <span className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                <span className="bg-zinc-800/50 border border-zinc-700 text-zinc-100 text-[9px] font-bold px-2 py-0.5 rounded-full  tracking-tight">
                                   Current Device
                                 </span>
                               )}
                             </div>
-                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[10px] text-slate-500 font-medium">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[10px] text-zinc-500 font-medium">
                               <span className="flex items-center gap-1"><Globe size={11} /> {session.ipAddress}</span>
                               <span>•</span>
                               <span>{browser}</span>

@@ -78,8 +78,8 @@ export default function InterviewPage() {
       <div className="min-h-screen bg-[var(--theme-bg)] flex items-center justify-center p-6">
         <div className="max-w-4xl w-full space-y-12">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-black text-white tracking-tighter uppercase">Select Your Evaluation Track</h1>
-            <p className="text-slate-500 text-sm font-bold uppercase tracking-widest">Logic will adapt based on your responses.</p>
+            <h1 className="text-4xl font-medium text-white tracking-tighter ">Select Your Evaluation Track</h1>
+            <p className="text-zinc-500 text-sm font-bold  tracking-tight">Logic will adapt based on your responses.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -94,17 +94,17 @@ export default function InterviewPage() {
                   <div className="absolute inset-0 bg-sky-600/20 backdrop-blur-sm flex items-center justify-center z-10">
                     <div className="flex flex-col items-center gap-4">
                       <div className="w-10 h-10 border-4 border-sky-500 border-t-white rounded-full animate-spin" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-white">Neural Parsing...</span>
+                      <span className="text-[10px] font-medium  tracking-tight text-white">Neural Parsing...</span>
                     </div>
                   </div>
                 )}
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-100 group-hover:text-sky-400 transition-all">
                   <Sparkles className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-black text-white mb-4 leading-tight">{TRACKS[key].title}</h3>
+                <h3 className="text-xl font-medium text-white mb-4 leading-tight">{TRACKS[key].title}</h3>
                 <div className="flex flex-wrap gap-2">
                   {TRACKS[key].focus.slice(0, 3).map((f, i) => (
-                    <span key={i} className="text-[9px] font-black uppercase tracking-widest text-slate-500 bg-white/5 px-2 py-1 rounded-full">{f}</span>
+                    <span key={i} className="text-[9px] font-medium  tracking-tight text-zinc-500 bg-zinc-900/50 px-2 py-1 rounded-full">{f}</span>
                   ))}
                 </div>
               </button>
@@ -118,28 +118,28 @@ export default function InterviewPage() {
   return (
     <div className="h-screen bg-[var(--theme-bg)] flex flex-col">
       {/* Header */}
-      <header className="px-10 py-6 border-b border-white/5 flex items-center justify-between backdrop-blur-md">
+      <header className="px-10 py-6 border-b border-zinc-800/50 flex items-center justify-between backdrop-blur-md">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-slate-500 hover:text-white transition-colors">
+          <Link href="/" className="text-zinc-500 hover:text-white transition-colors">
             <ChevronLeft className="w-6 h-6" />
           </Link>
           <div>
-            <h2 className="text-sm font-black text-white uppercase tracking-widest">{TRACKS[track].title}</h2>
+            <h2 className="text-sm font-medium text-white  tracking-tight">{TRACKS[track].title}</h2>
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Sync Active</span>
+              <span className="w-1.5 h-1.5 bg-white rounded-full " />
+              <span className="text-[10px] font-medium text-zinc-500  tracking-tight">Neural Sync Active</span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <Link href="/report" className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-emerald-500 transition-all">
+          <Link href="/report" className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-medium text-[10px]  tracking-tight hover:bg-white transition-all">
             End & Generate Report
           </Link>
           <div className="px-4 py-2 bg-sky-500/10 border border-sky-500/20 rounded-xl">
-            <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Depth: Senior</span>
+            <span className="text-[10px] font-medium text-sky-400  tracking-tight">Depth: Senior</span>
           </div>
-          <button className="p-2.5 bg-white/5 rounded-xl border border-white/10 text-slate-400 hover:text-white transition-all">
+          <button className="p-2.5 bg-zinc-900/50 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white transition-all">
             <LayoutDashboard className="w-5 h-5" />
           </button>
         </div>
@@ -157,10 +157,10 @@ export default function InterviewPage() {
                 key={i} 
                 className={`flex ${m.role === 'assistant' ? 'justify-start' : 'justify-end'}`}
               >
-                <div className={`max-w-2xl p-6 rounded-3xl ${m.role === 'assistant' ? 'glass-card text-slate-200' : 'bg-sky-600 text-white shadow-xl shadow-sky-600/20'}`}>
+                <div className={`max-w-2xl p-6 rounded-3xl ${m.role === 'assistant' ? 'glass-card text-zinc-300' : 'bg-sky-600 text-white shadow-xl shadow-sky-600/20'}`}>
                   <div className="flex items-center gap-3 mb-3 opacity-50">
                     {m.role === 'assistant' ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    <span className="text-[9px] font-black uppercase tracking-widest">{m.role === 'assistant' ? 'InterviewOS AI' : 'Candidate'}</span>
+                    <span className="text-[9px] font-medium  tracking-tight">{m.role === 'assistant' ? 'InterviewOS AI' : 'Candidate'}</span>
                   </div>
                   <p className="text-sm leading-relaxed font-medium">{m.content}</p>
                 </div>
@@ -175,7 +175,7 @@ export default function InterviewPage() {
                     <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                     <div className="w-1.5 h-1.5 bg-sky-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
-                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Processing</span>
+                  <span className="text-[10px] font-medium text-zinc-500  tracking-tight">Neural Processing</span>
                 </div>
               </motion.div>
             )}
@@ -188,16 +188,16 @@ export default function InterviewPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your response..."
-                className="w-full bg-slate-900 border border-white/10 rounded-[32px] px-8 py-6 pr-40 text-sm text-white focus:ring-4 focus:ring-sky-500/20 focus:border-sky-500/50 outline-none transition-all placeholder:text-slate-600"
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-[32px] px-8 py-6 pr-40 text-sm text-white focus:ring-4 focus:ring-sky-500/20 focus:border-sky-500/50 outline-none transition-all placeholder:text-zinc-600"
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                <button type="button" className="p-3 text-slate-500 hover:text-sky-400 transition-colors">
+                <button type="button" className="p-3 text-zinc-500 hover:text-sky-400 transition-colors">
                   <Mic className="w-5 h-5" />
                 </button>
                 <button 
                   type="submit"
                   disabled={!input.trim() || isThinking}
-                  className="bg-sky-600 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-sky-500 transition-all disabled:opacity-50 disabled:bg-slate-800"
+                  className="bg-sky-600 text-white px-6 py-3 rounded-2xl font-medium text-[10px]  tracking-tight hover:bg-sky-500 transition-all disabled:opacity-50 disabled:bg-slate-800"
                 >
                   Analyze
                 </button>
@@ -207,11 +207,11 @@ export default function InterviewPage() {
         </div>
 
         {/* Neural Signal Sidebar */}
-        <div className="w-[400px] border-l border-white/5 bg-slate-950/50 p-10 space-y-10 hidden xl:block">
+        <div className="w-[400px] border-l border-zinc-800/50 bg-slate-950/50 p-10 space-y-10 hidden xl:block">
           <div className="space-y-4">
              <div className="flex items-center justify-between">
-               <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Signals</h3>
-               <Sparkles className="text-sky-500 w-4 h-4 animate-pulse" />
+               <h3 className="text-[10px] font-medium text-zinc-500  tracking-tight">Neural Signals</h3>
+               <Sparkles className="text-sky-500 w-4 h-4 " />
              </div>
              <div className="space-y-3">
                <AnimatePresence mode="popLayout">
@@ -221,42 +221,42 @@ export default function InterviewPage() {
                      animate={{ opacity: 1, x: 0 }}
                      exit={{ opacity: 0, x: -10 }}
                      key={s + i} 
-                     className="flex items-start gap-3 p-4 bg-white/5 rounded-2xl border border-white/5"
+                     className="flex items-start gap-3 p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50"
                    >
                      <div className="w-1.5 h-1.5 bg-sky-500 rounded-full mt-1.5 shrink-0" />
-                     <p className="text-[11px] font-semibold text-slate-400 leading-relaxed">{s}</p>
+                     <p className="text-[11px] font-semibold text-zinc-400 leading-relaxed">{s}</p>
                    </motion.div>
                  ))}
                </AnimatePresence>
              </div>
           </div>
 
-          <div className="space-y-6 pt-10 border-t border-white/5">
-             <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Neural Proctoring</h3>
+          <div className="space-y-6 pt-10 border-t border-zinc-800/50">
+             <h3 className="text-[10px] font-medium text-zinc-500  tracking-tight">Neural Proctoring</h3>
              <div className="space-y-4">
                 {[
-                  { label: "Face Detection", status: "Locked", color: "text-emerald-400" },
-                  { label: "Eye Tracking", status: "Active", color: "text-emerald-400" },
+                  { label: "Face Detection", status: "Locked", color: "text-zinc-100" },
+                  { label: "Eye Tracking", status: "Active", color: "text-zinc-100" },
                   { label: "Ambient Noise", status: "Filtered", color: "text-sky-400" }
                 ].map((p, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{p.label}</span>
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${p.color}`}>{p.status}</span>
+                  <div key={i} className="flex items-center justify-between p-4 bg-zinc-900/50 rounded-2xl border border-zinc-800/50">
+                    <span className="text-[9px] font-medium text-zinc-500  tracking-tight">{p.label}</span>
+                    <span className={`text-[9px] font-medium  tracking-tight ${p.color}`}>{p.status}</span>
                   </div>
                 ))}
              </div>
           </div>
 
-          <div className="space-y-6 pt-10 border-t border-white/5">
-             <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Live Metrics</h3>
+          <div className="space-y-6 pt-10 border-t border-zinc-800/50">
+             <h3 className="text-[10px] font-medium text-zinc-500  tracking-tight">Live Metrics</h3>
              <div className="grid grid-cols-2 gap-4">
-               <div className="p-5 bg-white/5 rounded-3xl border border-white/5">
-                 <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">Clarity</p>
-                 <p className="text-lg font-black text-white tracking-tighter">High</p>
+               <div className="p-5 bg-zinc-900/50 rounded-3xl border border-zinc-800/50">
+                 <p className="text-[9px] font-medium text-zinc-600  tracking-tight mb-1">Clarity</p>
+                 <p className="text-lg font-medium text-white tracking-tighter">High</p>
                </div>
-               <div className="p-5 bg-white/5 rounded-3xl border border-white/5">
-                 <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">Integrity</p>
-                 <p className="text-lg font-black text-emerald-400 tracking-tighter">98%</p>
+               <div className="p-5 bg-zinc-900/50 rounded-3xl border border-zinc-800/50">
+                 <p className="text-[9px] font-medium text-zinc-600  tracking-tight mb-1">Integrity</p>
+                 <p className="text-lg font-medium text-zinc-100 tracking-tighter">98%</p>
                </div>
              </div>
           </div>
@@ -264,9 +264,9 @@ export default function InterviewPage() {
           <div className="p-6 bg-sky-600/5 border border-sky-500/20 rounded-3xl mt-auto">
              <div className="flex items-center gap-3 mb-3">
                <TrendingUp className="text-sky-400 w-4 h-4" />
-               <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest">Adaptive Insight</span>
+               <span className="text-[10px] font-medium text-sky-400  tracking-tight">Adaptive Insight</span>
              </div>
-             <p className="text-[11px] text-slate-400 leading-relaxed font-medium italic">
+             <p className="text-[11px] text-zinc-400 leading-relaxed font-medium italic">
                "Candidate shows high conceptual clarity but needs probing on execution details."
              </p>
           </div>

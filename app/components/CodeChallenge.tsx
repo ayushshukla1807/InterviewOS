@@ -28,7 +28,7 @@ export default function CodeChallenge({ question, initialCode = '', language = '
     <div className="flex flex-col h-full bg-[#0a0a0c] border-l border-gray-800">
       <div className="p-6 bg-[#111113] border-b border-gray-800">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-sm font-bold text-sky-400 uppercase tracking-wider">Live Coding Challenge</h2>
+          <h2 className="text-sm font-bold text-sky-400  tracking-tight">Live Coding Challenge</h2>
           <select 
             value={lang} 
             onChange={(e) => setLang(e.target.value)}

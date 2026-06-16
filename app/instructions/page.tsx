@@ -17,8 +17,8 @@ function InterviewOSLogo() {
         <Shield className="w-5 h-5 text-white" />
       </div>
       <div>
-        <div className="text-[11px] font-black text-[var(--text)] uppercase tracking-widest leading-none">InterviewOS</div>
-        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">AI Platform</div>
+        <div className="text-[11px] font-medium text-[var(--text)]  tracking-tight leading-none">InterviewOS</div>
+        <div className="text-[9px] font-bold text-zinc-500  tracking-tight mt-1">AI Platform</div>
       </div>
     </div>
   );
@@ -82,17 +82,17 @@ function InstructionsContent() {
         <div className="flex items-center gap-6">
           <button 
             onClick={() => router.back()} 
-            className="px-4 py-2 border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-[var(--text)] transition-all"
+            className="px-4 py-2 border border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl text-[10px] font-bold  tracking-tight text-zinc-500 dark:text-zinc-400 hover:text-[var(--text)] transition-all"
           >
             ← Back
           </button>
           <InterviewOSLogo />
         </div>
         <div className="flex items-center gap-2">
-           <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Powered by</span>
+           <span className="text-[10px] font-medium text-zinc-500  tracking-tight">Powered by</span>
            <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)]">
-             <div className="w-2 h-2 bg-sky-500 rounded-full animate-pulse" />
-             <span className="text-[11px] font-black text-[var(--text)] tracking-tight italic">elevate</span>
+             <div className="w-2 h-2 bg-sky-500 rounded-full " />
+             <span className="text-[11px] font-medium text-[var(--text)] tracking-tight italic">elevate</span>
            </div>
         </div>
       </header>
@@ -104,7 +104,7 @@ function InstructionsContent() {
         <div className="w-full lg:w-[420px] space-y-6">
           <div className="glass-card border p-6 rounded-3xl space-y-8 shadow-2xl transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 60%, transparent)', borderColor: 'var(--border-color)' }}>
             <div className="space-y-6">
-              <h3 className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Team</h3>
+              <h3 className="text-[10px] font-medium  tracking-tight px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Team</h3>
               <div className="space-y-4">
                 {/* Invigilator */}
                 <div className="p-4 rounded-2xl border flex items-center gap-4 group transition-all" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
@@ -112,15 +112,15 @@ function InstructionsContent() {
                     <img src={invigilator.avatar} alt="Invigilator" className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Invigilator</p>
-                    <p className="text-xs font-black text-[var(--text)] tracking-tight">{invigilator.name}, {invigilator.org}</p>
-                    <p className="text-[9px] font-medium text-slate-500 mt-1 leading-tight">{invigilator.message}</p>
+                    <p className="text-[8px] font-medium text-zinc-500  tracking-tight mb-1">Invigilator</p>
+                    <p className="text-xs font-medium text-[var(--text)] tracking-tight">{invigilator.name}, {invigilator.org}</p>
+                    <p className="text-[9px] font-medium text-zinc-500 mt-1 leading-tight">{invigilator.message}</p>
                   </div>
                 </div>
 
                 {/* AI Interviewer Selector */}
                 <div className="space-y-3 pt-2">
-                  <p className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Choose AI Interviewer</p>
+                  <p className="text-[10px] font-medium  tracking-tight px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Choose AI Interviewer</p>
                   <div className="grid grid-cols-2 gap-2">
                     {INTERVIEWERS.map((int: any) => {
                       const isSelected = interviewer.id === int.id;
@@ -133,7 +133,7 @@ function InstructionsContent() {
                           }}
                           className={`p-3 rounded-2xl border text-left flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
                             isSelected 
-                              ? 'border-sky-600 bg-sky-600/10 shadow-[0_0_15px_rgba(79,70,229,0.15)]' 
+                              ? 'border-sky-600 bg-sky-600/10 shadow-sm' 
                               : 'border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10'
                           }`}
                         >
@@ -141,8 +141,8 @@ function InstructionsContent() {
                             <img src={int.avatar} alt={int.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="text-center">
-                            <p className="text-[11px] font-black text-[var(--text)]">{int.name}</p>
-                            <p className="text-[8px] font-bold text-slate-500 uppercase tracking-tight mt-0.5 leading-none">{int.role}</p>
+                            <p className="text-[11px] font-medium text-[var(--text)]">{int.name}</p>
+                            <p className="text-[8px] font-bold text-zinc-500  tracking-tight mt-0.5 leading-none">{int.role}</p>
                           </div>
                           {isSelected && (
                             <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-sky-500 rounded-full" />
@@ -156,17 +156,17 @@ function InstructionsContent() {
             </div>
 
             <div className="pt-6 border-t space-y-6" style={{ borderColor: 'var(--border-color)' }}>
-              <h3 className="text-[10px] font-black uppercase tracking-widest px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Details</h3>
+              <h3 className="text-[10px] font-medium  tracking-tight px-2" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Interview Details</h3>
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl border text-center space-y-1" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
                   <Clock className="w-4 h-4 mx-auto mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }} />
-                  <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Duration</p>
-                  <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>{config.time}</p>
+                  <p className="text-[8px] font-medium  tracking-tight" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Duration</p>
+                  <p className="text-xs font-medium tracking-tight" style={{ color: 'var(--text)' }}>{config.time}</p>
                 </div>
                 <div className="p-4 rounded-2xl border text-center space-y-1" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
                   <BrainCircuit className="w-4 h-4 mx-auto mb-1" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }} />
-                  <p className="text-[8px] font-black uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Questions</p>
-                  <p className="text-xs font-black tracking-tight" style={{ color: 'var(--text)' }}>Adaptive</p>
+                  <p className="text-[8px] font-medium  tracking-tight" style={{ color: 'color-mix(in srgb, var(--text) 50%, transparent)' }}>Questions</p>
+                  <p className="text-xs font-medium tracking-tight" style={{ color: 'var(--text)' }}>Adaptive</p>
                 </div>
               </div>
             </div>
@@ -177,10 +177,10 @@ function InstructionsContent() {
         <div className="flex-1 w-full space-y-8">
           <div className="space-y-10 px-4">
             <section className="space-y-4">
-              <h3 className="text-base font-black tracking-tight uppercase" style={{ color: 'var(--text)' }}>Instructions</h3>
+              <h3 className="text-base font-medium tracking-tight " style={{ color: 'var(--text)' }}>Instructions</h3>
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <h4 className="text-sm font-black" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>Before You Begin</h4>
+                  <h4 className="text-sm font-medium" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>Before You Begin</h4>
                   <ul className="space-y-2">
                     {[
                       'Ensure a quiet environment. Use headphones if possible.',
@@ -197,7 +197,7 @@ function InstructionsContent() {
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="text-sm font-black" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>During the Interview</h4>
+                  <h4 className="text-sm font-medium" style={{ color: 'color-mix(in srgb, var(--text) 90%, transparent)' }}>During the Interview</h4>
                   <ul className="space-y-2">
                     {[
                       'Stay in Full Screen Mode. Do not exit or minimize.',
@@ -216,14 +216,14 @@ function InstructionsContent() {
             </section>
 
             <section className="space-y-4 pt-6 border-t" style={{ borderColor: 'var(--border-color)' }}>
-              <h3 className="text-base font-black tracking-tight uppercase" style={{ color: 'var(--text)' }}>AI Interview Guide & Rubrics</h3>
-              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Learn how the AI recruiter evaluates your performance across multiple core dimensions.</p>
+              <h3 className="text-base font-medium tracking-tight " style={{ color: 'var(--text)' }}>AI Interview Guide & Rubrics</h3>
+              <p className="text-[11px] font-bold text-zinc-500  tracking-tight">Learn how the AI recruiter evaluates your performance across multiple core dimensions.</p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Rubric 1 */}
                 <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <h4 className="text-xs font-black text-[var(--text)] uppercase tracking-wider mb-2">Technical Probing (60%)</h4>
-                  <ul className="space-y-2 text-[12px] font-medium text-slate-400">
+                  <h4 className="text-xs font-medium text-[var(--text)]  tracking-tight mb-2">Technical Probing (60%)</h4>
+                  <ul className="space-y-2 text-[12px] font-medium text-zinc-400">
                     <li className="flex items-start gap-2">
                       <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
                       <span>Brute Force & Optimization: Asked to explain basic approaches before implementing high-performance solutions.</span>
@@ -241,8 +241,8 @@ function InstructionsContent() {
 
                 {/* Rubric 2 */}
                 <div className="p-5 rounded-2xl border" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
-                  <h4 className="text-xs font-black text-[var(--text)] uppercase tracking-wider mb-2">Communication & Persona (40%)</h4>
-                  <ul className="space-y-2 text-[12px] font-medium text-slate-400">
+                  <h4 className="text-xs font-medium text-[var(--text)]  tracking-tight mb-2">Communication & Persona (40%)</h4>
+                  <ul className="space-y-2 text-[12px] font-medium text-zinc-400">
                     <li className="flex items-start gap-2">
                       <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
                       <span>Clarity & Structure: Checked for concise explanations, avoidance of buzzword bloat, and structured presentation.</span>
@@ -272,15 +272,15 @@ function InstructionsContent() {
                 <button 
                   onClick={() => agreed && setShowPledgeModal(true)}
                   disabled={!agreed}
-                  className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${
+                  className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
                     agreed 
                       ? 'bg-sky-600 text-white hover:bg-sky-500 shadow-xl shadow-sky-600/20 active:scale-[0.98]' 
-                      : 'bg-[var(--border-color)] text-slate-500 cursor-not-allowed border border-[var(--border-color)]'
+                      : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed border border-[var(--border-color)]'
                   }`}
                 >
                   Start Interview
                 </button>
-                <p className="text-center text-[9px] font-black text-slate-600 uppercase tracking-widest">You can start your interview now</p>
+                <p className="text-center text-[9px] font-medium text-zinc-600  tracking-tight">You can start your interview now</p>
               </div>
             </div>
           </div>
@@ -289,11 +289,11 @@ function InstructionsContent() {
 
       {/* Footer */}
       <footer className="p-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 backdrop-blur-sm" style={{ borderColor: 'var(--border-color)', backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)' }}>
-        <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>
+        <p className="text-[10px] font-bold  tracking-tight" style={{ color: 'color-mix(in srgb, var(--text) 60%, transparent)' }}>
           This interview is conducted on a secure platform. Final results are verified by the hiring team.
         </p>
         <div className="flex gap-8">
-          <button onClick={() => setShowPrivacyModal(true)} className="text-[10px] font-black uppercase tracking-widest hover:opacity-70 transition-opacity" style={{ color: 'var(--primary)' }}>View Privacy Policy</button>
+          <button onClick={() => setShowPrivacyModal(true)} className="text-[10px] font-medium  tracking-tight hover:opacity-70 transition-opacity" style={{ color: 'var(--primary)' }}>View Privacy Policy</button>
         </div>
       </footer>
 
@@ -320,7 +320,7 @@ function InstructionsContent() {
                   <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: 'var(--primary)' }}>
                     <Shield className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-2xl font-black tracking-tight" style={{ color: 'var(--text)' }}>Data & Privacy Policy</h3>
+                  <h3 className="text-2xl font-medium tracking-tight" style={{ color: 'var(--text)' }}>Data & Privacy Policy</h3>
                 </div>
                 
                 <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-4" style={{ color: 'color-mix(in srgb, var(--text) 80%, transparent)' }}>
@@ -344,7 +344,7 @@ function InstructionsContent() {
                 <div className="pt-6 border-t flex justify-end" style={{ borderColor: 'var(--border-color)' }}>
                   <button 
                     onClick={() => setShowPrivacyModal(false)}
-                    className="px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all hover:opacity-90"
+                    className="px-6 py-3 rounded-xl font-medium text-xs  tracking-tight transition-all hover:opacity-90"
                     style={{ backgroundColor: 'var(--primary)', color: 'white' }}
                   >
                     I Understand
@@ -380,15 +380,15 @@ function InstructionsContent() {
                      <Shield className="w-6 h-6 text-white" />
                    </div>
                    <div className="space-y-4">
-                     <h3 className="text-3xl font-black text-[var(--text)] tracking-tighter leading-tight">Pledge of Honesty.</h3>
-                     <p className="text-slate-500 font-medium text-sm leading-relaxed">
+                     <h3 className="text-3xl font-medium text-[var(--text)] tracking-tighter leading-tight">Pledge of Honesty.</h3>
+                     <p className="text-zinc-500 font-medium text-sm leading-relaxed">
                        I understand that my interview session may be recorded and reviewed. If I am found cheating, I accept full responsibility for the consequences.
                      </p>
                    </div>
                 </div>
                 <div className="pt-12">
                    <div className="border-b-2 border-[var(--border-color)] pb-4">
-                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Signature</span>
+                     <span className="text-[10px] font-medium text-zinc-500  tracking-tight">Signature</span>
                    </div>
                 </div>
               </div>
@@ -397,7 +397,7 @@ function InstructionsContent() {
               <div className="flex-1 p-12 space-y-10">
                 <button 
                   onClick={() => setShowPledgeModal(false)}
-                  className="absolute top-8 right-8 text-slate-400 hover:text-[var(--text)] transition-colors"
+                  className="absolute top-8 right-8 text-zinc-400 hover:text-[var(--text)] transition-colors"
                 >
                   <ExternalLink className="w-5 h-5 rotate-45" />
                 </button>
@@ -405,27 +405,27 @@ function InstructionsContent() {
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 px-4 py-2 bg-rose-500/5 border border-rose-500/10 rounded-full w-fit">
                     <AlertTriangle className="w-4 h-4 text-rose-500" />
-                    <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Protocol Warning</span>
+                    <span className="text-[10px] font-medium text-rose-500  tracking-tight">Protocol Warning</span>
                   </div>
-                  <h4 className="text-xl font-black text-[var(--text)] tracking-tight">If cheating is detected, the following actions will be taken:</h4>
+                  <h4 className="text-xl font-medium text-[var(--text)] tracking-tight">If cheating is detected, the following actions will be taken:</h4>
                 </div>
 
                 <div className="space-y-4">
                   <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>
-                      <p className="text-sm font-black text-[var(--text)]">Permanent Ban</p>
-                      <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">From InterviewOS Ecosystem</p>
+                      <p className="text-sm font-medium text-[var(--text)]">Permanent Ban</p>
+                      <p className="text-xs font-bold text-rose-500  tracking-tight">From InterviewOS Ecosystem</p>
                     </div>
                     <InterviewOSLogo />
                   </div>
                   <div className="p-6 bg-[var(--bg)] border border-[var(--border-color)] rounded-3xl flex items-center justify-between group hover:border-rose-500/20 transition-all">
                     <div>
-                      <p className="text-sm font-black text-[var(--text)]">3-Year Blacklist</p>
-                      <p className="text-xs font-bold text-rose-500 uppercase tracking-tight">Across 800+ Hiring Partners</p>
+                      <p className="text-sm font-medium text-[var(--text)]">3-Year Blacklist</p>
+                      <p className="text-xs font-bold text-rose-500  tracking-tight">Across 800+ Hiring Partners</p>
                     </div>
-                    <div className="flex items-center gap-2 text-slate-400">
+                    <div className="flex items-center gap-2 text-zinc-400">
                       <Shield className="w-5 h-5" />
-                      <span className="text-[10px] font-black uppercase">800+</span>
+                      <span className="text-[10px] font-medium ">800+</span>
                     </div>
                   </div>
                 </div>
@@ -438,14 +438,14 @@ function InstructionsContent() {
                       onChange={(e) => setPledged(e.target.checked)}
                       className="w-5 h-5 rounded border-[var(--border-color)] text-sky-600 focus:ring-sky-500 cursor-pointer"
                     />
-                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 group-hover:text-[var(--text)] transition-colors">I will not cheat and accept the consequences if caught</span>
+                    <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 group-hover:text-[var(--text)] transition-colors">I will not cheat and accept the consequences if caught</span>
                   </label>
 
                   <button 
                     onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`)}
                     disabled={!pledged}
-                    className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${
-                      pledged ? 'bg-sky-600 text-white shadow-xl shadow-sky-600/20 hover:bg-sky-500' : 'bg-[var(--border-color)] text-slate-500 cursor-not-allowed'
+                    className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
+                      pledged ? 'bg-sky-600 text-white shadow-xl shadow-sky-600/20 hover:bg-sky-500' : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed'
                     }`}
                   >
                     Start Interview
@@ -462,7 +462,7 @@ function InstructionsContent() {
 
 export default function LandingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#050508] flex items-center justify-center text-slate-500 font-black uppercase tracking-widest text-[11px] animate-pulse">Syncing...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0A0A0A] flex items-center justify-center text-zinc-500 font-medium  tracking-tight text-[11px] ">Syncing...</div>}>
       <InstructionsContent />
     </Suspense>
   );

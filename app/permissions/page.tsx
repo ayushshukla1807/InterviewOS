@@ -96,8 +96,8 @@ function PermissionsContent() {
              </div>
           </div>
           <div>
-            <h2 className="text-2xl font-black text-[var(--text)] tracking-tighter italic">Welcome, {name.split(' ')[0]}.</h2>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mt-2">Security Protocol Calibration</p>
+            <h2 className="text-2xl font-medium text-[var(--text)] tracking-tighter italic">Welcome, {name.split(' ')[0]}.</h2>
+            <p className="text-[10px] font-bold text-zinc-500  tracking-[0.3em] mt-2">Security Protocol Calibration</p>
           </div>
         </motion.div>
       </div>
@@ -115,14 +115,14 @@ function PermissionsContent() {
                 <ShieldAlert className="w-8 h-8 text-rose-500" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-lg font-black text-[var(--text)] tracking-tight uppercase">Hardware Access Denied</h3>
-                <p className="text-xs text-slate-500 leading-relaxed max-w-md mx-auto">
+                <h3 className="text-lg font-medium text-[var(--text)] tracking-tight ">Hardware Access Denied</h3>
+                <p className="text-xs text-zinc-500 leading-relaxed max-w-md mx-auto">
                   Camera and Microphone permissions are required to calibration and proceed with this session. Please enable permissions in your browser settings and reload.
                 </p>
               </div>
               <button 
                 onClick={() => window.location.reload()} 
-                className="px-6 py-3 bg-rose-600 hover:bg-rose-500 transition-colors text-white rounded-xl text-xs font-black uppercase tracking-widest inline-flex items-center gap-2 shadow-lg shadow-rose-600/20"
+                className="px-6 py-3 bg-rose-600 hover:bg-rose-500 transition-colors text-white rounded-xl text-xs font-medium  tracking-tight inline-flex items-center gap-2 shadow-lg shadow-rose-600/20"
               >
                 Reload Page
               </button>
@@ -131,14 +131,14 @@ function PermissionsContent() {
             <>
               {/* 1. Extended Display */}
               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 flex items-center gap-6 group hover:border-[var(--primary)]/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.display ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.display ? 'bg-zinc-800/50 border-zinc-700 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-zinc-800/50 text-zinc-500'}`}>
                   <MonitorX className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xs font-black text-[var(--text)] tracking-tight uppercase">External Display Check</h3>
-                  <p className="text-[10px] text-slate-500 font-bold tracking-wide">Standard single-monitor environment required.</p>
+                  <h3 className="text-xs font-medium text-[var(--text)] tracking-tight ">External Display Check</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold tracking-wide">Standard single-monitor environment required.</p>
                 </div>
-                <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-2 text-white text-[10px] font-medium  tracking-tight">
                   <CheckCircle className="w-3.5 h-3.5" />
                   Verified
                 </div>
@@ -146,27 +146,27 @@ function PermissionsContent() {
 
               {/* 2. Camera */}
               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 flex items-center gap-6 group hover:border-[var(--primary)]/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.camera ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.camera ? 'bg-zinc-800/50 border-zinc-700 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-zinc-800/50 text-zinc-500'}`}>
                   <Camera className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xs font-black text-[var(--text)] tracking-tight uppercase">Visual Identity Feed</h3>
-                  <p className="text-[10px] text-slate-500 font-bold tracking-wide">Enable camera for proctoring & AI gaze tracking.</p>
+                  <h3 className="text-xs font-medium text-[var(--text)] tracking-tight ">Visual Identity Feed</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold tracking-wide">Enable camera for proctoring & AI gaze tracking.</p>
                 </div>
                 <div className="flex items-center gap-4">
                   {permissions.camera && (
-                    <div className="w-20 h-12 bg-black rounded-lg overflow-hidden border border-white/10 shadow-2xl">
+                    <div className="w-20 h-12 bg-black rounded-lg overflow-hidden border border-zinc-800 shadow-2xl">
                        <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" />
                     </div>
                   )}
-                  <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-white text-[10px] font-medium  tracking-tight">
                     {permissions.camera ? (
                       <>
                         <CheckCircle className="w-3.5 h-3.5" />
                         Active
                       </>
                     ) : (
-                      <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Enable Feed</button>
+                      <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Enable Feed</button>
                     )}
                   </div>
                 </div>
@@ -174,43 +174,43 @@ function PermissionsContent() {
 
               {/* 3. Audio */}
               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 flex items-center gap-6 group hover:border-[var(--primary)]/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.audio ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.audio ? 'bg-zinc-800/50 border-zinc-700 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-zinc-800/50 text-zinc-500'}`}>
                   <Mic className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xs font-black text-[var(--text)] tracking-tight uppercase">Acoustic Signal Calibration</h3>
-                  <p className="text-[10px] text-slate-500 font-bold tracking-wide">Sync microphone for real-time transcription.</p>
+                  <h3 className="text-xs font-medium text-[var(--text)] tracking-tight ">Acoustic Signal Calibration</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold tracking-wide">Sync microphone for real-time transcription.</p>
                 </div>
-                <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                <div className="flex items-center gap-2 text-white text-[10px] font-medium  tracking-tight">
                   {permissions.audio ? (
                     <>
                       <CheckCircle className="w-3.5 h-3.5" />
                       Synced
                     </>
                   ) : (
-                    <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase hover:opacity-90 transition-all">Sync Mic</button>
+                    <button onClick={requestHardware} className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Sync Mic</button>
                   )}
                 </div>
               </div>
 
               {/* 4. Screen Share */}
               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 flex items-center gap-6 group hover:border-[var(--primary)]/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.screen ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.screen ? 'bg-zinc-800/50 border-zinc-700 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-zinc-800/50 text-zinc-500'}`}>
                   <Share className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xs font-black text-[var(--text)] tracking-tight uppercase">Interactive Sandbox Access</h3>
-                  <p className="text-[10px] text-slate-500 font-bold tracking-wide">Share entire screen to activate the IDE sandbox.</p>
+                  <h3 className="text-xs font-medium text-[var(--text)] tracking-tight ">Interactive Sandbox Access</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold tracking-wide">Share entire screen to activate the IDE sandbox.</p>
                 </div>
                 {!permissions.screen ? (
                   <button 
                     onClick={handleScreenShare}
-                    className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-sky-500 transition-all"
+                    className="px-4 py-2 bg-sky-600 text-white rounded-lg text-[9px] font-medium  tracking-tight hover:bg-sky-500 transition-all"
                   >
                     Share Screen
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-white text-[10px] font-medium  tracking-tight">
                     <CheckCircle className="w-3.5 h-3.5" />
                     Authorized
                   </div>
@@ -219,22 +219,22 @@ function PermissionsContent() {
 
               {/* 5. Full Screen */}
               <div className="bg-[var(--card-bg)] border border-[var(--border-color)] rounded-3xl p-6 flex items-center gap-6 group hover:border-[var(--primary)]/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.fullscreen ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/5 text-slate-500'}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${permissions.fullscreen ? 'bg-zinc-800/50 border-zinc-700 text-white' : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-zinc-800/50 text-zinc-500'}`}>
                   <Maximize className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xs font-black text-[var(--text)] tracking-tight uppercase">Focus Mode Immersion</h3>
-                  <p className="text-[10px] text-slate-500 font-bold tracking-wide">Enter immersive mode to eliminate distractions.</p>
+                  <h3 className="text-xs font-medium text-[var(--text)] tracking-tight ">Focus Mode Immersion</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold tracking-wide">Enter immersive mode to eliminate distractions.</p>
                 </div>
                 {!permissions.fullscreen ? (
                   <button 
                     onClick={handleFullScreen}
-                    className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-black uppercase tracking-widest hover:opacity-90 transition-all"
+                    className="px-4 py-2 bg-sky-600 text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  tracking-tight hover:opacity-90 transition-all"
                   >
                     Enter Focus
                   </button>
                 ) : (
-                  <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black uppercase tracking-widest">
+                  <div className="flex items-center gap-2 text-white text-[10px] font-medium  tracking-tight">
                     <CheckCircle className="w-3.5 h-3.5" />
                     Immersed
                   </div>
@@ -243,7 +243,7 @@ function PermissionsContent() {
 
               <div className="pt-8 flex items-center gap-3 bg-[var(--card-bg)] p-4 rounded-2xl border border-[var(--border-color)]">
                  <Info className="w-4 h-4 text-sky-500 shrink-0" />
-                 <p className="text-[9px] font-bold text-slate-500 leading-relaxed uppercase tracking-wider">
+                 <p className="text-[9px] font-bold text-zinc-500 leading-relaxed  tracking-tight">
                    By proceeding, you agree to the proctoring guidelines. AI will monitor gaze, environmental audio, and screen integrity to ensure a fair assessment for all candidates.
                  </p>
               </div>
@@ -257,8 +257,8 @@ function PermissionsContent() {
       <footer className="fixed bottom-0 left-0 right-0 bg-[var(--bg)]/80 backdrop-blur-xl border-t border-[var(--border-color)] p-8 flex justify-center z-50">
         <div className="w-full max-w-[700px] flex items-center justify-between">
           <div className="flex flex-col">
-             <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em]">Ready for handshake</span>
-             <span className="text-[10px] font-black text-[var(--text)] uppercase tracking-widest">{allGranted ? 'Security Calibration Complete' : 'Awaiting Permissions...'}</span>
+             <span className="text-[8px] font-medium text-zinc-500  tracking-[0.2em]">Ready for handshake</span>
+             <span className="text-[10px] font-medium text-[var(--text)]  tracking-tight">{allGranted ? 'Security Calibration Complete' : 'Awaiting Permissions...'}</span>
           </div>
           <div className="flex items-center gap-4">
             <motion.button
@@ -266,10 +266,10 @@ function PermissionsContent() {
               whileTap={allGranted && !isInitializing ? { scale: 0.95 } : {}}
               onClick={handleStartTest}
               disabled={!allGranted || isInitializing}
-              className={`min-w-[200px] px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all relative overflow-hidden ${
+              className={`min-w-[200px] px-8 py-4 rounded-2xl font-medium text-[11px]  tracking-[0.2em] transition-all relative overflow-hidden ${
                 allGranted 
-                  ? 'bg-sky-600 text-white shadow-[0_0_40px_rgba(79,70,229,0.4)] cursor-pointer' 
-                  : 'bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-[var(--border-color)]'
+                  ? 'bg-sky-600 text-white shadow-sm cursor-pointer' 
+                  : 'bg-slate-100 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600 cursor-not-allowed border border-[var(--border-color)]'
               }`}
             >
               <AnimatePresence mode="wait">
@@ -297,7 +297,7 @@ function PermissionsContent() {
 
 export default function PermissionsGuard() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-transparent flex items-center justify-center text-[var(--text)] text-[10px] font-black uppercase tracking-widest animate-pulse transition-colors duration-500">Initializing Security Layer...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-transparent flex items-center justify-center text-[var(--text)] text-[10px] font-medium  tracking-tight  transition-colors duration-500">Initializing Security Layer...</div>}>
       <PermissionsContent />
     </Suspense>
   );

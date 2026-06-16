@@ -526,49 +526,49 @@ function LandingPageContent() {
   const activeQuestionDetails = selectedCandidate.questions.find(q => q.id === selectedQuestionId) || selectedCandidate.questions[0];
 
   return (
-    <div className="min-h-screen bg-transparent text-slate-100 font-sans selection:bg-emerald-500/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
+    <div className="min-h-screen bg-transparent text-slate-100 font-sans selection:bg-white/30 overflow-x-hidden flex flex-col relative transition-colors duration-500">
       
       {/* Background blurs — visible on dark canvas */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-emerald-600/10 blur-[150px] rounded-full" />
-        <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-emerald-500/8 blur-[150px] rounded-full" />
+        <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-white/8 blur-[150px] rounded-full" />
         <div className="absolute bottom-[20%] left-[-5%] w-[900px] h-[900px] bg-indigo-600/8 blur-[160px] rounded-full" />
       </div>
 
       {/* Nav */}
       <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between border-b border-white/8 bg-black/40 backdrop-blur-xl shadow-lg">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-          <div className="w-10 h-10 border border-emerald-500/20 rounded-xl flex items-center justify-center bg-emerald-500/5 shadow-md">
-            <Shield className="w-5 h-5 text-emerald-400" />
+          <div className="w-10 h-10 border border-zinc-700 rounded-xl flex items-center justify-center bg-zinc-900/50 shadow-md">
+            <Shield className="w-5 h-5 text-zinc-100" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 leading-none font-mono">InterviewOS</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-0.5">AI Platform</span>
+            <span className="text-sm font-medium tracking-tight  bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 leading-none font-mono">InterviewOS</span>
+            <span className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-wider text-slate-200">
-          <a href="#features" className="hover:text-emerald-400 transition-colors">Product</a>
-          <a href="#anti-cheating" className="hover:text-emerald-400 transition-colors">Why InterviewOS?</a>
-          <a href="#integrations" className="hover:text-emerald-400 transition-colors">Integrations</a>
-          <a href="#case-studies" className="hover:text-emerald-400 transition-colors">Case Studies</a>
-          <a href="#faq" className="hover:text-emerald-400 transition-colors">FAQ</a>
+        <div className="hidden md:flex items-center gap-8 text-[11px] font-medium  tracking-tight text-zinc-300">
+          <a href="#features" className="hover:text-zinc-100 transition-colors">Product</a>
+          <a href="#anti-cheating" className="hover:text-zinc-100 transition-colors">Why InterviewOS?</a>
+          <a href="#integrations" className="hover:text-zinc-100 transition-colors">Integrations</a>
+          <a href="#case-studies" className="hover:text-zinc-100 transition-colors">Case Studies</a>
+          <a href="#faq" className="hover:text-zinc-100 transition-colors">FAQ</a>
         </div>
 
         <div className="flex items-center gap-6">
           <button 
             onClick={() => setIsBookingOpen(true)}
-            className="hidden sm:inline-block px-4 py-2.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm cursor-pointer"
+            className="hidden sm:inline-block px-4 py-2.5 bg-white/15 hover:bg-white/25 text-zinc-100 border border-zinc-700 rounded-xl text-[10px] font-medium  tracking-tight transition-all shadow-sm cursor-pointer"
           >
             Launch Demo
           </button>
           {isAuthenticated ? (
-            <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+            <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all">
               Dashboard
             </Link>
           ) : (
-            <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md shadow-emerald-500/20 cursor-pointer">
+            <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all shadow-md  cursor-pointer">
               Try AI Interview
             </button>
           )}
@@ -583,14 +583,14 @@ function LandingPageContent() {
           transition={{ duration: 0.8 }}
           className="space-y-6 max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-emerald-500/10 border border-emerald-500/25 rounded-full shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Trained on 1 Lakh+ Interviews</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-zinc-800/50 border border-emerald-500/25 rounded-full shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-zinc-200 animate-ping" />
+            <span className="text-[9px] font-medium  tracking-tight text-zinc-200">Trained on 1 Lakh+ Interviews</span>
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-black tracking-tight leading-[1.05] text-white">
-            Never take an <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 font-medium">Interview</span> again <br />
-            <span className="font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 font-black px-1">InterviewOS</span> takes them for you.
+          <h1 className="text-4xl md:text-7xl font-medium tracking-tight leading-[1.05] text-white">
+            Never take an <span className="font-serif italic  bg-gradient-to-r from-emerald-400 to-teal-300 font-medium">Interview</span> again <br />
+            <span className="font-mono tracking-tighter  bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 font-medium px-1">InterviewOS</span> takes them for you.
           </h1>
 
           <p className="text-sm md:text-base font-medium text-slate-100 max-w-2xl mx-auto leading-relaxed">
@@ -600,13 +600,13 @@ function LandingPageContent() {
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <button 
               onClick={() => setIsBookingOpen(true)}
-              className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/30 cursor-pointer"
+              className="px-8 py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight transition-all shadow-lg shadow-emerald-500/30 cursor-pointer"
             >
               Launch Demo
             </button>
             <a 
               href="#command-center"
-              className="px-8 py-4 bg-white/8 hover:bg-white/15 text-white border border-white/15 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer backdrop-blur-sm"
+              className="px-8 py-4 bg-white/8 hover:bg-white/15 text-white border border-white/15 rounded-xl text-[11px] font-medium  tracking-tight transition-all cursor-pointer backdrop-blur-sm"
             >
               Configure Interview
             </a>
@@ -614,7 +614,7 @@ function LandingPageContent() {
         </motion.div>
 
         {/* Hero Interactive Switcher Tabs */}
-        <div className="flex gap-2 p-1.5 bg-white/5 border border-white/10 rounded-2xl max-w-2xl mx-auto mt-16 w-full relative z-20">
+        <div className="flex gap-2 p-1.5 bg-zinc-900/50 border border-zinc-800 rounded-2xl max-w-2xl mx-auto mt-16 w-full relative z-20">
           {(['coding', 'sales', 'data', 'product', 'marketer'] as const).map(tab => (
             <button
               key={tab}
@@ -622,10 +622,10 @@ function LandingPageContent() {
                 setActiveHeroTab(tab);
                 setIsUnmuted(false);
               }}
-              className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
+              className={`flex-1 py-3 text-[10px] font-medium  tracking-tight rounded-xl transition-all ${
                 activeHeroTab === tab
-                  ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30'
-                  : 'text-slate-200 hover:text-white hover:bg-white/8'
+                  ? 'bg-white text-black shadow-md shadow-emerald-500/30'
+                  : 'text-zinc-300 hover:text-white hover:bg-white/8'
               }`}
             >
               {tab === 'coding' && 'Coding'}
@@ -642,7 +642,7 @@ function LandingPageContent() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] border border-white/10 bg-black/40 backdrop-blur-xl mt-6 p-4 shadow-2xl shadow-black/50 flex flex-col overflow-hidden relative group"
+          className="w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] border border-zinc-800 bg-black/40 backdrop-blur-xl mt-6 p-4 shadow-2xl shadow-black/50 flex flex-col overflow-hidden relative group"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
           
@@ -651,13 +651,13 @@ function LandingPageContent() {
             <div className="flex gap-1.5">
               <div className="w-3.5 h-3.5 rounded-full bg-rose-500/80" />
               <div className="w-3.5 h-3.5 rounded-full bg-amber-500/80" />
-              <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/80" />
+              <div className="w-3.5 h-3.5 rounded-full bg-white/80" />
             </div>
-            <div className="text-[10px] text-slate-100 font-mono tracking-widest uppercase flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            <div className="text-[10px] text-slate-100 font-mono tracking-tight  flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 bg-white rounded-full " />
               {activeHeroTab.toUpperCase()}_DEMO_WORKSPACE
             </div>
-            <div className="text-[9px] px-2 py-0.5 bg-emerald-50 border border-emerald-500/20 rounded font-black uppercase text-emerald-600">
+            <div className="text-[9px] px-2 py-0.5 bg-emerald-50 border border-zinc-700 rounded font-medium  text-white">
               Proctoring Active
             </div>
           </div>
@@ -667,48 +667,48 @@ function LandingPageContent() {
               // Coding Workspace Template
               <div className="flex-1 flex gap-4 overflow-hidden">
                 {/* Left side problem statement */}
-                <div className="w-1/3 bg-[#050508]/60 border border-white/10 rounded-2xl p-5 font-sans space-y-3 overflow-y-auto hidden md:block">
+                <div className="w-1/3 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl p-5 font-sans space-y-3 overflow-y-auto hidden md:block">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Task 1</span>
+                    <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-zinc-700 px-2 py-0.5 rounded">Task 1</span>
                     <span className="text-[9px] text-slate-100 font-bold">Time Limit: 25m</span>
                   </div>
-                  <h4 className="text-sm font-black text-white">Word Search by Prefix & Suffix</h4>
-                  <p className="text-[11px] leading-relaxed text-slate-200">
+                  <h4 className="text-sm font-medium text-white">Word Search by Prefix & Suffix</h4>
+                  <p className="text-[11px] leading-relaxed text-zinc-300">
                     Design a special dictionary that searches words by a prefix and a suffix. Implement `WordFilter(words)` and `filter(prefix, suffix)` to return the maximum matching index. Optimize performance to ensure \(O(L)\) query time.
                   </p>
-                  <div className="p-3 bg-white/8 border border-white/10 rounded-xl text-[10px] space-y-1">
+                  <div className="p-3 bg-white/8 border border-zinc-800 rounded-xl text-[10px] space-y-1">
                     <span className="font-bold text-slate-100 block">Example Case:</span>
-                    <code className="text-slate-200 block font-mono">words = ["apple"], filter("a", "e") =&gt; Index 0</code>
+                    <code className="text-zinc-300 block font-mono">words = ["apple"], filter("a", "e") =&gt; Index 0</code>
                   </div>
                 </div>
 
                 {/* Middle: Code Editor */}
-                <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-200 flex flex-col justify-between border border-white/10 overflow-hidden">
+                <div className="flex-1 rounded-2xl bg-[#0A0A0A]/80 p-4 font-mono text-[10px] text-zinc-300 flex flex-col justify-between border border-zinc-800 overflow-hidden">
                   <div className="space-y-1.5 overflow-y-auto flex-1 select-none">
                     <div className="flex items-center gap-2 pb-2 border-b border-white/8 mb-2 shrink-0 text-[9px] text-slate-100 font-bold">
-                      <span className="text-emerald-400">Solution.java</span>
+                      <span className="text-zinc-100">Solution.java</span>
                       <span>•</span>
                       <span>Java (OpenJDK 13.0.1)</span>
                     </div>
-                    <div className="text-emerald-500">// Optimal prefix tree (Trie) based solution</div>
+                    <div className="text-white">// Optimal prefix tree (Trie) based solution</div>
                     <pre className="text-slate-100 whitespace-pre-wrap leading-relaxed">{editorText}</pre>
                   </div>
                   
                   {/* Console logs */}
-                  <div className="bg-black/60 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-200">
+                  <div className="bg-black/60 border border-zinc-800 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-zinc-300">
                     <div className="overflow-y-auto space-y-1">
                       {compilerLogs.map((log, idx) => (
-                        <div key={idx} className={log.startsWith('✓') ? 'text-emerald-400' : log.startsWith('!') ? 'text-rose-400' : 'text-slate-100'}>
+                        <div key={idx} className={log.startsWith('✓') ? 'text-zinc-100' : log.startsWith('!') ? 'text-rose-400' : 'text-slate-100'}>
                           {log}
                         </div>
                       ))}
                     </div>
-                    <div className="flex justify-between items-center pt-2 border-t border-white/10 mt-1">
+                    <div className="flex justify-between items-center pt-2 border-t border-zinc-800 mt-1">
                       <span className="text-[8px] text-slate-100">Console Terminal Output</span>
                       <button 
                         onClick={handleRunCode}
                         disabled={isCompiling}
-                        className="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-black rounded font-bold uppercase tracking-wider disabled:opacity-50"
+                        className="px-3 py-1 bg-white hover:bg-zinc-200 text-black rounded font-bold  tracking-tight disabled:opacity-50"
                       >
                         {isCompiling ? 'Running...' : 'Compile & Run'}
                       </button>
@@ -718,15 +718,15 @@ function LandingPageContent() {
 
                 {/* Right Side: Biometric meters */}
                 <div className="w-44 flex flex-col gap-3 shrink-0 hidden lg:flex">
-                  <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
-                    <Activity className="w-5 h-5 text-emerald-600 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-200">Voice Confidence</span>
-                    <span className="text-lg font-black text-white">92%</span>
+                  <div className="flex-1 rounded-2xl bg-white/8 border border-zinc-800 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                    <Activity className="w-5 h-5 text-white " />
+                    <span className="text-[9px] font-medium  tracking-tight text-zinc-300">Voice Confidence</span>
+                    <span className="text-lg font-medium text-white">92%</span>
                   </div>
-                  <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
-                    <Monitor className="w-5 h-5 text-indigo-400" />
-                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-200">Stress Tracking</span>
-                    <span className="text-sm font-black text-indigo-300">Focused / Stable</span>
+                  <div className="flex-1 rounded-2xl bg-white/8 border border-zinc-800 p-4 flex flex-col justify-center items-center text-center space-y-1">
+                    <Monitor className="w-5 h-5 text-zinc-300" />
+                    <span className="text-[9px] font-medium  tracking-tight text-zinc-300">Stress Tracking</span>
+                    <span className="text-sm font-medium text-indigo-300">Focused / Stable</span>
                   </div>
                 </div>
               </div>
@@ -734,7 +734,7 @@ function LandingPageContent() {
               // Video/Audio Calling Mock Grid (Sales, Data, Product, Marketer)
               <div className="flex-1 flex gap-4 overflow-hidden relative">
                 {/* Candidate Feed */}
-                <div className="flex-1 bg-black/40 border border-white/10 rounded-3xl overflow-hidden relative flex items-center justify-center">
+                <div className="flex-1 bg-black/40 border border-zinc-800 rounded-3xl overflow-hidden relative flex items-center justify-center">
                   {/* Mock video background image */}
                   <img 
                     src={activeHeroTab === 'sales'
@@ -748,11 +748,11 @@ function LandingPageContent() {
                     alt="Candidate video feed stream"
                     className="w-full h-full object-cover opacity-70 filter grayscale-[20%]"
                   />
-                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-[9px] font-bold text-slate-200 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Candidate Video Stream
+                  <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-xl border border-zinc-800 text-[9px] font-bold text-zinc-300 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-white " /> Candidate Video Stream
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4 bg-black/50 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
-                    <p className="text-[10px] text-slate-200 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
+                  <div className="absolute bottom-4 left-4 right-4 bg-black/50 border border-zinc-800 rounded-2xl p-4 backdrop-blur-md">
+                    <p className="text-[10px] text-zinc-300  tracking-tight font-medium mb-1">Live Subtitles</p>
                     <p className="text-sm text-white leading-relaxed font-medium">
                       {activeHeroTab === 'sales' && '"For our B2B sales cycles, I focus on identifying high-intent outbound leads using customer intent data..."'}
                       {activeHeroTab === 'data' && '"I analyzed the temporal schema logs and discovered a bottleneck in our indexing pipeline..."'}
@@ -763,7 +763,7 @@ function LandingPageContent() {
                 </div>
 
                 {/* AI Interviewer Feed */}
-                <div className="w-1/3 bg-black/40 border border-white/10 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
+                <div className="w-1/3 bg-black/40 border border-zinc-800 rounded-3xl overflow-hidden relative flex flex-col hidden md:flex">
                   <div className="flex-1 relative flex items-center justify-center">
                     <img 
                       src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=300&h=300"
@@ -771,15 +771,15 @@ function LandingPageContent() {
                       className="w-full h-full object-cover opacity-40"
                     />
                     <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-2">
-                      <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center animate-pulse">
-                        <Bot className="w-6 h-6 text-emerald-400" />
+                      <div className="w-12 h-12 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center ">
+                        <Bot className="w-6 h-6 text-zinc-100" />
                       </div>
-                      <span className="text-[10px] font-black uppercase text-emerald-400 tracking-wider">AI Interviewer</span>
-                      <span className="text-[9px] text-slate-200 font-mono">Analyzing Audio & Tone</span>
+                      <span className="text-[10px] font-medium  text-zinc-100 tracking-tight">AI Interviewer</span>
+                      <span className="text-[9px] text-zinc-300 font-mono">Analyzing Audio & Tone</span>
                     </div>
                   </div>
-                  <div className="bg-[#050508] border-t border-white/10 p-4 text-left space-y-2">
-                    <span className="text-[8px] font-black text-slate-100 uppercase tracking-widest">Active Question</span>
+                  <div className="bg-[#0A0A0A] border-t border-zinc-800 p-4 text-left space-y-2">
+                    <span className="text-[8px] font-medium text-slate-100  tracking-tight">Active Question</span>
                     <p className="text-[11px] text-slate-100 font-medium">
                       {activeHeroTab === 'sales' && 'How would you qualify outbound target companies?'}
                       {activeHeroTab === 'data' && 'Can you explain the difference between a B-Tree and an LSM-Tree?'}
@@ -800,12 +800,12 @@ function LandingPageContent() {
                     >
                       <button 
                         onClick={() => setIsUnmuted(true)}
-                        className="px-6 py-4 bg-white hover:bg-white/15 text-black font-black uppercase tracking-widest text-[10px] rounded-2xl flex items-center gap-3 shadow-md shadow-slate-200/40 shadow-white/5 active:scale-95 transition-all"
+                        className="px-6 py-4 bg-white hover:bg-white/15 text-black font-medium  tracking-tight text-[10px] rounded-2xl flex items-center gap-3 shadow-md shadow-slate-200/40 shadow-white/5 active:scale-95 transition-all"
                       >
                         <Volume2 className="w-4.5 h-4.5 text-black" />
                         Tap to unmute
                       </button>
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-100">Listen to AI dialogue logs</span>
+                      <span className="text-[9px] font-bold  tracking-tight text-slate-100">Listen to AI dialogue logs</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -814,23 +814,23 @@ function LandingPageContent() {
           </div>
 
           {/* Floating Badges */}
-          <div className="absolute top-16 right-6 bg-black/50 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px] hidden md:flex">
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-500/20 flex items-center justify-center">
-              <CheckCircle className="w-4.5 h-4.5 text-emerald-600" />
+          <div className="absolute top-16 right-6 bg-black/50 border border-zinc-800 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px] hidden md:flex">
+            <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-zinc-700 flex items-center justify-center">
+              <CheckCircle className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[8px] font-black tracking-widest text-slate-200 uppercase">Evaluation Score</span>
-              <span className="text-sm font-black text-white">80/100</span>
+              <span className="text-[8px] font-medium tracking-tight text-zinc-300 ">Evaluation Score</span>
+              <span className="text-sm font-medium text-white">80/100</span>
             </div>
           </div>
 
-          <div className="absolute bottom-24 left-6 bg-black/50 border border-white/10 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[4px] hidden md:flex">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-              <Award className="w-4.5 h-4.5 text-emerald-400" />
+          <div className="absolute bottom-24 left-6 bg-black/50 border border-zinc-800 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[4px] hidden md:flex">
+            <div className="w-8 h-8 rounded-xl bg-zinc-800/50 border border-zinc-700 flex items-center justify-center">
+              <Award className="w-4.5 h-4.5 text-zinc-100" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[8px] font-black tracking-widest text-slate-200 uppercase">Status</span>
-              <span className="text-sm font-black text-white">Strong Candidate</span>
+              <span className="text-[8px] font-medium tracking-tight text-zinc-300 ">Status</span>
+              <span className="text-sm font-medium text-white">Strong Candidate</span>
             </div>
           </div>
         </motion.div>
@@ -839,13 +839,13 @@ function LandingPageContent() {
       {/* Trust partners Marquee */}
       <section className="relative z-10 border-y border-white/8 bg-black/20 py-10 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center space-y-6">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-100">
-            InterviewOS - A Name Trusted by <span className="text-emerald-400">800+</span> hiring partners
+          <span className="text-[10px] font-medium  tracking-tight text-slate-100">
+            InterviewOS - A Name Trusted by <span className="text-zinc-100">800+</span> hiring partners
           </span>
           {/* Logo ticker mockup */}
           <div className="w-full flex justify-center gap-12 flex-wrap opacity-40 grayscale filter hover:grayscale-0 hover:opacity-80 transition-all duration-300">
             {['Greenhouse', 'Ashby', 'BambooHR', 'PeopleStrong', 'Oracle Taleo', 'iCIMS', 'Workday', 'Bullhorn'].map((logo, idx) => (
-              <span key={idx} className="text-sm font-extrabold text-slate-200 uppercase tracking-widest">
+              <span key={idx} className="text-sm font-extrabold text-zinc-300  tracking-tight">
                 {logo}
               </span>
             ))}
@@ -856,65 +856,65 @@ function LandingPageContent() {
       {/* Core Features Showcase */}
       <section id="features" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Core Product Modules</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Core Product Modules</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Everything you need to run interviews automatically, end-to-end
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Feature 1: Built on 3000+ Questions */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">Question Pools</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Question Pools</span>
               <h3 className="text-xl font-bold text-white">Built on 3000+ Industry Questions</h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 Picked from our comprehensive pool or tailored to your specific developer requirements. Ready to use and fully customizable.
               </p>
             </div>
             
             {/* Interactive tag cards group */}
             <div className="relative h-44 mt-6 flex items-center justify-center overflow-hidden">
-              <div className="absolute left-4 rotate-[-8deg] p-4 bg-white/5 border border-white/10 rounded-2xl w-48 shadow-md shadow-black/40">
-                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">DSA / Coding</span>
-                <p className="text-[10px] font-black text-white mt-1">Java, Python, C++, SQL</p>
-                <p className="text-[9px] text-emerald-400 font-bold mt-0.5">1500+ questions</p>
+              <div className="absolute left-4 rotate-[-8deg] p-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl w-48 shadow-md shadow-black/40">
+                <span className="text-[8px] font-bold text-zinc-300  tracking-tight">DSA / Coding</span>
+                <p className="text-[10px] font-medium text-white mt-1">Java, Python, C++, SQL</p>
+                <p className="text-[9px] text-zinc-100 font-bold mt-0.5">1500+ questions</p>
               </div>
-              <div className="absolute right-4 rotate-[8deg] p-4 bg-white/5 border border-white/10 rounded-2xl w-48 shadow-md shadow-black/40 z-0">
-                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">Sales Ops</span>
-                <p className="text-[10px] font-black text-white mt-1">Objection handling</p>
+              <div className="absolute right-4 rotate-[8deg] p-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl w-48 shadow-md shadow-black/40 z-0">
+                <span className="text-[8px] font-bold text-zinc-300  tracking-tight">Sales Ops</span>
+                <p className="text-[10px] font-medium text-white mt-1">Objection handling</p>
                 <p className="text-[9px] text-amber-400 font-bold mt-0.5">300+ questions</p>
               </div>
-              <div className="absolute p-5 bg-[#0e0e12] border border-white/10 rounded-2xl w-52 shadow-xl shadow-emerald-500/5 z-10 scale-105">
-                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">System Architecture</span>
-                <p className="text-[11px] font-black text-white mt-1">Root Cause Analysis</p>
-                <p className="text-[9px] text-emerald-400 font-bold mt-0.5">500+ questions</p>
+              <div className="absolute p-5 bg-[#0e0e12] border border-zinc-800 rounded-2xl w-52 shadow-xl shadow-emerald-500/5 z-10 scale-105">
+                <span className="text-[8px] font-bold text-zinc-300  tracking-tight">System Architecture</span>
+                <p className="text-[11px] font-medium text-white mt-1">Root Cause Analysis</p>
+                <p className="text-[9px] text-zinc-100 font-bold mt-0.5">500+ questions</p>
               </div>
             </div>
           </div>
 
           {/* Feature 2: 100% Anti-Cheating Simulator with Face Mesh */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest bg-rose-500/10 border border-rose-500/25 px-2 py-0.5 rounded">Neural Proctoring</span>
+                <span className="text-[9px] font-medium text-rose-400  tracking-tight bg-rose-500/10 border border-rose-500/25 px-2 py-0.5 rounded">Neural Proctoring</span>
                 <button 
                   onClick={() => setShowFaceMesh(!showFaceMesh)}
-                  className="text-[8px] font-black uppercase text-emerald-400 hover:text-emerald-300 tracking-wider flex items-center gap-1"
+                  className="text-[8px] font-medium  text-zinc-100 hover:text-zinc-200 tracking-tight flex items-center gap-1"
                 >
                   <Cpu className="w-3 h-3" /> {showFaceMesh ? 'Hide Face Mesh' : 'Show Face Mesh'}
                 </button>
               </div>
               <h3 className="text-xl font-bold text-white">100% Anti-Cheating</h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 We monitor browser focus states, eye shift patterns, voice presence anomalies, and keystroke injection signatures in real-time.
               </p>
             </div>
 
             {/* Anti-Cheating timeline logger preview with SVG landmarks */}
-            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 space-y-4 text-left relative overflow-hidden">
+            <div className="bg-[#0A0A0A] border border-zinc-800 rounded-2xl p-4 mt-6 space-y-4 text-left relative overflow-hidden">
               <div className="flex items-center gap-3">
-                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100/50 border border-white/10 relative shrink-0">
+                <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100/50 border border-zinc-800 relative shrink-0">
                   <img 
                     src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120&h=120"
                     alt="Mock proctored user"
@@ -941,19 +941,19 @@ function LandingPageContent() {
                   )}
                   {selectedViolation.videoState === 'camera-off' && (
                     <div className="absolute inset-0 bg-slate-100/50 flex flex-col items-center justify-center text-center p-1 space-y-1">
-                      <ShieldAlert className="w-5 h-5 text-rose-500 animate-pulse" />
-                      <span className="text-[6px] font-black uppercase text-rose-500 tracking-wider">Feed Blocked</span>
+                      <ShieldAlert className="w-5 h-5 text-rose-500 " />
+                      <span className="text-[6px] font-medium  text-rose-500 tracking-tight">Feed Blocked</span>
                     </div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-black text-rose-600 uppercase tracking-wider">{selectedViolation.label}</span>
+                    <span className="text-[10px] font-medium text-rose-600  tracking-tight">{selectedViolation.label}</span>
                     <span className="text-[9px] text-slate-100 font-mono">{selectedViolation.time} / 03:41</span>
                   </div>
-                  <p className="text-[10px] text-slate-200 mt-0.5">{selectedViolation.desc}</p>
-                  <div className="text-[8px] font-bold uppercase tracking-wider text-slate-100 mt-1.5 flex gap-2">
-                    <span className="text-emerald-600">FPS: 60.0</span>
+                  <p className="text-[10px] text-zinc-300 mt-0.5">{selectedViolation.desc}</p>
+                  <div className="text-[8px] font-bold  tracking-tight text-slate-100 mt-1.5 flex gap-2">
+                    <span className="text-white">FPS: 60.0</span>
                     <span className={selectedViolation.id ? 'text-rose-600' : 'text-slate-100'}>
                       Gaze: {selectedViolation.videoState === 'eye-shift' ? 'DEVIATING' : 'FOCUSED'}
                     </span>
@@ -975,10 +975,10 @@ function LandingPageContent() {
                     <button
                       key={v.id}
                       onClick={() => setSelectedViolation(v)}
-                      className={`py-1 text-[8px] font-bold uppercase tracking-wider rounded border text-center transition-all ${
+                      className={`py-1 text-[8px] font-bold  tracking-tight rounded border text-center transition-all ${
                         selectedViolation.id === v.id
                           ? 'bg-rose-50 border-rose-500/30 text-rose-600'
-                          : 'bg-white/8 border-white/10 text-slate-100 hover:text-slate-900'
+                          : 'bg-white/8 border-zinc-800 text-slate-100 hover:text-slate-900'
                       }`}
                     >
                       {v.label}
@@ -990,56 +990,56 @@ function LandingPageContent() {
           </div>
 
           {/* Feature 3: Integrated Code Editor */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">Compiler Sandbox</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Compiler Sandbox</span>
               <h3 className="text-xl font-bold text-white">Integrated Code Editor</h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 Built-in compiler environment and interactive editor scratchpad to evaluate structural code efficiency, edge cases, and runtime complexity.
               </p>
             </div>
 
             {/* Code mockup */}
-            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-slate-200 space-y-1">
-              <div className="text-emerald-500">// Evaluated Code Stream</div>
-              <div><span className="text-emerald-400">class</span> <span className="text-blue-400">Solution</span> &#123;</div>
-              <div className="pl-4"><span className="text-blue-400">int</span> <span className="text-yellow-400">sumOfDigits</span>(<span className="text-blue-400">int</span> n) &#123;</div>
-              <div className="pl-8"><span className="text-blue-400">int</span> sum = 0;</div>
-              <div className="pl-8"><span className="text-emerald-400">if</span> (n &lt; 0) &#123; n = -n; &#125;</div>
-              <div className="pl-8"><span className="text-emerald-400">while</span> (n &gt; 0) &#123;</div>
+            <div className="bg-[#0A0A0A] border border-zinc-800 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-zinc-300 space-y-1">
+              <div className="text-white">// Evaluated Code Stream</div>
+              <div><span className="text-zinc-100">class</span> <span className="text-zinc-300">Solution</span> &#123;</div>
+              <div className="pl-4"><span className="text-zinc-300">int</span> <span className="text-yellow-400">sumOfDigits</span>(<span className="text-zinc-300">int</span> n) &#123;</div>
+              <div className="pl-8"><span className="text-zinc-300">int</span> sum = 0;</div>
+              <div className="pl-8"><span className="text-zinc-100">if</span> (n &lt; 0) &#123; n = -n; &#125;</div>
+              <div className="pl-8"><span className="text-zinc-100">while</span> (n &gt; 0) &#123;</div>
               <div className="pl-12">sum += n % 10;</div>
               <div className="pl-12">n /= 10;</div>
               <div className="pl-8">&#125;</div>
-              <div className="pl-8"><span className="text-emerald-400">return</span> sum;</div>
+              <div className="pl-8"><span className="text-zinc-100">return</span> sum;</div>
               <div className="pl-4">&#125;</div>
               <div>&#125;</div>
             </div>
           </div>
 
           {/* Feature 4: Feels Like a Real Interview with Dialogue Player */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">Adaptive Dialogues</span>
+                <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Adaptive Dialogues</span>
                 <button 
                   onClick={triggerDialogueSimulation}
                   disabled={dialoguePlaying}
-                  className="text-[8px] font-black uppercase text-emerald-400 hover:text-emerald-300 tracking-wider flex items-center gap-1 disabled:opacity-50"
+                  className="text-[8px] font-medium  text-zinc-100 hover:text-zinc-200 tracking-tight flex items-center gap-1 disabled:opacity-50"
                 >
                   <Play className="w-2.5 h-2.5" /> Play Dialogue Demo
                 </button>
               </div>
               <h3 className="text-xl font-bold text-white">Feels Like a Real Interview</h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 Adaptive follow-ups, natural voice parsing, and real-time probing prompts structured to evaluate logic depth, not just memorized syntax.
               </p>
             </div>
 
             {/* Bubble Dialogue mockup with voice waves */}
-            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans relative">
+            <div className="bg-[#0A0A0A] border border-zinc-800 rounded-2xl p-4 mt-6 text-left space-y-3 font-sans relative">
               <div className="space-y-1 max-w-[90%]">
-                <span className="text-[8px] font-black text-emerald-400 uppercase tracking-wider">AI interviewer</span>
-                <div className="p-3 bg-[#0b130e] border border-emerald-500/20 rounded-2xl rounded-tl-none text-[10px] text-slate-200 leading-relaxed">
+                <span className="text-[8px] font-medium text-zinc-100  tracking-tight">AI interviewer</span>
+                <div className="p-3 bg-[#0b130e] border border-zinc-700 rounded-2xl rounded-tl-none text-[10px] text-zinc-300 leading-relaxed">
                   &quot;Can you tell me about one project you&apos;re proud of and the tech stack you used?&quot;
                 </div>
               </div>
@@ -1047,8 +1047,8 @@ function LandingPageContent() {
               <div className={`space-y-1 max-w-[90%] ml-auto text-right transition-opacity duration-500 ${
                 dialogueStep >= 1 ? 'opacity-100' : 'opacity-30'
               }`}>
-                <span className="text-[8px] font-black text-slate-100 uppercase tracking-wider">Candidate response</span>
-                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl rounded-tr-none text-[10px] text-slate-200 leading-relaxed text-left">
+                <span className="text-[8px] font-medium text-slate-100  tracking-tight">Candidate response</span>
+                <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl rounded-tr-none text-[10px] text-zinc-300 leading-relaxed text-left">
                   {dialogueStep >= 2 
                     ? '"Yeah sure, I’ve worked on a P2P food delivery system... MERN stack, MongoDB, React, Node..."' 
                     : '"Thinking... evaluating project archives..."'}
@@ -1057,11 +1057,11 @@ function LandingPageContent() {
 
               {/* Glowing voice waves */}
               {dialoguePlaying && (
-                <div className="absolute top-4 right-4 flex gap-1 items-end h-6 z-20 bg-white/10 px-3 py-1 border border-white/10 rounded-full">
+                <div className="absolute top-4 right-4 flex gap-1 items-end h-6 z-20 bg-white/10 px-3 py-1 border border-zinc-800 rounded-full">
                   {[1, 2, 3, 4, 5, 6].map(bar => (
                     <span 
                       key={bar} 
-                      className="w-1 bg-emerald-500 rounded-full animate-pulse" 
+                      className="w-1 bg-white rounded-full " 
                       style={{ 
                         height: `${Math.floor(Math.random() * 16) + 4}px`, 
                         animationDelay: `${bar * 100}ms` 
@@ -1079,19 +1079,19 @@ function LandingPageContent() {
       <section className="relative z-10 border-t border-white/8 bg-transparent py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
           <div className="text-center space-y-3">
-            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-block">Real-time Pipeline</span>
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 px-2 py-0.5 rounded border border-zinc-700 inline-block">Real-time Pipeline</span>
+            <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
               Interactive Telemetry: How InterviewOS Works
             </h2>
-            <p className="text-sm text-slate-200 max-w-2xl mx-auto">
+            <p className="text-sm text-zinc-300 max-w-2xl mx-auto">
               Click the pipeline nodes to track candidate request lifecycles and explore real-time telemetry metrics generated by the platform.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-center pt-6">
             {/* SVG Pipeline Connection Nodes (7 cols) */}
-            <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-3xl p-6 relative min-h-[350px] flex flex-col justify-center shadow-sm">
-              <span className="absolute top-4 left-4 text-[8px] font-mono text-slate-200 font-bold uppercase tracking-wider">[ PIPELINE-DIAGRAM // node_mesh ]</span>
+            <div className="lg:col-span-7 bg-zinc-900/50 border border-zinc-800 rounded-3xl p-6 relative min-h-[350px] flex flex-col justify-center shadow-sm">
+              <span className="absolute top-4 left-4 text-[8px] font-mono text-zinc-300 font-bold  tracking-tight">[ PIPELINE-DIAGRAM // node_mesh ]</span>
               
               {/* Dynamic SVG link line */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 500 200">
@@ -1132,12 +1132,12 @@ function LandingPageContent() {
                     onClick={() => setActiveTelemetryStep(node.id)}
                     className={`w-28 p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                       activeTelemetryStep === node.id
-                        ? 'bg-emerald-500 border-emerald-400 text-black font-extrabold shadow-lg shadow-emerald-500/25 scale-105'
-                        : 'bg-white/5 border-white/10 hover:border-emerald-500/30 text-slate-200 hover:text-white backdrop-blur-sm'
+                        ? 'bg-white border-emerald-400 text-black font-extrabold shadow-lg shadow-emerald-500/25 scale-105'
+                        : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white backdrop-blur-sm'
                     }`}
                   >
-                    <span className={`text-[7px] font-mono font-bold tracking-widest block uppercase ${activeTelemetryStep === node.id ? 'text-black/70' : 'text-emerald-400'}`}>{node.tag}</span>
-                    <h4 className={`text-[10px] font-black tracking-tight mt-1 ${activeTelemetryStep === node.id ? 'text-black font-extrabold' : 'text-slate-200'}`}>{node.title}</h4>
+                    <span className={`text-[7px] font-mono font-bold tracking-tight block  ${activeTelemetryStep === node.id ? 'text-black/70' : 'text-zinc-100'}`}>{node.tag}</span>
+                    <h4 className={`text-[10px] font-medium tracking-tight mt-1 ${activeTelemetryStep === node.id ? 'text-black font-extrabold' : 'text-zinc-300'}`}>{node.title}</h4>
                     <span className={`text-[8px] font-mono font-bold block mt-1.5 ${activeTelemetryStep === node.id ? 'text-black/50' : 'text-slate-100'}`}>{node.label}</span>
                   </button>
                 ))}
@@ -1145,19 +1145,19 @@ function LandingPageContent() {
             </div>
 
             {/* System Telemetry Log Console (5 cols) */}
-            <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 text-left font-mono text-[9.5px] text-slate-200 space-y-4 shadow-xl min-h-[350px] flex flex-col justify-between">
+            <div className="lg:col-span-5 bg-zinc-950 border border-slate-800 rounded-3xl p-5 text-left font-mono text-[9.5px] text-zinc-300 space-y-4 shadow-xl min-h-[350px] flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                  <span className="text-emerald-400 font-extrabold uppercase tracking-wider text-[8px]">[ TELEMETRY CONSOLE ]</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-zinc-100 font-extrabold  tracking-tight text-[8px]">[ TELEMETRY CONSOLE ]</span>
+                  <span className="w-2 h-2 rounded-full bg-white " />
                 </div>
                 
                 {activeTelemetryStep === 0 && (
                   <div className="space-y-1.5">
                     <div className="text-slate-100">&gt; INITIALIZING RESUME SCAN...</div>
-                    <div className="text-emerald-400">✓ Parsing PDF text bytes using Gemini Flash 2.5...</div>
+                    <div className="text-zinc-100">✓ Parsing PDF text bytes using Gemini Flash 2.5...</div>
                     <div>[INPUT]: Shubh_Agarwal_Resume.pdf (425 KB)</div>
-                    <div className="text-indigo-400">Matches found: [React, Node.js, PyTorch, IIT]</div>
+                    <div className="text-zinc-300">Matches found: [React, Node.js, PyTorch, IIT]</div>
                     <div className="text-slate-100">&gt; Target role: lead_fullstack_architect</div>
                   </div>
                 )}
@@ -1165,10 +1165,10 @@ function LandingPageContent() {
                 {activeTelemetryStep === 1 && (
                   <div className="space-y-1.5">
                     <div className="text-slate-100">&gt; TAILORING DYNAMIC QUESTIONS...</div>
-                    <div className="text-emerald-400">✓ Scanning 3000+ question repositories...</div>
+                    <div className="text-zinc-100">✓ Scanning 3000+ question repositories...</div>
                     <div>[GENERATE]: 3 customized questions generated.</div>
-                    <div className="text-indigo-400">Q1: &quot;Consensus Commit Protocol&quot; (System design)</div>
-                    <div className="text-indigo-400">Q2: &quot;Lock-free Concurrent Ring Buffer&quot; (Algorithms)</div>
+                    <div className="text-zinc-300">Q1: &quot;Consensus Commit Protocol&quot; (System design)</div>
+                    <div className="text-zinc-300">Q2: &quot;Lock-free Concurrent Ring Buffer&quot; (Algorithms)</div>
                     <div className="text-slate-100">&gt; Injecting prompt hooks into cloud session config...</div>
                   </div>
                 )}
@@ -1176,8 +1176,8 @@ function LandingPageContent() {
                 {activeTelemetryStep === 2 && (
                   <div className="space-y-1.5">
                     <div className="text-slate-100">&gt; SPINNING UP stack VM DOCKER CONTAINER...</div>
-                    <div className="text-emerald-400">✓ Node sandbox initialized successfully (60.0 FPS)</div>
-                    <div className="text-indigo-400">Running compiler validation test suites...</div>
+                    <div className="text-zinc-100">✓ Node sandbox initialized successfully (60.0 FPS)</div>
+                    <div className="text-zinc-300">Running compiler validation test suites...</div>
                     <div>[STDOUT]: 3/3 test cases passed. JVM execution OK.</div>
                     <div className="text-slate-100">&gt; Resource consumption: CPU: 12% | RAM: 154MB</div>
                   </div>
@@ -1186,8 +1186,8 @@ function LandingPageContent() {
                 {activeTelemetryStep === 3 && (
                   <div className="space-y-1.5">
                     <div className="text-slate-100">&gt; REAL-TIME NEURAL PROCTORING ACTIVE...</div>
-                    <div className="text-emerald-400">✓ Eye tracking, audio voice, and browser tabs audit:</div>
-                    <div className="text-indigo-400">Tab Focus: ACTIVE | Gaze Vector: 0.98 (Focused)</div>
+                    <div className="text-zinc-100">✓ Eye tracking, audio voice, and browser tabs audit:</div>
+                    <div className="text-zinc-300">Tab Focus: ACTIVE | Gaze Vector: 0.98 (Focused)</div>
                     <div className="text-rose-400">Warning: 1 event flagged [Eye Shift at 01:12]</div>
                     <div className="text-slate-100">&gt; Logging gaze landmarks coordinate mesh in database...</div>
                   </div>
@@ -1196,9 +1196,9 @@ function LandingPageContent() {
                 {activeTelemetryStep === 4 && (
                   <div className="space-y-1.5">
                     <div className="text-slate-100">&gt; COMPILING EVALUATION INDEX METRICS...</div>
-                    <div className="text-emerald-400">✓ AI grading completed successfully (Overall: 80/100)</div>
+                    <div className="text-zinc-100">✓ AI grading completed successfully (Overall: 80/100)</div>
                     <div>Problem Solving: Elite | Communication: Strong</div>
-                    <div className="text-indigo-400">Radar vectors calculated: [Thinking: 4.7, Fluency: 4.8]</div>
+                    <div className="text-zinc-300">Radar vectors calculated: [Thinking: 4.7, Fluency: 4.8]</div>
                     <div className="text-slate-100">&gt; Syncing scorecard data models. Evaluation trace ready.</div>
                   </div>
                 )}
@@ -1214,43 +1214,43 @@ function LandingPageContent() {
       </section>
 
       {/* Differentiator Section: AI Workplace Simulator */}
-      <section id="workplace-simulator" className="relative z-10 bg-white/5 border-y border-white/8 py-20">
+      <section id="workplace-simulator" className="relative z-10 bg-zinc-900/50 border-y border-white/8 py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
           <div className="text-center space-y-3">
-            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-block">The Ultimate Differentiator</span>
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            <span className="text-[10px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 px-2 py-0.5 rounded border border-zinc-700 inline-block">The Ultimate Differentiator</span>
+            <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
               Evaluate real workplace behavior. Not just MCQs.
             </h2>
-            <p className="text-sm text-slate-200 max-w-2xl mx-auto">
+            <p className="text-sm text-zinc-300 max-w-2xl mx-auto">
               Drop candidates into a simulated workplace sandbox. Watch them triage Slack bugs, handle angry CEO escalations, and prioritize Jira tickets on the fly.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left pt-4">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-colors backdrop-blur-sm">
               <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
-                <Activity className="w-5 h-5 text-indigo-400" />
+                <Activity className="w-5 h-5 text-zinc-300" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Real-time Stress Testing</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 Our AI simulates production outages and dynamically injects urgent messages. We evaluate how candidates manage panic, prioritize tasks under pressure, and communicate effectively during a crisis.
               </p>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4">
-                <Workflow className="w-5 h-5 text-emerald-400" />
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-colors backdrop-blur-sm">
+              <div className="w-10 h-10 rounded-xl bg-zinc-800/50 border border-zinc-700 flex items-center justify-center mb-4">
+                <Workflow className="w-5 h-5 text-zinc-100" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Workflow Prioritization</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 Candidates are presented with a backlog of conflicting Jira tickets and customer support emails. The AI analyzes their decision-making logic and triage strategies.
               </p>
             </div>
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
+            <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-colors backdrop-blur-sm">
               <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
                 <ShieldCheck className="w-5 h-5 text-rose-400" />
               </div>
               <h3 className="text-base font-bold text-white mb-2">Stakeholder Management</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">
+              <p className="text-sm text-zinc-400 leading-relaxed">
                 Beyond coding, we assess how candidates communicate with non-technical stakeholders. Do they blame others? Are they polite to frustrated clients? The AI grades emotional intelligence.
               </p>
             </div>
@@ -1293,18 +1293,18 @@ function LandingPageContent() {
                   }`}
                 >
                   {activeSimTab === tab.id && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-white" />
                   )}
-                  <span className="text-[8px] font-bold tracking-widest uppercase text-slate-200 block mb-1">{tab.tag}</span>
-                  <h4 className="text-sm font-black text-white">{tab.title}</h4>
+                  <span className="text-[8px] font-bold tracking-tight  text-zinc-300 block mb-1">{tab.tag}</span>
+                  <h4 className="text-sm font-medium text-white">{tab.title}</h4>
                   <p className="text-[11px] text-slate-100 leading-relaxed mt-1">{tab.desc}</p>
                 </button>
               ))}
             </div>
 
             {/* Right Interactive mockup panel (8 cols) */}
-            <div className="lg:col-span-8 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-md shadow-black/30 min-h-[400px] flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-sm">
-              <span className="absolute top-4 right-4 text-[8px] font-mono text-slate-200 font-bold uppercase tracking-wider">[ INTERACTIVE SIMULATION PREVIEW ]</span>
+            <div className="lg:col-span-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl p-6 shadow-md shadow-black/30 min-h-[400px] flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-sm">
+              <span className="absolute top-4 right-4 text-[8px] font-mono text-zinc-300 font-bold  tracking-tight">[ INTERACTIVE SIMULATION PREVIEW ]</span>
               
               <div className="space-y-4">
                 {/* Simulator Interface Header */}
@@ -1312,9 +1312,9 @@ function LandingPageContent() {
                   <div className="flex gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-zinc-200" />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-200 uppercase tracking-widest font-bold pl-4">
+                  <span className="text-[10px] font-mono text-zinc-300  tracking-tight font-bold pl-4">
                     {activeSimTab === 'slack' && 'workspace-slack / channel-deploy-panic'}
                     {activeSimTab === 'email' && 'inbox / client-escalations'}
                     {activeSimTab === 'jira' && 'jira-board / sprint-emergency'}
@@ -1325,13 +1325,13 @@ function LandingPageContent() {
                 {activeSimTab === 'slack' && (
                   <div className="space-y-4 font-sans text-sm">
                     <div className="flex gap-3 items-start">
-                      <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-extrabold text-[10px] text-indigo-400">DT</div>
+                      <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-extrabold text-[10px] text-zinc-300">DT</div>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-slate-200">Devin (Tech Lead)</span>
-                          <span className="text-[9px] text-slate-200 font-bold">12:31 PM</span>
+                          <span className="font-bold text-zinc-300">Devin (Tech Lead)</span>
+                          <span className="text-[9px] text-zinc-300 font-bold">12:31 PM</span>
                         </div>
-                        <p className="text-slate-100 leading-relaxed bg-white/5 border border-white/8 p-3 rounded-2xl rounded-tl-none">
+                        <p className="text-slate-100 leading-relaxed bg-zinc-900/50 border border-white/8 p-3 rounded-2xl rounded-tl-none">
                           &quot;Hey! The payment webhook service is throwing 504 gateway timeouts on production! Acme Corp is complaining their checks are failing. What is our hotfix path?&quot;
                         </p>
                       </div>
@@ -1339,16 +1339,16 @@ function LandingPageContent() {
 
                     {slackChoice === null ? (
                       <div className="space-y-2.5 pt-2 max-w-lg pl-11">
-                        <span className="text-[9px] font-bold text-slate-200 uppercase tracking-widest block">Choose candidate response:</span>
+                        <span className="text-[9px] font-bold text-zinc-300  tracking-tight block">Choose candidate response:</span>
                         <button 
                           onClick={() => setSlackChoice(1)}
-                          className="w-full p-3 bg-white/5 border border-white/10 rounded-xl hover:border-emerald-500/50 hover:bg-emerald-500/10 text-left transition-all duration-200 block text-[11px]"
+                          className="w-full p-3 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-600 hover:bg-zinc-800/50 text-left transition-all duration-200 block text-[11px]"
                         >
                           <strong>A) &quot;Let&apos;s roll back main branch immediately. Devin, prepare the git revert commands. I will notify customer operations.&quot;</strong>
                         </button>
                         <button 
                           onClick={() => setSlackChoice(2)}
-                          className="w-full p-3 bg-white/5 border border-white/10 rounded-xl hover:border-emerald-500/50 hover:bg-emerald-500/10 text-left transition-all duration-200 block text-[11px]"
+                          className="w-full p-3 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-600 hover:bg-zinc-800/50 text-left transition-all duration-200 block text-[11px]"
                         >
                           <strong>B) &quot;Let&apos;s run some curls on the logs first. Devin, spin up logs tracing. I want to check database connection count parameters before acting.&quot;</strong>
                         </button>
@@ -1358,8 +1358,8 @@ function LandingPageContent() {
                         <div className="flex gap-3 items-start justify-end text-right">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 justify-end">
-                              <span className="font-bold text-slate-200 text-sm">You (Candidate response)</span>
-                              <span className="text-[9px] text-slate-200 font-bold">12:32 PM</span>
+                              <span className="font-bold text-zinc-300 text-sm">You (Candidate response)</span>
+                              <span className="text-[9px] text-zinc-300 font-bold">12:32 PM</span>
                             </div>
                             <p className="text-white leading-relaxed bg-emerald-600 p-3 rounded-2xl rounded-tr-none text-left inline-block max-w-sm">
                               {slackChoice === 1 
@@ -1370,10 +1370,10 @@ function LandingPageContent() {
                         </div>
 
                         {/* Live AI feedback evaluate block */}
-                        <div className="p-4 bg-white/5 border border-white/10 rounded-2xl space-y-2">
+                        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-2xl space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AI Evaluation Feedback</span>
-                            <span className="text-sm font-black text-emerald-400">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
+                            <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 px-2 py-0.5 rounded border border-zinc-700">AI Evaluation Feedback</span>
+                            <span className="text-sm font-medium text-zinc-100">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
                           </div>
                           <p className="text-[11px] text-slate-100 leading-relaxed">
                             {slackChoice === 1 
@@ -1382,7 +1382,7 @@ function LandingPageContent() {
                           </p>
                           <button 
                             onClick={() => setSlackChoice(null)}
-                            className="text-[9px] font-black text-emerald-400 hover:underline uppercase tracking-wider block pt-1"
+                            className="text-[9px] font-medium text-zinc-100 hover:underline  tracking-tight block pt-1"
                           >
                             Reset Options
                           </button>
@@ -1395,40 +1395,40 @@ function LandingPageContent() {
                 {/* Tab content 2: Client email */}
                 {activeSimTab === 'email' && (
                   <div className="space-y-4 font-sans text-sm">
-                    <div className="bg-white/5 border border-white/8 rounded-2xl p-4 space-y-3">
+                    <div className="bg-zinc-900/50 border border-white/8 rounded-2xl p-4 space-y-3">
                       <div>
                         <div className="flex justify-between text-slate-100 font-bold text-[10px]">
                           <span>From: ceo@acme-corp.com</span>
                           <span>11:15 AM</span>
                         </div>
-                        <h4 className="text-sm font-black text-slate-200 mt-1">URGENT: Broken webhook API integrations (Immediate Escalation)</h4>
+                        <h4 className="text-sm font-medium text-zinc-300 mt-1">URGENT: Broken webhook API integrations (Immediate Escalation)</h4>
                       </div>
-                      <p className="text-slate-100 leading-relaxed pt-2 border-t border-white/10">
+                      <p className="text-slate-100 leading-relaxed pt-2 border-t border-zinc-800">
                         &quot;Your latest patch broke our webhook payouts pipeline. We have lost $40,000 in transactions in the last hour alone. If this is not fixed in 30 minutes, we are canceling our contract.&quot;
                       </p>
                     </div>
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
+                    <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-4 space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Candidate Draft Graded by AI</span>
-                        <span className="text-sm font-black text-emerald-400">Draft Score: 95/100 (Strong Hire)</span>
+                        <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 px-2 py-0.5 rounded border border-zinc-700">Candidate Draft Graded by AI</span>
+                        <span className="text-sm font-medium text-zinc-100">Draft Score: 95/100 (Strong Hire)</span>
                       </div>
                       
-                      <div className="p-3 bg-black/40 border border-white/10 rounded-xl font-mono text-[10px] text-slate-100 leading-relaxed">
+                      <div className="p-3 bg-black/40 border border-zinc-800 rounded-xl font-mono text-[10px] text-slate-100 leading-relaxed">
                         &quot;Hi CEO, We have identified the deployment bug and rolled back Webhook Release v2.4. Integrations are fully restored. I am initiating a refund of $4,500 for transaction fee credits as a priority safety measure.&quot;
                       </div>
                       
                       <div className="grid grid-cols-3 gap-2 text-[10px] font-bold text-center">
-                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
-                          <span className="text-emerald-400 block">Politeness</span>
+                        <div className="bg-black/50 border border-zinc-800 rounded-lg p-1">
+                          <span className="text-zinc-100 block">Politeness</span>
                           <span className="text-slate-100">95%</span>
                         </div>
-                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
-                          <span className="text-emerald-400 block">Escalation Mitigation</span>
+                        <div className="bg-black/50 border border-zinc-800 rounded-lg p-1">
+                          <span className="text-zinc-100 block">Escalation Mitigation</span>
                           <span className="text-slate-100">92%</span>
                         </div>
-                        <div className="bg-black/50 border border-white/10 rounded-lg p-1">
-                          <span className="text-emerald-400 block">Action Clarity</span>
+                        <div className="bg-black/50 border border-zinc-800 rounded-lg p-1">
+                          <span className="text-zinc-100 block">Action Clarity</span>
                           <span className="text-slate-100">98%</span>
                         </div>
                       </div>
@@ -1439,17 +1439,17 @@ function LandingPageContent() {
                 {/* Tab content 3: Jira triage */}
                 {activeSimTab === 'jira' && (
                   <div className="space-y-4 font-sans text-sm">
-                    <span className="text-[9px] font-bold text-slate-200 uppercase tracking-widest block">Prioritize incoming tickets (click nodes to swap order):</span>
+                    <span className="text-[9px] font-bold text-zinc-300  tracking-tight block">Prioritize incoming tickets (click nodes to swap order):</span>
                     
                     <div className="flex flex-col gap-2.5">
                       {jiraPriorities.map((item, idx) => (
                         <div 
                           key={item} 
-                          className="flex items-center justify-between p-3.5 bg-white/5 border border-white/10 rounded-xl text-left"
+                          className="flex items-center justify-between p-3.5 bg-zinc-900/50 border border-zinc-800 rounded-xl text-left"
                         >
                           <div className="flex items-center gap-3">
-                            <span className="w-5 h-5 rounded-full bg-emerald-500 text-black font-extrabold text-[10px] flex items-center justify-center">{idx + 1}</span>
-                            <span className="font-bold text-slate-200">{item}</span>
+                            <span className="w-5 h-5 rounded-full bg-white text-black font-extrabold text-[10px] flex items-center justify-center">{idx + 1}</span>
+                            <span className="font-bold text-zinc-300">{item}</span>
                           </div>
                           
                           <div className="flex gap-2">
@@ -1461,7 +1461,7 @@ function LandingPageContent() {
                                 setJiraPriorities(newOrder);
                                 setJiraSubmitted(false);
                               }}
-                              className="text-[9px] font-bold uppercase tracking-wider text-emerald-400 hover:text-emerald-300 bg-white/5 border border-white/10 hover:border-emerald-500/30 px-2 py-1 rounded"
+                              className="text-[9px] font-bold  tracking-tight text-zinc-100 hover:text-zinc-200 bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 px-2 py-1 rounded"
                             >
                               Move
                             </button>
@@ -1473,15 +1473,15 @@ function LandingPageContent() {
                     {!jiraSubmitted ? (
                       <button 
                         onClick={() => setJiraSubmitted(true)}
-                        className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                        className="w-full py-3 bg-white hover:bg-emerald-600 text-black font-extrabold rounded-xl text-[10px] font-medium  tracking-tight transition-all"
                       >
                         Submit Prioritization Strategy
                       </button>
                     ) : (
-                      <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl space-y-2">
+                      <div className="p-4 bg-zinc-800/50 border border-zinc-700 rounded-2xl space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/20">AI Priority Strategy Feedback</span>
-                          <span className="text-sm font-black text-emerald-400">
+                          <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-white/15 px-2 py-0.5 rounded border border-zinc-700">AI Priority Strategy Feedback</span>
+                          <span className="text-sm font-medium text-zinc-100">
                             {jiraPriorities[0] === 'Auth Bypass' ? 'Triage score: 98/100 (Optimal)' : 'Triage score: 45/100 (Risky)'}
                           </span>
                         </div>
@@ -1496,7 +1496,7 @@ function LandingPageContent() {
                 )}
               </div>
 
-              <div className="text-[8.5px] text-slate-200 border-t border-white/10 pt-3 flex justify-between font-mono">
+              <div className="text-[8.5px] text-zinc-300 border-t border-zinc-800 pt-3 flex justify-between font-mono">
                 <span>Evaluate: stress management, prioritization, critical writing</span>
                 <span>OS_SIMULATOR_v1.0</span>
               </div>
@@ -1508,11 +1508,11 @@ function LandingPageContent() {
       {/* Product Tour / Interface Showcase with Pictures */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Platform Walkthrough</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Platform Walkthrough</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             InterviewOS in Action: Product Tour
           </h2>
-          <p className="text-sm text-slate-200 max-w-2xl mx-auto">
+          <p className="text-sm text-zinc-300 max-w-2xl mx-auto">
             Explore the comprehensive candidate interfaces, recruiter analytics portals, and secure testing environments that drive automated hiring.
           </p>
         </div>
@@ -1556,17 +1556,17 @@ function LandingPageContent() {
                 onClick={() => setActiveTourTab(feat.id)}
                 className={`w-full p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden group ${
                   activeTourTab === feat.id
-                    ? 'bg-emerald-500/10 border-emerald-500/30 shadow-md shadow-emerald-900/5'
-                    : 'bg-white/5 border-white/15 hover:border-white/15 hover:bg-white/[0.02]'
+                    ? 'bg-zinc-800/50 border-zinc-700 shadow-md shadow-emerald-900/5'
+                    : 'bg-zinc-900/50 border-white/15 hover:border-white/15 hover:bg-white/[0.02]'
                 }`}
               >
                 {activeTourTab === feat.id && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-white" />
                 )}
-                <span className="text-[8px] font-black uppercase tracking-wider text-emerald-400 block mb-1">
+                <span className="text-[8px] font-medium  tracking-tight text-zinc-100 block mb-1">
                   {feat.tag}
                 </span>
-                <h4 className="text-sm font-black text-white group-hover:text-emerald-400 transition-colors">
+                <h4 className="text-sm font-medium text-white group-hover:text-zinc-100 transition-colors">
                   {feat.title}
                 </h4>
                 <p className="text-[11px] text-slate-100 leading-relaxed mt-1">
@@ -1577,18 +1577,18 @@ function LandingPageContent() {
           </div>
 
           {/* Right Column: Visual Interface Frame (7 cols) */}
-          <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-3xl p-4 md:p-6 shadow-xl shadow-black/50 relative group overflow-hidden flex flex-col justify-center min-h-[400px] backdrop-blur-sm">
+          <div className="lg:col-span-7 bg-zinc-900/50 border border-zinc-800 rounded-3xl p-4 md:p-6 shadow-xl shadow-black/50 relative group overflow-hidden flex flex-col justify-center min-h-[400px] backdrop-blur-sm">
             {/* Glow effect */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-zinc-900/50 rounded-full blur-[100px] pointer-events-none" />
             
             {/* Frame navigation header mockup */}
             <div className="flex justify-between items-center border-b border-white/8 pb-3 mb-4 text-[10px] text-slate-100 font-mono">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+                <span className="w-2.5 h-2.5 rounded-full bg-white/60" />
               </div>
-              <div className="px-3 py-0.5 bg-slate-100/80 rounded-md text-[9px] border border-white/10">
+              <div className="px-3 py-0.5 bg-slate-100/80 rounded-md text-[9px] border border-zinc-800">
                 {activeTourTab === 'live-session' && 'interviewos.com/session/LIVE-9291'}
                 {activeTourTab === 'grading-report' && 'interviewos.com/recruiter/report/shubh_agarwal'}
                 {activeTourTab === 'permissions-check' && 'interviewos.com/instructions?name=Shubh'}
@@ -1598,7 +1598,7 @@ function LandingPageContent() {
             </div>
 
             {/* Main Image Viewport */}
-            <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 bg-slate-100/50 flex items-center justify-center group-hover:border-emerald-500/20 transition-all duration-300">
+            <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-slate-100/50 flex items-center justify-center group-hover:border-zinc-700 transition-all duration-300">
               {[
                 { id: 'live-session', image: '/images/session_feature.png' },
                 { id: 'grading-report', image: '/images/dashboard_feature.png' },
@@ -1623,8 +1623,8 @@ function LandingPageContent() {
       <section className="relative z-10 border-y border-white/8 bg-transparent py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-16">
           <div className="text-center space-y-3">
-            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Grading Dashboard</span>
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+            <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Grading Dashboard</span>
+            <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
               Detailed & Instance-backed Interview Evaluation
             </h2>
           </div>
@@ -1637,26 +1637,26 @@ function LandingPageContent() {
                 onClick={() => handleCandidateSwap(c.id)}
                 className={`flex items-center gap-2 px-4 py-2 border rounded-2xl transition-all ${
                   selectedCandidate.id === c.id 
-                    ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 shadow-md shadow-emerald-500/10' 
-                    : 'bg-white/5 border-white/10 text-slate-200 hover:text-white hover:bg-white/10'
+                    ? 'border-emerald-500 bg-zinc-800/50 text-zinc-100 shadow-md shadow-emerald-500/10' 
+                    : 'bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:text-white hover:bg-white/10'
                 }`}
               >
-                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white/10">
+                <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-zinc-800">
                   <img src={c.avatar} alt={c.name} className="w-full h-full object-cover" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-wider">{c.name.split(' ')[0]}</span>
+                <span className="text-[10px] font-medium  tracking-tight">{c.name.split(' ')[0]}</span>
               </button>
             ))}
           </div>
 
-          <div className="max-w-6xl mx-auto bg-white/5 border border-white/10 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-black/50 grid backdrop-blur-sm grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
+          <div className="max-w-6xl mx-auto bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-black/50 grid backdrop-blur-sm grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
 
             {/* Left Side: Summary Card */}
-            <div className="lg:col-span-4 bg-[#050508]/60 border border-white/10 rounded-3xl p-6 flex flex-col justify-between space-y-6">
+            <div className="lg:col-span-4 bg-[#0A0A0A]/60 border border-zinc-800 rounded-3xl p-6 flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100/50 border border-white/10">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100/50 border border-zinc-800">
                     <img 
                       src={selectedCandidate.avatar}
                       alt={selectedCandidate.name}
@@ -1665,11 +1665,11 @@ function LandingPageContent() {
                   </div>
                   <div>
                     <h3 className="text-md font-bold text-white">{selectedCandidate.name}</h3>
-                    <p className="text-[9px] font-bold text-slate-200 uppercase tracking-wider">Candidate Scorecard</p>
+                    <p className="text-[9px] font-bold text-zinc-300  tracking-tight">Candidate Scorecard</p>
                   </div>
                 </div>
                 
-                <p className="text-[10px] text-slate-200 leading-relaxed">
+                <p className="text-[10px] text-zinc-300 leading-relaxed">
                   <strong>Background</strong>: {selectedCandidate.background}
                 </p>
               </div>
@@ -1716,12 +1716,12 @@ function LandingPageContent() {
                   </g>
                 </svg>
                 <div className="text-center mt-2">
-                  <span className="text-2xl font-black text-white block">{selectedCandidate.score}/100</span>
-                  <span className="text-[8px] font-black uppercase text-slate-200 tracking-widest">Final Score</span>
+                  <span className="text-2xl font-medium text-white block">{selectedCandidate.score}/100</span>
+                  <span className="text-[8px] font-medium  text-zinc-300 tracking-tight">Final Score</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-100 leading-relaxed">
+              <div className="p-4 bg-zinc-900/50 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-100 leading-relaxed">
                 <strong>AI Assessment</strong>: "{selectedCandidate.summary}"
               </div>
             </div>
@@ -1731,20 +1731,20 @@ function LandingPageContent() {
               
               {/* Skill level summary list */}
               <div className="space-y-3">
-                <span className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Skill Level Summary</span>
+                <span className="text-[9px] font-medium text-zinc-300  tracking-tight">Skill Level Summary</span>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
-                    <span className="text-[9px] font-black uppercase text-amber-400">Problem Solving</span>
+                  <div className="p-4 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl space-y-1 text-left">
+                    <span className="text-[9px] font-medium  text-amber-400">Problem Solving</span>
                     <span className="text-sm font-bold text-white block">{selectedCandidate.skills.problemSolving.level}</span>
                     <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.problemSolving.desc}</p>
                   </div>
-                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
-                    <span className="text-[9px] font-black uppercase text-rose-400">Technical knowledge</span>
+                  <div className="p-4 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl space-y-1 text-left">
+                    <span className="text-[9px] font-medium  text-rose-400">Technical knowledge</span>
                     <span className="text-sm font-bold text-white block">{selectedCandidate.skills.technical.level}</span>
                     <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.technical.desc}</p>
                   </div>
-                  <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
-                    <span className="text-[9px] font-black uppercase text-emerald-400">Code Quality</span>
+                  <div className="p-4 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl space-y-1 text-left">
+                    <span className="text-[9px] font-medium  text-zinc-100">Code Quality</span>
                     <span className="text-sm font-bold text-white block">{selectedCandidate.skills.codeQuality.level}</span>
                     <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.codeQuality.desc}</p>
                   </div>
@@ -1753,7 +1753,7 @@ function LandingPageContent() {
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                 {/* Recharts Radar chart wrapper */}
-                <div className="md:col-span-5 h-44 flex items-center justify-center bg-white/8 border border-white/10 rounded-2xl p-2">
+                <div className="md:col-span-5 h-44 flex items-center justify-center bg-white/8 border border-zinc-800 rounded-2xl p-2">
                   {mounted ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={selectedCandidate.radar}>
@@ -1765,17 +1765,17 @@ function LandingPageContent() {
                       </RadarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="text-[9px] text-slate-200 uppercase">Loading telemetry...</div>
+                    <div className="text-[9px] text-zinc-300 ">Loading telemetry...</div>
                   )}
                 </div>
 
                 {/* Radar legend description */}
                 <div className="md:col-span-7 text-left space-y-2">
-                  <div className="flex gap-4 text-[9px] uppercase tracking-wider font-bold">
-                    <span className="flex items-center gap-1.5 text-indigo-400"><span className="w-2.5 h-2.5 bg-indigo-500 rounded" /> Candidate</span>
-                    <span className="flex items-center gap-1.5 text-emerald-600"><span className="w-2.5 h-2.5 bg-emerald-500 rounded" /> Industry Benchmark</span>
+                  <div className="flex gap-4 text-[9px]  tracking-tight font-bold">
+                    <span className="flex items-center gap-1.5 text-zinc-300"><span className="w-2.5 h-2.5 bg-indigo-500 rounded" /> Candidate</span>
+                    <span className="flex items-center gap-1.5 text-white"><span className="w-2.5 h-2.5 bg-white rounded" /> Industry Benchmark</span>
                   </div>
-                  <p className="text-[11px] leading-relaxed text-slate-200">
+                  <p className="text-[11px] leading-relaxed text-zinc-300">
                     InterviewOS maps candidates across a 5-point competency dimension, overlaying their performance live against thousands of vetted developer benchmarks.
                   </p>
                 </div>
@@ -1783,11 +1783,11 @@ function LandingPageContent() {
 
               {/* Questions table grid */}
               <div className="space-y-3">
-                <span className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Question Breakdown logs</span>
-                <div className="border border-white/10 rounded-2xl overflow-hidden bg-[#050508]/40">
+                <span className="text-[9px] font-medium text-zinc-300  tracking-tight">Question Breakdown logs</span>
+                <div className="border border-zinc-800 rounded-2xl overflow-hidden bg-[#0A0A0A]/40">
                   <table className="w-full text-sm font-sans text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-white/8 text-[9px] font-black uppercase tracking-widest text-slate-200 bg-[#050508]/80">
+                      <tr className="border-b border-white/8 text-[9px] font-medium  tracking-tight text-zinc-300 bg-[#0A0A0A]/80">
                         <th className="p-4">Question</th>
                         <th className="p-4">Score</th>
                         <th className="p-4">Time</th>
@@ -1800,11 +1800,11 @@ function LandingPageContent() {
                           key={q.id}
                           onClick={() => setSelectedQuestionId(q.id)}
                           className={`border-b border-white/8 cursor-pointer hover:bg-white/10 transition-colors ${
-                            selectedQuestionId === q.id ? 'bg-emerald-500/10 text-emerald-400 font-extrabold' : 'text-slate-100 hover:text-white'
+                            selectedQuestionId === q.id ? 'bg-zinc-800/50 text-zinc-100 font-extrabold' : 'text-slate-100 hover:text-white'
                           }`}
                         >
                           <td className="p-4 font-bold">{q.title}</td>
-                          <td className="p-4 text-emerald-400 font-extrabold">{q.score}</td>
+                          <td className="p-4 text-zinc-100 font-extrabold">{q.score}</td>
                           <td className="p-4 font-mono">{q.time}</td>
                           <td className="p-4 text-[10px] truncate max-w-[200px]">{q.notes}</td>
                         </tr>
@@ -1816,27 +1816,27 @@ function LandingPageContent() {
 
               {/* Interactive Code Diff & Transcript panel */}
               {activeQuestionDetails && (
-                <div className="p-5 bg-[#050508] border border-white/10 rounded-3xl space-y-4 text-left font-sans">
+                <div className="p-5 bg-[#0A0A0A] border border-zinc-800 rounded-3xl space-y-4 text-left font-sans">
                   <div>
-                    <span className="text-[8px] font-black text-slate-200 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
-                    <h4 className="text-sm font-black text-white mt-1">{activeQuestionDetails.title}</h4>
+                    <span className="text-[8px] font-medium text-zinc-300  tracking-tight">AI Transcript & Evaluation Trace</span>
+                    <h4 className="text-sm font-medium text-white mt-1">{activeQuestionDetails.title}</h4>
                     <p className="text-[10px] text-slate-100 leading-relaxed mt-1"><strong>Prompt</strong>: {activeQuestionDetails.questionText}</p>
                     <p className="text-[10px] text-slate-100 leading-relaxed mt-1"><strong>Candidate response</strong>: &quot;{activeQuestionDetails.verbalResponse}&quot;</p>
                   </div>
 
                   {activeQuestionDetails.candidateCode && activeQuestionDetails.optimalCode && (
                     <div className="space-y-2">
-                      <span className="text-[8px] font-black text-slate-200 uppercase tracking-widest block">Code comparison (Candidate vs Optimal)</span>
+                      <span className="text-[8px] font-medium text-zinc-300  tracking-tight block">Code comparison (Candidate vs Optimal)</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[8px] overflow-x-auto">
                         {/* Candidate solution */}
                         <div className="p-3 bg-red-950/10 border border-red-500/10 rounded-xl space-y-1">
-                          <span className="text-rose-600 uppercase font-black text-[7px] block border-b border-red-500/10 pb-1 mb-1">Candidate solution</span>
+                          <span className="text-rose-600  font-medium text-[7px] block border-b border-red-500/10 pb-1 mb-1">Candidate solution</span>
                           <pre className="text-red-400 leading-normal">{activeQuestionDetails.candidateCode}</pre>
                         </div>
                         {/* Optimal solution */}
                         <div className="p-3 bg-emerald-950/10 border border-emerald-500/10 rounded-xl space-y-1">
-                          <span className="text-emerald-600 uppercase font-black text-[7px] block border-b border-emerald-500/10 pb-1 mb-1">Optimal solution</span>
-                          <pre className="text-emerald-400 leading-normal">{activeQuestionDetails.optimalCode}</pre>
+                          <span className="text-white  font-medium text-[7px] block border-b border-emerald-500/10 pb-1 mb-1">Optimal solution</span>
+                          <pre className="text-zinc-100 leading-normal">{activeQuestionDetails.optimalCode}</pre>
                         </div>
                       </div>
                     </div>
@@ -1852,22 +1852,22 @@ function LandingPageContent() {
       {/* Try Interview Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 text-center space-y-12">
         <div className="space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Try Simulator</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Try Simulator</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             AI Interview tailored for every Role
           </h2>
         </div>
 
         {/* Categories Tab Selector */}
-        <div className="flex justify-center gap-2 flex-wrap max-w-xl mx-auto p-1 bg-[#050508]/60 border border-white/10 rounded-2xl">
+        <div className="flex justify-center gap-2 flex-wrap max-w-xl mx-auto p-1 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl">
           {(['popular', 'tech', 'sales', 'marketing', 'product'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTryTab(tab)}
-              className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${
+              className={`px-4 py-2.5 text-[9px] font-medium  tracking-tight rounded-xl transition-all ${
                 activeTryTab === tab
-                  ? 'bg-emerald-50 text-black shadow-md shadow-emerald-500/20'
-                  : 'text-slate-200 hover:text-white'
+                  ? 'bg-emerald-50 text-black shadow-md '
+                  : 'text-zinc-300 hover:text-white'
               }`}
             >
               {tab === 'popular' && 'Popular'}
@@ -1883,29 +1883,29 @@ function LandingPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* Software Engineer card */}
           {activeTryTab === 'popular' || activeTryTab === 'tech' ? (
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">💻</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-emerald-400" /> 45m Simulation
+                  <span className="text-[8px] font-medium  tracking-tight text-slate-100 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 text-zinc-100" /> 45m Simulation
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Software Engineer 1</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-zinc-100 transition-colors">Software Engineer 1</h4>
                   <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Evaluate algorithms, array/tree traversal, system design constraints, and clean syntax structures.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">React</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Java</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">React</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Java</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('fullstack', 'software_engineering')}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1915,29 +1915,29 @@ function LandingPageContent() {
 
           {/* BDE Sales card */}
           {activeTryTab === 'popular' || activeTryTab === 'sales' ? (
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤝</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-emerald-400" /> 30m Simulation
+                  <span className="text-[8px] font-medium  tracking-tight text-slate-100 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 text-zinc-100" /> 30m Simulation
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">BDE (Sales)</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-zinc-100 transition-colors">BDE (Sales)</h4>
                   <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Tests objection handling, speech confidence levels, negotiation triggers, and sales flow pipelines.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Cold Pitching</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">CRM</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Cold Pitching</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">CRM</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('sales_associate', 'management_qa')}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1947,29 +1947,29 @@ function LandingPageContent() {
 
           {/* Performance Marketer card */}
           {activeTryTab === 'popular' || activeTryTab === 'marketing' ? (
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">📈</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-emerald-400" /> 35m Simulation
+                  <span className="text-[8px] font-medium  tracking-tight text-slate-100 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 text-zinc-100" /> 35m Simulation
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Performance Marketer</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-zinc-100 transition-colors">Performance Marketer</h4>
                   <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Evaluate user acquisition frameworks, ROAS statistics, search-intent algorithms, and budget allocation.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">ROAS</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">SEO</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">ROAS</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">SEO</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('performance_marketer', 'management_qa')}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all"
                 >
                   Try Interview now
                 </button>
@@ -1979,29 +1979,29 @@ function LandingPageContent() {
 
           {/* AI Engineer card */}
           {activeTryTab === 'tech' ? (
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤖</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-emerald-400" /> 45m Simulation
+                  <span className="text-[8px] font-medium  tracking-tight text-slate-100 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 text-zinc-100" /> 45m Simulation
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">AI / ML Engineer</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-zinc-100 transition-colors">AI / ML Engineer</h4>
                   <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Assess transformer architectures, pipeline training, vector database RAG structures, and prompt modeling.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">PyTorch</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Transformers</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">PyTorch</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Transformers</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('ai_ml_engineer', 'ai_ml')}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all"
                 >
                   Try Interview now
                 </button>
@@ -2011,29 +2011,29 @@ function LandingPageContent() {
 
           {/* Product Manager card */}
           {activeTryTab === 'product' ? (
-            <div className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-md group text-left h-60 backdrop-blur-sm">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🗺️</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5 text-emerald-400" /> 40m Simulation
+                  <span className="text-[8px] font-medium  tracking-tight text-slate-100 flex items-center gap-1">
+                    <Clock className="w-2.5 h-2.5 text-zinc-100" /> 40m Simulation
                   </span>
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Product Manager</h4>
+                  <h4 className="text-sm font-bold text-slate-100 group-hover:text-zinc-100 transition-colors">Product Manager</h4>
                   <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Assess roadmap prioritization frameworks, user metrics modeling, and customer feedback architectures.
                   </p>
                 </div>
               </div>
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">GIST</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Priorities</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">GIST</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Priorities</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('product_manager', 'management_qa')}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                  className="px-4 py-2 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all"
                 >
                   Try Interview now
                 </button>
@@ -2044,20 +2044,20 @@ function LandingPageContent() {
       </section>
 
       {/* Anti-Cheating Marquee Banner */}
-      <section className="relative z-10 bg-[#050508]/60 py-8 border-y border-white/10 overflow-hidden">
+      <section className="relative z-10 bg-[#0A0A0A]/60 py-8 border-y border-zinc-800 overflow-hidden">
         <div className="flex gap-8 items-center whitespace-nowrap animate-[marquee_25s_linear_infinite] opacity-60">
           {VIOLATIONS.map((v, idx) => (
-            <div key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-200">
+            <div key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-2xl text-[10px] text-zinc-300">
               <AlertCircle className="w-4 h-4 text-rose-600" />
-              <span className="font-extrabold uppercase">{v.label} Detected</span>
+              <span className="font-extrabold ">{v.label} Detected</span>
               <span className="text-slate-100">at {v.time}</span>
             </div>
           ))}
           {/* duplicate loop to prevent gaps */}
           {VIOLATIONS.map((v, idx) => (
-            <div key={`dup-${idx}`} className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-200">
+            <div key={`dup-${idx}`} className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-2xl text-[10px] text-zinc-300">
               <AlertCircle className="w-4 h-4 text-rose-600" />
-              <span className="font-extrabold uppercase">{v.label} Detected</span>
+              <span className="font-extrabold ">{v.label} Detected</span>
               <span className="text-slate-100">at {v.time}</span>
             </div>
           ))}
@@ -2067,21 +2067,21 @@ function LandingPageContent() {
       {/* Interactive Savings Slider Comparison Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Efficiency Calculator</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Efficiency Calculator</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Fewer steps. Faster decisions. Make hiring peaceful.
           </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-black/50 relative backdrop-blur-sm">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-8 md:p-12 shadow-xl shadow-black/50 relative backdrop-blur-sm">
           
           {/* Left panel: comparison timeline bars */}
           <div className="md:col-span-7 space-y-6 text-left">
             {/* Volume scale slider */}
-            <div className="p-4 bg-white/8 border border-white/10 rounded-2xl space-y-3">
+            <div className="p-4 bg-white/8 border border-zinc-800 rounded-2xl space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] font-black uppercase text-slate-100 tracking-wider">Candidates to Interview (Per Month)</span>
-                <span className="text-sm font-black text-emerald-400">{candidateVolume}</span>
+                <span className="text-[10px] font-medium  text-slate-100 tracking-tight">Candidates to Interview (Per Month)</span>
+                <span className="text-sm font-medium text-zinc-100">{candidateVolume}</span>
               </div>
               <input 
                 type="range"
@@ -2096,13 +2096,13 @@ function LandingPageContent() {
 
             {/* WITHOUT INTERVIEWOS */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[10px] font-bold text-slate-100 uppercase tracking-wider">
+              <div className="flex justify-between items-center text-[10px] font-bold text-slate-100  tracking-tight">
                 <span>WITHOUT InterviewOS</span>
-                <span className="text-slate-200 font-extrabold">29 DAYS</span>
+                <span className="text-zinc-300 font-extrabold">29 DAYS</span>
               </div>
-              <div className="w-full h-8 bg-white/10 rounded-xl border border-white/10 relative overflow-hidden flex items-center px-4">
+              <div className="w-full h-8 bg-white/10 rounded-xl border border-zinc-800 relative overflow-hidden flex items-center px-4">
                 <div className="h-full bg-rose-500/25 absolute top-0 left-0 w-full" />
-                <span className="text-[9px] font-bold text-rose-400 uppercase tracking-wider relative z-10">
+                <span className="text-[9px] font-bold text-rose-400  tracking-tight relative z-10">
                   Shortlist → Screening Call → Round-1 → Follow-ups → Offer
                 </span>
               </div>
@@ -2110,13 +2110,13 @@ function LandingPageContent() {
 
             {/* WITH INTERVIEWOS */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
+              <div className="flex justify-between items-center text-[10px] font-bold text-zinc-100  tracking-tight">
                 <span>WITH InterviewOS</span>
-                <span className="text-emerald-400 font-extrabold">14 Days</span>
+                <span className="text-zinc-100 font-extrabold">14 Days</span>
               </div>
-              <div className="w-full h-8 bg-[#050508]/60 rounded-xl border border-white/10 relative overflow-hidden flex items-center px-4">
-                <div className="h-full bg-emerald-500/20 absolute top-0 left-0 w-[48%]" />
-                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider relative z-10">
+              <div className="w-full h-8 bg-[#0A0A0A]/60 rounded-xl border border-zinc-800 relative overflow-hidden flex items-center px-4">
+                <div className="h-full bg-white/20 absolute top-0 left-0 w-[48%]" />
+                <span className="text-[9px] font-bold text-zinc-100  tracking-tight relative z-10">
                   Resume Parse + AI Round-1 Screening (1 Day) → Final Rounds
                 </span>
               </div>
@@ -2124,18 +2124,18 @@ function LandingPageContent() {
           </div>
 
           {/* Right panel: savings indicators */}
-          <div className="md:col-span-5 bg-white/5 border border-white/10 rounded-3xl p-6 text-center space-y-4">
+          <div className="md:col-span-5 bg-zinc-900/50 border border-zinc-800 rounded-3xl p-6 text-center space-y-4">
             <div>
-              <span className="text-3xl font-black text-white block">
+              <span className="text-3xl font-medium text-white block">
                 {Math.round(candidateVolume * 1.8)} Hrs
               </span>
-              <span className="text-[8px] font-bold uppercase text-slate-200 tracking-widest block mt-0.5">Engineering Time Saved</span>
+              <span className="text-[8px] font-bold  text-zinc-300 tracking-tight block mt-0.5">Engineering Time Saved</span>
             </div>
-            <div className="border-t border-white/10 pt-4">
-              <span className="text-3xl font-black text-emerald-400 block">
+            <div className="border-t border-zinc-800 pt-4">
+              <span className="text-3xl font-medium text-zinc-100 block">
                 ${(candidateVolume * 35).toLocaleString()}
               </span>
-              <span className="text-[8px] font-bold uppercase text-slate-200 tracking-widest block mt-0.5">Hiring budget saved</span>
+              <span className="text-[8px] font-bold  text-zinc-300 tracking-tight block mt-0.5">Hiring budget saved</span>
             </div>
           </div>
         </div>
@@ -2144,23 +2144,23 @@ function LandingPageContent() {
       {/* Testimonials ("What Hiring Teams Are Saying") */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">hiring partners feedback</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">hiring partners feedback</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             What Hiring Teams Are Saying
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {TESTIMONIALS.map((t, idx) => (
-            <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between text-left hover:border-emerald-500/30 transition-all duration-300 backdrop-blur-sm">
-              <p className="text-sm text-slate-200 leading-relaxed font-medium">"{t.quote}"</p>
-              <div className="flex items-center gap-3 mt-6 pt-4 border-t border-white/10">
-                <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-white/10">
+            <div key={idx} className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl flex flex-col justify-between text-left hover:border-zinc-700 transition-all duration-300 backdrop-blur-sm">
+              <p className="text-sm text-zinc-300 leading-relaxed font-medium">"{t.quote}"</p>
+              <div className="flex items-center gap-3 mt-6 pt-4 border-t border-zinc-800">
+                <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-950 border border-zinc-800">
                   <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-black text-white">{t.author}</h4>
-                  <p className="text-[9px] text-slate-200 font-bold uppercase tracking-widest">{t.role}</p>
+                  <h4 className="text-sm font-medium text-white">{t.author}</h4>
+                  <p className="text-[9px] text-zinc-300 font-bold  tracking-tight">{t.role}</p>
                 </div>
               </div>
             </div>
@@ -2170,22 +2170,22 @@ function LandingPageContent() {
 
       {/* Statistics Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 text-center">
-        <div className="max-w-6xl mx-auto bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-6xl mx-auto bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-8 md:p-12 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <span className="text-3xl md:text-5xl font-black text-white block">20,000+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Interviews</span>
+            <span className="text-3xl md:text-5xl font-medium text-white block">20,000+</span>
+            <span className="text-[9px] font-medium  tracking-tight text-zinc-300 block mt-1.5">Interviews</span>
           </div>
           <div>
-            <span className="text-3xl md:text-5xl font-black text-emerald-400 block">60%</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Cost Reduction</span>
+            <span className="text-3xl md:text-5xl font-medium text-zinc-100 block">60%</span>
+            <span className="text-[9px] font-medium  tracking-tight text-zinc-300 block mt-1.5">Cost Reduction</span>
           </div>
           <div>
-            <span className="text-3xl md:text-5xl font-black text-white block">80+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Scoring metrics</span>
+            <span className="text-3xl md:text-5xl font-medium text-white block">80+</span>
+            <span className="text-[9px] font-medium  tracking-tight text-zinc-300 block mt-1.5">Scoring metrics</span>
           </div>
           <div>
-            <span className="text-3xl md:text-5xl font-black text-emerald-400 block">115+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Candidates Hired</span>
+            <span className="text-3xl md:text-5xl font-medium text-zinc-100 block">115+</span>
+            <span className="text-[9px] font-medium  tracking-tight text-zinc-300 block mt-1.5">Candidates Hired</span>
           </div>
         </div>
       </section>
@@ -2193,18 +2193,18 @@ function LandingPageContent() {
       {/* ATS Integrations Section */}
       <section id="integrations" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">ATS Integrations</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">ATS Integrations</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Integrate Effortlessly with your Hiring Workflow
           </h2>
         </div>
 
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white/5 border border-white/10 rounded-[2.5rem] p-8 lg:p-12 shadow-xl shadow-black/50 backdrop-blur-sm">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-8 lg:p-12 shadow-xl shadow-black/50 backdrop-blur-sm">
           
           {/* Left Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Ashby', 'greyHR', 'Freshworks', 'Workable'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-sm font-black uppercase text-slate-100 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl flex items-center justify-center text-sm font-medium  text-slate-100 hover:text-zinc-100 hover:border-zinc-700 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2212,17 +2212,17 @@ function LandingPageContent() {
 
           {/* Middle: Integration graphic */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center gap-4 py-8">
-            <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-md shadow-emerald-500/5">
-              <Shield className="w-10 h-10 text-emerald-400" />
+            <div className="w-20 h-20 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center shadow-md shadow-emerald-500/5">
+              <Shield className="w-10 h-10 text-zinc-100" />
             </div>
             <div className="flex flex-col items-center gap-1">
               <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
-              <div className="px-3 py-1.5 bg-white/8 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-100">
+              <div className="px-3 py-1.5 bg-white/8 border border-zinc-800 rounded-xl text-[9px] font-medium  tracking-tight text-slate-100">
                 Data Sync
               </div>
               <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
             </div>
-            <div className="w-20 h-20 rounded-full bg-white/8 border border-white/10 flex items-center justify-center text-[10px] font-black uppercase text-slate-200">
+            <div className="w-20 h-20 rounded-full bg-white/8 border border-zinc-800 flex items-center justify-center text-[10px] font-medium  text-zinc-300">
               Your ATS
             </div>
           </div>
@@ -2230,7 +2230,7 @@ function LandingPageContent() {
           {/* Right Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Greenhouse', 'Breezy HR', 'Keka', 'Bullhorn'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-sm font-black uppercase text-slate-100 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#0A0A0A]/60 border border-zinc-800 rounded-2xl flex items-center justify-center text-sm font-medium  text-slate-100 hover:text-zinc-100 hover:border-zinc-700 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2242,29 +2242,29 @@ function LandingPageContent() {
       {/* Candidate Feedback Section */}
       <section className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Candidate Experience</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Candidate Experience</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Because Candidate Experience Matters
           </h2>
           <div className="flex items-center justify-center gap-2 pt-2">
-            <span className="text-lg font-black text-white">4.2</span>
+            <span className="text-lg font-medium text-white">4.2</span>
             <div className="flex gap-0.5">
               {[1, 2, 3, 4].map(idx => (
                 <Star key={idx} className="w-4.5 h-4.5 fill-amber-400 text-amber-600" />
               ))}
-              <Star className="w-4.5 h-4.5 text-slate-200 fill-slate-800" />
+              <Star className="w-4.5 h-4.5 text-zinc-300 fill-slate-800" />
             </div>
-            <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wider ml-1">18K Ratings</span>
+            <span className="text-[10px] font-bold text-zinc-300  tracking-tight ml-1">18K Ratings</span>
           </div>
         </div>
 
         {/* Dynamic review feed */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {FEEDBACKS.slice(0, 6).map((f, idx) => (
-            <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between text-left h-40 hover:border-emerald-500/30 transition-all duration-300">
-              <p className="text-sm text-slate-200 leading-relaxed font-medium">"{f.comment}"</p>
-              <div className="flex justify-between items-center mt-4 pt-3 border-t border-white/10">
-                <span className="text-sm font-black text-white">{f.name}</span>
+            <div key={idx} className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between text-left h-40 hover:border-zinc-700 transition-all duration-300">
+              <p className="text-sm text-zinc-300 leading-relaxed font-medium">"{f.comment}"</p>
+              <div className="flex justify-between items-center mt-4 pt-3 border-t border-zinc-800">
+                <span className="text-sm font-medium text-white">{f.name}</span>
                 <div className="flex gap-0.5">
                   {Array.from({ length: f.stars }).map((_, sIdx) => (
                     <Star key={sIdx} className="w-3.5 h-3.5 fill-amber-400 text-amber-600" />
@@ -2279,41 +2279,41 @@ function LandingPageContent() {
       {/* Case Studies Section */}
       <section id="case-studies" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">proven success</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">proven success</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Stop wasting WEEKS on interviews
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Case Study 1 */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-zinc-700 transition-all backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">17 Hires / Month</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-zinc-700 px-2 py-0.5 rounded">17 Hires / Month</span>
               <h3 className="text-xl font-bold text-white leading-tight">
                 How EdTech Scale-Up Saved 15 Hours/Week for Their Senior Sales Managers
               </h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 By delegating early behavioral screening loops to InterviewOS AI, hiring managers skipped the scheduling bottlenecks, accelerating pipeline velocity.
               </p>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 flex items-center gap-1.5 hover:underline cursor-pointer">
+            <span className="text-[10px] font-medium  tracking-tight text-zinc-100 flex items-center gap-1.5 hover:underline cursor-pointer">
               Read Case Study <ArrowRight className="w-3.5 h-3.5" />
             </span>
           </div>
 
           {/* Case Study 2 */}
-          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all backdrop-blur-sm">
+          <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl text-left space-y-6 flex flex-col justify-between hover:border-zinc-700 transition-all backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Hiring in 3 Hours</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-zinc-700 px-2 py-0.5 rounded">Hiring in 3 Hours</span>
               <h3 className="text-xl font-bold text-white leading-tight">
                 How Global AI SaaS Hired a Data Analyst with InterviewOS's Super TA
               </h3>
-              <p className="text-sm text-slate-200 leading-relaxed">
+              <p className="text-sm text-zinc-300 leading-relaxed">
                 An immediate resume parse matched against database requirements triggered a mock assessment sandbox round, finishing evaluations within 180 minutes.
               </p>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400 flex items-center gap-1.5 hover:underline cursor-pointer">
+            <span className="text-[10px] font-medium  tracking-tight text-zinc-100 flex items-center gap-1.5 hover:underline cursor-pointer">
               Read Case Study <ArrowRight className="w-3.5 h-3.5" />
             </span>
           </div>
@@ -2327,12 +2327,12 @@ function LandingPageContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="w-full bg-black/50 border border-white/10 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-emerald-500/5 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
+          className="w-full bg-black/50 border border-zinc-800 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-emerald-500/5 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
 
           {/* Navigation tabs */}
-          <div className="w-full p-1.5 rounded-2xl flex bg-[#050508]/60 border border-white/10">
+          <div className="w-full p-1.5 rounded-2xl flex bg-[#0A0A0A]/60 border border-zinc-800">
             {[
               { id: 'tryout', icon: <Bot className="w-4 h-4" />, label: 'Practice Interview' },
               { id: 'candidate', icon: <GraduationCap className="w-4 h-4" />, label: 'My Workspace' },
@@ -2342,8 +2342,8 @@ function LandingPageContent() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex-1 py-3 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${
-                  activeTab === tab.id ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20' : 'text-slate-200 hover:text-white hover:bg-white/5 opacity-70 hover:opacity-100'
+                className={`flex-1 py-3 px-4 text-[10px] font-medium  tracking-tight rounded-xl transition-all flex items-center justify-center gap-2 ${
+                  activeTab === tab.id ? 'bg-white text-black shadow-md ' : 'text-zinc-300 hover:text-white hover:bg-zinc-900/50 opacity-70 hover:opacity-100'
                 }`}
               >
                 {tab.icon} {tab.label}
@@ -2364,8 +2364,8 @@ function LandingPageContent() {
                 className="space-y-8 text-left"
               >
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Configure Practice Interview</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">
+                  <h3 className="text-lg font-medium text-white  tracking-tight">Configure Practice Interview</h3>
+                  <p className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-1">
                     Select a role Category → Pick a specialized path → Add background details
                   </p>
                 </div>
@@ -2376,10 +2376,10 @@ function LandingPageContent() {
                     <button
                       key={catId}
                       onClick={() => setSelectedCategory(catId)}
-                      className={`px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-xl border transition-all ${
+                      className={`px-4 py-2 text-[9px] font-medium  tracking-tight rounded-xl border transition-all ${
                         selectedCategory === catId
-                          ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 font-extrabold'
-                          : 'bg-white/5 border-white/10 text-slate-200 hover:text-white hover:bg-white/10'
+                          ? 'bg-white/20 border-zinc-600 text-zinc-100 font-extrabold'
+                          : 'bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:text-white hover:bg-white/10'
                       }`}
                     >
                       {catMeta.label}
@@ -2396,13 +2396,13 @@ function LandingPageContent() {
                       className={`p-4 rounded-2xl border text-left transition-all space-y-2 flex flex-col justify-between ${
                         selectedRole?.id === role.id
                           ? 'border-emerald-500 shadow-md shadow-emerald-500/10 bg-white/8'
-                          : 'bg-[#050508]/40 border-white/10 hover:border-emerald-500/30 hover:bg-[#050508]/60 shadow-md'
+                          : 'bg-[#0A0A0A]/40 border-zinc-800 hover:border-zinc-700 hover:bg-[#0A0A0A]/60 shadow-md'
                       }`}
                     >
                       <span className="text-xl">🛠️</span>
                       <div>
-                        <p className={`text-sm font-bold leading-tight transition-colors ${selectedRole?.id === role.id ? 'text-emerald-400' : 'text-slate-200'}`}>{role.title}</p>
-                        <p className="text-[9px] leading-relaxed text-slate-200 mt-1">{role.description.slice(0, 50)}…</p>
+                        <p className={`text-sm font-bold leading-tight transition-colors ${selectedRole?.id === role.id ? 'text-zinc-100' : 'text-zinc-300'}`}>{role.title}</p>
+                        <p className="text-[9px] leading-relaxed text-zinc-300 mt-1">{role.description.slice(0, 50)}…</p>
                       </div>
                     </button>
                   ))}
@@ -2410,14 +2410,14 @@ function LandingPageContent() {
 
                 {/* Selected role details card */}
                 {selectedRole && (
-                  <div className="p-5 rounded-2xl border border-emerald-500/25 bg-[#050508]/50">
+                  <div className="p-5 rounded-2xl border border-emerald-500/25 bg-[#0A0A0A]/50">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-xl">🛡️</span>
-                      <span className="text-sm font-black uppercase tracking-wider text-emerald-400">{selectedRole.title}</span>
+                      <span className="text-sm font-medium  tracking-tight text-zinc-100">{selectedRole.title}</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.coreSkills.map(s => (
-                        <span key={s} className="text-[9px] px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-100 font-bold uppercase tracking-wider">
+                        <span key={s} className="text-[9px] px-2.5 py-1 bg-zinc-900/50 border border-zinc-800 rounded-lg text-slate-100 font-bold  tracking-tight">
                           {s}
                         </span>
                       ))}
@@ -2430,7 +2430,7 @@ function LandingPageContent() {
                   <div className="space-y-4">
                     <button
                       onClick={() => setShowProfileForm(v => !v)}
-                      className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest hover:text-emerald-300 transition-all"
+                      className="flex items-center gap-2 text-[10px] font-medium text-zinc-100  tracking-tight hover:text-zinc-200 transition-all"
                     >
                       <ChevronDown className={`w-4 h-4 transition-transform ${showProfileForm ? 'rotate-180' : ''}`} />
                       {showProfileForm ? 'Hide' : 'Add'} Customized Background (Resume / Project Context)
@@ -2444,53 +2444,53 @@ function LandingPageContent() {
                           exit={{ opacity: 0, height: 0 }}
                           className="overflow-hidden"
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/10 mt-2">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-zinc-800 mt-2">
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Your Name *</label>
+                              <label className="text-[9px] font-medium text-zinc-300  tracking-tight">Your Name *</label>
                               <input
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
                                 placeholder="Guest Candidate"
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Education</label>
+                              <label className="text-[9px] font-medium text-zinc-300  tracking-tight">Education</label>
                               <input
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
                                 placeholder="e.g. B.S. Computer Science"
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5 md:col-span-2">
-                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Core Projects</label>
+                              <label className="text-[9px] font-medium text-zinc-300  tracking-tight">Core Projects</label>
                               <textarea
                                 value={profile.projects}
                                 onChange={e => updateProfile('projects', e.target.value)}
                                 placeholder="e.g. Built an AI chat application using Next.js and WebSockets..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Work History</label>
+                              <label className="text-[9px] font-medium text-slate-100  tracking-tight">Work History</label>
                               <textarea
                                 value={profile.experience}
                                 onChange={e => updateProfile('experience', e.target.value)}
                                 placeholder="e.g. Frontend Intern at TechCorp - built dynamic dashboards..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Additional Skills & Certifications</label>
+                              <label className="text-[9px] font-medium text-slate-100  tracking-tight">Additional Skills & Certifications</label>
                               <textarea
                                 value={profile.certifications}
                                 onChange={e => updateProfile('certifications', e.target.value)}
                                 placeholder="e.g. AWS Developer Assoc, Docker, Redux..."
                                 rows={2}
-                                className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                           </div>
@@ -2502,7 +2502,7 @@ function LandingPageContent() {
 
                 <button
                   onClick={handleLaunchTryout}
-                  className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-md shadow-slate-200/40 shadow-emerald-500/20 active:scale-[0.98] transition-all"
+                  className="w-full py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight flex items-center justify-center gap-2 shadow-md shadow-slate-200/40  active:scale-[0.98] transition-all"
                 >
                   Start Practice Interview Session
                   <ArrowRight className="w-4 h-4" />
@@ -2514,22 +2514,22 @@ function LandingPageContent() {
             {activeTab === 'candidate' && (
               <motion.div key="candidate" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Candidate Portfolio Workspace</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">View stats, monitor daily activity streaks, download credentials, and check rankings</p>
+                  <h3 className="text-lg font-medium text-white  tracking-tight">Candidate Portfolio Workspace</h3>
+                  <p className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-1">View stats, monitor daily activity streaks, download credentials, and check rankings</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
-                    <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Personalised paths</span>
+                  <Link href="/candidate" className="p-6 bg-[#0A0A0A]/40 border border-zinc-800 hover:border-zinc-700 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-medium text-white  tracking-tight">Personalised paths</span>
                     <p className="text-sm font-bold text-slate-100">Learning Roadmap</p>
-                    <p className="text-sm text-slate-200 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
+                    <p className="text-sm text-zinc-300 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
                   </Link>
-                  <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Verified Credentials</span>
+                  <Link href="/candidate" className="p-6 bg-[#0A0A0A]/40 border border-zinc-800 hover:border-zinc-700 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Verified Credentials</span>
                     <p className="text-sm font-bold text-slate-100">Shareable Portfolio Profile</p>
-                    <p className="text-sm text-slate-200 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
+                    <p className="text-sm text-zinc-300 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
                   </Link>
                 </div>
-                <Link href="/candidate" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
+                <Link href="/candidate" className="w-full py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40  text-center">
                   Open Candidate Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -2539,22 +2539,22 @@ function LandingPageContent() {
             {activeTab === 'recruiter' && (
               <motion.div key="recruiter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-wider">Recruiter Assessment Center</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
+                  <h3 className="text-lg font-medium text-white  tracking-tight">Recruiter Assessment Center</h3>
+                  <p className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
-                    <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest">Behavioral Proctoring</span>
+                  <Link href="/recruiter" className="p-6 bg-[#0A0A0A]/40 border border-zinc-800 hover:border-zinc-700 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-medium text-rose-600  tracking-tight">Behavioral Proctoring</span>
                     <p className="text-sm font-bold text-slate-100">Neural Integrity Log</p>
-                    <p className="text-sm text-slate-200 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
+                    <p className="text-sm text-zinc-300 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
                   </Link>
-                  <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Diagnostic Analytics</span>
+                  <Link href="/recruiter" className="p-6 bg-[#0A0A0A]/40 border border-zinc-800 hover:border-zinc-700 rounded-2xl space-y-1.5 block transition-colors">
+                    <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Diagnostic Analytics</span>
                     <p className="text-sm font-bold text-slate-100">16-Point Competency Radar</p>
-                    <p className="text-sm text-slate-200 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
+                    <p className="text-sm text-zinc-300 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
                   </Link>
                 </div>
-                <Link href="/recruiter" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
+                <Link href="/recruiter" className="w-full py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40  text-center">
                   Open Recruiter Dashboard <ArrowRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -2565,44 +2565,44 @@ function LandingPageContent() {
               <motion.div key="mvp" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="text-lg font-black text-white uppercase tracking-wider">JD + Resume Custom Mock (RAG Assessment)</h3>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
+                    <h3 className="text-lg font-medium text-white  tracking-tight">JD + Resume Custom Mock (RAG Assessment)</h3>
+                    <p className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-black text-slate-100 uppercase tracking-widest">Select Target Job Opening</label>
-                    <button onClick={() => setShowAddJob(!showAddJob)} className="text-[9px] font-black text-emerald-600 uppercase tracking-widest hover:underline">
+                    <label className="text-[10px] font-medium text-slate-100  tracking-tight">Select Target Job Opening</label>
+                    <button onClick={() => setShowAddJob(!showAddJob)} className="text-[9px] font-medium text-white  tracking-tight hover:underline">
                       {showAddJob ? 'Cancel' : '+ Create Custom Role'}
                     </button>
                   </div>
 
                   {showAddJob ? (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#050508] border border-white/10 rounded-2xl space-y-4">
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#0A0A0A] border border-zinc-800 rounded-2xl space-y-4">
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Job Title</label>
+                        <label className="text-[9px] font-medium text-slate-100  tracking-tight">Job Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Senior Backend Engineer"
                           value={newJobTitle}
                           onChange={e => setNewJobTitle(e.target.value)}
-                          className="w-full bg-[#050508] border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500"
+                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-emerald-500"
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Job Description</label>
+                        <label className="text-[9px] font-medium text-slate-100  tracking-tight">Job Description</label>
                         <textarea
                           placeholder="Paste the requirements or role details here..."
                           value={newJobDesc}
                           onChange={e => setNewJobDesc(e.target.value)}
                           rows={3}
-                          className="w-full bg-[#050508] border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500 resize-none"
+                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-emerald-500 resize-none"
                         />
                       </div>
                       <button
                         onClick={handleAddCustomJob}
                         disabled={!newJobTitle || !newJobDesc}
-                        className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-black rounded-lg text-[10px] font-black uppercase tracking-wider transition-all"
+                        className="w-full py-2 bg-white hover:bg-zinc-200 disabled:opacity-50 text-black rounded-lg text-[10px] font-medium  tracking-tight transition-all"
                       >
                         Save & Select Role
                       </button>
@@ -2611,22 +2611,22 @@ function LandingPageContent() {
                     <select
                       value={selectedJob}
                       onChange={e => setSelectedJob(e.target.value)}
-                      className="w-full bg-[#050508] border border-white/10 rounded-xl px-4 py-3 text-sm text-slate-200 focus:border-emerald-500 focus:bg-[#050508] outline-none shadow-inner"
+                      className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:border-emerald-500 focus:bg-[#0A0A0A] outline-none shadow-inner"
                     >
                       {mergedJobs.map(job => (
-                        <option key={job.id} value={job.id} className="bg-[#050508] text-slate-200">{job.id}: {job.title}</option>
+                        <option key={job.id} value={job.id} className="bg-[#0A0A0A] text-zinc-300">{job.id}: {job.title}</option>
                       ))}
                     </select>
                   )}
                 </div>
-                <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
-                  <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                <div className="p-4 bg-zinc-900/50 border border-emerald-500/10 rounded-xl">
+                  <p className="text-sm text-zinc-300 leading-relaxed font-medium">
                     You will be redirected to the custom job application portal. There, you can upload your <strong>PDF resume</strong>. The system automatically structures your skills, parses work history, and dynamically prompts you with tailored scenarios reflecting the intersection of your experience and the job description.
                   </p>
                 </div>
                 <button
                   onClick={handleLaunchMVP}
-                  className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-md shadow-slate-200/40 shadow-emerald-500/20 active:scale-[0.98] transition-all animate-bounce"
+                  className="w-full py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight flex items-center justify-center gap-2 shadow-md shadow-slate-200/40  active:scale-[0.98] transition-all animate-bounce"
                 >
                   Go to Job Application Portal <ExternalLink className="w-4 h-4" />
                 </button>
@@ -2639,11 +2639,11 @@ function LandingPageContent() {
       {/* Technical Architecture Showcase Section ("Under the Hood") */}
       <section id="technical-architecture" className="relative z-10 max-w-6xl mx-auto w-full px-6 py-20 space-y-16">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Under the Hood</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Under the Hood</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Technical Architecture & Specs
           </h2>
-          <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed font-medium">
+          <p className="text-sm text-zinc-300 max-w-2xl mx-auto leading-relaxed font-medium">
             InterviewOS is a complex multi-agent evaluation platform. We leverage sandboxed environments, real-time proctoring telemetry, and structured AI response loops to simulate real workplace conditions.
           </p>
         </div>
@@ -2652,53 +2652,53 @@ function LandingPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
-              icon: <Terminal className="w-5 h-5 text-emerald-400" />,
+              icon: <Terminal className="w-5 h-5 text-zinc-100" />,
               title: "Sandboxed Terminal IDE",
               desc: "A client-side Node.js sandbox that compiles and executes code directly inside the browser using WebContainers. Candidates interact with a stateful environment that tests real problem-solving.",
               tech: ["WebContainers", "Monaco Editor", "xterm.js"]
             },
             {
-              icon: <Activity className="w-5 h-5 text-emerald-600" />,
+              icon: <Activity className="w-5 h-5 text-white" />,
               title: "Real-time AI Proctoring",
               desc: "Uses MediaPipe Face Mesh to map facial keypoints in real time, checking eye gaze coordinates, tracking tab-switching losses, and mapping behavioral integrity metrics.",
               tech: ["MediaPipe", "Webcam API", "Face Mesh"]
             },
             {
-              icon: <Volume2 className="w-5 h-5 text-emerald-400" />,
+              icon: <Volume2 className="w-5 h-5 text-zinc-100" />,
               title: "Adaptive AI Speech Engine",
               desc: "Combines Gemini API structured JSON schemas with Cartesia voice synthesis for high-performance audio delivery, natural pacing, and instant interruption detection.",
               tech: ["Gemini API", "Cartesia TTS", "Web Audio API"]
             },
             {
-              icon: <LayoutDashboard className="w-5 h-5 text-emerald-400" />,
+              icon: <LayoutDashboard className="w-5 h-5 text-zinc-100" />,
               title: "Evaluation Dashboards",
               desc: "Analytical recruitment dashboards displaying 16-point competency radar charts, custom scoring gauges, full audio transcript audits, and side-by-side git code diffs.",
               tech: ["Next.js", "Recharts", "MongoDB"]
             },
             {
-              icon: <Award className="w-5 h-5 text-emerald-400" />,
+              icon: <Award className="w-5 h-5 text-zinc-100" />,
               title: "Gamification & Leaderboards",
               desc: "Drives developer engagement with persistent profiles, levels, XP accumulation, daily streaks, custom badge triggers, and global rank tracking.",
               tech: ["MongoDB", "Mongoose", "XP Engine"]
             },
             {
-              icon: <Briefcase className="w-5 h-5 text-emerald-400" />,
+              icon: <Briefcase className="w-5 h-5 text-zinc-100" />,
               title: "Crisis Triage Simulator",
               desc: "Simulates actual developer workplaces using mock Slack alerts and Jira boards, testing how candidates handle production outages under realistic time pressure.",
               tech: ["Framer Motion", "State Machine", "JSON Templates"]
             }
           ].map((item, idx) => (
-            <div key={idx} className="p-8 bg-white/5 border border-white/10 rounded-[2.5rem] hover:shadow-xl hover:border-emerald-500/20 transition-all duration-300 flex flex-col justify-between space-y-6 backdrop-blur-sm">
+            <div key={idx} className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] hover:shadow-xl hover:border-zinc-700 transition-all duration-300 flex flex-col justify-between space-y-6 backdrop-blur-sm">
               <div className="space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-slate-950 flex items-center justify-center border border-white/10 shadow-sm animate-pulse">
+                <div className="w-10 h-10 rounded-2xl bg-slate-950 flex items-center justify-center border border-zinc-800 shadow-sm ">
                   {item.icon}
                 </div>
-                <h4 className="text-md font-black text-slate-100 tracking-tight">{item.title}</h4>
-                <p className="text-sm text-slate-200 leading-relaxed font-medium">{item.desc}</p>
+                <h4 className="text-md font-medium text-slate-100 tracking-tight">{item.title}</h4>
+                <p className="text-sm text-zinc-300 leading-relaxed font-medium">{item.desc}</p>
               </div>
               <div className="flex flex-wrap gap-1.5 pt-2">
                 {item.tech.map((t, i) => (
-                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-white/5 text-slate-200 rounded-full border border-white/5">
+                  <span key={i} className="text-[8px] font-medium  tracking-tight px-2.5 py-1 bg-zinc-900/50 text-zinc-300 rounded-full border border-zinc-800/50">
                     {t}
                   </span>
                 ))}
@@ -2708,62 +2708,62 @@ function LandingPageContent() {
         </div>
 
         {/* System Spec Console */}
-        <div className="bg-[#0a0a0c] border border-white/5 rounded-[2.5rem] shadow-2xl p-6 lg:p-8 space-y-6 max-w-4xl mx-auto overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/5">
+        <div className="bg-[#0a0a0c] border border-zinc-800/50 rounded-[2.5rem] shadow-2xl p-6 lg:p-8 space-y-6 max-w-4xl mx-auto overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-800/50">
             <div>
-              <h4 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> System Spec Console
+              <h4 className="text-sm font-medium text-white  tracking-tight flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-white " /> System Spec Console
               </h4>
-              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-100 mt-1">
+              <p className="text-[9px] font-bold  tracking-tight text-slate-100 mt-1">
                 Inspect database models and prompt configurations
               </p>
             </div>
-            <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/5 self-start sm:self-auto">
+            <div className="flex items-center gap-2 bg-zinc-900/50 p-1 rounded-xl border border-zinc-800/50 self-start sm:self-auto">
               <button
                 onClick={() => setActiveSpecTab('schema')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'schema' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'schema' ? 'bg-white text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 Database Schemas
               </button>
               <button
                 onClick={() => setActiveSpecTab('payload')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'payload' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'payload' ? 'bg-white text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 AI Prompt Schema
               </button>
             </div>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-[#050507]">
+          <div className="relative rounded-2xl overflow-hidden border border-zinc-800/50 bg-[#050507]">
             {/* Terminal Window Header */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/5 text-[9px] font-mono text-slate-100">
+            <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-zinc-800/50 text-[9px] font-mono text-slate-100">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-500/60" />
                 <span className="w-2 h-2 rounded-full bg-amber-500/60" />
-                <span className="w-2 h-2 rounded-full bg-emerald-500/60" />
+                <span className="w-2 h-2 rounded-full bg-white/60" />
               </div>
               <span>{activeSpecTab === 'schema' ? 'mongoose_models.ts' : 'gemini_payload_blueprint.json'}</span>
               <div className="w-8" />
             </div>
 
             {/* Terminal Content */}
-            <div className="p-6 overflow-x-auto font-mono text-sm leading-relaxed text-slate-200 select-text max-h-[350px] custom-scrollbar text-left">
+            <div className="p-6 overflow-x-auto font-mono text-sm leading-relaxed text-zinc-300 select-text max-h-[350px] custom-scrollbar text-left">
               {activeSpecTab === 'schema' ? (
                 <pre className="space-y-1">
-                  <div><span className="text-indigo-400">import</span> mongoose, &#123; Schema, Model &#125; <span className="text-indigo-400">from</span> <span className="text-emerald-400">'mongoose'</span>;</div>
+                  <div><span className="text-zinc-300">import</span> mongoose, &#123; Schema, Model &#125; <span className="text-zinc-300">from</span> <span className="text-zinc-100">'mongoose'</span>;</div>
                   <br />
                   <div><span className="text-slate-100">// 1. User Profile & Streak Schema</span></div>
-                  <div><span className="text-indigo-400">const</span> UserSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
+                  <div><span className="text-zinc-300">const</span> UserSchema = <span className="text-zinc-300">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
                   <div>  name:           &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
                   <div>  email:          &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
-                  <div>  xp:             &#123; type: Number, <span className="text-indigo-400">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
-                  <div>  level:          &#123; type: Number, <span className="text-indigo-400">default</span>: <span className="text-amber-500">1</span> &#125;,</div>
-                  <div>  streak:         &#123; type: Number, <span className="text-indigo-400">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
-                  <div>  badges:         &#123; type: Schema.Types.Mixed, <span className="text-indigo-400">default</span>: [] &#125;</div>
+                  <div>  xp:             &#123; type: Number, <span className="text-zinc-300">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
+                  <div>  level:          &#123; type: Number, <span className="text-zinc-300">default</span>: <span className="text-amber-500">1</span> &#125;,</div>
+                  <div>  streak:         &#123; type: Number, <span className="text-zinc-300">default</span>: <span className="text-amber-500">0</span> &#125;,</div>
+                  <div>  badges:         &#123; type: Schema.Types.Mixed, <span className="text-zinc-300">default</span>: [] &#125;</div>
                   <div>&#125;);</div>
                   <br />
                   <div><span className="text-slate-100">// 2. Parsed Resume RAG Schema</span></div>
-                  <div><span className="text-indigo-400">const</span> ResumeSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
+                  <div><span className="text-zinc-300">const</span> ResumeSchema = <span className="text-zinc-300">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
                   <div>  userId:         &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
                   <div>  rawText:        &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
                   <div>  parsedData: &#123;</div>
@@ -2776,26 +2776,26 @@ function LandingPageContent() {
               ) : (
                 <pre className="space-y-1">
                   <div>&#123;</div>
-                  <div>  <span className="text-indigo-400">"system_instruction"</span>: <span className="text-emerald-400">"You are an AI technical evaluator. Assess candidate response quality and proctoring metrics."</span>,</div>
-                  <div>  <span className="text-indigo-400">"response_schema"</span>: &#123;</div>
-                  <div>    <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"OBJECT"</span>,</div>
-                  <div>    <span className="text-indigo-400">"properties"</span>: &#123;</div>
-                  <div>      <span className="text-indigo-400">"assessment"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;,</div>
-                  <div>      <span className="text-indigo-400">"competency_scores"</span>: &#123;</div>
-                  <div>        <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"OBJECT"</span>,</div>
-                  <div>        <span className="text-indigo-400">"properties"</span>: &#123;</div>
-                  <div>          <span className="text-indigo-400">"problem_solving"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;,</div>
-                  <div>          <span className="text-indigo-400">"code_quality"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;,</div>
-                  <div>          <span className="text-indigo-400">"communication"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"INTEGER"</span> &#125;</div>
+                  <div>  <span className="text-zinc-300">"system_instruction"</span>: <span className="text-zinc-100">"You are an AI technical evaluator. Assess candidate response quality and proctoring metrics."</span>,</div>
+                  <div>  <span className="text-zinc-300">"response_schema"</span>: &#123;</div>
+                  <div>    <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"OBJECT"</span>,</div>
+                  <div>    <span className="text-zinc-300">"properties"</span>: &#123;</div>
+                  <div>      <span className="text-zinc-300">"assessment"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"STRING"</span> &#125;,</div>
+                  <div>      <span className="text-zinc-300">"competency_scores"</span>: &#123;</div>
+                  <div>        <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"OBJECT"</span>,</div>
+                  <div>        <span className="text-zinc-300">"properties"</span>: &#123;</div>
+                  <div>          <span className="text-zinc-300">"problem_solving"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"INTEGER"</span> &#125;,</div>
+                  <div>          <span className="text-zinc-300">"code_quality"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"INTEGER"</span> &#125;,</div>
+                  <div>          <span className="text-zinc-300">"communication"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"INTEGER"</span> &#125;</div>
                   <div>        &#125;</div>
                   <div>      &#125;,</div>
-                  <div>      <span className="text-indigo-400">"proctoring_flags"</span>: &#123;</div>
-                  <div>        <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"ARRAY"</span>,</div>
-                  <div>        <span className="text-indigo-400">"items"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;</div>
+                  <div>      <span className="text-zinc-300">"proctoring_flags"</span>: &#123;</div>
+                  <div>        <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"ARRAY"</span>,</div>
+                  <div>        <span className="text-zinc-300">"items"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"STRING"</span> &#125;</div>
                   <div>      &#125;,</div>
-                  <div>      <span className="text-indigo-400">"next_question"</span>: &#123; <span className="text-indigo-400">"type"</span>: <span className="text-emerald-400">"STRING"</span> &#125;</div>
+                  <div>      <span className="text-zinc-300">"next_question"</span>: &#123; <span className="text-zinc-300">"type"</span>: <span className="text-zinc-100">"STRING"</span> &#125;</div>
                   <div>    &#125;,</div>
-                  <div>    <span className="text-indigo-400">"required"</span>: [<span className="text-emerald-400">"assessment"</span>, <span className="text-emerald-400">"competency_scores"</span>, <span className="text-emerald-400">"proctoring_flags"</span>, <span className="text-emerald-400">"next_question"</span>]</div>
+                  <div>    <span className="text-zinc-300">"required"</span>: [<span className="text-zinc-100">"assessment"</span>, <span className="text-zinc-100">"competency_scores"</span>, <span className="text-zinc-100">"proctoring_flags"</span>, <span className="text-zinc-100">"next_question"</span>]</div>
                   <div>  &#125;</div>
                   <div>&#125;</div>
                 </pre>
@@ -2808,8 +2808,8 @@ function LandingPageContent() {
       {/* FAQ Accordion Section */}
       <section id="faq" className="relative z-10 max-w-4xl mx-auto w-full px-6 py-20 space-y-12">
         <div className="text-center space-y-3">
-          <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Questions</span>
-          <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+          <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Questions</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Frequently Asked Questions
           </h2>
         </div>
@@ -2822,13 +2822,13 @@ function LandingPageContent() {
             { q: "Can we customize interviews and questions?", a: "Yes. Recruiter dashboard users can paste custom Job Descriptions and candidate Resumes to run dynamic, context-aware RAG interview sessions." },
             { q: "Does InterviewOS integrate with our ATS?", a: "Yes, we support effortless data sync hooks with Ashby, Greenhouse, BambooHR, greyHR, workdays, Zoho, Keka, Breezy, and major HR platforms." }
           ].map((item, idx) => (
-            <div key={idx} className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden text-left backdrop-blur-sm">
+            <div key={idx} className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden text-left backdrop-blur-sm">
               <button 
                 onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
                 className="w-full px-6 py-5 flex justify-between items-center text-left"
               >
                 <span className="text-sm font-bold text-slate-100">{item.q}</span>
-                <span className="text-slate-200">
+                <span className="text-zinc-300">
                   {activeFaq === idx ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </span>
               </button>
@@ -2840,7 +2840,7 @@ function LandingPageContent() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-5 pt-1 text-sm text-slate-200 leading-relaxed border-t border-white/10">
+                    <div className="px-6 pb-5 pt-1 text-sm text-zinc-300 leading-relaxed border-t border-zinc-800">
                       {item.a}
                     </div>
                   </motion.div>
@@ -2858,27 +2858,27 @@ function LandingPageContent() {
           {/* Left info column */}
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 border border-emerald-500/20 rounded-xl flex items-center justify-center bg-emerald-500/5">
-                <Shield className="w-4 h-4 text-emerald-400" />
+              <div className="w-8 h-8 border border-zinc-700 rounded-xl flex items-center justify-center bg-zinc-900/50">
+                <Shield className="w-4 h-4 text-zinc-100" />
               </div>
               <span className="text-sm font-extrabold tracking-tight text-white">InterviewOS</span>
             </div>
-            <p className="text-sm text-slate-200 leading-relaxed max-w-sm">
+            <p className="text-sm text-zinc-300 leading-relaxed max-w-sm">
               We are here to make technical evaluations peaceful, accurate, and secure. AI-driven behavioral proctoring and compilation sandboxes.
             </p>
             <p className="text-[10px] text-slate-100 font-medium">Contact: support@interviewos.ai</p>
           </div>
 
           {/* Middle link columns */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-8 text-sm font-semibold text-slate-200">
+          <div className="lg:col-span-4 grid grid-cols-2 gap-8 text-sm font-semibold text-zinc-300">
             <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-100 block">Why InterviewOS?</span>
+              <span className="text-[10px] font-medium  tracking-tight text-slate-100 block">Why InterviewOS?</span>
               <a href="#anti-cheating" className="hover:text-white block transition-colors">100% Anti-cheating</a>
               <a href="#features" className="hover:text-white block transition-colors">Evaluation Report</a>
               <a href="#integrations" className="hover:text-white block transition-colors">ATS Integrations</a>
             </div>
             <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-100 block">Proven Results</span>
+              <span className="text-[10px] font-medium  tracking-tight text-slate-100 block">Proven Results</span>
               <a href="#case-studies" className="hover:text-white block transition-colors">Case Studies</a>
               <Link href="/leaderboard" className="hover:text-white block transition-colors">Leaderboard Rankings</Link>
               <Link href="/pricing" className="hover:text-white block transition-colors">Pricing Plans</Link>
@@ -2886,22 +2886,22 @@ function LandingPageContent() {
           </div>
 
           {/* Right Japanese origin Card */}
-          <div className="lg:col-span-3 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-xl relative backdrop-blur-sm">
+          <div className="lg:col-span-3 bg-zinc-900/50 border border-zinc-800 rounded-3xl p-6 shadow-xl relative backdrop-blur-sm">
             <div className="flex justify-between items-center mb-3">
-              <span className="text-sm font-black text-white">InterviewOS - (雇用)</span>
-              <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                <span className="text-[9px] text-emerald-400 font-black">OS</span>
+              <span className="text-sm font-medium text-white">InterviewOS - (雇用)</span>
+              <div className="w-6 h-6 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center">
+                <span className="text-[9px] text-zinc-100 font-medium">OS</span>
               </div>
             </div>
-            <p className="text-[9px] text-slate-100 font-bold uppercase tracking-widest">noun</p>
-            <p className="text-[11px] text-slate-200 leading-relaxed mt-2">
+            <p className="text-[9px] text-slate-100 font-bold  tracking-tight">noun</p>
+            <p className="text-[11px] text-zinc-300 leading-relaxed mt-2">
               "1. a blend of 'skillful finesse' and 'employment' — symbolizing technical assessments carried out with precision, grace, and mastery."
             </p>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-white/8 mt-12 pt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-200">
+        <div className="max-w-7xl mx-auto border-t border-white/8 mt-12 pt-6 text-center text-[10px] font-bold  tracking-tight text-zinc-300">
           © 2026 InterviewOS Inc. All rights reserved.
         </div>
       </footer>
@@ -2913,24 +2913,24 @@ function LandingPageContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050508]/85 backdrop-blur-md p-6"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0A0A0A]/85 backdrop-blur-md p-6"
           >
             <motion.div 
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
-              className="w-full max-w-lg bg-[#0a0f0d] border border-white/15 rounded-[2.5rem] p-8 space-y-6 shadow-2xl shadow-black/80 relative overflow-hidden"
+              className="w-full max-w-lg bg-[#0A0A0A] border border-white/15 rounded-[2.5rem] p-8 space-y-6 shadow-2xl shadow-black/80 relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800" />
               
               <div className="flex justify-between items-start text-left">
                 <div>
-                  <h3 className="text-xl font-black text-white uppercase tracking-wider">Launch Demo Sandbox</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Select an experience to test our stateful evaluation models</p>
+                  <h3 className="text-xl font-medium text-white  tracking-tight">Launch Demo Sandbox</h3>
+                  <p className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-1">Select an experience to test our stateful evaluation models</p>
                 </div>
                 <button 
                   onClick={() => setIsBookingOpen(false)} 
-                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-200 hover:text-white border border-white/10 transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-zinc-900/50 hover:bg-white/15 flex items-center justify-center text-zinc-300 hover:text-white border border-zinc-800 transition-all cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2938,36 +2938,36 @@ function LandingPageContent() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
                 {/* Option A: Classic AI Technical Interview */}
-                <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 hover:border-emerald-500/30 transition-all flex flex-col justify-between backdrop-blur-sm">
+                <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl space-y-4 hover:border-zinc-700 transition-all flex flex-col justify-between backdrop-blur-sm">
                   <div className="space-y-1.5">
-                    <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Developer Screening</span>
-                    <h4 className="text-base font-black text-white">Classic AI Technical Interview</h4>
-                    <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                    <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Developer Screening</span>
+                    <h4 className="text-base font-medium text-white">Classic AI Technical Interview</h4>
+                    <p className="text-sm text-zinc-300 leading-relaxed font-medium">
                       Test the compiler-backed browser IDE, live audio dialogs, question generators, and real-time proctoring diagnostics.
                     </p>
                   </div>
                   <Link 
                     href="/instructions?name=Guest&track=JS"
                     onClick={() => setIsBookingOpen(false)}
-                    className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all text-center"
+                    className="w-full py-3 bg-zinc-950 hover:bg-slate-800 text-white rounded-xl text-[10px] font-medium  tracking-tight flex items-center justify-center gap-2 transition-all text-center"
                   >
                     Launch Coding Demo <Code2 className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
                 {/* Option B: Crisis Triage Workplace Simulator */}
-                <div className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 hover:border-emerald-500/30 transition-all flex flex-col justify-between backdrop-blur-sm">
+                <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl space-y-4 hover:border-zinc-700 transition-all flex flex-col justify-between backdrop-blur-sm">
                   <div className="space-y-1.5">
-                    <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Workplace Simulation</span>
-                    <h4 className="text-base font-black text-white">Workplace Simulator (Crisis Triage)</h4>
-                    <p className="text-sm text-slate-200 leading-relaxed font-medium">
+                    <span className="text-[9px] font-medium text-white  tracking-tight">Workplace Simulation</span>
+                    <h4 className="text-base font-medium text-white">Workplace Simulator (Crisis Triage)</h4>
+                    <p className="text-sm text-zinc-300 leading-relaxed font-medium">
                       Test our simulator sandbox where candidates handle production alerts, Slack triage, and Jira prioritization under pressure.
                     </p>
                   </div>
                   <Link 
                     href="/simulation"
                     onClick={() => setIsBookingOpen(false)}
-                    className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all text-center"
+                    className="w-full py-3 bg-white hover:bg-zinc-200 text-black rounded-xl text-[10px] font-medium  tracking-tight flex items-center justify-center gap-2 transition-all text-center"
                   >
                     Launch Simulator Demo <Briefcase className="w-3.5 h-3.5" />
                   </Link>
@@ -2983,7 +2983,7 @@ function LandingPageContent() {
 
 export default function LandingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#050508]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0A0A0A]" />}>
       <LandingPageContent />
     </Suspense>
   );
