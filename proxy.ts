@@ -18,7 +18,6 @@ export default clerkMiddleware((auth, req) => {
     // @ts-ignore
     if (!session.userId) {
       const signInUrl = new URL('/sign-in', req.url);
-      signInUrl.searchParams.set('redirect_url', req.url);
       return NextResponse.redirect(signInUrl);
     }
   }
