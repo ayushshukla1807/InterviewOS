@@ -71,7 +71,7 @@ export default function PublicProfilePage() {
   if (loading) {
     return (
       <div className="h-screen w-screen bg-[#020617] flex flex-col items-center justify-center space-y-4 text-slate-100">
-        <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-white/10 border-t-indigo-500 rounded-full animate-spin" />
         <p className="text-zinc-500 font-medium  tracking-[0.3em] text-[10px]">
           Parsing Profile Nodes...
         </p>
@@ -126,9 +126,9 @@ export default function PublicProfilePage() {
     : 0;
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-indigo-500/30 relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-zinc-800/30 relative overflow-x-hidden">
       {/* Decorative gradient blur */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-zinc-800/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-purple-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-6xl mx-auto p-6 md:p-12 space-y-8 pb-20 relative z-10">
@@ -152,7 +152,7 @@ export default function PublicProfilePage() {
           <div className="absolute top-0 left-0 w-full h-40 bg-gradient-to-r from-indigo-600/15 via-purple-600/15 to-transparent pointer-events-none" />
           
           <div className="relative z-10 flex flex-col md:flex-row items-end gap-8">
-            <div className="w-36 h-36 rounded-[2rem] bg-gradient-to-br from-indigo-600/25 to-sky-600/25 border-2 border-indigo-500/30 flex items-center justify-center font-medium text-zinc-300 text-5xl shadow-2xl relative">
+            <div className="w-36 h-36 rounded-[2rem] bg-gradient-to-br from-indigo-600/25 to-sky-600/25 border-2 border-white/10 flex items-center justify-center font-medium text-zinc-300 text-5xl shadow-2xl relative">
               {profile.name[0].toUpperCase()}
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-xl border-4 border-[#020617]" />
             </div>
@@ -160,7 +160,7 @@ export default function PublicProfilePage() {
             <div className="flex-1 space-y-3">
               <div className="flex items-center gap-4 flex-wrap">
                 <h1 className="text-4xl font-medium text-white tracking-tighter ">{profile.name}</h1>
-                <span className="px-3 py-1 bg-indigo-500/10 text-zinc-300 text-[10px] font-medium  tracking-tight rounded-lg border border-indigo-500/20">
+                <span className="px-3 py-1 bg-zinc-800/10 text-zinc-300 text-[10px] font-medium  tracking-tight rounded-lg border border-white/10">
                   Level {profile.level}
                 </span>
               </div>
@@ -227,7 +227,7 @@ export default function PublicProfilePage() {
                   profile.badges.map((badge: any) => (
                     <div 
                       key={badge.id}
-                      className="aspect-square bg-indigo-500/10 border border-indigo-500/20 text-zinc-300 rounded-xl flex items-center justify-center relative group/badge cursor-help shadow-lg hover:scale-105 transition-all"
+                      className="aspect-square bg-zinc-800/10 border border-white/10 text-zinc-300 rounded-xl flex items-center justify-center relative group/badge cursor-help shadow-lg hover:scale-105 transition-all"
                     >
                       <Star size={20} className="fill-indigo-500/10" />
                       <span className="absolute -top-12 left-1/2 -translate-x-1/2 w-48 text-center bg-zinc-950 border border-zinc-800 p-2.5 rounded-lg text-[10px] text-white font-bold opacity-0 pointer-events-none group-hover/badge:opacity-100 transition-opacity z-50 shadow-2xl">
@@ -247,7 +247,7 @@ export default function PublicProfilePage() {
 
           {/* Skill Radar Chart */}
           <div className="lg:col-span-2 glass-card p-10 rounded-[3rem] border border-zinc-800/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-zinc-800/5 blur-[100px] pointer-events-none" />
             
             <div className="flex justify-between items-center mb-10">
               <div>
@@ -256,7 +256,7 @@ export default function PublicProfilePage() {
                 </h3>
                 <p className="text-[10px] font-medium text-zinc-500  tracking-tight mt-1">Multi-dimensional verification stats</p>
               </div>
-              <div className="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center text-zinc-300 shadow-md">
+              <div className="w-10 h-10 bg-zinc-800/10 border border-white/10 rounded-xl flex items-center justify-center text-zinc-300 shadow-md">
                 <Zap size={18} />
               </div>
             </div>

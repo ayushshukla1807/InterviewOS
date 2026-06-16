@@ -13,7 +13,7 @@ import Link from 'next/link';
 function InterviewOSLogo() {
   return (
     <div className="flex items-center gap-3">
-      <div className="w-9 h-9 bg-sky-600 rounded-xl flex items-center justify-center shadow-lg shadow-sky-600/20">
+      <div className="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center shadow-lg shadow-white/5">
         <Shield className="w-5 h-5 text-white" />
       </div>
       <div>
@@ -76,7 +76,7 @@ function InstructionsContent() {
   if (!isMounted || !interviewer || !invigilator) return null;
 
   return (
-    <div className="min-h-screen flex flex-col font-sans selection:bg-sky-500/30 transition-colors" style={{ color: 'var(--text)' }}>
+    <div className="min-h-screen flex flex-col font-sans selection:bg-white text-black/30 transition-colors" style={{ color: 'var(--text)' }}>
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-5 border-b backdrop-blur-md sticky top-0 z-50 transition-colors" style={{ backgroundColor: 'color-mix(in srgb, var(--card-bg) 50%, transparent)', borderColor: 'var(--border-color)' }}>
         <div className="flex items-center gap-6">
@@ -91,7 +91,7 @@ function InstructionsContent() {
         <div className="flex items-center gap-2">
            <span className="text-[10px] font-medium text-zinc-500  tracking-tight">Powered by</span>
            <div className="flex items-center gap-1.5 px-3 py-1 bg-[var(--card-bg)] rounded-full border border-[var(--border-color)]">
-             <div className="w-2 h-2 bg-sky-500 rounded-full " />
+             <div className="w-2 h-2 bg-white text-black rounded-full " />
              <span className="text-[11px] font-medium text-[var(--text)] tracking-tight italic">elevate</span>
            </div>
         </div>
@@ -133,11 +133,11 @@ function InstructionsContent() {
                           }}
                           className={`p-3 rounded-2xl border text-left flex flex-col items-center justify-center gap-2 transition-all relative overflow-hidden ${
                             isSelected 
-                              ? 'border-sky-600 bg-sky-600/10 shadow-sm' 
+                              ? 'border-zinc-500 bg-white/5 shadow-sm' 
                               : 'border-[var(--border-color)] bg-[var(--card-bg)] hover:bg-slate-100 dark:hover:bg-white/10'
                           }`}
                         >
-                          <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shrink-0 transition-all ${isSelected ? 'border-sky-500' : 'border-[var(--border-color)]'}`}>
+                          <div className={`w-10 h-10 rounded-full overflow-hidden border-2 shrink-0 transition-all ${isSelected ? 'border-zinc-500' : 'border-[var(--border-color)]'}`}>
                             <img src={int.avatar} alt={int.name} className="w-full h-full object-cover" />
                           </div>
                           <div className="text-center">
@@ -145,7 +145,7 @@ function InstructionsContent() {
                             <p className="text-[8px] font-bold text-zinc-500  tracking-tight mt-0.5 leading-none">{int.role}</p>
                           </div>
                           {isSelected && (
-                            <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-sky-500 rounded-full" />
+                            <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-white text-black rounded-full" />
                           )}
                         </button>
                       );
@@ -225,15 +225,15 @@ function InstructionsContent() {
                   <h4 className="text-xs font-medium text-[var(--text)]  tracking-tight mb-2">Technical Probing (60%)</h4>
                   <ul className="space-y-2 text-[12px] font-medium text-zinc-400">
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Brute Force & Optimization: Asked to explain basic approaches before implementing high-performance solutions.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Space & Time Complexity: Evaluated on defining exact Big-O complexities and defending structural choices.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Hands-on Code Quality: Tested on syntax accuracy, memory limits, and handling obscure edge cases.</span>
                     </li>
                   </ul>
@@ -244,15 +244,15 @@ function InstructionsContent() {
                   <h4 className="text-xs font-medium text-[var(--text)]  tracking-tight mb-2">Communication & Persona (40%)</h4>
                   <ul className="space-y-2 text-[12px] font-medium text-zinc-400">
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Clarity & Structure: Checked for concise explanations, avoidance of buzzword bloat, and structured presentation.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Situational Judgment: Evaluated via case scenarios analyzing decision consistency and ownership under stress.</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-sky-500 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-full mt-1.5 bg-white text-black shrink-0" />
                       <span>Language Agility: Support for multiple languages, fluidly translating concepts to explain trade-offs.</span>
                     </li>
                   </ul>
@@ -274,7 +274,7 @@ function InstructionsContent() {
                   disabled={!agreed}
                   className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
                     agreed 
-                      ? 'bg-sky-600 text-white hover:bg-sky-500 shadow-xl shadow-sky-600/20 active:scale-[0.98]' 
+                      ? 'bg-white text-black text-white hover:bg-white text-black shadow-xl shadow-white/5 active:scale-[0.98]' 
                       : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed border border-[var(--border-color)]'
                   }`}
                 >
@@ -376,7 +376,7 @@ function InstructionsContent() {
               {/* Left Panel: Pledge */}
               <div className="w-full md:w-[45%] bg-[var(--bg)] p-12 flex flex-col justify-between border-r border-[var(--border-color)]">
                 <div className="space-y-8">
-                   <div className="w-12 h-12 bg-sky-600 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-600/20">
+                   <div className="w-12 h-12 bg-white text-black rounded-2xl flex items-center justify-center shadow-lg shadow-white/5">
                      <Shield className="w-6 h-6 text-white" />
                    </div>
                    <div className="space-y-4">
@@ -436,7 +436,7 @@ function InstructionsContent() {
                       type="checkbox" 
                       checked={pledged} 
                       onChange={(e) => setPledged(e.target.checked)}
-                      className="w-5 h-5 rounded border-[var(--border-color)] text-sky-600 focus:ring-sky-500 cursor-pointer"
+                      className="w-5 h-5 rounded border-[var(--border-color)] text-zinc-300 focus:ring-white/20 cursor-pointer"
                     />
                     <span className="text-xs font-bold text-zinc-500 dark:text-zinc-400 group-hover:text-[var(--text)] transition-colors">I will not cheat and accept the consequences if caught</span>
                   </label>
@@ -445,7 +445,7 @@ function InstructionsContent() {
                     onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`)}
                     disabled={!pledged}
                     className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
-                      pledged ? 'bg-sky-600 text-white shadow-xl shadow-sky-600/20 hover:bg-sky-500' : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed'
+                      pledged ? 'bg-white text-black text-white shadow-xl shadow-white/5 hover:bg-white text-black' : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed'
                     }`}
                   >
                     Start Interview

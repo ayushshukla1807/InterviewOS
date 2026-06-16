@@ -142,7 +142,7 @@ export default function RecruiterDashboard() {
   return (
     <div className="min-h-screen text-[var(--text)] font-sans selection:bg-white/30 transition-colors duration-500 relative bg-[var(--theme-bg)] overflow-hidden">
       <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-zinc-800/50 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-sky-600/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-white/5 rounded-full blur-[150px] pointer-events-none" />
       <div className="mesh-bg" />
       
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
@@ -267,7 +267,7 @@ export default function RecruiterDashboard() {
                     <div className="bg-black/50 border border-zinc-800 rounded-2xl p-5 flex-1 relative overflow-hidden flex flex-col items-center justify-center group">
                       <div className="absolute inset-0 bg-zinc-900/50 opacity-50 group-hover:opacity-100 transition-opacity" />
                       <div className="w-24 h-24 rounded-full border-2 border-zinc-700 flex items-center justify-center relative mb-4">
-                        <motion.div className="absolute inset-0 border-2 border-sky-500 rounded-full" animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }} transition={{ repeat: Infinity, duration: 2 }} />
+                        <motion.div className="absolute inset-0 border-2 border-zinc-500 rounded-full" animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0, 0.5] }} transition={{ repeat: Infinity, duration: 2 }} />
                         <Activity className="w-10 h-10 text-white" />
                       </div>
                       <div className="text-center">
@@ -308,15 +308,15 @@ export default function RecruiterDashboard() {
                 <div className="space-y-4 mb-6">
                   <div>
                     <label className="block text-[10px] font-medium text-zinc-400  tracking-tight mb-2">Candidate Name</label>
-                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-sky-500 outline-none" placeholder="John Doe" />
+                    <input type="text" value={inviteData.name} onChange={e => setInviteData(p => ({...p, name: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-zinc-500 outline-none" placeholder="John Doe" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-medium text-zinc-400  tracking-tight mb-2">Candidate Email</label>
-                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-sky-500 outline-none" placeholder="john@example.com" />
+                    <input type="email" value={inviteData.email} onChange={e => setInviteData(p => ({...p, email: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-zinc-500 outline-none" placeholder="john@example.com" />
                   </div>
                   <div>
                     <label className="block text-[10px] font-medium text-zinc-400  tracking-tight mb-2">Target Role</label>
-                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-sky-500 outline-none" placeholder="Software Engineer" />
+                    <input type="text" value={inviteData.role} onChange={e => setInviteData(p => ({...p, role: e.target.value}))} className="w-full bg-zinc-900/50 border-none rounded-xl px-4 py-3 text-sm text-white focus:border-zinc-500 outline-none" placeholder="Software Engineer" />
                   </div>
                 </div>
 
@@ -463,7 +463,7 @@ export default function RecruiterDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {liveSessions.length === 0 ? (
-                  <div className="col-span-full py-32 text-center rounded-[40px] border border-sky-500/10 bg-[var(--theme-bg)]/40 backdrop-blur-3xl shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
+                  <div className="col-span-full py-32 text-center rounded-[40px] border border-white/10 bg-[var(--theme-bg)]/40 backdrop-blur-3xl shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
                     {/* Scanning Background Grid */}
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] opacity-30 group-hover:opacity-60 transition-opacity duration-1000" />
                     
@@ -481,7 +481,7 @@ export default function RecruiterDashboard() {
                       <motion.div className="absolute -inset-8 border border-zinc-700 rounded-full" animate={{ scale: [1, 1.4, 1], opacity: [0.5, 0, 0.5] }} transition={{ duration: 4, repeat: Infinity }} />
                       <motion.div className="absolute -inset-16 border border-zinc-700 rounded-full" animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }} transition={{ duration: 4, delay: 1, repeat: Infinity }} />
                       
-                      <div className="w-24 h-24 bg-[#0A0A0A] rounded-full flex items-center justify-center border-2 border-sky-500/20 shadow-sm relative z-10">
+                      <div className="w-24 h-24 bg-[#0A0A0A] rounded-full flex items-center justify-center border-2 border-white/10 shadow-sm relative z-10">
                         <Activity className="w-10 h-10 text-zinc-100 drop-shadow-sm" />
                       </div>
                     </div>
@@ -509,7 +509,7 @@ export default function RecruiterDashboard() {
                       <div className={`absolute top-0 left-0 w-full h-1.5 ${
                         session.phase === 'chaos' ? 'bg-gradient-to-r from-red-500 to-orange-500 shadow-sm' :
                         session.phase === 'recovery' ? 'bg-gradient-to-r from-amber-500 to-yellow-500 shadow-sm' :
-                        'bg-gradient-to-r from-sky-500 to-blue-600 shadow-sm'
+                        'bg-gradient-to-r from-white to-zinc-400 shadow-sm'
                       }`} />
 
                       <div className="flex justify-between items-start mb-8 mt-2">
@@ -636,7 +636,7 @@ export default function RecruiterDashboard() {
               )}
 
               {isLoadingDb ? (
-                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin shadow-sm"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin shadow-sm"></div></div>
               ) : dbReports.length === 0 ? (
                 <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
                   <div className="w-20 h-20 bg-zinc-800/50 rounded-3xl flex items-center justify-center mb-6 border border-zinc-700">
@@ -723,7 +723,7 @@ export default function RecruiterDashboard() {
               </div>
 
               {isLoadingDb ? (
-                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin shadow-sm"></div></div>
+                <div className="py-24 flex justify-center"><div className="w-10 h-10 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin shadow-sm"></div></div>
               ) : dbUsers.length === 0 ? (
                 <div className="border-none glass-card shadow-lg rounded-xl p-16 text-center flex flex-col items-center">
                   <div className="w-20 h-20 bg-zinc-800/50 rounded-3xl flex items-center justify-center mb-6 border border-zinc-700">
@@ -791,7 +791,7 @@ export default function RecruiterDashboard() {
                 <h3 className="text-xl font-medium text-white flex items-center gap-2"><Cpu className="w-5 h-5 text-zinc-100" /> AI Blueprint Generator</h3>
                 <p className="text-xs text-zinc-400 font-bold  tracking-tight">Describe the role, tech stack, and evaluation focus to auto-generate a custom rubric.</p>
                 <div className="flex gap-4 flex-col sm:flex-row">
-                  <input type="text" value={jdInput} onChange={e => setJdInput(e.target.value)} placeholder="e.g. Senior Rust Backend Dev focusing on latency and WebSockets..." className="flex-1 bg-black/40 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:border-sky-500 outline-none" />
+                  <input type="text" value={jdInput} onChange={e => setJdInput(e.target.value)} placeholder="e.g. Senior Rust Backend Dev focusing on latency and WebSockets..." className="flex-1 bg-black/40 border border-zinc-800 rounded-xl px-4 py-3 text-sm text-white focus:border-zinc-500 outline-none" />
                   <button onClick={() => {
                     setIsGeneratingJd(true);
                     setGeneratedJd(null);

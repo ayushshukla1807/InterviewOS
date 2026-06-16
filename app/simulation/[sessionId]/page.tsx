@@ -687,11 +687,11 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
             {questions.map((q, qi) => (
               <div key={q.id} className="glass-card hud-border p-6 space-y-4">
                 <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-500/30 flex items-center justify-center text-xs font-medium text-sky-400 shrink-0">
+                  <div className="w-7 h-7 rounded-lg bg-white text-black/20 border border-white/10 flex items-center justify-center text-xs font-medium text-zinc-300 shrink-0">
                     {qi + 1}
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs font-semibold  tracking-tight text-sky-400 mb-2">
+                    <div className="text-xs font-semibold  tracking-tight text-zinc-300 mb-2">
                       {q.type === 'priority_decision' ? '⚡ Priority Decision' :
                        q.type === 'data_analysis' ? '📊 Data Analysis' :
                        q.type === 'scenario_judgment' ? '🎯 Scenario Judgment' : '💬 Open Ended'}
@@ -737,7 +737,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                     {q.options.map((opt, oi) => (
                       <label key={oi} className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
                         preSkillAnswers[q.id] === opt
-                          ? 'border-sky-500/50 bg-sky-500/10'
+                          ? 'border-white/10 bg-white text-black/10'
                           : 'border-white/6 bg-transparent hover:border-white/15'
                       }`}>
                         <input
@@ -746,7 +746,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
                           value={opt}
                           checked={preSkillAnswers[q.id] === opt}
                           onChange={() => setPreSkillAnswers(prev => ({ ...prev, [q.id]: opt }))}
-                          className="mt-0.5 accent-sky-500"
+                          className="mt-0.5 accent-zinc-400"
                         />
                         <span className="text-sm text-gray-300">{opt}</span>
                       </label>

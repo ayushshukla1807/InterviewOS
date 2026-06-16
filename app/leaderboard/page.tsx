@@ -56,7 +56,7 @@ export default function LeaderboardPage() {
   if (loading) {
     return (
       <div className="h-screen w-screen bg-[#020617] flex flex-col items-center justify-center space-y-4 text-slate-100">
-        <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-white/10 border-t-indigo-500 rounded-full animate-spin" />
         <p className="text-zinc-500 font-medium  tracking-[0.3em] text-[10px]">
           Retrieving Rankings...
         </p>
@@ -70,9 +70,9 @@ export default function LeaderboardPage() {
   const thirdPlace = filteredLeaderboard[2];
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-indigo-500/30 relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#020617] text-slate-100 font-sans selection:bg-zinc-800/30 relative overflow-x-hidden">
       {/* Decorative Blur Spheres */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-zinc-800/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-6xl mx-auto p-6 md:p-12 space-y-12 relative z-10">
@@ -104,7 +104,7 @@ export default function LeaderboardPage() {
               placeholder="Search candidates..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder:text-zinc-600"
+              className="w-full bg-zinc-900/50 border border-zinc-800 rounded-2xl py-4 pl-12 pr-6 text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-white/10 transition-all placeholder:text-zinc-600"
             />
           </div>
         </div>
@@ -146,16 +146,16 @@ export default function LeaderboardPage() {
             <motion.div 
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="relative flex flex-col items-center gap-6 p-8 rounded-[3rem] border bg-gradient-to-b from-indigo-500/10 to-transparent border-indigo-500/20 h-[420px] shadow-2xl shadow-indigo-600/5"
+              className="relative flex flex-col items-center gap-6 p-8 rounded-[3rem] border bg-gradient-to-b from-indigo-500/10 to-transparent border-white/10 h-[420px] shadow-2xl shadow-white/5"
             >
               <div className="absolute -top-6 w-12 h-12 rounded-2xl flex items-center justify-center text-white font-medium text-xl shadow-xl bg-amber-500 border border-amber-400 shadow-amber-500/20">
                 <Crown size={22} />
               </div>
-              <div className="rounded-full p-1 border-2 border-indigo-500 relative shadow-2xl shadow-indigo-500/30">
+              <div className="rounded-full p-1 border-2 border-zinc-500 relative shadow-2xl shadow-white/5">
                 <div className="w-32 h-32 rounded-full bg-zinc-950 overflow-hidden relative flex items-center justify-center font-medium text-zinc-300 text-5xl bg-gradient-to-br from-indigo-600/10 to-indigo-600/20">
                   {firstPlace.name[0].toUpperCase()}
                 </div>
-                <div className="absolute -right-2 bottom-0 w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl">
+                <div className="absolute -right-2 bottom-0 w-10 h-10 bg-zinc-800 rounded-2xl flex items-center justify-center text-white shadow-xl">
                   <Sparkles size={20} />
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function LeaderboardPage() {
               <Users size={18} className="text-zinc-300" />
               <span className="text-[10px] font-medium text-zinc-500  tracking-tight">All Evaluated Nodes</span>
             </div>
-            <span className="text-[10px] font-medium text-zinc-300  tracking-tight bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">
+            <span className="text-[10px] font-medium text-zinc-300  tracking-tight bg-zinc-800/10 px-3 py-1 rounded-full border border-white/10">
               {filteredLeaderboard.length} Nodes Active
             </span>
           </div>
@@ -239,7 +239,7 @@ export default function LeaderboardPage() {
                   <div>
                     <h4 className="text-white font-medium tracking-tight text-sm">{entry.name}</h4>
                     <div className="flex items-center gap-3 mt-1.5">
-                      <span className="text-[9px] font-medium text-zinc-300  tracking-tight bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/10">Level {entry.level || 1}</span>
+                      <span className="text-[9px] font-medium text-zinc-300  tracking-tight bg-zinc-800/10 px-2 py-0.5 rounded border border-white/10">Level {entry.level || 1}</span>
                       <div className="w-1 h-1 bg-slate-700 rounded-full" />
                       <div className="flex items-center gap-1.5 text-orange-500">
                         <Flame size={10} />

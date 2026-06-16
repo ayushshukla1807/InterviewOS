@@ -50,7 +50,7 @@ function RecruiterContent() {
 
   if (!report) return (
     <div data-theme="dark" className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-white/10 border-t-sky-500 rounded-full animate-spin" />
     </div>
   );
 
@@ -81,7 +81,7 @@ function RecruiterContent() {
       {/* Header */}
       <header className="sticky top-0 z-50 px-8 py-4 border-b border-zinc-800/50 bg-[#0A0A0A]/90 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -92,7 +92,7 @@ function RecruiterContent() {
         <div className="flex items-center gap-2">
           {(['snapshot', 'deepdive'] as const).map(m => (
             <button key={m} onClick={() => setMode(m)}
-              className={`px-4 py-1.5 rounded-lg text-[9px] font-medium  tracking-tight transition-all ${mode === m ? 'bg-sky-600 text-white' : 'bg-zinc-900/50 text-zinc-500 hover:text-white'}`}>
+              className={`px-4 py-1.5 rounded-lg text-[9px] font-medium  tracking-tight transition-all ${mode === m ? 'bg-white text-black text-white' : 'bg-zinc-900/50 text-zinc-500 hover:text-white'}`}>
               {m === 'snapshot' ? 'Snapshot' : 'Deep Dive'}
             </button>
           ))}
@@ -107,7 +107,7 @@ function RecruiterContent() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { label: 'Overall Score', value: `${overall}/100`, color: 'text-white' },
-              { label: 'Communication', value: `${comm.totalScore || 0}/100`, color: 'text-sky-400' },
+              { label: 'Communication', value: `${comm.totalScore || 0}/100`, color: 'text-zinc-300' },
               { label: 'Technical Depth', value: `${tech.totalScore || 0}/100`, color: 'text-violet-400' },
               { label: 'Behavioural', value: `${beh.totalScore || 0}/100`, color: 'text-fuchsia-400' },
             ].map((s, i) => (
@@ -143,7 +143,7 @@ function RecruiterContent() {
           <div className="bg-[#111111] border border-zinc-800/50 rounded-2xl p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-800/50 pb-4">
               <p className="text-[10px] font-medium text-zinc-500  tracking-tight">Communication Skills</p>
-              <span className="text-sm font-medium text-sky-400">Score {((comm.totalScore || 0) / 20).toFixed(1)}/5</span>
+              <span className="text-sm font-medium text-zinc-300">Score {((comm.totalScore || 0) / 20).toFixed(1)}/5</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
@@ -164,7 +164,7 @@ function RecruiterContent() {
 
           {/* Integrity Trust Index & Koyo AI Signals */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="p-6 bg-sky-600/5 border border-sky-500/10 rounded-2xl flex items-center justify-between">
+            <div className="p-6 bg-white text-black/5 border border-white/10 rounded-2xl flex items-center justify-between">
               <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${report.violations > 0 ? 'bg-rose-500/10 border-rose-500/20' : 'bg-zinc-800/50 border-zinc-700'}`}>
                     <Shield className={`w-6 h-6 ${report.violations > 0 ? 'text-rose-500' : 'text-white'}`} />
@@ -245,7 +245,7 @@ function RecruiterContent() {
                    <span className="text-[9px] font-medium text-zinc-500 tabular-nums">00:00</span>
                    <div className="flex-1 relative group/timeline cursor-pointer">
                       <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                         <div className="h-full w-1/3 bg-sky-500" />
+                         <div className="h-full w-1/3 bg-white text-black" />
                       </div>
                       {/* Timeline Markers */}
                       {report.proctoringLogs && report.proctoringLogs.length > 0 ? (
@@ -304,7 +304,7 @@ function RecruiterContent() {
             <div className="bg-[#111111] border border-zinc-800/50 rounded-3xl p-6 space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800/50 pb-4">
                 <div>
-                  <p className="text-[8px] font-medium text-sky-400  tracking-tight">{report.simulation.company || 'Corporate Client'} Simulation Scenario</p>
+                  <p className="text-[8px] font-medium text-zinc-300  tracking-tight">{report.simulation.company || 'Corporate Client'} Simulation Scenario</p>
                   <h3 className="text-xl font-medium text-white tracking-tight">{report.simulation.title}</h3>
                   <p className="text-xs text-zinc-400 mt-1">Role Objective: {report.simulation.role || 'Software Engineer'}</p>
                 </div>
@@ -348,10 +348,10 @@ function RecruiterContent() {
                         <div key={idx} className="p-4 bg-slate-950/60 border border-zinc-800/50 rounded-2xl space-y-2">
                           <div>
                             <p className="text-[10px] font-medium text-white">{skill.name}</p>
-                            <p className="text-[8px] font-bold text-sky-400  tracking-tight mt-0.5">{skill.level} Level</p>
+                            <p className="text-[8px] font-bold text-zinc-300  tracking-tight mt-0.5">{skill.level} Level</p>
                           </div>
                           <div className="w-full bg-zinc-900/50 h-1 rounded-full overflow-hidden mt-1">
-                            <div className="h-full bg-sky-500" style={{ width: `${computedScore}%` }} />
+                            <div className="h-full bg-white text-black" style={{ width: `${computedScore}%` }} />
                           </div>
                           <div className="flex justify-between text-[7px] font-medium text-zinc-500  tracking-tight">
                             <span>Computed: {computedScore}%</span>
@@ -370,7 +370,7 @@ function RecruiterContent() {
                   <p className="text-[9px] font-medium text-zinc-500  tracking-tight">Behavioral & Crisis Response Metrics</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="bg-slate-950/60 p-5 rounded-2xl border border-zinc-800/50 space-y-3">
-                      <p className="text-[10px] font-medium text-sky-400  tracking-tight">Simulation Stress & Crisis Profile</p>
+                      <p className="text-[10px] font-medium text-zinc-300  tracking-tight">Simulation Stress & Crisis Profile</p>
                       
                       <div className="space-y-2">
                         <div className="flex justify-between items-center text-[10px] font-bold text-zinc-400  tracking-tight">
@@ -378,7 +378,7 @@ function RecruiterContent() {
                           <span className="text-white font-medium">{ev.simulationBehavioralGraph.pressureResponse}/100</span>
                         </div>
                         <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-sky-500" style={{ width: `${ev.simulationBehavioralGraph.pressureResponse}%` }} />
+                          <div className="h-full bg-white text-black" style={{ width: `${ev.simulationBehavioralGraph.pressureResponse}%` }} />
                         </div>
                       </div>
 
@@ -388,7 +388,7 @@ function RecruiterContent() {
                           <span className="text-white font-medium">{ev.simulationBehavioralGraph.decisionConsistency}/100</span>
                         </div>
                         <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-sky-500" style={{ width: `${ev.simulationBehavioralGraph.decisionConsistency}%` }} />
+                          <div className="h-full bg-white text-black" style={{ width: `${ev.simulationBehavioralGraph.decisionConsistency}%` }} />
                         </div>
                       </div>
 
@@ -398,13 +398,13 @@ function RecruiterContent() {
                           <span className="text-white font-medium">{ev.simulationBehavioralGraph.ambiguityTolerance}/100</span>
                         </div>
                         <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-sky-500" style={{ width: `${ev.simulationBehavioralGraph.ambiguityTolerance}%` }} />
+                          <div className="h-full bg-white text-black" style={{ width: `${ev.simulationBehavioralGraph.ambiguityTolerance}%` }} />
                         </div>
                       </div>
                     </div>
 
                     <div className="bg-slate-950/60 p-5 rounded-2xl border border-zinc-800/50 space-y-3">
-                      <p className="text-[10px] font-medium text-sky-400  tracking-tight">Stakeholder & Escalation Performance</p>
+                      <p className="text-[10px] font-medium text-zinc-300  tracking-tight">Stakeholder & Escalation Performance</p>
                       
                       <div className="space-y-2">
                         <div className="flex justify-between items-center text-[10px] font-bold text-zinc-400  tracking-tight">
@@ -412,7 +412,7 @@ function RecruiterContent() {
                           <span className="text-white font-medium">{ev.simulationBehavioralGraph.stakeholderManagement}/100</span>
                         </div>
                         <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-sky-500" style={{ width: `${ev.simulationBehavioralGraph.stakeholderManagement}%` }} />
+                          <div className="h-full bg-white text-black" style={{ width: `${ev.simulationBehavioralGraph.stakeholderManagement}%` }} />
                         </div>
                       </div>
 
@@ -422,7 +422,7 @@ function RecruiterContent() {
                           <span className="text-white font-medium">{ev.simulationBehavioralGraph.accountability}/100</span>
                         </div>
                         <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden">
-                          <div className="h-full bg-sky-500" style={{ width: `${ev.simulationBehavioralGraph.accountability}%` }} />
+                          <div className="h-full bg-white text-black" style={{ width: `${ev.simulationBehavioralGraph.accountability}%` }} />
                         </div>
                       </div>
 
@@ -467,7 +467,7 @@ function RecruiterContent() {
               <div className="bg-[#111111] border border-zinc-800/50 rounded-2xl p-6 space-y-5">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-medium text-white">Communication</p>
-                  <span className="text-xs font-medium text-sky-400">{comm.totalScore || 0}/100</span>
+                  <span className="text-xs font-medium text-zinc-300">{comm.totalScore || 0}/100</span>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
@@ -572,7 +572,7 @@ function RecruiterContent() {
                       <div className="grid grid-cols-3 gap-2">
                          {/* Heatmap Grid Simulation */}
                          {['Innovation', 'Pace', 'Hierarchy', 'Autonomy', 'Teamwork', 'Detail'].map((trait, i) => (
-                            <div key={i} className={`p-2 rounded flex flex-col items-center justify-center text-center ${i % 2 === 0 ? 'bg-sky-500/20 border border-sky-500/30' : 'bg-white/20 border border-zinc-700'}`}>
+                            <div key={i} className={`p-2 rounded flex flex-col items-center justify-center text-center ${i % 2 === 0 ? 'bg-white text-black/20 border border-white/10' : 'bg-white/20 border border-zinc-700'}`}>
                                <span className="text-[8px] font-medium text-white  tracking-tight">{trait}</span>
                                <span className="text-[10px] font-medium text-zinc-400 mt-1">{80 + (i * 3)}% Match</span>
                             </div>
@@ -596,7 +596,7 @@ function RecruiterContent() {
                                      </span>
                                   </div>
                                   <div className="h-1.5 w-full bg-zinc-900/50 rounded-full overflow-hidden relative">
-                                     <div className="absolute top-0 left-0 h-full bg-sky-500" style={{ width: `${candidateLvl}%` }} />
+                                     <div className="absolute top-0 left-0 h-full bg-white text-black" style={{ width: `${candidateLvl}%` }} />
                                      <div className="absolute top-0 h-full w-0.5 bg-white z-10" style={{ left: `${requiredLvl}%` }} />
                                   </div>
                                </div>
@@ -611,7 +611,7 @@ function RecruiterContent() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                          {['30 Days: Core Ramp-up', '60 Days: Project Execution', '90 Days: Autonomy'].map((phase, i) => (
                             <div key={i} className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-                               <p className="text-[10px] font-medium text-sky-400  tracking-tight mb-2">{phase}</p>
+                               <p className="text-[10px] font-medium text-zinc-300  tracking-tight mb-2">{phase}</p>
                                <ul className="text-xs text-zinc-400 font-medium space-y-2">
                                   <li className="flex gap-2"><span>•</span> Review system architecture docs</li>
                                   <li className="flex gap-2"><span>•</span> Pair program with senior engineers</li>
@@ -630,7 +630,7 @@ function RecruiterContent() {
               <div className="flex items-center justify-between">
                  <h2 className="text-[10px] font-medium text-zinc-500  tracking-[0.3em]">Recruiter Decision Metrics</h2>
                  {/* Feature 21: Offer Letter Generator */}
-                 <button className="px-4 py-2 bg-sky-600 hover:bg-indigo-700 text-white text-[10px] font-medium  tracking-tight rounded-lg transition-all shadow-sm">
+                 <button className="px-4 py-2 bg-white text-black hover:bg-zinc-800 text-white text-[10px] font-medium  tracking-tight rounded-lg transition-all shadow-sm">
                     Generate Offer Letter (PDF)
                  </button>
               </div>
@@ -661,7 +661,7 @@ function RecruiterContent() {
                 <div key={i} className="bg-[#111111] border border-zinc-800/50 rounded-3xl p-6 space-y-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-[10px] font-medium text-sky-400  tracking-tight mb-1">Question {i + 1}</p>
+                      <p className="text-[10px] font-medium text-zinc-300  tracking-tight mb-1">Question {i + 1}</p>
                       <h3 className="text-sm font-medium text-white">{q.question}</h3>
                     </div>
                   </div>
@@ -669,7 +669,7 @@ function RecruiterContent() {
                   {q.candidateCode && q.candidateCode !== "N/A" && (
                     <div className="space-y-2">
                       <p className="text-[9px] font-medium text-zinc-500  tracking-tight">Candidate's Code</p>
-                      <pre className="text-[11px] font-mono text-indigo-300/90 overflow-x-auto leading-relaxed bg-[#0A0A0A] p-4 rounded-xl border border-zinc-800/50">
+                      <pre className="text-[11px] font-mono text-zinc-300/90 overflow-x-auto leading-relaxed bg-[#0A0A0A] p-4 rounded-xl border border-zinc-800/50">
                         {q.candidateCode}
                       </pre>
                     </div>
@@ -723,15 +723,15 @@ function RecruiterContent() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-[10px] font-medium text-zinc-500  tracking-[0.3em]">7. Code Evolution & Playback</h2>
-              <button onClick={() => setShowHeatmap(!showHeatmap)} className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-[9px] font-medium  tracking-tight transition-all flex items-center gap-2">
+              <button onClick={() => setShowHeatmap(!showHeatmap)} className="px-4 py-1.5 bg-white text-black hover:bg-white text-black text-white rounded-xl text-[9px] font-medium  tracking-tight transition-all flex items-center gap-2">
                  {showHeatmap ? 'Hide Playback' : 'View Code Playback Timeline'}
               </button>
             </div>
             
             {showHeatmap && (
-              <div className="p-6 bg-white/[0.02] border border-sky-500/30 rounded-2xl space-y-4">
+              <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl space-y-4">
                  <div className="flex items-center justify-between border-b border-zinc-800/50 pb-4">
-                    <p className="text-[10px] font-medium text-sky-400  tracking-tight flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> Time-Travel Analysis</p>
+                    <p className="text-[10px] font-medium text-zinc-300  tracking-tight flex items-center gap-2"><Clock className="w-3.5 h-3.5" /> Time-Travel Analysis</p>
                     <span className="text-[8px] font-bold text-zinc-500 ">34 Revisions Tracked</span>
                  </div>
                  
@@ -753,7 +753,7 @@ function RecruiterContent() {
 
             <div className="bg-[#111111] border border-zinc-800/50 rounded-2xl p-6 space-y-4">
               {ev.codeEvaluation?.evaluation && <p className="text-xs text-zinc-400 italic">"{ev.codeEvaluation.evaluation}"</p>}
-              <pre className="text-[12px] font-mono text-indigo-300/90 overflow-x-auto leading-relaxed bg-slate-950/60 p-6 rounded-xl border border-zinc-800/50">{report.questionDetails.code}</pre>
+              <pre className="text-[12px] font-mono text-zinc-300/90 overflow-x-auto leading-relaxed bg-slate-950/60 p-6 rounded-xl border border-zinc-800/50">{report.questionDetails.code}</pre>
             </div>
           </section>
         )}
@@ -763,7 +763,7 @@ function RecruiterContent() {
             <ChevronLeft className="w-4 h-4" /> Back to Dashboard
           </Link>
           <Link href={`/feedback/candidate?name=${encodeURIComponent(name)}`}
-            className="px-6 py-2.5 bg-sky-600 text-white rounded-xl text-[10px] font-medium  tracking-tight hover:bg-sky-500 transition-all">
+            className="px-6 py-2.5 bg-white text-black text-white rounded-xl text-[10px] font-medium  tracking-tight hover:bg-white text-black transition-all">
             View Candidate Report →
           </Link>
         </div>

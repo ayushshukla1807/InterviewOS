@@ -159,7 +159,7 @@ export default function CandidateDashboard() {
   const radarData = calculateRadarData();
 
   return (
-    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-sky-600/30 transition-colors duration-500 relative">
+    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-white text-black/30 transition-colors duration-500 relative">
       <div className="mesh-bg" />
       
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
@@ -171,7 +171,7 @@ export default function CandidateDashboard() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-6"
           >
-            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-300">
+            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-zinc-200 via-zinc-400 to-zinc-500 rounded-2xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-300">
               <Shield className="w-7 h-7 text-white" />
             </Link>
             <div>
@@ -215,7 +215,7 @@ export default function CandidateDashboard() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl text-[10px] font-medium  tracking-tight transition-all shadow-sm hover:shadow-sm hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-gradient-to-r from-white to-zinc-400 text-white rounded-xl text-[10px] font-medium  tracking-tight transition-all shadow-sm hover:shadow-sm hover:scale-105 active:scale-95"
               >
                 Start New Simulation
               </motion.button>
@@ -284,7 +284,7 @@ export default function CandidateDashboard() {
               transition={{ delay: 0.05 }} 
               className="glass-card p-8 space-y-6 relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[45px] rounded-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-800/10 blur-[45px] rounded-full pointer-events-none" />
               
               <div className="flex justify-between items-center">
                 <h2 className="text-xs font-medium  tracking-tight text-zinc-400 flex items-center gap-2">
@@ -296,8 +296,8 @@ export default function CandidateDashboard() {
               </div>
 
               <div className="flex items-center gap-6 bg-black/20 p-5 rounded-2xl border border-zinc-800/50">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex flex-col items-center justify-center shadow-lg shadow-indigo-600/30 text-white relative">
-                  <span className="text-[9px] font-bold  tracking-tight text-indigo-200">Level</span>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-600 flex flex-col items-center justify-center shadow-lg shadow-white/5 text-white relative">
+                  <span className="text-[9px] font-bold  tracking-tight text-zinc-300">Level</span>
                   <span className="text-2xl font-medium">{candidateContext?.level || 1}</span>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-white rounded-full border-2 border-slate-900" />
                 </div>
@@ -334,7 +334,7 @@ export default function CandidateDashboard() {
                     candidateContext.badges.map((badge: any) => (
                       <div 
                         key={badge.id} 
-                        className="aspect-square bg-indigo-500/10 border border-indigo-500/20 text-zinc-300 rounded-xl flex items-center justify-center relative group/badge cursor-help shadow-lg hover:scale-105 transition-all"
+                        className="aspect-square bg-zinc-800/10 border border-white/10 text-zinc-300 rounded-xl flex items-center justify-center relative group/badge cursor-help shadow-lg hover:scale-105 transition-all"
                         title={`${badge.name}: ${badge.description}`}
                       >
                         <Star className="w-5 h-5 fill-indigo-500/10" />
@@ -362,7 +362,7 @@ export default function CandidateDashboard() {
                 </Link>
                 <Link 
                   href={candidateContext?.id ? `/p/${candidateContext.id}` : '#'}
-                  className="py-3 bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/20 hover:border-indigo-500/30 text-zinc-300 rounded-xl text-[10px] font-medium  tracking-tight text-center transition-all flex items-center justify-center gap-1.5"
+                  className="py-3 bg-zinc-800/10 hover:bg-zinc-800/20 border border-white/10 hover:border-white/10 text-zinc-300 rounded-xl text-[10px] font-medium  tracking-tight text-center transition-all flex items-center justify-center gap-1.5"
                 >
                   <ExternalLink className="w-3.5 h-3.5" /> Portfolio
                 </Link>
@@ -383,11 +383,11 @@ export default function CandidateDashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleResumeUpload}
-                className={`w-full p-8 bg-black/20 hover:bg-[var(--theme-bg)] border-2 border-dashed ${isUploading ? 'border-sky-500 shadow-sm' : 'border-white/20'} hover:border-sky-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
+                className={`w-full p-8 bg-black/20 hover:bg-[var(--theme-bg)] border-2 border-dashed ${isUploading ? 'border-zinc-500 shadow-sm' : 'border-white/20'} hover:border-white/10 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-4">
-                    <div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-zinc-500 border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-xs font-medium text-zinc-100  tracking-tight">Parsing Resume...</p>
                   </div>
                 ) : (
@@ -406,7 +406,7 @@ export default function CandidateDashboard() {
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="glass-card p-8 space-y-6">
               <div>
                 <h2 className="text-xs font-medium  tracking-tight text-zinc-400 flex items-center gap-2">
-                  <Code2 className="w-4 h-4 text-sky-400" /> Quick Simulator
+                  <Code2 className="w-4 h-4 text-zinc-300" /> Quick Simulator
                 </h2>
                 <p className="text-[10px] text-zinc-500 mt-2  tracking-tight leading-relaxed">Launch a standard 4-question interview</p>
               </div>
@@ -471,7 +471,7 @@ export default function CandidateDashboard() {
                       <h3 className="text-sm font-medium text-white leading-tight mb-2">{job.title}</h3>
                       <p className="text-xs text-zinc-400 line-clamp-2">{job.description}</p>
                     </div>
-                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-sky-600 border border-zinc-800 hover:border-sky-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all text-white flex justify-center items-center gap-2">
+                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-white text-black border border-zinc-800 hover:border-zinc-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all text-white flex justify-center items-center gap-2">
                       Apply Now <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
@@ -560,13 +560,13 @@ export default function CandidateDashboard() {
                   <motion.div 
                     whileHover={{ scale: 1.01 }}
                     key={record.id} 
-                    className="p-6 bg-black/30 border-none rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-sky-500/50 transition-all shadow-lg group relative overflow-hidden"
+                    className="p-6 bg-black/30 border-none rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-white/10 transition-all shadow-lg group relative overflow-hidden"
                   >
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-500 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                     
                     <div className="space-y-3 pl-2">
                       <div className="flex items-center gap-4">
-                        <span className="px-3 py-1 bg-white/20 text-blue-300 text-[9px] font-medium  tracking-tight rounded-md border border-zinc-700">
+                        <span className="px-3 py-1 bg-white/20 text-zinc-300 text-[9px] font-medium  tracking-tight rounded-md border border-zinc-700">
                           {record.id}
                         </span>
                         <span className="text-xs text-zinc-400 flex items-center gap-1.5 font-semibold">

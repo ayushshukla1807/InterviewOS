@@ -34,7 +34,7 @@ function FeedbackGateway() {
               We couldn't find an assessment report for this session. It might have expired or not been generated yet.
             </p>
           </div>
-          <Link href="/" className="px-6 py-3 bg-sky-600 hover:bg-sky-500 transition-colors text-white rounded-xl text-xs font-medium  tracking-tight inline-flex items-center gap-2 shadow-lg shadow-sky-600/20">
+          <Link href="/" className="px-6 py-3 bg-white text-black hover:bg-white text-black transition-colors text-white rounded-xl text-xs font-medium  tracking-tight inline-flex items-center gap-2 shadow-lg shadow-white/5">
             Go to Home
           </Link>
         </div>
@@ -42,7 +42,7 @@ function FeedbackGateway() {
     }
     return (
       <div data-theme="dark" className="min-h-screen bg-[#0A0A0A] flex flex-col items-center justify-center gap-4">
-        <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-white/10 border-t-sky-500 rounded-full animate-spin" />
         <p className="text-zinc-500 font-bold  tracking-tight text-[10px] ">Generating Assessment Report...</p>
       </div>
     );
@@ -59,7 +59,7 @@ function FeedbackGateway() {
   return (
     <div data-theme="dark" className="min-h-screen bg-[#0A0A0A] text-zinc-300 font-sans flex flex-col">
       <header className="px-8 py-5 border-b border-zinc-800/50 bg-[#0a0a0c]/80 backdrop-blur-xl flex items-center gap-4">
-        <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center">
+        <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center">
           <Shield className="w-4 h-4 text-white" />
         </div>
         <div>
@@ -108,17 +108,17 @@ function FeedbackGateway() {
           <p className="text-center text-[10px] font-medium text-zinc-500  tracking-[0.3em]">Select Your Report View</p>
 
           <Link href={`/feedback/recruiter?name=${encodeURIComponent(name)}&track=${track}`}
-            className="group flex items-center justify-between p-6 bg-[#111111] border border-zinc-800/50 hover:border-sky-500/30 rounded-2xl transition-all">
+            className="group flex items-center justify-between p-6 bg-[#111111] border border-zinc-800/50 hover:border-white/10 rounded-2xl transition-all">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-sky-600/10 border border-sky-500/20 flex items-center justify-center group-hover:bg-sky-600/20 transition-all">
-                <BarChart3 className="w-5 h-5 text-sky-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white text-black/20 transition-all">
+                <BarChart3 className="w-5 h-5 text-zinc-300" />
               </div>
               <div>
                 <p className="text-sm font-medium text-white">Recruiter Report</p>
                 <p className="text-[10px] font-bold text-zinc-500  tracking-tight">Full 9-metric analysis · Hiring decision ready</p>
               </div>
             </div>
-            <ArrowRight className="w-5 h-5 text-zinc-600 group-hover:text-sky-400 group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="w-5 h-5 text-zinc-600 group-hover:text-zinc-300 group-hover:translate-x-1 transition-all" />
           </Link>
 
           <Link href={`/feedback/candidate?name=${encodeURIComponent(name)}&track=${track}`}

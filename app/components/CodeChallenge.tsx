@@ -28,11 +28,11 @@ export default function CodeChallenge({ question, initialCode = '', language = '
     <div className="flex flex-col h-full bg-[#0a0a0c] border-l border-gray-800">
       <div className="p-6 bg-[#111113] border-b border-gray-800">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-sm font-bold text-sky-400  tracking-tight">Live Coding Challenge</h2>
+          <h2 className="text-sm font-bold text-zinc-300  tracking-tight">Live Coding Challenge</h2>
           <select 
             value={lang} 
             onChange={(e) => setLang(e.target.value)}
-            className="bg-[#1a1a1c] border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-sky-500"
+            className="bg-[#1a1a1c] border border-gray-700 text-gray-300 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:border-zinc-500"
           >
             <option value="javascript">JavaScript</option>
             <option value="typescript">TypeScript</option>
@@ -80,7 +80,7 @@ export default function CodeChallenge({ question, initialCode = '', language = '
       <div className="p-4 bg-[#111113] border-t border-gray-800 flex justify-end">
         <button
           onClick={() => onSubmit(code, lang)}
-          className="px-6 py-2 bg-sky-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
+          className="px-6 py-2 bg-white text-black hover:bg-zinc-800 text-white rounded-lg font-medium transition-colors"
         >
           Submit & Discuss
         </button>

@@ -62,7 +62,7 @@ export default function SimulationLanding() {
         <div className="grid grid-cols-3 gap-3">
           {[
             { icon: <MessageSquare className="w-6 h-6 text-violet-400" />, title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
-            { icon: <Mail className="w-6 h-6 text-sky-400" />, title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
+            { icon: <Mail className="w-6 h-6 text-zinc-300" />, title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
             { icon: <ClipboardCheck className="w-6 h-6 text-zinc-100" />, title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
           ].map(f => (
             <div key={f.title} className="glass-card hud-border p-4 space-y-2 flex flex-col items-start transition-all hover:bg-[var(--card-bg)]/80">

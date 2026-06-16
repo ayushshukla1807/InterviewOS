@@ -6,14 +6,14 @@
   
   --color-glass-border: rgba(255, 255, 255, 0.08);
   --color-glass-bg: rgba(9, 10, 15, 0.85); /* Deep charcoal */
-  --color-neural-glow: rgba(96, 165, 250, 0.15); /* Soft Arctic Ice Blue */
+  --color-neural-glow: rgba(255, 255, 255, 0.04); /* Subtle white glow */
   
-  --color-theme-bg: #08090C; /* Warm graphite black */
-  --color-theme-text: #F1F5F9; /* Clean off-white */
-  --color-theme-card: rgba(18, 20, 28, 0.7);
-  --color-theme-border: rgba(255, 255, 255, 0.07);
-  --color-theme-primary: #38BDF8; /* Arctic Ice Blue */
-  --color-theme-accent: #818CF8; /* Soft Slate Purple */
+  --color-theme-bg: #0A0A0A; /* Pure black/graphite */
+  --color-theme-text: #FAFAFA; /* Zinc 50 */
+  --color-theme-card: rgba(24, 24, 27, 0.7); /* Zinc 900 */
+  --color-theme-border: rgba(255, 255, 255, 0.05);
+  --color-theme-primary: #FFFFFF; /* Pure White */
+  --color-theme-accent: #A1A1AA; /* Zinc 400 */
 
   /* Curated sophisticated tones mapped to defaults to maintain compatibility */
   --color-emerald-50: rgba(16, 185, 129, 0.05);
@@ -70,9 +70,9 @@ body {
   inset: 0;
   z-index: -2;
   background: 
-    radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(129, 140, 248, 0.03) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.02) 0%, transparent 60%);
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.015) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 60%);
   filter: blur(60px);
 }
 

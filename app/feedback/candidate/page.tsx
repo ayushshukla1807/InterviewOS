@@ -25,7 +25,7 @@ function CandidateContent() {
 
   if (!report) return (
     <div data-theme="dark" className="min-h-screen bg-[#0A0A0A] flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-sky-500/20 border-t-sky-500 rounded-full animate-spin" />
+      <div className="w-12 h-12 border-4 border-white/10 border-t-sky-500 rounded-full animate-spin" />
     </div>
   );
 
@@ -60,7 +60,7 @@ function CandidateContent() {
       {/* Header */}
       <header className="sticky top-0 z-50 px-8 py-4 border-b border-zinc-800/50 bg-[#0A0A0A]/90 backdrop-blur-xl flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-white text-black rounded-lg flex items-center justify-center">
             <Shield className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -71,7 +71,7 @@ function CandidateContent() {
         <div className="flex items-center gap-2">
           {(['snapshot', 'deepdive'] as const).map(m => (
             <button key={m} onClick={() => setMode(m)}
-              className={`px-4 py-1.5 rounded-lg text-[9px] font-medium  tracking-tight transition-all ${mode === m ? 'bg-sky-600 text-white' : 'bg-zinc-900/50 text-zinc-500 hover:text-white'}`}>
+              className={`px-4 py-1.5 rounded-lg text-[9px] font-medium  tracking-tight transition-all ${mode === m ? 'bg-white text-black text-white' : 'bg-zinc-900/50 text-zinc-500 hover:text-white'}`}>
               {m === 'snapshot' ? 'Snapshot' : 'Full Report'}
             </button>
           ))}
@@ -111,7 +111,7 @@ function CandidateContent() {
                 <div className="py-4 border-y border-zinc-800/50 max-w-lg mx-auto print:border-slate-200">
                   <p className="text-[10px] font-medium text-zinc-500  tracking-tight print:text-zinc-600">Proudly Presented To</p>
                   <p className="text-2xl font-medium text-white tracking-tight mt-2 print:text-black">{name}</p>
-                  <p className="text-[11px] font-bold text-sky-400  tracking-tight mt-2 print:text-sky-600">
+                  <p className="text-[11px] font-bold text-zinc-300  tracking-tight mt-2 print:text-zinc-300">
                     For executing the {report.simulation.title || `${report.metadata?.track || 'Developer'} Track`}
                   </p>
                 </div>
@@ -214,7 +214,7 @@ function CandidateContent() {
             {plan.map((step: string, i: number) => (
               <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
                 className="bg-[#111111] border border-zinc-800/50 rounded-xl px-5 py-4 flex items-center gap-4">
-                <div className="w-7 h-7 rounded-lg bg-sky-600/20 border border-sky-500/20 flex items-center justify-center text-[10px] font-medium text-sky-400 shrink-0">{i + 1}</div>
+                <div className="w-7 h-7 rounded-lg bg-white text-black/20 border border-white/10 flex items-center justify-center text-[10px] font-medium text-zinc-300 shrink-0">{i + 1}</div>
                 <p className="text-xs font-medium text-zinc-400">{step}</p>
               </motion.div>
             ))}
@@ -226,7 +226,7 @@ function CandidateContent() {
           <h2 className="text-[10px] font-medium text-zinc-500  tracking-[0.3em]">7. Tailored Learning Paths & Recommendations</h2>
           <div className="bg-[#111111] border border-zinc-800/50 rounded-3xl p-6 space-y-6">
             <div className="flex items-center gap-3">
-              <BookOpen className="w-5 h-5 text-sky-400" />
+              <BookOpen className="w-5 h-5 text-zinc-300" />
               <div>
                 <h3 className="text-sm font-medium text-white">Custom Growth Path: {report.metadata?.track?.toUpperCase() || 'General'}</h3>
                 <p className="text-[10px] text-zinc-500  tracking-tight mt-0.5 font-bold">Based on simulated task outcomes</p>
@@ -256,19 +256,19 @@ function CandidateContent() {
                 return (
                   <>
                     <div className="p-5 bg-white/[0.02] border border-zinc-800/50 rounded-2xl space-y-2">
-                      <p className="text-[8px] font-medium text-sky-400  tracking-tight">Phase 1: Foundation Enhancement</p>
+                      <p className="text-[8px] font-medium text-zinc-300  tracking-tight">Phase 1: Foundation Enhancement</p>
                       <p className="text-xs text-zinc-400 leading-relaxed font-medium">{recommendations.p1}</p>
                     </div>
                     <div className="p-5 bg-white/[0.02] border border-zinc-800/50 rounded-2xl space-y-2">
                       <p className="text-[8px] font-medium text-violet-400  tracking-tight">Phase 2: Mastery Progression</p>
                       <p className="text-xs text-zinc-400 leading-relaxed font-medium">{recommendations.p2}</p>
                     </div>
-                    <div className="md:col-span-2 p-5 bg-sky-500/5 border border-sky-500/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="md:col-span-2 p-5 bg-white text-black/5 border border-white/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
-                        <p className="text-[8px] font-medium text-indigo-300  tracking-tight">Recommended Capstone Project</p>
+                        <p className="text-[8px] font-medium text-zinc-300  tracking-tight">Recommended Capstone Project</p>
                         <p className="text-xs font-bold text-white mt-1">{recommendations.proj}</p>
                       </div>
-                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-[9px] font-medium  tracking-tight flex items-center gap-1.5 transition-all">
+                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-white text-black hover:bg-white text-black text-white rounded-lg text-[9px] font-medium  tracking-tight flex items-center gap-1.5 transition-all">
                         Launch Resources
                         <ExternalLink className="w-3 h-3" />
                       </a>

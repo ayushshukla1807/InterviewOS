@@ -144,7 +144,7 @@ export default function ApplyPage() {
       </div>
 
       <header className="relative z-10 px-8 py-5 border-b backdrop-blur-xl flex items-center gap-4" style={{ backgroundColor: 'color-mix(in srgb, var(--bg) 80%, transparent)', borderColor: 'var(--border-color)' }}>
-        <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center shadow-lg shadow-blue-700/20">
+        <div className="w-8 h-8 bg-zinc-800 rounded-lg flex items-center justify-center shadow-lg shadow-blue-700/20">
           <Shield className="w-4 h-4 text-white" />
         </div>
         <div>
@@ -238,7 +238,7 @@ export default function ApplyPage() {
 
                <button type="submit" disabled={isSubmitting || !name || !email || !file} 
                  className={`w-full py-4 rounded-xl text-[11px] font-medium  tracking-tight transition-all flex items-center justify-center gap-2 shadow-lg ${
-                   isSubmitting ? 'bg-blue-700/50 text-white/50 cursor-not-allowed' : 'bg-blue-700 hover:bg-emerald-600 text-white shadow-blue-700/20'
+                   isSubmitting ? 'bg-zinc-800/50 text-white/50 cursor-not-allowed' : 'bg-zinc-800 hover:bg-emerald-600 text-white shadow-blue-700/20'
                  }`}>
                  {isSubmitting ? (
                    <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Processing...</>
