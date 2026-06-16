@@ -525,10 +525,8 @@ function LandingPageContent() {
 
       {/* Nav */}
       <nav className="relative z-50 px-6 py-4 lg:px-12 flex items-center justify-between border-b border-white/8 bg-black/40 backdrop-blur-xl shadow-lg">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3">
-          <div className="w-10 h-10 border border-zinc-700 rounded-xl flex items-center justify-center bg-zinc-900/50 shadow-md">
-            <Shield className="w-5 h-5 text-zinc-100" />
-          </div>
+        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
+          <img src="/logo.png" alt="InterviewOS Logo" className="w-6 h-6 object-contain rounded-md" />
           <div className="flex flex-col text-left">
             <span className="text-sm font-medium tracking-tight  bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-500 leading-none font-mono">InterviewOS</span>
             <span className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-0.5">AI Platform</span>
@@ -2853,10 +2851,8 @@ function LandingPageContent() {
           
           {/* Left info column */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 border border-zinc-700 rounded-xl flex items-center justify-center bg-zinc-900/50">
-                <Shield className="w-4 h-4 text-zinc-100" />
-              </div>
+            <div className="flex items-center gap-3 mb-6">
+              <img src="/logo.png" alt="InterviewOS Logo" className="w-8 h-8 object-contain rounded-xl" />
               <span className="text-sm font-extrabold tracking-tight text-white">InterviewOS</span>
             </div>
             <p className="text-sm text-zinc-300 leading-relaxed max-w-sm">
