@@ -159,7 +159,7 @@ export default function CandidateDashboard() {
   const radarData = calculateRadarData();
 
   return (
-    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-emerald-600/30 transition-colors duration-500 relative">
+    <div className="min-h-screen text-[var(--text)] font-sans selection:bg-sky-600/30 transition-colors duration-500 relative">
       <div className="mesh-bg" />
       
       <div className="max-w-[1400px] mx-auto p-8 lg:p-12 space-y-12 relative z-10">
@@ -171,7 +171,7 @@ export default function CandidateDashboard() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-6"
           >
-            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-violet-600 via-fuchsia-600 to-rose-600 rounded-2xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-300">
+            <Link href="/" className="w-14 h-14 bg-gradient-to-br from-sky-600 via-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-sm hover:scale-105 transition-all duration-300">
               <Shield className="w-7 h-7 text-white" />
             </Link>
             <div>
@@ -215,7 +215,7 @@ export default function CandidateDashboard() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl text-[10px] font-medium  tracking-tight transition-all shadow-sm hover:shadow-sm hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-xl text-[10px] font-medium  tracking-tight transition-all shadow-sm hover:shadow-sm hover:scale-105 active:scale-95"
               >
                 Start New Simulation
               </motion.button>
@@ -383,11 +383,11 @@ export default function CandidateDashboard() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleResumeUpload}
-                className={`w-full p-8 bg-black/20 hover:bg-[var(--theme-bg)] border-2 border-dashed ${isUploading ? 'border-emerald-500 shadow-sm' : 'border-white/20'} hover:border-emerald-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
+                className={`w-full p-8 bg-black/20 hover:bg-[var(--theme-bg)] border-2 border-dashed ${isUploading ? 'border-sky-500 shadow-sm' : 'border-white/20'} hover:border-sky-500/60 rounded-2xl flex flex-col items-center justify-center gap-4 transition-all cursor-pointer`}
               >
                 {isUploading ? (
                   <div className="flex flex-col items-center gap-4">
-                    <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-xs font-medium text-zinc-100  tracking-tight">Parsing Resume...</p>
                   </div>
                 ) : (
@@ -471,7 +471,7 @@ export default function CandidateDashboard() {
                       <h3 className="text-sm font-medium text-white leading-tight mb-2">{job.title}</h3>
                       <p className="text-xs text-zinc-400 line-clamp-2">{job.description}</p>
                     </div>
-                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-emerald-600 border border-zinc-800 hover:border-emerald-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all text-white flex justify-center items-center gap-2">
+                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-sky-600 border border-zinc-800 hover:border-sky-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all text-white flex justify-center items-center gap-2">
                       Apply Now <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>

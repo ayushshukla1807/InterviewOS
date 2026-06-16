@@ -516,7 +516,7 @@ function LandingPageContent() {
       
       {/* Background blurs — visible on dark canvas */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-emerald-600/10 blur-[150px] rounded-full" />
+        <div className="absolute top-[-5%] left-[-10%] w-[800px] h-[800px] bg-sky-600/10 blur-[150px] rounded-full" />
         <div className="absolute top-[20%] right-[-10%] w-[700px] h-[700px] bg-white/8 blur-[150px] rounded-full" />
         <div className="absolute bottom-[20%] left-[-5%] w-[900px] h-[900px] bg-indigo-600/8 blur-[160px] rounded-full" />
       </div>
@@ -528,7 +528,7 @@ function LandingPageContent() {
             <Shield className="w-5 h-5 text-zinc-100" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-medium tracking-tight  bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 leading-none font-mono">InterviewOS</span>
+            <span className="text-sm font-medium tracking-tight  bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 leading-none font-mono">InterviewOS</span>
             <span className="text-[10px] font-bold  tracking-tight text-zinc-300 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
@@ -577,14 +577,14 @@ function LandingPageContent() {
           transition={{ duration: 0.8 }}
           className="space-y-6 max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-zinc-800/50 border border-emerald-500/25 rounded-full shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-zinc-800/50 border border-sky-500/15 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-zinc-200 animate-ping" />
             <span className="text-[9px] font-medium  tracking-tight text-zinc-200">Trained on 1 Lakh+ Interviews</span>
           </div>
 
           <h1 className="text-4xl md:text-7xl font-medium tracking-tight leading-[1.05] text-white">
-            Never take an <span className="font-serif italic  bg-gradient-to-r from-emerald-400 to-teal-300 font-medium">Interview</span> again <br />
-            <span className="font-mono tracking-tighter  bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 font-medium px-1">InterviewOS</span> takes them for you.
+            Never take an <span className="font-serif italic  bg-gradient-to-r from-sky-400 to-blue-400 font-medium">Interview</span> again <br />
+            <span className="font-mono tracking-tighter  bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 font-medium px-1">InterviewOS</span> takes them for you.
           </h1>
 
           <p className="text-sm md:text-base font-medium text-slate-100 max-w-2xl mx-auto leading-relaxed">
@@ -594,7 +594,7 @@ function LandingPageContent() {
           <div className="flex flex-wrap justify-center gap-4 pt-4">
             <button 
               onClick={() => setIsBookingOpen(true)}
-              className="px-8 py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight transition-all shadow-lg shadow-emerald-500/30 cursor-pointer"
+              className="px-8 py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium  tracking-tight transition-all shadow-lg shadow-sky-500/10 cursor-pointer"
             >
               Launch Demo
             </button>
@@ -618,7 +618,7 @@ function LandingPageContent() {
               }}
               className={`flex-1 py-3 text-[10px] font-medium  tracking-tight rounded-xl transition-all ${
                 activeHeroTab === tab
-                  ? 'bg-white text-black shadow-md shadow-emerald-500/30'
+                  ? 'bg-white text-black shadow-md shadow-sky-500/10'
                   : 'text-zinc-300 hover:text-white hover:bg-white/8'
               }`}
             >
@@ -638,7 +638,7 @@ function LandingPageContent() {
           transition={{ duration: 0.9, delay: 0.2 }}
           className="w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] rounded-[2.5rem] border border-zinc-800 bg-black/40 backdrop-blur-xl mt-6 p-4 shadow-2xl shadow-black/50 flex flex-col overflow-hidden relative group"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-indigo-600 to-blue-700 opacity-60" />
           
           {/* Header tab buttons representing different mock modes */}
           <div className="flex items-center justify-between pb-3 border-b border-white/8 mb-3 shrink-0">
@@ -651,7 +651,7 @@ function LandingPageContent() {
               <span className="w-1.5 h-1.5 bg-white rounded-full " />
               {activeHeroTab.toUpperCase()}_DEMO_WORKSPACE
             </div>
-            <div className="text-[9px] px-2 py-0.5 bg-emerald-50 border border-zinc-700 rounded font-medium  text-white">
+            <div className="text-[9px] px-2 py-0.5 bg-zinc-800 border border-zinc-700 rounded font-medium  text-white">
               Proctoring Active
             </div>
           </div>
@@ -809,7 +809,7 @@ function LandingPageContent() {
 
           {/* Floating Badges */}
           <div className="absolute top-16 right-6 bg-black/50 border border-zinc-800 rounded-2xl p-4 shadow-xl backdrop-blur-md flex items-center gap-3 transition-transform group-hover:translate-y-[-4px] hidden md:flex">
-            <div className="w-8 h-8 rounded-xl bg-emerald-50 border border-zinc-700 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-zinc-800 border border-zinc-700 flex items-center justify-center">
               <CheckCircle className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="flex flex-col text-left">
@@ -860,7 +860,7 @@ function LandingPageContent() {
           {/* Feature 1: Built on 3000+ Questions */}
           <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Question Pools</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-sky-500/15 px-2 py-0.5 rounded">Question Pools</span>
               <h3 className="text-xl font-bold text-white">Built on 3000+ Industry Questions</h3>
               <p className="text-sm text-zinc-300 leading-relaxed">
                 Picked from our comprehensive pool or tailored to your specific developer requirements. Ready to use and fully customizable.
@@ -879,7 +879,7 @@ function LandingPageContent() {
                 <p className="text-[10px] font-medium text-white mt-1">Objection handling</p>
                 <p className="text-[9px] text-amber-400 font-bold mt-0.5">300+ questions</p>
               </div>
-              <div className="absolute p-5 bg-[#0e0e12] border border-zinc-800 rounded-2xl w-52 shadow-xl shadow-emerald-500/5 z-10 scale-105">
+              <div className="absolute p-5 bg-[#0e0e12] border border-zinc-800 rounded-2xl w-52 shadow-xl shadow-sky-500/5 z-10 scale-105">
                 <span className="text-[8px] font-bold text-zinc-300  tracking-tight">System Architecture</span>
                 <p className="text-[11px] font-medium text-white mt-1">Root Cause Analysis</p>
                 <p className="text-[9px] text-zinc-100 font-bold mt-0.5">500+ questions</p>
@@ -986,7 +986,7 @@ function LandingPageContent() {
           {/* Feature 3: Integrated Code Editor */}
           <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
-              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Compiler Sandbox</span>
+              <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-sky-500/15 px-2 py-0.5 rounded">Compiler Sandbox</span>
               <h3 className="text-xl font-bold text-white">Integrated Code Editor</h3>
               <p className="text-sm text-zinc-300 leading-relaxed">
                 Built-in compiler environment and interactive editor scratchpad to evaluate structural code efficiency, edge cases, and runtime complexity.
@@ -1014,7 +1014,7 @@ function LandingPageContent() {
           <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl shadow-sm flex flex-col justify-between hover:border-zinc-700 transition-all duration-300 shadow-xl min-h-[400px] backdrop-blur-sm">
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-emerald-500/25 px-2 py-0.5 rounded">Adaptive Dialogues</span>
+                <span className="text-[9px] font-medium text-zinc-100  tracking-tight bg-zinc-800/50 border border-sky-500/15 px-2 py-0.5 rounded">Adaptive Dialogues</span>
                 <button 
                   onClick={triggerDialogueSimulation}
                   disabled={dialoguePlaying}
@@ -1126,7 +1126,7 @@ function LandingPageContent() {
                     onClick={() => setActiveTelemetryStep(node.id)}
                     className={`w-28 p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                       activeTelemetryStep === node.id
-                        ? 'bg-white border-emerald-400 text-black font-extrabold shadow-lg shadow-emerald-500/25 scale-105'
+                        ? 'bg-white border-sky-400 text-black font-extrabold shadow-lg shadow-emerald-500/25 scale-105'
                         : 'bg-zinc-900/50 border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white backdrop-blur-sm'
                     }`}
                   >
@@ -1355,7 +1355,7 @@ function LandingPageContent() {
                               <span className="font-bold text-zinc-300 text-sm">You (Candidate response)</span>
                               <span className="text-[9px] text-zinc-300 font-bold">12:32 PM</span>
                             </div>
-                            <p className="text-white leading-relaxed bg-emerald-600 p-3 rounded-2xl rounded-tr-none text-left inline-block max-w-sm">
+                            <p className="text-white leading-relaxed bg-sky-600 p-3 rounded-2xl rounded-tr-none text-left inline-block max-w-sm">
                               {slackChoice === 1 
                                 ? '"Let\'s roll back main branch immediately. Devin, prepare the git revert commands. I will notify customer operations."'
                                 : '"Let\'s run some curls on the logs first. Devin, spin up logs tracing. I want to check database connection count parameters before acting."'}
@@ -1467,7 +1467,7 @@ function LandingPageContent() {
                     {!jiraSubmitted ? (
                       <button 
                         onClick={() => setJiraSubmitted(true)}
-                        className="w-full py-3 bg-white hover:bg-emerald-600 text-black font-extrabold rounded-xl text-[10px] font-medium  tracking-tight transition-all"
+                        className="w-full py-3 bg-white hover:bg-sky-600 text-black font-extrabold rounded-xl text-[10px] font-medium  tracking-tight transition-all"
                       >
                         Submit Prioritization Strategy
                       </button>
@@ -1550,7 +1550,7 @@ function LandingPageContent() {
                 onClick={() => setActiveTourTab(feat.id)}
                 className={`w-full p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden group ${
                   activeTourTab === feat.id
-                    ? 'bg-zinc-800/50 border-zinc-700 shadow-md shadow-emerald-900/5'
+                    ? 'bg-zinc-800/50 border-zinc-700 shadow-md shadow-sky-900/5'
                     : 'bg-zinc-900/50 border-white/15 hover:border-white/15 hover:bg-white/[0.02]'
                 }`}
               >
@@ -1631,7 +1631,7 @@ function LandingPageContent() {
                 onClick={() => handleCandidateSwap(c.id)}
                 className={`flex items-center gap-2 px-4 py-2 border rounded-2xl transition-all ${
                   selectedCandidate.id === c.id 
-                    ? 'border-emerald-500 bg-zinc-800/50 text-zinc-100 shadow-md shadow-emerald-500/10' 
+                    ? 'border-sky-500 bg-zinc-800/50 text-zinc-100 shadow-md shadow-sky-500/5' 
                     : 'bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:text-white hover:bg-white/10'
                 }`}
               >
@@ -1644,7 +1644,7 @@ function LandingPageContent() {
           </div>
 
           <div className="max-w-6xl mx-auto bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-6 md:p-10 shadow-xl shadow-black/50 grid backdrop-blur-sm grid-cols-1 lg:grid-cols-12 gap-8 text-left relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-indigo-600 to-blue-700 opacity-60" />
 
             {/* Left Side: Summary Card */}
             <div className="lg:col-span-4 bg-[#0A0A0A]/60 border border-zinc-800 rounded-3xl p-6 flex flex-col justify-between space-y-6">
@@ -1715,7 +1715,7 @@ function LandingPageContent() {
                 </div>
               </div>
 
-              <div className="p-4 bg-zinc-900/50 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-100 leading-relaxed">
+              <div className="p-4 bg-zinc-900/50 border border-sky-500/10 rounded-2xl text-[10px] text-slate-100 leading-relaxed">
                 <strong>AI Assessment</strong>: "{selectedCandidate.summary}"
               </div>
             </div>
@@ -1828,8 +1828,8 @@ function LandingPageContent() {
                           <pre className="text-red-400 leading-normal">{activeQuestionDetails.candidateCode}</pre>
                         </div>
                         {/* Optimal solution */}
-                        <div className="p-3 bg-emerald-950/10 border border-emerald-500/10 rounded-xl space-y-1">
-                          <span className="text-white  font-medium text-[7px] block border-b border-emerald-500/10 pb-1 mb-1">Optimal solution</span>
+                        <div className="p-3 bg-sky-950/5 border border-sky-500/10 rounded-xl space-y-1">
+                          <span className="text-white  font-medium text-[7px] block border-b border-sky-500/10 pb-1 mb-1">Optimal solution</span>
                           <pre className="text-zinc-100 leading-normal">{activeQuestionDetails.optimalCode}</pre>
                         </div>
                       </div>
@@ -1860,7 +1860,7 @@ function LandingPageContent() {
               onClick={() => setActiveTryTab(tab)}
               className={`px-4 py-2.5 text-[9px] font-medium  tracking-tight rounded-xl transition-all ${
                 activeTryTab === tab
-                  ? 'bg-emerald-50 text-black shadow-md '
+                  ? 'bg-zinc-800 text-black shadow-md '
                   : 'text-zinc-300 hover:text-white'
               }`}
             >
@@ -2084,7 +2084,7 @@ function LandingPageContent() {
                 step="50"
                 value={candidateVolume}
                 onChange={e => setCandidateVolume(Number(e.target.value))}
-                className="w-full accent-emerald-500 bg-white/15 h-1.5 rounded-lg appearance-none cursor-pointer"
+                className="w-full accent-sky-500 bg-white/15 h-1.5 rounded-lg appearance-none cursor-pointer"
               />
             </div>
 
@@ -2206,15 +2206,15 @@ function LandingPageContent() {
 
           {/* Middle: Integration graphic */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center gap-4 py-8">
-            <div className="w-20 h-20 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center shadow-md shadow-emerald-500/5">
+            <div className="w-20 h-20 rounded-full bg-zinc-800/50 border border-zinc-700 flex items-center justify-center shadow-md shadow-sky-500/5">
               <Shield className="w-10 h-10 text-zinc-100" />
             </div>
             <div className="flex flex-col items-center gap-1">
-              <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
+              <span className="w-1 h-8 border-l border-dashed border-sky-500/20" />
               <div className="px-3 py-1.5 bg-white/8 border border-zinc-800 rounded-xl text-[9px] font-medium  tracking-tight text-slate-100">
                 Data Sync
               </div>
-              <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
+              <span className="w-1 h-8 border-l border-dashed border-sky-500/20" />
             </div>
             <div className="w-20 h-20 rounded-full bg-white/8 border border-zinc-800 flex items-center justify-center text-[10px] font-medium  text-zinc-300">
               Your ATS
@@ -2321,9 +2321,9 @@ function LandingPageContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="w-full bg-black/50 border border-zinc-800 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-emerald-500/5 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
+          className="w-full bg-black/50 border border-zinc-800 rounded-[2.5rem] p-6 lg:p-10 shadow-xl shadow-sky-500/5 flex flex-col gap-8 backdrop-blur-xl relative overflow-hidden"
         >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800 opacity-60" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-sky-500 via-indigo-600 to-blue-700 opacity-60" />
 
           {/* Navigation tabs */}
           <div className="w-full p-1.5 rounded-2xl flex bg-[#0A0A0A]/60 border border-zinc-800">
@@ -2389,7 +2389,7 @@ function LandingPageContent() {
                       onClick={() => setSelectedRole(role)}
                       className={`p-4 rounded-2xl border text-left transition-all space-y-2 flex flex-col justify-between ${
                         selectedRole?.id === role.id
-                          ? 'border-emerald-500 shadow-md shadow-emerald-500/10 bg-white/8'
+                          ? 'border-sky-500 shadow-md shadow-sky-500/5 bg-white/8'
                           : 'bg-[#0A0A0A]/40 border-zinc-800 hover:border-zinc-700 hover:bg-[#0A0A0A]/60 shadow-md'
                       }`}
                     >
@@ -2404,7 +2404,7 @@ function LandingPageContent() {
 
                 {/* Selected role details card */}
                 {selectedRole && (
-                  <div className="p-5 rounded-2xl border border-emerald-500/25 bg-[#0A0A0A]/50">
+                  <div className="p-5 rounded-2xl border border-sky-500/15 bg-[#0A0A0A]/50">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-xl">🛡️</span>
                       <span className="text-sm font-medium  tracking-tight text-zinc-100">{selectedRole.title}</span>
@@ -2445,7 +2445,7 @@ function LandingPageContent() {
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
                                 placeholder="Guest Candidate"
-                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-sky-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2454,7 +2454,7 @@ function LandingPageContent() {
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
                                 placeholder="e.g. B.S. Computer Science"
-                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-sky-500 placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5 md:col-span-2">
@@ -2464,7 +2464,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('projects', e.target.value)}
                                 placeholder="e.g. Built an AI chat application using Next.js and WebSockets..."
                                 rows={2}
-                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-sky-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2474,7 +2474,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('experience', e.target.value)}
                                 placeholder="e.g. Frontend Intern at TechCorp - built dynamic dashboards..."
                                 rows={2}
-                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-sky-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                             <div className="space-y-1.5">
@@ -2484,7 +2484,7 @@ function LandingPageContent() {
                                 onChange={e => updateProfile('certifications', e.target.value)}
                                 placeholder="e.g. AWS Developer Assoc, Docker, Redux..."
                                 rows={2}
-                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-emerald-500 resize-none placeholder-slate-600 shadow-inner"
+                                className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-sky-500 resize-none placeholder-slate-600 shadow-inner"
                               />
                             </div>
                           </div>
@@ -2580,7 +2580,7 @@ function LandingPageContent() {
                           placeholder="e.g. Senior Backend Engineer"
                           value={newJobTitle}
                           onChange={e => setNewJobTitle(e.target.value)}
-                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-emerald-500"
+                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-sky-500"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -2590,7 +2590,7 @@ function LandingPageContent() {
                           value={newJobDesc}
                           onChange={e => setNewJobDesc(e.target.value)}
                           rows={3}
-                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-emerald-500 resize-none"
+                          className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-300 outline-none focus:border-sky-500 resize-none"
                         />
                       </div>
                       <button
@@ -2605,7 +2605,7 @@ function LandingPageContent() {
                     <select
                       value={selectedJob}
                       onChange={e => setSelectedJob(e.target.value)}
-                      className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:border-emerald-500 focus:bg-[#0A0A0A] outline-none shadow-inner"
+                      className="w-full bg-[#0A0A0A] border border-zinc-800 rounded-xl px-4 py-3 text-sm text-zinc-300 focus:border-sky-500 focus:bg-[#0A0A0A] outline-none shadow-inner"
                     >
                       {mergedJobs.map(job => (
                         <option key={job.id} value={job.id} className="bg-[#0A0A0A] text-zinc-300">{job.id}: {job.title}</option>
@@ -2613,7 +2613,7 @@ function LandingPageContent() {
                     </select>
                   )}
                 </div>
-                <div className="p-4 bg-zinc-900/50 border border-emerald-500/10 rounded-xl">
+                <div className="p-4 bg-zinc-900/50 border border-sky-500/10 rounded-xl">
                   <p className="text-sm text-zinc-300 leading-relaxed font-medium">
                     You will be redirected to the custom job application portal. There, you can upload your <strong>PDF resume</strong>. The system automatically structures your skills, parses work history, and dynamically prompts you with tailored scenarios reflecting the intersection of your experience and the job description.
                   </p>
@@ -2715,13 +2715,13 @@ function LandingPageContent() {
             <div className="flex items-center gap-2 bg-zinc-900/50 p-1 rounded-xl border border-zinc-800/50 self-start sm:self-auto">
               <button
                 onClick={() => setActiveSpecTab('schema')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'schema' ? 'bg-white text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'schema' ? 'bg-white text-black shadow-md shadow-sky-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 Database Schemas
               </button>
               <button
                 onClick={() => setActiveSpecTab('payload')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'payload' ? 'bg-white text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-medium tracking-tight transition-all  cursor-pointer ${activeSpecTab === 'payload' ? 'bg-white text-black shadow-md shadow-sky-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 AI Prompt Schema
               </button>
@@ -2915,7 +2915,7 @@ function LandingPageContent() {
               exit={{ scale: 0.95, y: 20 }}
               className="w-full max-w-lg bg-[#0A0A0A] border border-white/15 rounded-[2.5rem] p-8 space-y-6 shadow-2xl shadow-black/80 relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-indigo-500 to-emerald-800" />
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-sky-500 via-indigo-600 to-blue-700" />
               
               <div className="flex justify-between items-start text-left">
                 <div>
