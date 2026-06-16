@@ -81,7 +81,7 @@ function PermissionsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col font-sans selection:bg-white text-black/30 transition-colors duration-500">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] flex flex-col font-sans selection:bg-white/30 transition-colors duration-500">
       
       {/* Top Banner */}
       <div className="text-center py-12 px-6">
@@ -166,7 +166,7 @@ function PermissionsContent() {
                         Active
                       </>
                     ) : (
-                      <button onClick={requestHardware} className="px-4 py-2 bg-white text-black text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Enable Feed</button>
+                      <button onClick={requestHardware} className="px-4 py-2 bg-white text-black dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Enable Feed</button>
                     )}
                   </div>
                 </div>
@@ -188,7 +188,7 @@ function PermissionsContent() {
                       Synced
                     </>
                   ) : (
-                    <button onClick={requestHardware} className="px-4 py-2 bg-white text-black text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Sync Mic</button>
+                    <button onClick={requestHardware} className="px-4 py-2 bg-white text-black dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  hover:opacity-90 transition-all">Sync Mic</button>
                   )}
                 </div>
               </div>
@@ -205,7 +205,7 @@ function PermissionsContent() {
                 {!permissions.screen ? (
                   <button 
                     onClick={handleScreenShare}
-                    className="px-4 py-2 bg-white text-black text-white rounded-lg text-[9px] font-medium  tracking-tight hover:bg-white text-black transition-all"
+                    className="px-4 py-2 bg-white text-black rounded-lg text-[9px] font-medium  tracking-tight hover:bg-white text-black transition-all"
                   >
                     Share Screen
                   </button>
@@ -229,7 +229,7 @@ function PermissionsContent() {
                 {!permissions.fullscreen ? (
                   <button 
                     onClick={handleFullScreen}
-                    className="px-4 py-2 bg-white text-black text-white dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  tracking-tight hover:opacity-90 transition-all"
+                    className="px-4 py-2 bg-white text-black dark:bg-white dark:text-black rounded-lg text-[9px] font-medium  tracking-tight hover:opacity-90 transition-all"
                   >
                     Enter Focus
                   </button>
@@ -268,7 +268,7 @@ function PermissionsContent() {
               disabled={!allGranted || isInitializing}
               className={`min-w-[200px] px-8 py-4 rounded-2xl font-medium text-[11px]  tracking-[0.2em] transition-all relative overflow-hidden ${
                 allGranted 
-                  ? 'bg-white text-black text-white shadow-sm cursor-pointer' 
+                  ? 'bg-white text-black shadow-sm cursor-pointer' 
                   : 'bg-slate-100 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600 cursor-not-allowed border border-[var(--border-color)]'
               }`}
             >
