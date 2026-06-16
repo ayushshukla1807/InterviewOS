@@ -17,9 +17,10 @@ export default clerkMiddleware((auth, req) => {
     const session = typeof auth === 'function' ? auth() : auth;
     // @ts-ignore
     if (!session.userId) {
-      const signInUrl = req.nextUrl.clone();
-      signInUrl.pathname = '/sign-in';
-      return NextResponse.redirect(signInUrl);
+      const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
+      const protocol = req.headers.get('x-forwarded-proto') || 'https';
+      const baseUrl = host ? `${protocol}://${host}` : req.url;
+      return NextResponse.redirect(new URL('/sign-in', baseUrl));
     }
   }
   return NextResponse.next();
