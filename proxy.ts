@@ -14,7 +14,13 @@ const isProtectedRoute = createRouteMatcher([
 
 export default clerkMiddleware((auth, req) => {
   if (isProtectedRoute(req)) {
-    auth().protect();
+    const session = typeof auth === 'function' ? auth() : auth;
+    // @ts-ignore
+    if (!session.userId) {
+      const signInUrl = new URL('/sign-in', req.url);
+      signInUrl.searchParams.set('redirect_url', req.url);
+      return NextResponse.redirect(signInUrl);
+    }
   }
   return NextResponse.next();
 });
