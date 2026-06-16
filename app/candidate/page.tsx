@@ -27,20 +27,16 @@ export default function CandidateDashboard() {
 
     const verifyAuth = async () => {
       try {
-        const token = localStorage.getItem('interviewos_token');
-        const res = await fetch('/api/auth/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        const res = await fetch('/api/auth/me');
         if (!res.ok) throw new Error('Not authenticated');
         const data = await res.json();
         const user = data.user || data;
         
-        if (user.role !== 'candidate') {
-          localStorage.removeItem('interviewos_token');
-          localStorage.removeItem('interviewos_user');
-          router.push('/login');
+        if (user.role === 'recruiter') {
+          router.push('/recruiter');
+          return;
+        } else if (user.role === 'founder') {
+          router.push('/founder');
           return;
         }
 
@@ -53,7 +49,7 @@ export default function CandidateDashboard() {
       } catch (err) {
         localStorage.removeItem('interviewos_token');
         localStorage.removeItem('interviewos_user');
-        router.push('/login');
+        router.push('/sign-in');
       }
     };
 

@@ -35,23 +35,24 @@ export default function RecruiterDashboard() {
   const [generatedJd, setGeneratedJd] = useState<{title: string, content: string, rubric: string[]} | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('interviewos_user');
-    if (!savedUser) {
-      window.location.href = '/login';
-      return;
-    }
-    try {
-      const user = JSON.parse(savedUser);
-      if (user.role !== 'recruiter' && user.role !== 'founder') {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const user = data.user || data;
+        if (user.role !== 'recruiter' && user.role !== 'founder') {
+          window.location.href = '/candidate';
+        } else {
+          localStorage.setItem('interviewos_user', JSON.stringify(user));
+        }
+      } catch {
         localStorage.removeItem('interviewos_token');
         localStorage.removeItem('interviewos_user');
-        window.location.href = '/login';
+        window.location.href = '/sign-in';
       }
-    } catch {
-      localStorage.removeItem('interviewos_token');
-      localStorage.removeItem('interviewos_user');
-      window.location.href = '/login';
-    }
+    };
+    checkAuth();
   }, []);
 
   useEffect(() => {

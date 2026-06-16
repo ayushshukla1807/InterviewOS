@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongoose';
 import Job from '@/lib/db/models/Job';
+import User from '@/lib/db/models/User';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -8,15 +10,12 @@ export async function GET(req: NextRequest) {
     
     let query: any = { isActive: true };
 
-    const token = req.cookies.get('interviewos_token')?.value;
-    if (token) {
-      try {
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'interviewos_secret_2026');
-        const { payload } = await jose.jwtVerify(token, secret);
-        if (payload.role === 'recruiter') {
-          query.recruiterId = payload.id;
-        }
-      } catch (e) {}
+    const { userId } = auth();
+    if (userId) {
+      const mongoUser = await User.findById(userId);
+      if (mongoUser && mongoUser.role === 'recruiter') {
+        query.recruiterId = userId;
+      }
     }
 
     // Fetch jobs based on query, sorted by newest first
@@ -29,8 +28,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-import * as jose from 'jose';
-
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
@@ -42,21 +39,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Title and description are required' }, { status: 400 });
     }
 
-    // Extract recruiterId from token
-    const token = req.cookies.get('interviewos_token')?.value;
-    let recruiterId = 'unknown';
-    
-    if (token) {
-      try {
-        const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'interviewos_secret_2026');
-        const { payload } = await jose.jwtVerify(token, secret);
-        recruiterId = payload.id as string;
-      } catch (e) {
-        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-      }
-    } else {
+    // Extract recruiterId from auth()
+    const { userId } = auth();
+    if (!userId) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
+    const recruiterId = userId;
     
     // Generate a unique ID for the job
     const jobId = `REQ-${Math.floor(1000 + Math.random() * 9000)}`;

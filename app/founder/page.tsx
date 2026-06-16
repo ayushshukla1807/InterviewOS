@@ -12,19 +12,24 @@ export default function FounderDashboard() {
 
   // Role Guard
   useEffect(() => {
-    const savedUser = localStorage.getItem('interviewos_user');
-    if (!savedUser) {
-      window.location.href = '/login';
-      return;
-    }
-    try {
-      const user = JSON.parse(savedUser);
-      if (user.role !== 'founder') {
-        window.location.href = '/login';
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const user = data.user || data;
+        if (user.role !== 'founder') {
+          window.location.href = '/candidate';
+        } else {
+          localStorage.setItem('interviewos_user', JSON.stringify(user));
+        }
+      } catch {
+        localStorage.removeItem('interviewos_token');
+        localStorage.removeItem('interviewos_user');
+        window.location.href = '/sign-in';
       }
-    } catch {
-      window.location.href = '/login';
-    }
+    };
+    checkAuth();
   }, []);
 
   // Fetch from MongoDB

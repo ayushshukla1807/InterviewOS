@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
+import { auth } from '@clerk/nextjs/server';
 import { connectDB } from '../../../../lib/db/mongoose';
 import User from '../../../../lib/db/models/User';
 
@@ -9,18 +8,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_mock', {
   apiVersion: '2026-05-27.dahlia',
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'interviewos_secret_2026';
-
 export async function POST(req: Request) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('interviewos_token')?.value;
-    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
+    const { userId } = auth();
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     
     await connectDB();
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(userId);
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 });
 
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';

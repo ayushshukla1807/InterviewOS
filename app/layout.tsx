@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from '@clerk/nextjs';
 
 import { ThemeProvider } from "./components/ThemeProvider";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { ThemeBackground } from "./components/ThemeBackground";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
@@ -20,15 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
-      <body className="antialiased">
-        <ThemeProvider>
-          <ThemeBackground />
-          <div className="mesh-bg" />
-          <div className="noise-overlay" />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={`${inter.variable} ${outfit.variable}`} suppressHydrationWarning>
+        <body className="antialiased">
+          <ThemeProvider>
+            <ThemeBackground />
+            <div className="mesh-bg" />
+            <div className="noise-overlay" />
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

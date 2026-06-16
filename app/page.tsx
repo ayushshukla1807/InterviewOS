@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useAuth, UserButton } from '@clerk/nextjs';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Shield, ArrowRight, Bot, UserCheck, 
@@ -296,6 +297,7 @@ const CANDIDATES: Candidate[] = [
 function LandingPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { isSignedIn } = useAuth();
   const nameParam = searchParams.get('name');
   const trackParam = searchParams.get('track');
 
@@ -307,23 +309,7 @@ function LandingPageContent() {
   }, [nameParam, trackParam, router]);
 
   const [activeTab, setActiveTab] = useState<'tryout' | 'candidate' | 'recruiter' | 'mvp'>('tryout');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
 
-  // Check auth state
-  useEffect(() => {
-    setMounted(true);
-    const token = localStorage.getItem('interviewos_token');
-    const userStr = localStorage.getItem('interviewos_user');
-    if (token && userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        setIsAuthenticated(true);
-        setUserRole(user.role);
-      } catch (e) {}
-    }
-  }, []);
 
   // Role selector state
   const [selectedRole, setSelectedRole] = useState<RoleConfig | null>(null);
@@ -563,14 +549,22 @@ function LandingPageContent() {
           >
             Launch Demo
           </button>
-          {isAuthenticated ? (
-            <Link href={userRole === 'founder' ? '/founder' : userRole === 'recruiter' ? '/recruiter' : '/candidate'} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all">
-              Dashboard
-            </Link>
+          {isSignedIn ? (
+            <>
+              <Link href="/candidate" className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all">
+                Dashboard
+              </Link>
+              <UserButton />
+            </>
           ) : (
-            <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all shadow-md  cursor-pointer">
-              Try AI Interview
-            </button>
+            <>
+              <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all shadow-md  cursor-pointer">
+                Try AI Interview
+              </button>
+              <Link href="/sign-in" className="px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-[9px] font-medium tracking-tight transition-all">
+                Sign In
+              </Link>
+            </>
           )}
         </div>
       </nav>

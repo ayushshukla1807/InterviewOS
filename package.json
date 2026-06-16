@@ -12,6 +12,7 @@
     "@aws-sdk/client-s3": "^3.1063.0",
     "@aws-sdk/s3-request-presigner": "^3.1063.0",
     "@cartesia/cartesia-js": "^3.2.0",
+    "@clerk/nextjs": "^7.5.3",
     "@excalidraw/excalidraw": "^0.18.1",
     "@google/genai": "^2.4.0",
     "@mediapipe/tasks-vision": "^0.10.35",
