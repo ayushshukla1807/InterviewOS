@@ -585,8 +585,8 @@ function LandingPageContent() {
           </div>
 
           <h1 className="text-4xl md:text-7xl font-medium tracking-tight leading-[1.05] text-white">
-            Never take an <span className="font-serif italic  bg-gradient-to-r from-white to-zinc-400 font-medium">Interview</span> again <br />
-            <span className="font-mono tracking-tighter  bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-500 font-medium px-1">InterviewOS</span> takes them for you.
+            Never take an <span className="font-serif italic bg-gradient-to-r from-zinc-200 to-zinc-400 font-medium text-transparent bg-clip-text">Interview</span> again <br />
+            <span className="font-mono tracking-tighter bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-500 font-medium px-1 text-transparent bg-clip-text">InterviewOS</span> takes them for you.
           </h1>
 
           <p className="text-sm md:text-base font-medium text-slate-100 max-w-2xl mx-auto leading-relaxed">
@@ -1284,8 +1284,8 @@ function LandingPageContent() {
                   }}
                   className={`p-5 rounded-2xl border text-left transition-all duration-300 relative overflow-hidden ${
                     activeSimTab === tab.id
-                      ? 'bg-white border-purple-500/30 shadow-md shadow-slate-200/40'
-                      : 'bg-white/4 border-white/8 hover:bg-white hover:border-slate-300'
+                      ? 'bg-zinc-800 border-zinc-500/30 shadow-md shadow-slate-900/40'
+                      : 'bg-white/4 border-white/8 hover:bg-zinc-800 hover:border-zinc-500'
                   }`}
                 >
                   {activeSimTab === tab.id && (
@@ -1896,8 +1896,8 @@ function LandingPageContent() {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">React</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Java</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">React</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">Java</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('fullstack', 'software_engineering')}
@@ -1928,8 +1928,8 @@ function LandingPageContent() {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Cold Pitching</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">CRM</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">Cold Pitching</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">CRM</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('sales_associate', 'management_qa')}
@@ -1960,8 +1960,8 @@ function LandingPageContent() {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">ROAS</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">SEO</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">ROAS</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">SEO</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('performance_marketer', 'management_qa')}
@@ -1992,8 +1992,8 @@ function LandingPageContent() {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">PyTorch</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Transformers</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">PyTorch</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">Transformers</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('ai_ml_engineer', 'ai_ml')}
@@ -2024,8 +2024,8 @@ function LandingPageContent() {
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">GIST</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-zinc-300 ">Priorities</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">GIST</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-zinc-800 rounded text-zinc-300 ">Priorities</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('product_manager', 'management_qa')}

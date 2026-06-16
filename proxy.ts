@@ -17,7 +17,8 @@ export default clerkMiddleware((auth, req) => {
     const session = typeof auth === 'function' ? auth() : auth;
     // @ts-ignore
     if (!session.userId) {
-      const signInUrl = new URL('/sign-in', req.url);
+      const signInUrl = req.nextUrl.clone();
+      signInUrl.pathname = '/sign-in';
       return NextResponse.redirect(signInUrl);
     }
   }
