@@ -543,12 +543,12 @@ function LandingPageContent() {
           </div>
           <div className="flex flex-col text-left">
             <span className="text-sm font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 leading-none font-mono">InterviewOS</span>
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-0.5">AI Platform</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-0.5">AI Platform</span>
           </div>
         </motion.div>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-wider text-slate-400">
+        <div className="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-wider text-slate-200">
           <a href="#features" className="hover:text-emerald-400 transition-colors">Product</a>
           <a href="#anti-cheating" className="hover:text-emerald-400 transition-colors">Why InterviewOS?</a>
           <a href="#integrations" className="hover:text-emerald-400 transition-colors">Integrations</a>
@@ -593,7 +593,7 @@ function LandingPageContent() {
             <span className="font-mono tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-300 to-teal-400 font-black px-1">InterviewOS</span> takes them for you.
           </h1>
 
-          <p className="text-sm md:text-base font-medium text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm md:text-base font-medium text-slate-100 max-w-2xl mx-auto leading-relaxed">
             Fully automated human-like AI Interviews. Automated assessments, interactive coding sandboxes, proctoring telemetry, and instant candidate grading reports.
           </p>
 
@@ -625,7 +625,7 @@ function LandingPageContent() {
               className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
                 activeHeroTab === tab
                   ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30'
-                  : 'text-slate-400 hover:text-white hover:bg-white/8'
+                  : 'text-slate-200 hover:text-white hover:bg-white/8'
               }`}
             >
               {tab === 'coding' && 'Coding'}
@@ -653,7 +653,7 @@ function LandingPageContent() {
               <div className="w-3.5 h-3.5 rounded-full bg-amber-500/80" />
               <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/80" />
             </div>
-            <div className="text-[10px] text-slate-500 font-mono tracking-widest uppercase flex items-center gap-1.5">
+            <div className="text-[10px] text-slate-100 font-mono tracking-widest uppercase flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
               {activeHeroTab.toUpperCase()}_DEMO_WORKSPACE
             </div>
@@ -670,41 +670,41 @@ function LandingPageContent() {
                 <div className="w-1/3 bg-[#050508]/60 border border-white/10 rounded-2xl p-5 font-sans space-y-3 overflow-y-auto hidden md:block">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded">Task 1</span>
-                    <span className="text-[9px] text-slate-500 font-bold">Time Limit: 25m</span>
+                    <span className="text-[9px] text-slate-100 font-bold">Time Limit: 25m</span>
                   </div>
                   <h4 className="text-sm font-black text-white">Word Search by Prefix & Suffix</h4>
-                  <p className="text-[11px] leading-relaxed text-slate-400">
+                  <p className="text-[11px] leading-relaxed text-slate-200">
                     Design a special dictionary that searches words by a prefix and a suffix. Implement `WordFilter(words)` and `filter(prefix, suffix)` to return the maximum matching index. Optimize performance to ensure \(O(L)\) query time.
                   </p>
                   <div className="p-3 bg-white/8 border border-white/10 rounded-xl text-[10px] space-y-1">
-                    <span className="font-bold text-slate-300 block">Example Case:</span>
-                    <code className="text-slate-400 block font-mono">words = ["apple"], filter("a", "e") =&gt; Index 0</code>
+                    <span className="font-bold text-slate-100 block">Example Case:</span>
+                    <code className="text-slate-200 block font-mono">words = ["apple"], filter("a", "e") =&gt; Index 0</code>
                   </div>
                 </div>
 
                 {/* Middle: Code Editor */}
-                <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-600 flex flex-col justify-between border border-white/10 overflow-hidden">
+                <div className="flex-1 rounded-2xl bg-[#050508]/80 p-4 font-mono text-[10px] text-slate-200 flex flex-col justify-between border border-white/10 overflow-hidden">
                   <div className="space-y-1.5 overflow-y-auto flex-1 select-none">
-                    <div className="flex items-center gap-2 pb-2 border-b border-white/8 mb-2 shrink-0 text-[9px] text-slate-500 font-bold">
+                    <div className="flex items-center gap-2 pb-2 border-b border-white/8 mb-2 shrink-0 text-[9px] text-slate-100 font-bold">
                       <span className="text-emerald-400">Solution.java</span>
                       <span>•</span>
                       <span>Java (OpenJDK 13.0.1)</span>
                     </div>
                     <div className="text-emerald-500">// Optimal prefix tree (Trie) based solution</div>
-                    <pre className="text-slate-300 whitespace-pre-wrap leading-relaxed">{editorText}</pre>
+                    <pre className="text-slate-100 whitespace-pre-wrap leading-relaxed">{editorText}</pre>
                   </div>
                   
                   {/* Console logs */}
-                  <div className="bg-black/60 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-400">
+                  <div className="bg-black/60 border border-white/10 rounded-xl p-3 h-28 shrink-0 flex flex-col justify-between font-mono text-[9px] text-slate-200">
                     <div className="overflow-y-auto space-y-1">
                       {compilerLogs.map((log, idx) => (
-                        <div key={idx} className={log.startsWith('✓') ? 'text-emerald-400' : log.startsWith('!') ? 'text-rose-400' : 'text-slate-500'}>
+                        <div key={idx} className={log.startsWith('✓') ? 'text-emerald-400' : log.startsWith('!') ? 'text-rose-400' : 'text-slate-100'}>
                           {log}
                         </div>
                       ))}
                     </div>
                     <div className="flex justify-between items-center pt-2 border-t border-white/10 mt-1">
-                      <span className="text-[8px] text-slate-500">Console Terminal Output</span>
+                      <span className="text-[8px] text-slate-100">Console Terminal Output</span>
                       <button 
                         onClick={handleRunCode}
                         disabled={isCompiling}
@@ -720,13 +720,13 @@ function LandingPageContent() {
                 <div className="w-44 flex flex-col gap-3 shrink-0 hidden lg:flex">
                   <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
                     <Activity className="w-5 h-5 text-emerald-600 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Voice Confidence</span>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-200">Voice Confidence</span>
                     <span className="text-lg font-black text-white">92%</span>
                   </div>
                   <div className="flex-1 rounded-2xl bg-white/8 border border-white/10 p-4 flex flex-col justify-center items-center text-center space-y-1">
                     <Monitor className="w-5 h-5 text-indigo-400" />
-                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Stress Tracking</span>
-                    <span className="text-xs font-black text-indigo-300">Focused / Stable</span>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-slate-200">Stress Tracking</span>
+                    <span className="text-sm font-black text-indigo-300">Focused / Stable</span>
                   </div>
                 </div>
               </div>
@@ -752,8 +752,8 @@ function LandingPageContent() {
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Candidate Video Stream
                   </div>
                   <div className="absolute bottom-4 left-4 right-4 bg-black/50 border border-white/10 rounded-2xl p-4 backdrop-blur-md">
-                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
-                    <p className="text-xs text-white leading-relaxed font-medium">
+                    <p className="text-[10px] text-slate-200 uppercase tracking-widest font-black mb-1">Live Subtitles</p>
+                    <p className="text-sm text-white leading-relaxed font-medium">
                       {activeHeroTab === 'sales' && '"For our B2B sales cycles, I focus on identifying high-intent outbound leads using customer intent data..."'}
                       {activeHeroTab === 'data' && '"I analyzed the temporal schema logs and discovered a bottleneck in our indexing pipeline..."'}
                       {activeHeroTab === 'product' && '"I believe product management requires a strong focus on bridging technical complexity and customer value..."'}
@@ -775,12 +775,12 @@ function LandingPageContent() {
                         <Bot className="w-6 h-6 text-emerald-400" />
                       </div>
                       <span className="text-[10px] font-black uppercase text-emerald-400 tracking-wider">AI Interviewer</span>
-                      <span className="text-[9px] text-slate-400 font-mono">Analyzing Audio & Tone</span>
+                      <span className="text-[9px] text-slate-200 font-mono">Analyzing Audio & Tone</span>
                     </div>
                   </div>
                   <div className="bg-[#050508] border-t border-white/10 p-4 text-left space-y-2">
-                    <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Active Question</span>
-                    <p className="text-[11px] text-slate-300 font-medium">
+                    <span className="text-[8px] font-black text-slate-100 uppercase tracking-widest">Active Question</span>
+                    <p className="text-[11px] text-slate-100 font-medium">
                       {activeHeroTab === 'sales' && 'How would you qualify outbound target companies?'}
                       {activeHeroTab === 'data' && 'Can you explain the difference between a B-Tree and an LSM-Tree?'}
                       {activeHeroTab === 'product' && 'How do you prioritize features for a product in early beta?'}
@@ -805,7 +805,7 @@ function LandingPageContent() {
                         <Volume2 className="w-4.5 h-4.5 text-black" />
                         Tap to unmute
                       </button>
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500">Listen to AI dialogue logs</span>
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-slate-100">Listen to AI dialogue logs</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -819,7 +819,7 @@ function LandingPageContent() {
               <CheckCircle className="w-4.5 h-4.5 text-emerald-600" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[8px] font-black tracking-widest text-slate-600 uppercase">Evaluation Score</span>
+              <span className="text-[8px] font-black tracking-widest text-slate-200 uppercase">Evaluation Score</span>
               <span className="text-sm font-black text-white">80/100</span>
             </div>
           </div>
@@ -829,7 +829,7 @@ function LandingPageContent() {
               <Award className="w-4.5 h-4.5 text-emerald-400" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-[8px] font-black tracking-widest text-slate-600 uppercase">Status</span>
+              <span className="text-[8px] font-black tracking-widest text-slate-200 uppercase">Status</span>
               <span className="text-sm font-black text-white">Strong Candidate</span>
             </div>
           </div>
@@ -839,13 +839,13 @@ function LandingPageContent() {
       {/* Trust partners Marquee */}
       <section className="relative z-10 border-y border-white/8 bg-black/20 py-10 w-full overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 text-center space-y-6">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-100">
             InterviewOS - A Name Trusted by <span className="text-emerald-400">800+</span> hiring partners
           </span>
           {/* Logo ticker mockup */}
           <div className="w-full flex justify-center gap-12 flex-wrap opacity-40 grayscale filter hover:grayscale-0 hover:opacity-80 transition-all duration-300">
             {['Greenhouse', 'Ashby', 'BambooHR', 'PeopleStrong', 'Oracle Taleo', 'iCIMS', 'Workday', 'Bullhorn'].map((logo, idx) => (
-              <span key={idx} className="text-sm font-extrabold text-slate-600 uppercase tracking-widest">
+              <span key={idx} className="text-sm font-extrabold text-slate-200 uppercase tracking-widest">
                 {logo}
               </span>
             ))}
@@ -868,7 +868,7 @@ function LandingPageContent() {
             <div className="space-y-3">
               <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">Question Pools</span>
               <h3 className="text-xl font-bold text-white">Built on 3000+ Industry Questions</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 Picked from our comprehensive pool or tailored to your specific developer requirements. Ready to use and fully customizable.
               </p>
             </div>
@@ -876,17 +876,17 @@ function LandingPageContent() {
             {/* Interactive tag cards group */}
             <div className="relative h-44 mt-6 flex items-center justify-center overflow-hidden">
               <div className="absolute left-4 rotate-[-8deg] p-4 bg-white/5 border border-white/10 rounded-2xl w-48 shadow-md shadow-black/40">
-                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">DSA / Coding</span>
+                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">DSA / Coding</span>
                 <p className="text-[10px] font-black text-white mt-1">Java, Python, C++, SQL</p>
                 <p className="text-[9px] text-emerald-400 font-bold mt-0.5">1500+ questions</p>
               </div>
               <div className="absolute right-4 rotate-[8deg] p-4 bg-white/5 border border-white/10 rounded-2xl w-48 shadow-md shadow-black/40 z-0">
-                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Sales Ops</span>
+                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">Sales Ops</span>
                 <p className="text-[10px] font-black text-white mt-1">Objection handling</p>
                 <p className="text-[9px] text-amber-400 font-bold mt-0.5">300+ questions</p>
               </div>
               <div className="absolute p-5 bg-[#0e0e12] border border-white/10 rounded-2xl w-52 shadow-xl shadow-emerald-500/5 z-10 scale-105">
-                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">System Architecture</span>
+                <span className="text-[8px] font-bold text-slate-200 uppercase tracking-widest">System Architecture</span>
                 <p className="text-[11px] font-black text-white mt-1">Root Cause Analysis</p>
                 <p className="text-[9px] text-emerald-400 font-bold mt-0.5">500+ questions</p>
               </div>
@@ -906,7 +906,7 @@ function LandingPageContent() {
                 </button>
               </div>
               <h3 className="text-xl font-bold text-white">100% Anti-Cheating</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 We monitor browser focus states, eye shift patterns, voice presence anomalies, and keystroke injection signatures in real-time.
               </p>
             </div>
@@ -949,12 +949,12 @@ function LandingPageContent() {
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black text-rose-600 uppercase tracking-wider">{selectedViolation.label}</span>
-                    <span className="text-[9px] text-slate-500 font-mono">{selectedViolation.time} / 03:41</span>
+                    <span className="text-[9px] text-slate-100 font-mono">{selectedViolation.time} / 03:41</span>
                   </div>
-                  <p className="text-[10px] text-slate-600 mt-0.5">{selectedViolation.desc}</p>
-                  <div className="text-[8px] font-bold uppercase tracking-wider text-slate-500 mt-1.5 flex gap-2">
+                  <p className="text-[10px] text-slate-200 mt-0.5">{selectedViolation.desc}</p>
+                  <div className="text-[8px] font-bold uppercase tracking-wider text-slate-100 mt-1.5 flex gap-2">
                     <span className="text-emerald-600">FPS: 60.0</span>
-                    <span className={selectedViolation.id ? 'text-rose-600' : 'text-slate-500'}>
+                    <span className={selectedViolation.id ? 'text-rose-600' : 'text-slate-100'}>
                       Gaze: {selectedViolation.videoState === 'eye-shift' ? 'DEVIATING' : 'FOCUSED'}
                     </span>
                   </div>
@@ -978,7 +978,7 @@ function LandingPageContent() {
                       className={`py-1 text-[8px] font-bold uppercase tracking-wider rounded border text-center transition-all ${
                         selectedViolation.id === v.id
                           ? 'bg-rose-50 border-rose-500/30 text-rose-600'
-                          : 'bg-white/8 border-white/10 text-slate-500 hover:text-slate-900'
+                          : 'bg-white/8 border-white/10 text-slate-100 hover:text-slate-900'
                       }`}
                     >
                       {v.label}
@@ -994,13 +994,13 @@ function LandingPageContent() {
             <div className="space-y-3">
               <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded">Compiler Sandbox</span>
               <h3 className="text-xl font-bold text-white">Integrated Code Editor</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 Built-in compiler environment and interactive editor scratchpad to evaluate structural code efficiency, edge cases, and runtime complexity.
               </p>
             </div>
 
             {/* Code mockup */}
-            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-slate-400 space-y-1">
+            <div className="bg-[#050508] border border-white/10 rounded-2xl p-4 mt-6 text-left font-mono text-[9px] text-slate-200 space-y-1">
               <div className="text-emerald-500">// Evaluated Code Stream</div>
               <div><span className="text-emerald-400">class</span> <span className="text-blue-400">Solution</span> &#123;</div>
               <div className="pl-4"><span className="text-blue-400">int</span> <span className="text-yellow-400">sumOfDigits</span>(<span className="text-blue-400">int</span> n) &#123;</div>
@@ -1030,7 +1030,7 @@ function LandingPageContent() {
                 </button>
               </div>
               <h3 className="text-xl font-bold text-white">Feels Like a Real Interview</h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 Adaptive follow-ups, natural voice parsing, and real-time probing prompts structured to evaluate logic depth, not just memorized syntax.
               </p>
             </div>
@@ -1047,7 +1047,7 @@ function LandingPageContent() {
               <div className={`space-y-1 max-w-[90%] ml-auto text-right transition-opacity duration-500 ${
                 dialogueStep >= 1 ? 'opacity-100' : 'opacity-30'
               }`}>
-                <span className="text-[8px] font-black text-slate-500 uppercase tracking-wider">Candidate response</span>
+                <span className="text-[8px] font-black text-slate-100 uppercase tracking-wider">Candidate response</span>
                 <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl rounded-tr-none text-[10px] text-slate-200 leading-relaxed text-left">
                   {dialogueStep >= 2 
                     ? '"Yeah sure, I’ve worked on a P2P food delivery system... MERN stack, MongoDB, React, Node..."' 
@@ -1083,7 +1083,7 @@ function LandingPageContent() {
             <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Interactive Telemetry: How InterviewOS Works
             </h2>
-            <p className="text-xs text-slate-600 max-w-2xl mx-auto">
+            <p className="text-sm text-slate-200 max-w-2xl mx-auto">
               Click the pipeline nodes to track candidate request lifecycles and explore real-time telemetry metrics generated by the platform.
             </p>
           </div>
@@ -1091,7 +1091,7 @@ function LandingPageContent() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto items-center pt-6">
             {/* SVG Pipeline Connection Nodes (7 cols) */}
             <div className="lg:col-span-7 bg-white/5 border border-white/10 rounded-3xl p-6 relative min-h-[350px] flex flex-col justify-center shadow-sm">
-              <span className="absolute top-4 left-4 text-[8px] font-mono text-slate-400 font-bold uppercase tracking-wider">[ PIPELINE-DIAGRAM // node_mesh ]</span>
+              <span className="absolute top-4 left-4 text-[8px] font-mono text-slate-200 font-bold uppercase tracking-wider">[ PIPELINE-DIAGRAM // node_mesh ]</span>
               
               {/* Dynamic SVG link line */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 500 200">
@@ -1133,19 +1133,19 @@ function LandingPageContent() {
                     className={`w-28 p-3.5 rounded-2xl border text-center transition-all duration-300 ${
                       activeTelemetryStep === node.id
                         ? 'bg-emerald-500 border-emerald-400 text-black font-extrabold shadow-lg shadow-emerald-500/25 scale-105'
-                        : 'bg-white/5 border-white/10 hover:border-emerald-500/30 text-slate-400 hover:text-white backdrop-blur-sm'
+                        : 'bg-white/5 border-white/10 hover:border-emerald-500/30 text-slate-200 hover:text-white backdrop-blur-sm'
                     }`}
                   >
                     <span className={`text-[7px] font-mono font-bold tracking-widest block uppercase ${activeTelemetryStep === node.id ? 'text-black/70' : 'text-emerald-400'}`}>{node.tag}</span>
                     <h4 className={`text-[10px] font-black tracking-tight mt-1 ${activeTelemetryStep === node.id ? 'text-black font-extrabold' : 'text-slate-200'}`}>{node.title}</h4>
-                    <span className={`text-[8px] font-mono font-bold block mt-1.5 ${activeTelemetryStep === node.id ? 'text-black/50' : 'text-slate-500'}`}>{node.label}</span>
+                    <span className={`text-[8px] font-mono font-bold block mt-1.5 ${activeTelemetryStep === node.id ? 'text-black/50' : 'text-slate-100'}`}>{node.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* System Telemetry Log Console (5 cols) */}
-            <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 text-left font-mono text-[9.5px] text-slate-400 space-y-4 shadow-xl min-h-[350px] flex flex-col justify-between">
+            <div className="lg:col-span-5 bg-slate-900 border border-slate-800 rounded-3xl p-5 text-left font-mono text-[9.5px] text-slate-200 space-y-4 shadow-xl min-h-[350px] flex flex-col justify-between">
               <div className="space-y-3">
                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
                   <span className="text-emerald-400 font-extrabold uppercase tracking-wider text-[8px]">[ TELEMETRY CONSOLE ]</span>
@@ -1154,57 +1154,57 @@ function LandingPageContent() {
                 
                 {activeTelemetryStep === 0 && (
                   <div className="space-y-1.5">
-                    <div className="text-slate-500">&gt; INITIALIZING RESUME SCAN...</div>
+                    <div className="text-slate-100">&gt; INITIALIZING RESUME SCAN...</div>
                     <div className="text-emerald-400">✓ Parsing PDF text bytes using Gemini Flash 2.5...</div>
                     <div>[INPUT]: Shubh_Agarwal_Resume.pdf (425 KB)</div>
                     <div className="text-indigo-400">Matches found: [React, Node.js, PyTorch, IIT]</div>
-                    <div className="text-slate-500">&gt; Target role: lead_fullstack_architect</div>
+                    <div className="text-slate-100">&gt; Target role: lead_fullstack_architect</div>
                   </div>
                 )}
 
                 {activeTelemetryStep === 1 && (
                   <div className="space-y-1.5">
-                    <div className="text-slate-500">&gt; TAILORING DYNAMIC QUESTIONS...</div>
+                    <div className="text-slate-100">&gt; TAILORING DYNAMIC QUESTIONS...</div>
                     <div className="text-emerald-400">✓ Scanning 3000+ question repositories...</div>
                     <div>[GENERATE]: 3 customized questions generated.</div>
                     <div className="text-indigo-400">Q1: &quot;Consensus Commit Protocol&quot; (System design)</div>
                     <div className="text-indigo-400">Q2: &quot;Lock-free Concurrent Ring Buffer&quot; (Algorithms)</div>
-                    <div className="text-slate-500">&gt; Injecting prompt hooks into cloud session config...</div>
+                    <div className="text-slate-100">&gt; Injecting prompt hooks into cloud session config...</div>
                   </div>
                 )}
 
                 {activeTelemetryStep === 2 && (
                   <div className="space-y-1.5">
-                    <div className="text-slate-500">&gt; SPINNING UP stack VM DOCKER CONTAINER...</div>
+                    <div className="text-slate-100">&gt; SPINNING UP stack VM DOCKER CONTAINER...</div>
                     <div className="text-emerald-400">✓ Node sandbox initialized successfully (60.0 FPS)</div>
                     <div className="text-indigo-400">Running compiler validation test suites...</div>
                     <div>[STDOUT]: 3/3 test cases passed. JVM execution OK.</div>
-                    <div className="text-slate-500">&gt; Resource consumption: CPU: 12% | RAM: 154MB</div>
+                    <div className="text-slate-100">&gt; Resource consumption: CPU: 12% | RAM: 154MB</div>
                   </div>
                 )}
 
                 {activeTelemetryStep === 3 && (
                   <div className="space-y-1.5">
-                    <div className="text-slate-500">&gt; REAL-TIME NEURAL PROCTORING ACTIVE...</div>
+                    <div className="text-slate-100">&gt; REAL-TIME NEURAL PROCTORING ACTIVE...</div>
                     <div className="text-emerald-400">✓ Eye tracking, audio voice, and browser tabs audit:</div>
                     <div className="text-indigo-400">Tab Focus: ACTIVE | Gaze Vector: 0.98 (Focused)</div>
                     <div className="text-rose-400">Warning: 1 event flagged [Eye Shift at 01:12]</div>
-                    <div className="text-slate-500">&gt; Logging gaze landmarks coordinate mesh in database...</div>
+                    <div className="text-slate-100">&gt; Logging gaze landmarks coordinate mesh in database...</div>
                   </div>
                 )}
 
                 {activeTelemetryStep === 4 && (
                   <div className="space-y-1.5">
-                    <div className="text-slate-500">&gt; COMPILING EVALUATION INDEX METRICS...</div>
+                    <div className="text-slate-100">&gt; COMPILING EVALUATION INDEX METRICS...</div>
                     <div className="text-emerald-400">✓ AI grading completed successfully (Overall: 80/100)</div>
                     <div>Problem Solving: Elite | Communication: Strong</div>
                     <div className="text-indigo-400">Radar vectors calculated: [Thinking: 4.7, Fluency: 4.8]</div>
-                    <div className="text-slate-500">&gt; Syncing scorecard data models. Evaluation trace ready.</div>
+                    <div className="text-slate-100">&gt; Syncing scorecard data models. Evaluation trace ready.</div>
                   </div>
                 )}
               </div>
 
-              <div className="text-[8.5px] text-slate-500 border-t border-slate-800 pt-2 flex justify-between">
+              <div className="text-[8.5px] text-slate-100 border-t border-slate-800 pt-2 flex justify-between">
                 <span>Buffer size: 4.2 KB</span>
                 <span>STATUS: STABLE_OK</span>
               </div>
@@ -1217,13 +1217,43 @@ function LandingPageContent() {
       <section id="workplace-simulator" className="relative z-10 bg-white/5 border-y border-white/8 py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
           <div className="text-center space-y-3">
-            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 inline-block">The Ultimate Differentiator</span>
+            <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-block">The Ultimate Differentiator</span>
             <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
               Evaluate real workplace behavior. Not just MCQs.
             </h2>
-            <p className="text-xs text-slate-600 max-w-2xl mx-auto">
+            <p className="text-sm text-slate-200 max-w-2xl mx-auto">
               Drop candidates into a simulated workplace sandbox. Watch them triage Slack bugs, handle angry CEO escalations, and prioritize Jira tickets on the fly.
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left pt-4">
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4">
+                <Activity className="w-5 h-5 text-indigo-400" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">Real-time Stress Testing</h3>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Our AI simulates production outages and dynamically injects urgent messages. We evaluate how candidates manage panic, prioritize tasks under pressure, and communicate effectively during a crisis.
+              </p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4">
+                <Workflow className="w-5 h-5 text-emerald-400" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">Workflow Prioritization</h3>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Candidates are presented with a backlog of conflicting Jira tickets and customer support emails. The AI analyzes their decision-making logic and triage strategies.
+              </p>
+            </div>
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-colors backdrop-blur-sm">
+              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
+                <ShieldCheck className="w-5 h-5 text-rose-400" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">Stakeholder Management</h3>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Beyond coding, we assess how candidates communicate with non-technical stakeholders. Do they blame others? Are they polite to frustrated clients? The AI grades emotional intelligence.
+              </p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-6xl mx-auto pt-6 items-stretch">
@@ -1265,16 +1295,16 @@ function LandingPageContent() {
                   {activeSimTab === tab.id && (
                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
                   )}
-                  <span className="text-[8px] font-bold tracking-widest uppercase text-slate-400 block mb-1">{tab.tag}</span>
+                  <span className="text-[8px] font-bold tracking-widest uppercase text-slate-200 block mb-1">{tab.tag}</span>
                   <h4 className="text-sm font-black text-white">{tab.title}</h4>
-                  <p className="text-[11px] text-slate-500 leading-relaxed mt-1">{tab.desc}</p>
+                  <p className="text-[11px] text-slate-100 leading-relaxed mt-1">{tab.desc}</p>
                 </button>
               ))}
             </div>
 
             {/* Right Interactive mockup panel (8 cols) */}
             <div className="lg:col-span-8 bg-white/5 border border-white/10 rounded-3xl p-6 shadow-md shadow-black/30 min-h-[400px] flex flex-col justify-between text-left relative overflow-hidden backdrop-blur-sm">
-              <span className="absolute top-4 right-4 text-[8px] font-mono text-slate-400 font-bold uppercase tracking-wider">[ INTERACTIVE SIMULATION PREVIEW ]</span>
+              <span className="absolute top-4 right-4 text-[8px] font-mono text-slate-200 font-bold uppercase tracking-wider">[ INTERACTIVE SIMULATION PREVIEW ]</span>
               
               <div className="space-y-4">
                 {/* Simulator Interface Header */}
@@ -1284,7 +1314,7 @@ function LandingPageContent() {
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest font-bold pl-4">
+                  <span className="text-[10px] font-mono text-slate-200 uppercase tracking-widest font-bold pl-4">
                     {activeSimTab === 'slack' && 'workspace-slack / channel-deploy-panic'}
                     {activeSimTab === 'email' && 'inbox / client-escalations'}
                     {activeSimTab === 'jira' && 'jira-board / sprint-emergency'}
@@ -1293,15 +1323,15 @@ function LandingPageContent() {
 
                 {/* Tab content 1: Slack chat */}
                 {activeSimTab === 'slack' && (
-                  <div className="space-y-4 font-sans text-xs">
+                  <div className="space-y-4 font-sans text-sm">
                     <div className="flex gap-3 items-start">
                       <div className="w-8 h-8 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center font-extrabold text-[10px] text-indigo-400">DT</div>
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-200">Devin (Tech Lead)</span>
-                          <span className="text-[9px] text-slate-400 font-bold">12:31 PM</span>
+                          <span className="text-[9px] text-slate-200 font-bold">12:31 PM</span>
                         </div>
-                        <p className="text-slate-300 leading-relaxed bg-white/5 border border-white/8 p-3 rounded-2xl rounded-tl-none">
+                        <p className="text-slate-100 leading-relaxed bg-white/5 border border-white/8 p-3 rounded-2xl rounded-tl-none">
                           &quot;Hey! The payment webhook service is throwing 504 gateway timeouts on production! Acme Corp is complaining their checks are failing. What is our hotfix path?&quot;
                         </p>
                       </div>
@@ -1309,7 +1339,7 @@ function LandingPageContent() {
 
                     {slackChoice === null ? (
                       <div className="space-y-2.5 pt-2 max-w-lg pl-11">
-                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Choose candidate response:</span>
+                        <span className="text-[9px] font-bold text-slate-200 uppercase tracking-widest block">Choose candidate response:</span>
                         <button 
                           onClick={() => setSlackChoice(1)}
                           className="w-full p-3 bg-white/5 border border-white/10 rounded-xl hover:border-emerald-500/50 hover:bg-emerald-500/10 text-left transition-all duration-200 block text-[11px]"
@@ -1328,8 +1358,8 @@ function LandingPageContent() {
                         <div className="flex gap-3 items-start justify-end text-right">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2 justify-end">
-                              <span className="font-bold text-slate-200 text-xs">You (Candidate response)</span>
-                              <span className="text-[9px] text-slate-400 font-bold">12:32 PM</span>
+                              <span className="font-bold text-slate-200 text-sm">You (Candidate response)</span>
+                              <span className="text-[9px] text-slate-200 font-bold">12:32 PM</span>
                             </div>
                             <p className="text-white leading-relaxed bg-emerald-600 p-3 rounded-2xl rounded-tr-none text-left inline-block max-w-sm">
                               {slackChoice === 1 
@@ -1343,9 +1373,9 @@ function LandingPageContent() {
                         <div className="p-4 bg-white/5 border border-white/10 rounded-2xl space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">AI Evaluation Feedback</span>
-                            <span className="text-xs font-black text-emerald-400">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
+                            <span className="text-sm font-black text-emerald-400">{slackChoice === 1 ? 'Score: 4.8 / 5' : 'Score: 3.5 / 5'}</span>
                           </div>
-                          <p className="text-[11px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-100 leading-relaxed">
                             {slackChoice === 1 
                               ? "Excellent response. Triage prioritizes recovery speed (rollback) and proactive alignment with customer support. Strong service reliability mindset."
                               : "Risky choice. Delaying action to inspect log traces while production is actively failing is problematic. Prioritize service uptime over logging research."}
@@ -1364,16 +1394,16 @@ function LandingPageContent() {
 
                 {/* Tab content 2: Client email */}
                 {activeSimTab === 'email' && (
-                  <div className="space-y-4 font-sans text-xs">
+                  <div className="space-y-4 font-sans text-sm">
                     <div className="bg-white/5 border border-white/8 rounded-2xl p-4 space-y-3">
                       <div>
-                        <div className="flex justify-between text-slate-500 font-bold text-[10px]">
+                        <div className="flex justify-between text-slate-100 font-bold text-[10px]">
                           <span>From: ceo@acme-corp.com</span>
                           <span>11:15 AM</span>
                         </div>
-                        <h4 className="text-xs font-black text-slate-200 mt-1">URGENT: Broken webhook API integrations (Immediate Escalation)</h4>
+                        <h4 className="text-sm font-black text-slate-200 mt-1">URGENT: Broken webhook API integrations (Immediate Escalation)</h4>
                       </div>
-                      <p className="text-slate-300 leading-relaxed pt-2 border-t border-white/10">
+                      <p className="text-slate-100 leading-relaxed pt-2 border-t border-white/10">
                         &quot;Your latest patch broke our webhook payouts pipeline. We have lost $40,000 in transactions in the last hour alone. If this is not fixed in 30 minutes, we are canceling our contract.&quot;
                       </p>
                     </div>
@@ -1381,25 +1411,25 @@ function LandingPageContent() {
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-3">
                       <div className="flex justify-between items-center">
                         <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Candidate Draft Graded by AI</span>
-                        <span className="text-xs font-black text-emerald-400">Draft Score: 95/100 (Strong Hire)</span>
+                        <span className="text-sm font-black text-emerald-400">Draft Score: 95/100 (Strong Hire)</span>
                       </div>
                       
-                      <div className="p-3 bg-black/40 border border-white/10 rounded-xl font-mono text-[10px] text-slate-300 leading-relaxed">
+                      <div className="p-3 bg-black/40 border border-white/10 rounded-xl font-mono text-[10px] text-slate-100 leading-relaxed">
                         &quot;Hi CEO, We have identified the deployment bug and rolled back Webhook Release v2.4. Integrations are fully restored. I am initiating a refund of $4,500 for transaction fee credits as a priority safety measure.&quot;
                       </div>
                       
                       <div className="grid grid-cols-3 gap-2 text-[10px] font-bold text-center">
                         <div className="bg-black/50 border border-white/10 rounded-lg p-1">
                           <span className="text-emerald-400 block">Politeness</span>
-                          <span className="text-slate-300">95%</span>
+                          <span className="text-slate-100">95%</span>
                         </div>
                         <div className="bg-black/50 border border-white/10 rounded-lg p-1">
                           <span className="text-emerald-400 block">Escalation Mitigation</span>
-                          <span className="text-slate-300">92%</span>
+                          <span className="text-slate-100">92%</span>
                         </div>
                         <div className="bg-black/50 border border-white/10 rounded-lg p-1">
                           <span className="text-emerald-400 block">Action Clarity</span>
-                          <span className="text-slate-300">98%</span>
+                          <span className="text-slate-100">98%</span>
                         </div>
                       </div>
                     </div>
@@ -1408,8 +1438,8 @@ function LandingPageContent() {
 
                 {/* Tab content 3: Jira triage */}
                 {activeSimTab === 'jira' && (
-                  <div className="space-y-4 font-sans text-xs">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Prioritize incoming tickets (click nodes to swap order):</span>
+                  <div className="space-y-4 font-sans text-sm">
+                    <span className="text-[9px] font-bold text-slate-200 uppercase tracking-widest block">Prioritize incoming tickets (click nodes to swap order):</span>
                     
                     <div className="flex flex-col gap-2.5">
                       {jiraPriorities.map((item, idx) => (
@@ -1451,11 +1481,11 @@ function LandingPageContent() {
                       <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl space-y-2">
                         <div className="flex justify-between items-center">
                           <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest bg-emerald-500/15 px-2 py-0.5 rounded border border-emerald-500/20">AI Priority Strategy Feedback</span>
-                          <span className="text-xs font-black text-emerald-400">
+                          <span className="text-sm font-black text-emerald-400">
                             {jiraPriorities[0] === 'Auth Bypass' ? 'Triage score: 98/100 (Optimal)' : 'Triage score: 45/100 (Risky)'}
                           </span>
                         </div>
-                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                        <p className="text-[11px] text-slate-100 leading-relaxed">
                           {jiraPriorities[0] === 'Auth Bypass'
                             ? "Correct prioritization. Security breaches (Auth Bypass) represent immediate existential risks and must always be patched first, followed by DB migrations and finally non-blocking documentation corrections."
                             : "Risk identified. Correct prioritization requires resolving security vulnerabilities (Auth Bypass) first. Placing migrations or documentation above security items compromises system integrity."}
@@ -1466,7 +1496,7 @@ function LandingPageContent() {
                 )}
               </div>
 
-              <div className="text-[8.5px] text-slate-400 border-t border-white/10 pt-3 flex justify-between font-mono">
+              <div className="text-[8.5px] text-slate-200 border-t border-white/10 pt-3 flex justify-between font-mono">
                 <span>Evaluate: stress management, prioritization, critical writing</span>
                 <span>OS_SIMULATOR_v1.0</span>
               </div>
@@ -1482,7 +1512,7 @@ function LandingPageContent() {
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             InterviewOS in Action: Product Tour
           </h2>
-          <p className="text-xs text-slate-600 max-w-2xl mx-auto">
+          <p className="text-sm text-slate-200 max-w-2xl mx-auto">
             Explore the comprehensive candidate interfaces, recruiter analytics portals, and secure testing environments that drive automated hiring.
           </p>
         </div>
@@ -1539,7 +1569,7 @@ function LandingPageContent() {
                 <h4 className="text-sm font-black text-white group-hover:text-emerald-400 transition-colors">
                   {feat.title}
                 </h4>
-                <p className="text-[11px] text-slate-300 leading-relaxed mt-1">
+                <p className="text-[11px] text-slate-100 leading-relaxed mt-1">
                   {feat.desc}
                 </p>
               </button>
@@ -1552,7 +1582,7 @@ function LandingPageContent() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
             
             {/* Frame navigation header mockup */}
-            <div className="flex justify-between items-center border-b border-white/8 pb-3 mb-4 text-[10px] text-slate-500 font-mono">
+            <div className="flex justify-between items-center border-b border-white/8 pb-3 mb-4 text-[10px] text-slate-100 font-mono">
               <div className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
@@ -1608,7 +1638,7 @@ function LandingPageContent() {
                 className={`flex items-center gap-2 px-4 py-2 border rounded-2xl transition-all ${
                   selectedCandidate.id === c.id 
                     ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 shadow-md shadow-emerald-500/10' 
-                    : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
+                    : 'bg-white/5 border-white/10 text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
               >
                 <div className="w-5 h-5 rounded-full overflow-hidden shrink-0 border border-white/10">
@@ -1635,11 +1665,11 @@ function LandingPageContent() {
                   </div>
                   <div>
                     <h3 className="text-md font-bold text-white">{selectedCandidate.name}</h3>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Candidate Scorecard</p>
+                    <p className="text-[9px] font-bold text-slate-200 uppercase tracking-wider">Candidate Scorecard</p>
                   </div>
                 </div>
                 
-                <p className="text-[10px] text-slate-400 leading-relaxed">
+                <p className="text-[10px] text-slate-200 leading-relaxed">
                   <strong>Background</strong>: {selectedCandidate.background}
                 </p>
               </div>
@@ -1687,11 +1717,11 @@ function LandingPageContent() {
                 </svg>
                 <div className="text-center mt-2">
                   <span className="text-2xl font-black text-white block">{selectedCandidate.score}/100</span>
-                  <span className="text-[8px] font-black uppercase text-slate-400 tracking-widest">Final Score</span>
+                  <span className="text-[8px] font-black uppercase text-slate-200 tracking-widest">Final Score</span>
                 </div>
               </div>
 
-              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-300 leading-relaxed">
+              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl text-[10px] text-slate-100 leading-relaxed">
                 <strong>AI Assessment</strong>: "{selectedCandidate.summary}"
               </div>
             </div>
@@ -1701,22 +1731,22 @@ function LandingPageContent() {
               
               {/* Skill level summary list */}
               <div className="space-y-3">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Skill Level Summary</span>
+                <span className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Skill Level Summary</span>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-amber-400">Problem Solving</span>
-                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.problemSolving.level}</span>
-                    <p className="text-[10px] text-slate-300 leading-normal">{selectedCandidate.skills.problemSolving.desc}</p>
+                    <span className="text-sm font-bold text-white block">{selectedCandidate.skills.problemSolving.level}</span>
+                    <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.problemSolving.desc}</p>
                   </div>
                   <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-rose-400">Technical knowledge</span>
-                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.technical.level}</span>
-                    <p className="text-[10px] text-slate-300 leading-normal">{selectedCandidate.skills.technical.desc}</p>
+                    <span className="text-sm font-bold text-white block">{selectedCandidate.skills.technical.level}</span>
+                    <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.technical.desc}</p>
                   </div>
                   <div className="p-4 bg-[#050508]/60 border border-white/10 rounded-2xl space-y-1 text-left">
                     <span className="text-[9px] font-black uppercase text-emerald-400">Code Quality</span>
-                    <span className="text-xs font-bold text-white block">{selectedCandidate.skills.codeQuality.level}</span>
-                    <p className="text-[10px] text-slate-300 leading-normal">{selectedCandidate.skills.codeQuality.desc}</p>
+                    <span className="text-sm font-bold text-white block">{selectedCandidate.skills.codeQuality.level}</span>
+                    <p className="text-[10px] text-slate-100 leading-normal">{selectedCandidate.skills.codeQuality.desc}</p>
                   </div>
                 </div>
               </div>
@@ -1735,7 +1765,7 @@ function LandingPageContent() {
                       </RadarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="text-[9px] text-slate-400 uppercase">Loading telemetry...</div>
+                    <div className="text-[9px] text-slate-200 uppercase">Loading telemetry...</div>
                   )}
                 </div>
 
@@ -1745,7 +1775,7 @@ function LandingPageContent() {
                     <span className="flex items-center gap-1.5 text-indigo-400"><span className="w-2.5 h-2.5 bg-indigo-500 rounded" /> Candidate</span>
                     <span className="flex items-center gap-1.5 text-emerald-600"><span className="w-2.5 h-2.5 bg-emerald-500 rounded" /> Industry Benchmark</span>
                   </div>
-                  <p className="text-[11px] leading-relaxed text-slate-400">
+                  <p className="text-[11px] leading-relaxed text-slate-200">
                     InterviewOS maps candidates across a 5-point competency dimension, overlaying their performance live against thousands of vetted developer benchmarks.
                   </p>
                 </div>
@@ -1753,11 +1783,11 @@ function LandingPageContent() {
 
               {/* Questions table grid */}
               <div className="space-y-3">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Question Breakdown logs</span>
+                <span className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Question Breakdown logs</span>
                 <div className="border border-white/10 rounded-2xl overflow-hidden bg-[#050508]/40">
-                  <table className="w-full text-xs font-sans text-left border-collapse">
+                  <table className="w-full text-sm font-sans text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-white/8 text-[9px] font-black uppercase tracking-widest text-slate-400 bg-[#050508]/80">
+                      <tr className="border-b border-white/8 text-[9px] font-black uppercase tracking-widest text-slate-200 bg-[#050508]/80">
                         <th className="p-4">Question</th>
                         <th className="p-4">Score</th>
                         <th className="p-4">Time</th>
@@ -1770,7 +1800,7 @@ function LandingPageContent() {
                           key={q.id}
                           onClick={() => setSelectedQuestionId(q.id)}
                           className={`border-b border-white/8 cursor-pointer hover:bg-white/10 transition-colors ${
-                            selectedQuestionId === q.id ? 'bg-emerald-500/10 text-emerald-400 font-extrabold' : 'text-slate-300 hover:text-white'
+                            selectedQuestionId === q.id ? 'bg-emerald-500/10 text-emerald-400 font-extrabold' : 'text-slate-100 hover:text-white'
                           }`}
                         >
                           <td className="p-4 font-bold">{q.title}</td>
@@ -1788,15 +1818,15 @@ function LandingPageContent() {
               {activeQuestionDetails && (
                 <div className="p-5 bg-[#050508] border border-white/10 rounded-3xl space-y-4 text-left font-sans">
                   <div>
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
-                    <h4 className="text-xs font-black text-white mt-1">{activeQuestionDetails.title}</h4>
-                    <p className="text-[10px] text-slate-300 leading-relaxed mt-1"><strong>Prompt</strong>: {activeQuestionDetails.questionText}</p>
-                    <p className="text-[10px] text-slate-300 leading-relaxed mt-1"><strong>Candidate response</strong>: &quot;{activeQuestionDetails.verbalResponse}&quot;</p>
+                    <span className="text-[8px] font-black text-slate-200 uppercase tracking-widest">AI Transcript & Evaluation Trace</span>
+                    <h4 className="text-sm font-black text-white mt-1">{activeQuestionDetails.title}</h4>
+                    <p className="text-[10px] text-slate-100 leading-relaxed mt-1"><strong>Prompt</strong>: {activeQuestionDetails.questionText}</p>
+                    <p className="text-[10px] text-slate-100 leading-relaxed mt-1"><strong>Candidate response</strong>: &quot;{activeQuestionDetails.verbalResponse}&quot;</p>
                   </div>
 
                   {activeQuestionDetails.candidateCode && activeQuestionDetails.optimalCode && (
                     <div className="space-y-2">
-                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">Code comparison (Candidate vs Optimal)</span>
+                      <span className="text-[8px] font-black text-slate-200 uppercase tracking-widest block">Code comparison (Candidate vs Optimal)</span>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-[8px] overflow-x-auto">
                         {/* Candidate solution */}
                         <div className="p-3 bg-red-950/10 border border-red-500/10 rounded-xl space-y-1">
@@ -1837,7 +1867,7 @@ function LandingPageContent() {
               className={`px-4 py-2.5 text-[9px] font-black uppercase tracking-widest rounded-xl transition-all ${
                 activeTryTab === tab
                   ? 'bg-emerald-50 text-black shadow-md shadow-emerald-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-200 hover:text-white'
               }`}
             >
               {tab === 'popular' && 'Popular'}
@@ -1857,21 +1887,21 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">💻</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 text-emerald-400" /> 45m Simulation
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Software Engineer 1</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
+                  <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Evaluate algorithms, array/tree traversal, system design constraints, and clean syntax structures.
                   </p>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">React</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Java</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">React</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Java</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('fullstack', 'software_engineering')}
@@ -1889,21 +1919,21 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤝</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 text-emerald-400" /> 30m Simulation
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">BDE (Sales)</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
+                  <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Tests objection handling, speech confidence levels, negotiation triggers, and sales flow pipelines.
                   </p>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Cold Pitching</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">CRM</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Cold Pitching</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">CRM</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('sales_associate', 'management_qa')}
@@ -1921,21 +1951,21 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">📈</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 text-emerald-400" /> 35m Simulation
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Performance Marketer</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
+                  <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Evaluate user acquisition frameworks, ROAS statistics, search-intent algorithms, and budget allocation.
                   </p>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">ROAS</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">SEO</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">ROAS</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">SEO</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('performance_marketer', 'management_qa')}
@@ -1953,21 +1983,21 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🤖</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 text-emerald-400" /> 45m Simulation
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">AI / ML Engineer</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
+                  <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Assess transformer architectures, pipeline training, vector database RAG structures, and prompt modeling.
                   </p>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">PyTorch</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Transformers</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">PyTorch</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Transformers</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('ai_ml_engineer', 'ai_ml')}
@@ -1985,21 +2015,21 @@ function LandingPageContent() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <span className="text-3xl">🗺️</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-1">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-100 flex items-center gap-1">
                     <Clock className="w-2.5 h-2.5 text-emerald-400" /> 40m Simulation
                   </span>
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-slate-100 group-hover:text-emerald-400 transition-colors">Product Manager</h4>
-                  <p className="text-[10px] text-slate-500 leading-relaxed mt-1">
+                  <p className="text-[10px] text-slate-100 leading-relaxed mt-1">
                     Assess roadmap prioritization frameworks, user metrics modeling, and customer feedback architectures.
                   </p>
                 </div>
               </div>
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
                 <div className="flex gap-1">
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">GIST</span>
-                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-600 uppercase">Priorities</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">GIST</span>
+                  <span className="text-[8px] px-2 py-0.5 bg-slate-100/80 rounded text-slate-200 uppercase">Priorities</span>
                 </div>
                 <button 
                   onClick={() => handleConfigureTryout('product_manager', 'management_qa')}
@@ -2020,7 +2050,7 @@ function LandingPageContent() {
             <div key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-200">
               <AlertCircle className="w-4 h-4 text-rose-600" />
               <span className="font-extrabold uppercase">{v.label} Detected</span>
-              <span className="text-slate-500">at {v.time}</span>
+              <span className="text-slate-100">at {v.time}</span>
             </div>
           ))}
           {/* duplicate loop to prevent gaps */}
@@ -2028,7 +2058,7 @@ function LandingPageContent() {
             <div key={`dup-${idx}`} className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-slate-200">
               <AlertCircle className="w-4 h-4 text-rose-600" />
               <span className="font-extrabold uppercase">{v.label} Detected</span>
-              <span className="text-slate-500">at {v.time}</span>
+              <span className="text-slate-100">at {v.time}</span>
             </div>
           ))}
         </div>
@@ -2050,7 +2080,7 @@ function LandingPageContent() {
             {/* Volume scale slider */}
             <div className="p-4 bg-white/8 border border-white/10 rounded-2xl space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Candidates to Interview (Per Month)</span>
+                <span className="text-[10px] font-black uppercase text-slate-100 tracking-wider">Candidates to Interview (Per Month)</span>
                 <span className="text-sm font-black text-emerald-400">{candidateVolume}</span>
               </div>
               <input 
@@ -2066,9 +2096,9 @@ function LandingPageContent() {
 
             {/* WITHOUT INTERVIEWOS */}
             <div className="space-y-2">
-              <div className="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              <div className="flex justify-between items-center text-[10px] font-bold text-slate-100 uppercase tracking-wider">
                 <span>WITHOUT InterviewOS</span>
-                <span className="text-slate-600 font-extrabold">29 DAYS</span>
+                <span className="text-slate-200 font-extrabold">29 DAYS</span>
               </div>
               <div className="w-full h-8 bg-white/10 rounded-xl border border-white/10 relative overflow-hidden flex items-center px-4">
                 <div className="h-full bg-rose-500/25 absolute top-0 left-0 w-full" />
@@ -2099,13 +2129,13 @@ function LandingPageContent() {
               <span className="text-3xl font-black text-white block">
                 {Math.round(candidateVolume * 1.8)} Hrs
               </span>
-              <span className="text-[8px] font-bold uppercase text-slate-400 tracking-widest block mt-0.5">Engineering Time Saved</span>
+              <span className="text-[8px] font-bold uppercase text-slate-200 tracking-widest block mt-0.5">Engineering Time Saved</span>
             </div>
             <div className="border-t border-white/10 pt-4">
               <span className="text-3xl font-black text-emerald-400 block">
                 ${(candidateVolume * 35).toLocaleString()}
               </span>
-              <span className="text-[8px] font-bold uppercase text-slate-400 tracking-widest block mt-0.5">Hiring budget saved</span>
+              <span className="text-[8px] font-bold uppercase text-slate-200 tracking-widest block mt-0.5">Hiring budget saved</span>
             </div>
           </div>
         </div>
@@ -2123,14 +2153,14 @@ function LandingPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {TESTIMONIALS.map((t, idx) => (
             <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-3xl flex flex-col justify-between text-left hover:border-emerald-500/30 transition-all duration-300 backdrop-blur-sm">
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">"{t.quote}"</p>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">"{t.quote}"</p>
               <div className="flex items-center gap-3 mt-6 pt-4 border-t border-white/10">
                 <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-900 border border-white/10">
                   <img src={t.image} alt={t.author} className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black text-white">{t.author}</h4>
-                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{t.role}</p>
+                  <h4 className="text-sm font-black text-white">{t.author}</h4>
+                  <p className="text-[9px] text-slate-200 font-bold uppercase tracking-widest">{t.role}</p>
                 </div>
               </div>
             </div>
@@ -2143,19 +2173,19 @@ function LandingPageContent() {
         <div className="max-w-6xl mx-auto bg-white/5 border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
             <span className="text-3xl md:text-5xl font-black text-white block">20,000+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mt-1.5">Interviews</span>
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Interviews</span>
           </div>
           <div>
             <span className="text-3xl md:text-5xl font-black text-emerald-400 block">60%</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mt-1.5">Cost Reduction</span>
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Cost Reduction</span>
           </div>
           <div>
             <span className="text-3xl md:text-5xl font-black text-white block">80+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mt-1.5">Scoring metrics</span>
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Scoring metrics</span>
           </div>
           <div>
             <span className="text-3xl md:text-5xl font-black text-emerald-400 block">115+</span>
-            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mt-1.5">Candidates Hired</span>
+            <span className="text-[9px] font-black uppercase tracking-widest text-slate-200 block mt-1.5">Candidates Hired</span>
           </div>
         </div>
       </section>
@@ -2174,7 +2204,7 @@ function LandingPageContent() {
           {/* Left Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Ashby', 'greyHR', 'Freshworks', 'Workable'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-sm font-black uppercase text-slate-100 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2187,12 +2217,12 @@ function LandingPageContent() {
             </div>
             <div className="flex flex-col items-center gap-1">
               <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
-              <div className="px-3 py-1.5 bg-white/8 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-300">
+              <div className="px-3 py-1.5 bg-white/8 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-slate-100">
                 Data Sync
               </div>
               <span className="w-1 h-8 border-l border-dashed border-emerald-500/40" />
             </div>
-            <div className="w-20 h-20 rounded-full bg-white/8 border border-white/10 flex items-center justify-center text-[10px] font-black uppercase text-slate-400">
+            <div className="w-20 h-20 rounded-full bg-white/8 border border-white/10 flex items-center justify-center text-[10px] font-black uppercase text-slate-200">
               Your ATS
             </div>
           </div>
@@ -2200,7 +2230,7 @@ function LandingPageContent() {
           {/* Right Grid: 3 ATS Logos */}
           <div className="lg:col-span-4 grid grid-cols-2 gap-4">
             {['Greenhouse', 'Breezy HR', 'Keka', 'Bullhorn'].map(logo => (
-              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-xs font-black uppercase text-slate-500 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
+              <div key={logo} className="h-16 bg-[#050508]/60 border border-white/10 rounded-2xl flex items-center justify-center text-sm font-black uppercase text-slate-100 hover:text-emerald-400 hover:border-emerald-500/30 transition-all select-none">
                 {logo}
               </div>
             ))}
@@ -2222,9 +2252,9 @@ function LandingPageContent() {
               {[1, 2, 3, 4].map(idx => (
                 <Star key={idx} className="w-4.5 h-4.5 fill-amber-400 text-amber-600" />
               ))}
-              <Star className="w-4.5 h-4.5 text-slate-600 fill-slate-800" />
+              <Star className="w-4.5 h-4.5 text-slate-200 fill-slate-800" />
             </div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">18K Ratings</span>
+            <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wider ml-1">18K Ratings</span>
           </div>
         </div>
 
@@ -2232,9 +2262,9 @@ function LandingPageContent() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {FEEDBACKS.slice(0, 6).map((f, idx) => (
             <div key={idx} className="p-6 bg-white/5 border border-white/10 rounded-3xl shadow-sm flex flex-col justify-between text-left h-40 hover:border-emerald-500/30 transition-all duration-300">
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">"{f.comment}"</p>
+              <p className="text-sm text-slate-200 leading-relaxed font-medium">"{f.comment}"</p>
               <div className="flex justify-between items-center mt-4 pt-3 border-t border-white/10">
-                <span className="text-xs font-black text-white">{f.name}</span>
+                <span className="text-sm font-black text-white">{f.name}</span>
                 <div className="flex gap-0.5">
                   {Array.from({ length: f.stars }).map((_, sIdx) => (
                     <Star key={sIdx} className="w-3.5 h-3.5 fill-amber-400 text-amber-600" />
@@ -2263,7 +2293,7 @@ function LandingPageContent() {
               <h3 className="text-xl font-bold text-white leading-tight">
                 How EdTech Scale-Up Saved 15 Hours/Week for Their Senior Sales Managers
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 By delegating early behavioral screening loops to InterviewOS AI, hiring managers skipped the scheduling bottlenecks, accelerating pipeline velocity.
               </p>
             </div>
@@ -2279,7 +2309,7 @@ function LandingPageContent() {
               <h3 className="text-xl font-bold text-white leading-tight">
                 How Global AI SaaS Hired a Data Analyst with InterviewOS's Super TA
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-200 leading-relaxed">
                 An immediate resume parse matched against database requirements triggered a mock assessment sandbox round, finishing evaluations within 180 minutes.
               </p>
             </div>
@@ -2313,7 +2343,7 @@ function LandingPageContent() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex-1 py-3 px-4 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 ${
-                  activeTab === tab.id ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20' : 'text-slate-400 hover:text-white hover:bg-white/5 opacity-70 hover:opacity-100'
+                  activeTab === tab.id ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20' : 'text-slate-200 hover:text-white hover:bg-white/5 opacity-70 hover:opacity-100'
                 }`}
               >
                 {tab.icon} {tab.label}
@@ -2335,7 +2365,7 @@ function LandingPageContent() {
               >
                 <div>
                   <h3 className="text-lg font-black text-white uppercase tracking-wider">Configure Practice Interview</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">
                     Select a role Category → Pick a specialized path → Add background details
                   </p>
                 </div>
@@ -2349,7 +2379,7 @@ function LandingPageContent() {
                       className={`px-4 py-2 text-[9px] font-black uppercase tracking-widest rounded-xl border transition-all ${
                         selectedCategory === catId
                           ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-400 font-extrabold'
-                          : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
+                          : 'bg-white/5 border-white/10 text-slate-200 hover:text-white hover:bg-white/10'
                       }`}
                     >
                       {catMeta.label}
@@ -2371,8 +2401,8 @@ function LandingPageContent() {
                     >
                       <span className="text-xl">🛠️</span>
                       <div>
-                        <p className={`text-xs font-bold leading-tight transition-colors ${selectedRole?.id === role.id ? 'text-emerald-400' : 'text-slate-200'}`}>{role.title}</p>
-                        <p className="text-[9px] leading-relaxed text-slate-400 mt-1">{role.description.slice(0, 50)}…</p>
+                        <p className={`text-sm font-bold leading-tight transition-colors ${selectedRole?.id === role.id ? 'text-emerald-400' : 'text-slate-200'}`}>{role.title}</p>
+                        <p className="text-[9px] leading-relaxed text-slate-200 mt-1">{role.description.slice(0, 50)}…</p>
                       </div>
                     </button>
                   ))}
@@ -2383,11 +2413,11 @@ function LandingPageContent() {
                   <div className="p-5 rounded-2xl border border-emerald-500/25 bg-[#050508]/50">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-xl">🛡️</span>
-                      <span className="text-xs font-black uppercase tracking-wider text-emerald-400">{selectedRole.title}</span>
+                      <span className="text-sm font-black uppercase tracking-wider text-emerald-400">{selectedRole.title}</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.coreSkills.map(s => (
-                        <span key={s} className="text-[9px] px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-300 font-bold uppercase tracking-wider">
+                        <span key={s} className="text-[9px] px-2.5 py-1 bg-white/5 border border-white/10 rounded-lg text-slate-100 font-bold uppercase tracking-wider">
                           {s}
                         </span>
                       ))}
@@ -2416,7 +2446,7 @@ function LandingPageContent() {
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-white/10 mt-2">
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Your Name *</label>
+                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Your Name *</label>
                               <input
                                 value={profile.candidateName}
                                 onChange={e => updateProfile('candidateName', e.target.value)}
@@ -2425,7 +2455,7 @@ function LandingPageContent() {
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Education</label>
+                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Education</label>
                               <input
                                 value={profile.education}
                                 onChange={e => updateProfile('education', e.target.value)}
@@ -2434,7 +2464,7 @@ function LandingPageContent() {
                               />
                             </div>
                             <div className="space-y-1.5 md:col-span-2">
-                              <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Core Projects</label>
+                              <label className="text-[9px] font-black text-slate-200 uppercase tracking-widest">Core Projects</label>
                               <textarea
                                 value={profile.projects}
                                 onChange={e => updateProfile('projects', e.target.value)}
@@ -2444,7 +2474,7 @@ function LandingPageContent() {
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Work History</label>
+                              <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Work History</label>
                               <textarea
                                 value={profile.experience}
                                 onChange={e => updateProfile('experience', e.target.value)}
@@ -2454,7 +2484,7 @@ function LandingPageContent() {
                               />
                             </div>
                             <div className="space-y-1.5">
-                              <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Additional Skills & Certifications</label>
+                              <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Additional Skills & Certifications</label>
                               <textarea
                                 value={profile.certifications}
                                 onChange={e => updateProfile('certifications', e.target.value)}
@@ -2485,18 +2515,18 @@ function LandingPageContent() {
               <motion.div key="candidate" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
                   <h3 className="text-lg font-black text-white uppercase tracking-wider">Candidate Portfolio Workspace</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">View stats, monitor daily activity streaks, download credentials, and check rankings</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">View stats, monitor daily activity streaks, download credentials, and check rankings</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Personalised paths</span>
                     <p className="text-sm font-bold text-slate-100">Learning Roadmap</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">Tailored improvement checklists automatically calculated from your actual performance metrics.</p>
                   </Link>
                   <Link href="/candidate" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Verified Credentials</span>
                     <p className="text-sm font-bold text-slate-100">Shareable Portfolio Profile</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">Display earned badges, XP achievements, streaks, and capability radar charts on a public link.</p>
                   </Link>
                 </div>
                 <Link href="/candidate" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
@@ -2510,18 +2540,18 @@ function LandingPageContent() {
               <motion.div key="recruiter" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6 text-left">
                 <div>
                   <h3 className="text-lg font-black text-white uppercase tracking-wider">Recruiter Assessment Center</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Audit candidate behaviors, create customized listings, and analyze competency matrices</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest">Behavioral Proctoring</span>
                     <p className="text-sm font-bold text-slate-100">Neural Integrity Log</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">Audits candidate gaze shifts, dynamic browser tab focus losses, and audio consistency reports.</p>
                   </Link>
                   <Link href="/recruiter" className="p-6 bg-[#050508]/40 border border-white/10 hover:border-emerald-500/30 rounded-2xl space-y-1.5 block transition-colors">
                     <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Diagnostic Analytics</span>
                     <p className="text-sm font-bold text-slate-100">16-Point Competency Radar</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
+                    <p className="text-sm text-slate-200 leading-relaxed">Generates robust merit reports, code review details, and structured candidate comparison tables.</p>
                   </Link>
                 </div>
                 <Link href="/recruiter" className="w-full py-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-200/40 shadow-emerald-500/20 text-center">
@@ -2536,12 +2566,12 @@ function LandingPageContent() {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-lg font-black text-white uppercase tracking-wider">JD + Resume Custom Mock (RAG Assessment)</h3>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Upload a PDF Resume against any Job Description to generate a fully tailored assessment</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Select Target Job Opening</label>
+                    <label className="text-[10px] font-black text-slate-100 uppercase tracking-widest">Select Target Job Opening</label>
                     <button onClick={() => setShowAddJob(!showAddJob)} className="text-[9px] font-black text-emerald-600 uppercase tracking-widest hover:underline">
                       {showAddJob ? 'Cancel' : '+ Create Custom Role'}
                     </button>
@@ -2550,7 +2580,7 @@ function LandingPageContent() {
                   {showAddJob ? (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="p-5 bg-[#050508] border border-white/10 rounded-2xl space-y-4">
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Job Title</label>
+                        <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Job Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Senior Backend Engineer"
@@ -2560,7 +2590,7 @@ function LandingPageContent() {
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Job Description</label>
+                        <label className="text-[9px] font-black text-slate-100 uppercase tracking-widest">Job Description</label>
                         <textarea
                           placeholder="Paste the requirements or role details here..."
                           value={newJobDesc}
@@ -2590,7 +2620,7 @@ function LandingPageContent() {
                   )}
                 </div>
                 <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-xl">
-                  <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                  <p className="text-sm text-slate-200 leading-relaxed font-medium">
                     You will be redirected to the custom job application portal. There, you can upload your <strong>PDF resume</strong>. The system automatically structures your skills, parses work history, and dynamically prompts you with tailored scenarios reflecting the intersection of your experience and the job description.
                   </p>
                 </div>
@@ -2613,7 +2643,7 @@ function LandingPageContent() {
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             Technical Architecture & Specs
           </h2>
-          <p className="text-xs text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
+          <p className="text-sm text-slate-200 max-w-2xl mx-auto leading-relaxed font-medium">
             InterviewOS is a complex multi-agent evaluation platform. We leverage sandboxed environments, real-time proctoring telemetry, and structured AI response loops to simulate real workplace conditions.
           </p>
         </div>
@@ -2664,11 +2694,11 @@ function LandingPageContent() {
                   {item.icon}
                 </div>
                 <h4 className="text-md font-black text-slate-100 tracking-tight">{item.title}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed font-medium">{item.desc}</p>
+                <p className="text-sm text-slate-200 leading-relaxed font-medium">{item.desc}</p>
               </div>
               <div className="flex flex-wrap gap-1.5 pt-2">
                 {item.tech.map((t, i) => (
-                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-white/5 text-slate-400 rounded-full border border-white/5">
+                  <span key={i} className="text-[8px] font-black uppercase tracking-widest px-2.5 py-1 bg-white/5 text-slate-200 rounded-full border border-white/5">
                     {t}
                   </span>
                 ))}
@@ -2684,20 +2714,20 @@ function LandingPageContent() {
               <h4 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> System Spec Console
               </h4>
-              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 mt-1">
+              <p className="text-[9px] font-bold uppercase tracking-widest text-slate-100 mt-1">
                 Inspect database models and prompt configurations
               </p>
             </div>
             <div className="flex items-center gap-2 bg-white/5 p-1 rounded-xl border border-white/5 self-start sm:self-auto">
               <button
                 onClick={() => setActiveSpecTab('schema')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'schema' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'schema' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 Database Schemas
               </button>
               <button
                 onClick={() => setActiveSpecTab('payload')}
-                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'payload' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-500 hover:text-slate-300'}`}
+                className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-widest transition-all uppercase cursor-pointer ${activeSpecTab === 'payload' ? 'bg-emerald-500 text-black shadow-md shadow-emerald-600/10' : 'text-slate-100 hover:text-slate-100'}`}
               >
                 AI Prompt Schema
               </button>
@@ -2706,7 +2736,7 @@ function LandingPageContent() {
 
           <div className="relative rounded-2xl overflow-hidden border border-white/5 bg-[#050507]">
             {/* Terminal Window Header */}
-            <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/5 text-[9px] font-mono text-slate-500">
+            <div className="flex items-center justify-between px-4 py-2.5 bg-[#0f0f13] border-b border-white/5 text-[9px] font-mono text-slate-100">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-500/60" />
                 <span className="w-2 h-2 rounded-full bg-amber-500/60" />
@@ -2717,12 +2747,12 @@ function LandingPageContent() {
             </div>
 
             {/* Terminal Content */}
-            <div className="p-6 overflow-x-auto font-mono text-xs leading-relaxed text-slate-400 select-text max-h-[350px] custom-scrollbar text-left">
+            <div className="p-6 overflow-x-auto font-mono text-sm leading-relaxed text-slate-200 select-text max-h-[350px] custom-scrollbar text-left">
               {activeSpecTab === 'schema' ? (
                 <pre className="space-y-1">
                   <div><span className="text-indigo-400">import</span> mongoose, &#123; Schema, Model &#125; <span className="text-indigo-400">from</span> <span className="text-emerald-400">'mongoose'</span>;</div>
                   <br />
-                  <div><span className="text-slate-500">// 1. User Profile & Streak Schema</span></div>
+                  <div><span className="text-slate-100">// 1. User Profile & Streak Schema</span></div>
                   <div><span className="text-indigo-400">const</span> UserSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
                   <div>  name:           &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
                   <div>  email:          &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
@@ -2732,7 +2762,7 @@ function LandingPageContent() {
                   <div>  badges:         &#123; type: Schema.Types.Mixed, <span className="text-indigo-400">default</span>: [] &#125;</div>
                   <div>&#125;);</div>
                   <br />
-                  <div><span className="text-slate-500">// 2. Parsed Resume RAG Schema</span></div>
+                  <div><span className="text-slate-100">// 2. Parsed Resume RAG Schema</span></div>
                   <div><span className="text-indigo-400">const</span> ResumeSchema = <span className="text-blue-400">new</span> <span className="text-amber-400">Schema</span>(&#123;</div>
                   <div>  userId:         &#123; type: String, required: <span className="text-amber-500">true</span>, unique: <span className="text-amber-500">true</span> &#125;,</div>
                   <div>  rawText:        &#123; type: String, required: <span className="text-amber-500">true</span> &#125;,</div>
@@ -2798,7 +2828,7 @@ function LandingPageContent() {
                 className="w-full px-6 py-5 flex justify-between items-center text-left"
               >
                 <span className="text-sm font-bold text-slate-100">{item.q}</span>
-                <span className="text-slate-600">
+                <span className="text-slate-200">
                   {activeFaq === idx ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </span>
               </button>
@@ -2810,7 +2840,7 @@ function LandingPageContent() {
                     exit={{ height: 0, opacity: 0 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-6 pb-5 pt-1 text-xs text-slate-400 leading-relaxed border-t border-white/10">
+                    <div className="px-6 pb-5 pt-1 text-sm text-slate-200 leading-relaxed border-t border-white/10">
                       {item.a}
                     </div>
                   </motion.div>
@@ -2833,22 +2863,22 @@ function LandingPageContent() {
               </div>
               <span className="text-sm font-extrabold tracking-tight text-white">InterviewOS</span>
             </div>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
+            <p className="text-sm text-slate-200 leading-relaxed max-w-sm">
               We are here to make technical evaluations peaceful, accurate, and secure. AI-driven behavioral proctoring and compilation sandboxes.
             </p>
-            <p className="text-[10px] text-slate-500 font-medium">Contact: support@interviewos.ai</p>
+            <p className="text-[10px] text-slate-100 font-medium">Contact: support@interviewos.ai</p>
           </div>
 
           {/* Middle link columns */}
-          <div className="lg:col-span-4 grid grid-cols-2 gap-8 text-xs font-semibold text-slate-400">
+          <div className="lg:col-span-4 grid grid-cols-2 gap-8 text-sm font-semibold text-slate-200">
             <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 block">Why InterviewOS?</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-100 block">Why InterviewOS?</span>
               <a href="#anti-cheating" className="hover:text-white block transition-colors">100% Anti-cheating</a>
               <a href="#features" className="hover:text-white block transition-colors">Evaluation Report</a>
               <a href="#integrations" className="hover:text-white block transition-colors">ATS Integrations</a>
             </div>
             <div className="space-y-3">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 block">Proven Results</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-100 block">Proven Results</span>
               <a href="#case-studies" className="hover:text-white block transition-colors">Case Studies</a>
               <Link href="/leaderboard" className="hover:text-white block transition-colors">Leaderboard Rankings</Link>
               <Link href="/pricing" className="hover:text-white block transition-colors">Pricing Plans</Link>
@@ -2863,15 +2893,15 @@ function LandingPageContent() {
                 <span className="text-[9px] text-emerald-400 font-black">OS</span>
               </div>
             </div>
-            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">noun</p>
-            <p className="text-[11px] text-slate-400 leading-relaxed mt-2">
+            <p className="text-[9px] text-slate-100 font-bold uppercase tracking-widest">noun</p>
+            <p className="text-[11px] text-slate-200 leading-relaxed mt-2">
               "1. a blend of 'skillful finesse' and 'employment' — symbolizing technical assessments carried out with precision, grace, and mastery."
             </p>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-white/8 mt-12 pt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
+        <div className="max-w-7xl mx-auto border-t border-white/8 mt-12 pt-6 text-center text-[10px] font-bold uppercase tracking-widest text-slate-200">
           © 2026 InterviewOS Inc. All rights reserved.
         </div>
       </footer>
@@ -2896,11 +2926,11 @@ function LandingPageContent() {
               <div className="flex justify-between items-start text-left">
                 <div>
                   <h3 className="text-xl font-black text-white uppercase tracking-wider">Launch Demo Sandbox</h3>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-1">Select an experience to test our stateful evaluation models</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-200 mt-1">Select an experience to test our stateful evaluation models</p>
                 </div>
                 <button 
                   onClick={() => setIsBookingOpen(false)} 
-                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-400 hover:text-white border border-white/10 transition-all cursor-pointer"
+                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 flex items-center justify-center text-slate-200 hover:text-white border border-white/10 transition-all cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -2912,7 +2942,7 @@ function LandingPageContent() {
                   <div className="space-y-1.5">
                     <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">Developer Screening</span>
                     <h4 className="text-base font-black text-white">Classic AI Technical Interview</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                    <p className="text-sm text-slate-200 leading-relaxed font-medium">
                       Test the compiler-backed browser IDE, live audio dialogs, question generators, and real-time proctoring diagnostics.
                     </p>
                   </div>
@@ -2930,7 +2960,7 @@ function LandingPageContent() {
                   <div className="space-y-1.5">
                     <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Workplace Simulation</span>
                     <h4 className="text-base font-black text-white">Workplace Simulator (Crisis Triage)</h4>
-                    <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                    <p className="text-sm text-slate-200 leading-relaxed font-medium">
                       Test our simulator sandbox where candidates handle production alerts, Slack triage, and Jira prioritization under pressure.
                     </p>
                   </div>
