@@ -734,12 +734,12 @@ function LandingPageContent() {
                   {/* Mock video background image */}
                   <img 
                     src={activeHeroTab === 'sales'
-                      ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=450'
+                      ? '/interview_person.png'
                       : activeHeroTab === 'data'
                       ? 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600&h=450'
                       : activeHeroTab === 'product'
                       ? 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600&h=450'
-                      : 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600&h=450'
+                      : '/interview_person.png'
                     }
                     alt="Candidate video feed stream"
                     className="w-full h-full object-cover opacity-70 filter grayscale-[20%]"
@@ -912,7 +912,7 @@ function LandingPageContent() {
               <div className="flex items-center gap-3">
                 <div className="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100/50 border border-zinc-800 relative shrink-0">
                   <img 
-                    src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=120&h=120"
+                    src="/interview_person.png"
                     alt="Mock proctored user"
                     className="w-full h-full object-cover"
                   />
@@ -1597,8 +1597,8 @@ function LandingPageContent() {
             <div className="relative aspect-video rounded-xl overflow-hidden border border-zinc-800 bg-slate-100/50 flex items-center justify-center group-hover:border-zinc-700 transition-all duration-300">
               {[
                 { id: 'live-session', image: '/images/session_feature.png' },
-                { id: 'grading-report', image: '/images/dashboard_feature.png' },
-                { id: 'permissions-check', image: '/images/permissions_feature.png' },
+                { id: 'grading-report', image: '/tech_dashboard.png' },
+                { id: 'permissions-check', image: '/tech_dashboard.png' },
                 { id: 'platform-overview', image: '/images/platform_collage.png' }
               ].map((item) => (
                 <img
@@ -2633,7 +2633,7 @@ function LandingPageContent() {
       </section>
 
       {/* Technical Architecture Showcase Section ("Under the Hood") */}
-      <section id="technical-architecture" className="relative z-10 max-w-6xl mx-auto w-full px-6 py-20 space-y-16">
+      <section id="anti-cheating" className="relative z-10 max-w-6xl mx-auto w-full px-6 py-20 space-y-16">
         <div className="text-center space-y-3">
           <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Under the Hood</span>
           <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
