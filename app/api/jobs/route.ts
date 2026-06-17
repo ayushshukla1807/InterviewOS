@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     
     let query: any = { isActive: true };
 
-    const { userId } = auth();
+    const { userId } = await auth();
     if (userId) {
       const mongoUser = await User.findById(userId);
       if (mongoUser && mongoUser.role === 'recruiter') {
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Extract recruiterId from auth()
-    const { userId } = auth();
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }

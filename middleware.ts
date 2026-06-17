@@ -8,11 +8,10 @@ const isProtectedRoute = createRouteMatcher([
   '/report(.*)'
 ]);
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
-    const session = typeof auth === 'function' ? auth() : auth;
-    // @ts-ignore
-    if (!session.userId) {
+    const { userId } = await auth();
+    if (!userId) {
       const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
       const protocol = req.headers.get('x-forwarded-proto') || 'https';
       const baseUrl = host ? `${protocol}://${host}` : req.url;
