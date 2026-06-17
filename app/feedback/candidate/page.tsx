@@ -263,12 +263,12 @@ function CandidateContent() {
                       <p className="text-[8px] font-medium text-violet-400  tracking-tight">Phase 2: Mastery Progression</p>
                       <p className="text-xs text-zinc-400 leading-relaxed font-medium">{recommendations.p2}</p>
                     </div>
-                    <div className="md:col-span-2 p-5 bg-white text-black/5 border border-white/10 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="md:col-span-2 p-5 bg-white/[0.02] border border-zinc-800/50 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
                         <p className="text-[8px] font-medium text-zinc-300  tracking-tight">Recommended Capstone Project</p>
                         <p className="text-xs font-bold text-white mt-1">{recommendations.proj}</p>
                       </div>
-                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-white text-black hover:bg-white text-black text-white rounded-lg text-[9px] font-medium  tracking-tight flex items-center gap-1.5 transition-all">
+                      <a href={recommendations.link} target="_blank" rel="noopener noreferrer" className="shrink-0 px-4 py-2 bg-white text-black hover:opacity-90 rounded-lg text-[9px] font-medium  tracking-tight flex items-center gap-1.5 transition-all">
                         Launch Resources
                         <ExternalLink className="w-3 h-3" />
                       </a>

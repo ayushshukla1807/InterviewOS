@@ -164,7 +164,7 @@ function RecruiterContent() {
 
           {/* Integrity Trust Index & Koyo AI Signals */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="p-6 bg-white text-black/5 border border-white/10 rounded-2xl flex items-center justify-between">
+            <div className="p-6 bg-zinc-900/50 border border-zinc-800/50 rounded-2xl flex items-center justify-between">
               <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${report.violations > 0 ? 'bg-rose-500/10 border-rose-500/20' : 'bg-zinc-800/50 border-zinc-700'}`}>
                     <Shield className={`w-6 h-6 ${report.violations > 0 ? 'text-rose-500' : 'text-white'}`} />

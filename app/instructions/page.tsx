@@ -13,8 +13,8 @@ import Link from 'next/link';
 function InterviewOSLogo() {
   return (
     <div className="flex items-center gap-3">
-      <div className="w-9 h-9 bg-white text-black rounded-xl flex items-center justify-center shadow-lg shadow-white/5">
-        <Shield className="w-5 h-5 text-white" />
+      <div className="w-9 h-9 bg-zinc-800 border border-zinc-700 text-zinc-300 rounded-xl flex items-center justify-center shadow-md shadow-black/20">
+        <Shield className="w-5 h-5 text-zinc-100" />
       </div>
       <div>
         <div className="text-[11px] font-medium text-[var(--text)]  tracking-tight leading-none">InterviewOS</div>
@@ -274,7 +274,7 @@ function InstructionsContent() {
                   disabled={!agreed}
                   className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
                     agreed 
-                      ? 'bg-white text-black text-white hover:bg-white text-black shadow-xl shadow-white/5 active:scale-[0.98]' 
+                      ? 'bg-white text-black hover:opacity-90 shadow-xl shadow-white/5 active:scale-[0.98]' 
                       : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed border border-[var(--border-color)]'
                   }`}
                 >
@@ -376,9 +376,9 @@ function InstructionsContent() {
               {/* Left Panel: Pledge */}
               <div className="w-full md:w-[45%] bg-[var(--bg)] p-12 flex flex-col justify-between border-r border-[var(--border-color)]">
                 <div className="space-y-8">
-                   <div className="w-12 h-12 bg-white text-black rounded-2xl flex items-center justify-center shadow-lg shadow-white/5">
-                     <Shield className="w-6 h-6 text-white" />
-                   </div>
+                    <div className="w-12 h-12 bg-zinc-800 border border-zinc-700 rounded-2xl flex items-center justify-center shadow-lg shadow-black/20">
+                      <Shield className="w-6 h-6 text-zinc-100" />
+                    </div>
                    <div className="space-y-4">
                      <h3 className="text-3xl font-medium text-[var(--text)] tracking-tighter leading-tight">Pledge of Honesty.</h3>
                      <p className="text-zinc-500 font-medium text-sm leading-relaxed">
@@ -445,7 +445,7 @@ function InstructionsContent() {
                     onClick={() => pledged && router.push(`/permissions?name=${encodeURIComponent(nameParam)}&track=${trackParam}${mockParam ? '&mock=true' : ''}${simulationSessionId ? `&simulationSessionId=${simulationSessionId}` : ''}`)}
                     disabled={!pledged}
                     className={`w-full py-5 rounded-2xl font-medium text-sm  tracking-tight transition-all ${
-                      pledged ? 'bg-white text-black text-white shadow-xl shadow-white/5 hover:bg-white text-black' : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed'
+                      pledged ? 'bg-white text-black shadow-xl shadow-white/5 hover:opacity-90' : 'bg-[var(--border-color)] text-zinc-500 cursor-not-allowed'
                     }`}
                   >
                     Start Interview
