@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ user: mongoUser }, { status: 200 });
   } catch (error: any) {
+    console.error('Error in /api/auth/me:', error);
     return NextResponse.json({ error: error.message || 'Auth check failed' }, { status: 500 });
   }
 }
