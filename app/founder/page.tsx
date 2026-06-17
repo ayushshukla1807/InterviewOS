@@ -18,7 +18,7 @@ export default function FounderDashboard() {
         if (!res.ok) throw new Error();
         const data = await res.json();
         const user = data.user || data;
-        if (user.role !== 'founder') {
+        if (user.role !== 'founder' || user.email !== 'founder@interviewos.com') {
           window.location.href = '/candidate';
         } else {
           localStorage.setItem('interviewos_user', JSON.stringify(user));
@@ -50,7 +50,7 @@ export default function FounderDashboard() {
   const totalRecruiters = dbUsers.filter(u => u.role === 'recruiter').length;
 
   return (
-    <div className="min-h-screen bg-[var(--theme-bg)] text-zinc-300 font-sans selection:bg-white text-black/30 overflow-hidden relative">
+    <div className="min-h-screen bg-[var(--theme-bg)] text-zinc-300 font-sans selection:bg-white/30 overflow-hidden relative">
       {/* Background gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-zinc-800/20 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-zinc-800/10 blur-[120px] rounded-full pointer-events-none" />
@@ -58,11 +58,11 @@ export default function FounderDashboard() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800/50 bg-zinc-900/50 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-white text-black/10 flex items-center justify-center border border-white/10 shadow-sm">
+            <div className="w-8 h-8 rounded-lg bg-zinc-800 text-zinc-300 flex items-center justify-center border border-zinc-700 shadow-sm">
               <Shield className="w-4 h-4 text-zinc-300" />
             </div>
             <span className="font-bold text-base tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70 whitespace-nowrap">
-              InterviewOS <span className="text-zinc-300 font-mono text-xs ml-2 px-2 py-0.5 bg-white text-black/10 rounded-full border border-white/10">FOUNDER</span>
+              InterviewOS <span className="text-zinc-400 font-mono text-[10px] ml-2 px-2 py-0.5 bg-zinc-900 border border-zinc-800 rounded-full">FOUNDER</span>
             </span>
           </div>
 
@@ -199,7 +199,7 @@ export default function FounderDashboard() {
                       Quick Actions
                     </h3>
                     <div className="space-y-3 flex-1">
-                      <Link href="/recruiter" className="w-full flex items-center justify-between p-3 rounded-lg bg-white text-black/10 border border-white/10 text-zinc-300 hover:bg-white text-black/20 transition-colors">
+                      <Link href="/recruiter" className="w-full flex items-center justify-between p-3 rounded-lg bg-zinc-900/50 border border-zinc-800 text-zinc-300 hover:bg-white hover:text-black transition-colors">
                         <span className="text-sm font-medium">Recruiter View</span>
                         <ArrowRight className="w-4 h-4" />
                       </Link>
@@ -242,7 +242,7 @@ export default function FounderDashboard() {
                             </td>
                             <td className="p-4">
                               <span className={`px-2 py-1 rounded border text-[10px]  font-bold tracking-tight ${
-                                u.role === 'founder' ? 'bg-white text-black/10 border-white/10 text-zinc-300' :
+                                u.role === 'founder' ? 'bg-zinc-800 border-zinc-700 text-zinc-100' :
                                 u.role === 'recruiter' ? 'bg-zinc-800/50 border-zinc-700 text-zinc-100' :
                                 'bg-slate-500/10 border-slate-500/20 text-zinc-400'
                               }`}>

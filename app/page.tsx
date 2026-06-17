@@ -561,7 +561,7 @@ function LandingPageContent() {
               <button onClick={() => setIsBookingOpen(true)} className="px-4 py-2.5 bg-white hover:bg-zinc-200 text-black rounded-xl text-[9px] font-medium  tracking-tight transition-all shadow-md  cursor-pointer">
                 Try AI Interview
               </button>
-              <Link href="/sign-in" className="px-4 py-2.5 bg-white text-black hover:bg-white text-black text-white rounded-xl text-[9px] font-medium tracking-tight transition-all">
+              <Link href="/sign-in" className="px-4 py-2.5 bg-white text-black hover:bg-zinc-200 rounded-xl text-[9px] font-medium tracking-tight transition-all">
                 Sign In
               </Link>
             </>
@@ -580,6 +580,18 @@ function LandingPageContent() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 backdrop-blur-md bg-zinc-800/50 border border-white/10 rounded-full shadow-sm">
             <span className="w-2 h-2 rounded-full bg-zinc-200 animate-ping" />
             <span className="text-[9px] font-medium  tracking-tight text-zinc-200">Trained on 1 Lakh+ Interviews</span>
+          </div>
+
+          <div className="flex justify-center pt-2">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="relative group cursor-pointer"
+            >
+              <div className="absolute inset-0 bg-white/5 blur-2xl rounded-full opacity-60 group-hover:opacity-100 transition-opacity" />
+              <img src="/logo.png" alt="InterviewOS Giant Logo" className="w-24 h-24 object-contain rounded-2xl relative z-10 hover:scale-105 transition-transform duration-300" />
+            </motion.div>
           </div>
 
           <h1 className="text-4xl md:text-7xl font-medium tracking-tight leading-[1.05] text-white">
@@ -849,7 +861,8 @@ function LandingPageContent() {
 
       {/* Core Features Showcase */}
       <section id="features" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-20 lg:px-12 space-y-16">
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <img src="/logo.png" alt="InterviewOS Mini Logo" className="w-6 h-6 object-contain rounded-md mb-2" />
           <span className="text-[9px] font-medium text-zinc-100  tracking-tight">Core Product Modules</span>
           <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Everything you need to run interviews automatically, end-to-end
@@ -2186,7 +2199,8 @@ function LandingPageContent() {
 
       {/* ATS Integrations Section */}
       <section id="integrations" className="relative z-10 max-w-7xl mx-auto w-full px-6 py-12 lg:px-12 space-y-12">
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <img src="/logo.png" alt="InterviewOS Mini Logo" className="w-6 h-6 object-contain rounded-md mb-2" />
           <span className="text-[9px] font-medium text-zinc-100  tracking-tight">ATS Integrations</span>
           <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
             Integrate Effortlessly with your Hiring Workflow

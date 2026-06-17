@@ -23,9 +23,14 @@ export async function GET(req: NextRequest) {
     // Read the role selected during login/sign-up
     const cookieStore = await cookies();
     const preferredRoleCookie = cookieStore.get('preferred_role')?.value || 'candidate';
-    const preferredRole = ['candidate', 'recruiter', 'founder'].includes(preferredRoleCookie)
+    let preferredRole = ['candidate', 'recruiter', 'founder'].includes(preferredRoleCookie)
       ? preferredRoleCookie
       : 'candidate';
+
+    // Strict validation: Only founder@interviewos.com is permitted to login/register as founder
+    if (preferredRole === 'founder' && email.toLowerCase().trim() !== 'founder@interviewos.com') {
+      preferredRole = 'candidate';
+    }
 
     // Sync to MongoDB with the chosen role
     const mongoUser = await getOrCreateMongoUser(userId, name, email, preferredRole as any);

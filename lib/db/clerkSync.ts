@@ -6,6 +6,12 @@ export async function getOrCreateMongoUser(clerkUserId: string, name: string, em
   
   const normalizedEmail = email.toLowerCase().trim();
   
+  // Strict check: Only founder@interviewos.com is allowed the founder role
+  let roleToUse = preferredRole;
+  if (roleToUse === 'founder' && normalizedEmail !== 'founder@interviewos.com') {
+    roleToUse = 'candidate';
+  }
+  
   let mongoUser = await User.findById(clerkUserId);
   if (!mongoUser) {
     // Check if a user with the same email exists to link them (useful if transitioning from custom JWT to Clerk)
@@ -22,7 +28,7 @@ export async function getOrCreateMongoUser(clerkUserId: string, name: string, em
         ...userData,
         _id: clerkUserId,
         email: normalizedEmail,
-        role: preferredRole,
+        role: roleToUse,
       });
     } else {
       // Create new user record
@@ -31,7 +37,7 @@ export async function getOrCreateMongoUser(clerkUserId: string, name: string, em
         name,
         email: normalizedEmail,
         password: 'clerk-managed-auth', // placeholder
-        role: preferredRole,
+        role: roleToUse,
         plan: 'free',
         xp: 0,
         level: 1,
@@ -39,10 +45,21 @@ export async function getOrCreateMongoUser(clerkUserId: string, name: string, em
         badges: [],
       });
     }
-  } else if (mongoUser.role !== preferredRole && preferredRole !== 'candidate') {
-    // If the user lands on recruiter or founder, promote their role if it was candidate
-    if (mongoUser.role === 'candidate') {
-      mongoUser.role = preferredRole;
+  } else {
+    // Check if we need to promote/update role
+    let targetRole = mongoUser.role;
+    
+    if (roleToUse !== 'candidate' && mongoUser.role === 'candidate') {
+      targetRole = roleToUse;
+    }
+    
+    // Safety check on existing user role modification
+    if (targetRole === 'founder' && normalizedEmail !== 'founder@interviewos.com') {
+      targetRole = 'candidate';
+    }
+    
+    if (mongoUser.role !== targetRole) {
+      mongoUser.role = targetRole;
       await mongoUser.save();
     }
   }

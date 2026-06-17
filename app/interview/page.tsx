@@ -77,7 +77,8 @@ export default function InterviewPage() {
     return (
       <div className="min-h-screen bg-[var(--theme-bg)] flex items-center justify-center p-6">
         <div className="max-w-4xl w-full space-y-12">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 flex flex-col items-center">
+            <img src="/logo.png" alt="InterviewOS Logo" className="w-12 h-12 object-contain rounded-xl mb-4" />
             <h1 className="text-4xl font-medium text-white tracking-tighter ">Select Your Evaluation Track</h1>
             <p className="text-zinc-500 text-sm font-bold  tracking-tight">Logic will adapt based on your responses.</p>
           </div>
@@ -120,8 +121,9 @@ export default function InterviewPage() {
       {/* Header */}
       <header className="px-10 py-6 border-b border-zinc-800/50 flex items-center justify-between backdrop-blur-md">
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-zinc-500 hover:text-white transition-colors">
+          <Link href="/" className="text-zinc-500 hover:text-white transition-colors flex items-center gap-2">
             <ChevronLeft className="w-6 h-6" />
+            <img src="/logo.png" alt="InterviewOS Logo" className="w-5 h-5 object-contain rounded-md" />
           </Link>
           <div>
             <h2 className="text-sm font-medium text-white  tracking-tight">{TRACKS[track].title}</h2>
@@ -133,11 +135,11 @@ export default function InterviewPage() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Link href="/report" className="px-6 py-2 bg-emerald-600 text-white rounded-xl font-medium text-[10px]  tracking-tight hover:bg-white transition-all">
+          <Link href="/report" className="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium text-[10px] tracking-tight transition-all">
             End & Generate Report
           </Link>
-          <div className="px-4 py-2 bg-white text-black/10 border border-white/10 rounded-xl">
-            <span className="text-[10px] font-medium text-zinc-300  tracking-tight">Depth: Senior</span>
+          <div className="px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+            <span className="text-[10px] font-medium text-zinc-400 tracking-tight">Depth: Senior</span>
           </div>
           <button className="p-2.5 bg-zinc-900/50 rounded-xl border border-zinc-800 text-zinc-400 hover:text-white transition-all">
             <LayoutDashboard className="w-5 h-5" />

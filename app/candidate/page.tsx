@@ -471,7 +471,7 @@ export default function CandidateDashboard() {
                       <h3 className="text-sm font-medium text-white leading-tight mb-2">{job.title}</h3>
                       <p className="text-xs text-zinc-400 line-clamp-2">{job.description}</p>
                     </div>
-                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-white text-black border border-zinc-800 hover:border-zinc-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all text-white flex justify-center items-center gap-2">
+                    <Link href={`/apply/${job.jobId}`} className="mt-4 w-full text-center py-2 bg-zinc-900/50 hover:bg-white text-zinc-300 hover:text-black border border-zinc-800 hover:border-zinc-500 rounded-lg text-[10px] font-medium  tracking-tight transition-all flex justify-center items-center gap-2">
                       Apply Now <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>

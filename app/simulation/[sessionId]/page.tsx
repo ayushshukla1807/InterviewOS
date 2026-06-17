@@ -649,7 +649,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
         {/* Header */}
         <div className="border-b px-8 py-4 flex items-center justify-between" style={{ borderColor: t.border, backgroundColor: t.surface }}>
           <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-sky-600 flex items-center justify-center text-xs font-medium">OS</div>
+            <img src="/logo.png" alt="InterviewOS Logo" className="w-8 h-8 object-contain rounded-lg shrink-0" />
             <div>
               <div className="text-sm font-semibold text-gray-100">HYRTE Simulation</div>
               <div className="text-xs text-gray-500">{blueprint.role} · {blueprint.company}</div>
@@ -841,10 +841,7 @@ Hiring Insight: ${hyrteScore?.hiringInsight || 'Pending'}`;
       >
         {/* Left: Logo + Company + Act Progress */}
         <div className="flex items-center gap-5">
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-medium text-white shrink-0"
-            style={{ background: `linear-gradient(135deg, ${t.accent}, ${t.accentHover})` }}
-          >OS</div>
+          <img src="/logo.png" alt="InterviewOS Logo" className="w-8 h-8 object-contain rounded-lg shrink-0" />
           <div>
             <div className="text-sm font-semibold" style={{ color: t.textPrimary }}>{blueprint.company}</div>
             <div className="text-xs" style={{ color: t.textMuted }}>{blueprint.role}</div>
