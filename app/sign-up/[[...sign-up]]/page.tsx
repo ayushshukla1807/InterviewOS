@@ -51,9 +51,7 @@ export default function SignUpPage() {
             </h2>
             
             <p className="text-zinc-400 text-xs md:text-sm leading-relaxed font-normal">
-              As we navigate through internship season, this insight resonates deeply. 
-              Currently, roughly <span className="text-teal-400 font-semibold">65% of students</span> seeking opportunities have already secured placements. 
-              For the remaining <span className="text-indigo-400 font-semibold">35% still searching</span>, remember: progress is rarely a straight line week-to-week.
+              Whether you are refining your coding skills, studying system architectures, or preparing for high-stakes technical assessments: progress is rarely a straight line week-to-week. Focus on consistent efforts and long-term mastery.
             </p>
           </div>
 

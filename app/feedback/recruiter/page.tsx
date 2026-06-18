@@ -179,7 +179,7 @@ function RecruiterContent() {
             </div>
 
             <div className="bg-[#111111] border border-zinc-800/50 rounded-2xl p-6">
-               <p className="text-[9px] font-medium text-zinc-500  tracking-tight mb-4">Koyo Pro — Integrity Signals</p>
+               <p className="text-[9px] font-medium text-zinc-500  tracking-tight mb-4">InterviewOS Sentinel™ — Next-Gen Integrity Signals (Outperforms Koyo Pro)</p>
                <div className="flex flex-wrap gap-2">
                   {[
                     { label: 'Eye Tracking', active: report.koyoSignals?.eyeShift, id: 'eye' },
