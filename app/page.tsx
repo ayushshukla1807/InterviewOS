@@ -11,7 +11,7 @@ import {
   Flame, Terminal, Monitor, Code2, CheckCircle, Activity,
   Briefcase, Plus, Server, LayoutDashboard, Award, Clock,
   Play, Pause, X, AlertTriangle, AlertCircle, HelpCircle, ChevronRight,
-  Volume2, Star, ThumbsUp, BarChart3, Database, Workflow, ShieldCheck, Mail
+  Volume2, Star, ThumbsUp, BarChart3, Database, Workflow, ShieldCheck, Mail, Check
 } from 'lucide-react';
 import Link from 'next/link';
 import { ROLES, ROLE_CATEGORIES, getRolesByCategory, type RoleConfig, type RoleCategory } from '../lib/ai/roles';
@@ -1078,6 +1078,76 @@ function LandingPageContent() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Competitor Comparison Section */}
+      <section className="relative z-10 border-t border-zinc-800 bg-[#07070a] py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-12">
+          <div className="text-center space-y-3 flex flex-col items-center">
+            <span className="text-[9px] font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/25 px-2 py-0.5 rounded uppercase tracking-wider">Market Analysis</span>
+            <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
+              Designed to outperform Kōyō & legacy tools
+            </h2>
+            <p className="text-sm text-zinc-400 max-w-xl">
+              We benchmarked InterviewOS against market alternatives to ensure your hiring teams save more time and get unmatched evaluation accuracy.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto max-w-5xl mx-auto border border-zinc-800/80 rounded-3xl bg-zinc-900/10 backdrop-blur-md">
+            <table className="w-full min-w-[600px] text-left border-collapse font-sans text-xs">
+              <thead>
+                <tr className="border-b border-zinc-800 bg-zinc-900/50">
+                  <th className="p-5 font-semibold text-zinc-400">Capability</th>
+                  <th className="p-5 font-bold text-white flex items-center gap-1.5"><img src="/logo.png" className="w-3.5 h-3.5 object-contain" /> InterviewOS</th>
+                  <th className="p-5 font-semibold text-zinc-400">Koyō AI / Newton School</th>
+                  <th className="p-5 font-semibold text-zinc-400">Traditional R1s</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-zinc-900 text-zinc-300">
+                <tr className="border-b border-zinc-900/50">
+                  <td className="p-5 font-semibold text-white">Multi-Agent Panel Loops</td>
+                  <td className="p-5 text-emerald-400 font-medium flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-400" /> Yes (specialized panels)
+                  </td>
+                  <td className="p-5 text-zinc-500">No (single interviewer)</td>
+                  <td className="p-5 text-zinc-500">Rare (high coordination cost)</td>
+                </tr>
+                <tr className="border-b border-zinc-900/50">
+                  <td className="p-5 font-semibold text-white">Simulator Versatility</td>
+                  <td className="p-5 text-emerald-400 font-medium flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-400" /> Coding + System Design side-by-side
+                  </td>
+                  <td className="p-5 text-zinc-500">Single task code workspace</td>
+                  <td className="p-5 text-zinc-500">Vague discussion, no execution</td>
+                </tr>
+                <tr className="border-b border-zinc-900/50">
+                  <td className="p-5 font-semibold text-white">Integrity Verification</td>
+                  <td className="p-5 text-emerald-400 font-medium flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-400" /> Sentinel™ Keystroke & Audio Telemetry
+                  </td>
+                  <td className="p-5 text-zinc-500">Basic focus blur alerts</td>
+                  <td className="p-5 text-zinc-500">None (highly vulnerable)</td>
+                </tr>
+                <tr className="border-b border-zinc-900/50">
+                  <td className="p-5 font-semibold text-white">First-Round Duration</td>
+                  <td className="p-5 text-emerald-400 font-medium flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-400" /> Done in 1 day (scalable)
+                  </td>
+                  <td className="p-5 text-zinc-400">Done in 1-2 days</td>
+                  <td className="p-5 text-zinc-500">Adds ~21 days latency</td>
+                </tr>
+                <tr>
+                  <td className="p-5 font-semibold text-white">Growth & Feedback Path</td>
+                  <td className="p-5 text-emerald-400 font-medium flex items-center gap-1.5">
+                    <Check className="w-4 h-4 text-emerald-400" /> Personalized Capstone Learning Path
+                  </td>
+                  <td className="p-5 text-zinc-500">Simple scorecard text feedback</td>
+                  <td className="p-5 text-zinc-500">None provided</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
