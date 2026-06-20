@@ -46,40 +46,39 @@ export default function SimulationLanding() {
 
       <div className="max-w-2xl w-full space-y-8 relative z-10">
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-violet-500/10 border border-violet-500/20 rounded-full text-xs text-violet-300 font-medium mb-2">
-            <div className="w-1.5 h-1.5 bg-zinc-200 rounded-full " />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-900/50 border border-zinc-800 rounded-full text-[9px] text-zinc-100 font-medium mb-2 tracking-tight">
+            <div className="w-1.5 h-1.5 bg-zinc-300 rounded-full " />
             Powered by AI Behavioral Intelligence
           </div>
-          <h1 className="text-5xl font-bold">
-            <span className="bg-gradient-to-r from-violet-400 via-sky-400 to-emerald-400 bg-clip-text text-transparent">InterviewOS</span>
-            <span className="text-gray-300"> Workplace</span>
+          <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-white">
+            InterviewOS Workplace
           </h1>
-          <p className="text-gray-400 text-base max-w-lg mx-auto leading-relaxed">
+          <p className="text-zinc-300 text-sm max-w-lg mx-auto leading-relaxed font-medium">
             Drop candidates into a real workplace crisis. Watch how they handle Slack fires, angry clients, and impossible deadlines — not just MCQs.
           </p>
         </div>
         {/* Feature Cards */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { icon: <MessageSquare className="w-6 h-6 text-violet-400" />, title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
+            { icon: <MessageSquare className="w-6 h-6 text-zinc-300" />, title: 'Team Chat', desc: 'Simulated Slack messages from panicking coworkers' },
             { icon: <Mail className="w-6 h-6 text-zinc-300" />, title: 'Client Emails', desc: 'Angry escalation emails requiring professional replies' },
-            { icon: <ClipboardCheck className="w-6 h-6 text-zinc-100" />, title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
+            { icon: <ClipboardCheck className="w-6 h-6 text-zinc-300" />, title: 'Task Triage', desc: 'Critical Jira tickets demanding instant prioritization' }
           ].map(f => (
-            <div key={f.title} className="glass-card hud-border p-4 space-y-2 flex flex-col items-start transition-all hover:bg-[var(--card-bg)]/80">
-              <div className="mb-1">{f.icon}</div>
-              <h3 className="text-sm font-semibold text-gray-200">{f.title}</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
+            <div key={f.title} className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-3xl space-y-3 flex flex-col items-start transition-all hover:bg-zinc-800/60 hover:border-zinc-700">
+              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-2">{f.icon}</div>
+              <h3 className="text-base font-medium text-slate-100 tracking-tight">{f.title}</h3>
+              <p className="text-sm text-zinc-400 leading-relaxed font-medium">{f.desc}</p>
             </div>
           ))}
         </div>
 
-        <div className="glass-card hud-border p-6 shadow-2xl space-y-4">
+        <div className="bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] p-8 shadow-2xl space-y-5">
           <div className="flex items-center justify-between">
-            <label className="block text-sm font-medium text-gray-300">Paste Job Description</label>
-            <span className="text-xs text-gray-600">{jd.length} chars</span>
+            <label className="block text-sm font-medium text-slate-100 tracking-tight">Paste Job Description</label>
+            <span className="text-xs text-zinc-500 font-medium">{jd.length} chars</span>
           </div>
           <textarea
-            className="w-full h-48 bg-black/40 border border-[var(--color-theme-border)] rounded-xl p-4 text-sm font-mono text-emerald-50 focus:border-zinc-600 focus:ring-1 focus:ring-emerald-500/30 outline-none resize-none placeholder-slate-600"
+            className="w-full h-48 bg-zinc-950 border border-zinc-800 rounded-2xl p-5 text-sm font-mono text-zinc-300 focus:border-zinc-600 outline-none resize-none placeholder-zinc-600 transition-colors"
             placeholder="e.g. We are looking for a Senior Product Manager who can lead cross-functional teams, manage high-stakes client escalations, and handle sudden priority shifts..."
             value={jd}
             onChange={(e) => setJd(e.target.value)}
@@ -88,16 +87,16 @@ export default function SimulationLanding() {
           <button
             onClick={handleGenerateTest}
             disabled={loading || !jd.trim()}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[var(--accent)] to-emerald-600 hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed font-medium  tracking-tight text-white text-[10px] transition-all flex items-center justify-center gap-2 "
+            className="w-full py-4 rounded-2xl bg-white text-black hover:bg-zinc-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm tracking-tight transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                 Generating Workplace Simulation...
               </>
             ) : (
               <>
-                <ShieldCheck className="w-4 h-4" /> Launch Simulation Engine
+                <ShieldCheck className="w-5 h-5" /> Launch Simulation Engine
               </>
             )}
           </button>
