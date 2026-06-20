@@ -11,7 +11,8 @@ import {
   Flame, Terminal, Monitor, Code2, CheckCircle, Activity,
   Briefcase, Plus, Server, LayoutDashboard, Award, Clock,
   Play, Pause, X, AlertTriangle, AlertCircle, HelpCircle, ChevronRight,
-  Volume2, Star, ThumbsUp, BarChart3, Database, Workflow, ShieldCheck, Mail, Check
+  Volume2, Star, ThumbsUp, BarChart3, Database, Workflow, ShieldCheck, Mail, Check,
+  Target, Zap, PenTool, Rocket
 } from 'lucide-react';
 import Link from 'next/link';
 import { ROLES, ROLE_CATEGORIES, getRolesByCategory, type RoleConfig, type RoleCategory } from '../lib/ai/roles';
@@ -1109,14 +1110,14 @@ function LandingPageContent() {
             {/* Left: 8 pillar cards */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { icon: '🛡️', label: 'ATS Compatibility', desc: 'Does your resume pass automated screening systems?' },
-                { icon: '🎯', label: 'Keyword Gap Analysis', desc: 'Missing keywords vs. your target job description' },
-                { icon: '📊', label: 'Quantification Score', desc: 'How many bullets have measurable outcomes?' },
-                { icon: '⚡', label: 'Action Verb Audit', desc: 'Weak vs. strong verbs with one-click rewrites' },
-                { icon: '💡', label: 'Impact Language', desc: 'Does your language convey business impact?' },
-                { icon: '📄', label: 'Section Quality', desc: 'Per-section scoring: Summary, Experience, Skills' },
-                { icon: '✍️', label: 'Bullet Rewrites', desc: 'AI rewrites your 3 weakest bullets with numbers' },
-                { icon: '🚀', label: 'Fast Fix Plan', desc: '5 prioritised actions to improve your score today' },
+                { icon: <ShieldCheck className="w-5 h-5 text-indigo-400" />, label: 'ATS Compatibility', desc: 'Does your resume pass automated screening systems?' },
+                { icon: <Target className="w-5 h-5 text-purple-400" />, label: 'Keyword Gap Analysis', desc: 'Missing keywords vs. your target job description' },
+                { icon: <BarChart3 className="w-5 h-5 text-teal-400" />, label: 'Quantification Score', desc: 'How many bullets have measurable outcomes?' },
+                { icon: <Zap className="w-5 h-5 text-amber-400" />, label: 'Action Verb Audit', desc: 'Weak vs. strong verbs with one-click rewrites' },
+                { icon: <Sparkles className="w-5 h-5 text-fuchsia-400" />, label: 'Impact Language', desc: 'Does your language convey business impact?' },
+                { icon: <LayoutDashboard className="w-5 h-5 text-blue-400" />, label: 'Section Quality', desc: 'Per-section scoring: Summary, Experience, Skills' },
+                { icon: <PenTool className="w-5 h-5 text-rose-400" />, label: 'Bullet Rewrites', desc: 'AI rewrites your 3 weakest bullets with numbers' },
+                { icon: <Rocket className="w-5 h-5 text-emerald-400" />, label: 'Fast Fix Plan', desc: '5 prioritised actions to improve your score today' },
               ].map((pillar, i) => (
                 <motion.div
                   key={pillar.label}
@@ -1124,10 +1125,10 @@ function LandingPageContent() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06 }}
-                  className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/60 hover:border-purple-500/20 hover:bg-purple-950/5 transition-all group"
+                  className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/60 hover:border-indigo-500/30 hover:bg-indigo-950/20 transition-all group"
                 >
-                  <span className="text-lg mb-2 block">{pillar.icon}</span>
-                  <h3 className="text-xs font-semibold text-white mb-1 group-hover:text-purple-300 transition-colors">{pillar.label}</h3>
+                  <div className="mb-3 p-2 bg-zinc-800/50 rounded-lg inline-block group-hover:scale-110 transition-transform">{pillar.icon}</div>
+                  <h3 className="text-xs font-semibold text-white mb-1 group-hover:text-indigo-300 transition-colors">{pillar.label}</h3>
                   <p className="text-[10px] text-zinc-500 leading-relaxed">{pillar.desc}</p>
                 </motion.div>
               ))}
@@ -1210,7 +1211,7 @@ function LandingPageContent() {
               </div>
 
               {/* Floating badge */}
-              <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-[10px] font-bold text-white shadow-lg shadow-purple-500/30">
+              <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-[10px] font-bold text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-indigo-400/30">
                 Free · No login
               </div>
             </motion.div>
@@ -1222,7 +1223,7 @@ function LandingPageContent() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all"
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-sm rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] border border-indigo-400/20 transition-all"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Evaluate My Resume Free
@@ -3037,8 +3038,8 @@ function LandingPageContent() {
 
       {/* Mini Resume Review CTA (Above FAQ) */}
       <section className="relative z-10 max-w-4xl mx-auto w-full px-6 pt-12 pb-4">
-        <div className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-900/10 to-blue-900/10 backdrop-blur-xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-purple-500/20 transition-all duration-700" />
+        <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-900/10 to-purple-900/10 backdrop-blur-xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-700" />
           
           <div className="relative z-10 space-y-4">
             <h2 className="text-2xl md:text-4xl font-medium text-white tracking-tight">
@@ -3052,7 +3053,7 @@ function LandingPageContent() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-purple-500/20 transition-all"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-sm rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] border border-indigo-400/20 transition-all"
                 >
                   <Sparkles className="w-4 h-4" />
                   Evaluate My Resume Free
