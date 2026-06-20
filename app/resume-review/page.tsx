@@ -64,6 +64,16 @@ interface EvaluationResult {
     issues: string[];
     positives: string[];
   };
+  buzzwordsAndCliches?: {
+    found: string[];
+    feedback: string;
+  };
+  repetitionCheck?: {
+    repeatedWords: string[];
+    feedback: string;
+  };
+  activeVoiceScore?: number;
+  aiGeneratedSummary?: string;
   topStrengths: string[];
   topWeaknesses: string[];
   fastImprovementPlan: { priority: string; action: string; timeEstimate: string }[];
@@ -326,7 +336,7 @@ export default function ResumeReviewPage() {
     { label: 'ATS', score: result.atsScore },
     { label: 'Keywords', score: result.keywordAnalysis.keywordDensityScore },
     { label: 'Quantification', score: result.quantificationAnalysis.score },
-    { label: 'Action Verbs', score: result.actionVerbAudit.score },
+    { label: 'Active Voice', score: result.activeVoiceScore || result.actionVerbAudit.score },
     { label: 'Impact Language', score: result.impactLanguageScore },
     { label: 'Experience', score: result.sections.experience.score },
   ] : [];
@@ -734,6 +744,57 @@ export default function ResumeReviewPage() {
 
                 {/* Right column */}
                 <div className="space-y-6">
+
+                  {/* Buzzwords & Repetition (ResumeWorded feature) */}
+                  {(result.buzzwordsAndCliches || result.repetitionCheck) && (
+                    <div className="glass-card p-6 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-rose-400" /> Fluff & Repetition
+                        </h2>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {result.buzzwordsAndCliches && result.buzzwordsAndCliches.found.length > 0 && (
+                          <div className="space-y-2 border border-rose-500/10 bg-rose-500/5 p-3 rounded-xl">
+                            <span className="text-[10px] font-bold text-rose-400 uppercase tracking-widest">Buzzwords Found</span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {result.buzzwordsAndCliches.found.map(w => (
+                                <span key={w} className="px-2 py-1 bg-rose-500/10 border border-rose-500/20 text-rose-300 text-[10px] rounded-md">{w}</span>
+                              ))}
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-2">{result.buzzwordsAndCliches.feedback}</p>
+                          </div>
+                        )}
+                        
+                        {result.repetitionCheck && result.repetitionCheck.repeatedWords.length > 0 && (
+                          <div className="space-y-2 border border-amber-500/10 bg-amber-500/5 p-3 rounded-xl">
+                            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Overused Words</span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {result.repetitionCheck.repeatedWords.map(w => (
+                                <span key={w} className="px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[10px] rounded-md">{w}</span>
+                              ))}
+                            </div>
+                            <p className="text-xs text-zinc-400 mt-2">{result.repetitionCheck.feedback}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* AI Generated Summary (Resumify feature) */}
+                  {result.aiGeneratedSummary && (
+                    <div className="glass-card border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-blue-500/5 p-6 space-y-4">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-purple-400" />
+                        <h2 className="text-sm font-bold text-white">AI-Optimized Summary</h2>
+                      </div>
+                      <p className="text-xs text-zinc-400 mb-2">We rewrote your summary to be more ATS-friendly and impactful. Feel free to copy this:</p>
+                      <div className="p-4 bg-black/40 border border-white/5 rounded-xl text-sm text-zinc-200 leading-relaxed italic">
+                        "{result.aiGeneratedSummary}"
+                      </div>
+                    </div>
+                  )}
 
                   {/* Keyword Analysis */}
                   <div className="glass-card p-6 space-y-4">

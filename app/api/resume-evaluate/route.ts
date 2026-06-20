@@ -127,6 +127,20 @@ Return ONLY a valid JSON object (no markdown, no explanation) exactly matching t
     "positives": ["<format positive 1>"]
   },
 
+  "buzzwordsAndCliches": {
+    "found": ["<buzzword 1 e.g. team player, hard worker, synergy, detail-oriented>"],
+    "feedback": "<1-2 sentences on removing fluff>"
+  },
+
+  "repetitionCheck": {
+    "repeatedWords": ["<word repeated too much e.g. Developed, Managed>"],
+    "feedback": "<1 sentence on varying vocabulary>"
+  },
+
+  "activeVoiceScore": <0-100>,
+
+  "aiGeneratedSummary": "<A brand new, highly optimized 2-3 sentence professional summary based on their experience that they can copy-paste to replace their current one.>",
+
   "topStrengths": ["<strength 1>", "<strength 2>", "<strength 3>"],
   "topWeaknesses": ["<weakness 1>", "<weakness 2>", "<weakness 3>"],
 
@@ -147,7 +161,9 @@ STRICT EVALUATION RULES:
 3. atsScore specifically measures how well an ATS parser would handle this resume (formatting, headers, columns, tables).
 4. bulletAnalysis: pick the 3 weakest experience bullets and rewrite them with numbers and impact.
 5. missingCriticalKeywords: if JD provided, compare against it. If not, list keywords typical for the candidate's apparent role.
-6. Never fabricate experience or skills not present in the resume.`;
+6. aiGeneratedSummary: Generate a highly compelling, results-driven professional summary they can actually use (inspired by Resumify AI).
+7. activeVoiceScore: Penalize heavily for passive voice like "Was responsible for", "Duties included", "Helped with" (inspired by ResumeWorded).
+8. Never fabricate experience or skills not present in the resume.`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
