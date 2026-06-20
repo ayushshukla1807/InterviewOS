@@ -1084,154 +1084,53 @@ function LandingPageContent() {
       </section>
 
       {/* ── Resume Review Section ──────────────────────────────────────── */}
-      <section className="relative z-10 border-t border-white/5 bg-transparent py-24 overflow-hidden">
-        {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] rounded-full bg-purple-900/10 blur-[120px] pointer-events-none" />
+      <section className="relative z-10 max-w-6xl mx-auto w-full px-6 py-20 space-y-16">
+        {/* Header */}
+        <div className="text-center space-y-3">
+          <span className="text-[9px] font-medium text-zinc-100 tracking-tight">Free Tool</span>
+          <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight">
+            Get your resume scored like a senior recruiter
+          </h2>
+          <p className="text-sm text-zinc-300 max-w-2xl mx-auto leading-relaxed font-medium">
+            8-pillar AI analysis — ATS compatibility, keyword gaps, quantification score, action verb audit, section-by-section feedback with line-level bullet rewrites. No sign-up required.
+          </p>
+        </div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-16">
-          {/* Header */}
-          <div className="text-center space-y-4 flex flex-col items-center">
-            <span className="inline-flex items-center gap-2 text-[9px] font-semibold text-purple-400 bg-purple-500/10 border border-purple-500/25 px-3 py-1 rounded-full uppercase tracking-widest">
-              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Free Resume Evaluator
-            </span>
-            <h2 className="text-3xl md:text-5xl font-medium text-white tracking-tight max-w-2xl leading-tight">
-              Get your resume scored like a{' '}
-              <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">senior recruiter</span> reviewed it
-            </h2>
-            <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
-              8-pillar AI analysis — ATS compatibility, keyword gaps, quantification score, action verb audit, section-by-section feedback with line-level bullet rewrites. No sign-up required.
-            </p>
-          </div>
-
-          {/* Two column: pillars grid + live preview mockup */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {/* Left: 8 pillar cards */}
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { icon: <ShieldCheck className="w-5 h-5 text-indigo-400" />, label: 'ATS Compatibility', desc: 'Does your resume pass automated screening systems?' },
-                { icon: <Target className="w-5 h-5 text-purple-400" />, label: 'Keyword Gap Analysis', desc: 'Missing keywords vs. your target job description' },
-                { icon: <BarChart3 className="w-5 h-5 text-teal-400" />, label: 'Quantification Score', desc: 'How many bullets have measurable outcomes?' },
-                { icon: <Zap className="w-5 h-5 text-amber-400" />, label: 'Action Verb Audit', desc: 'Weak vs. strong verbs with one-click rewrites' },
-                { icon: <Sparkles className="w-5 h-5 text-fuchsia-400" />, label: 'Impact Language', desc: 'Does your language convey business impact?' },
-                { icon: <LayoutDashboard className="w-5 h-5 text-blue-400" />, label: 'Section Quality', desc: 'Per-section scoring: Summary, Experience, Skills' },
-                { icon: <PenTool className="w-5 h-5 text-rose-400" />, label: 'Bullet Rewrites', desc: 'AI rewrites your 3 weakest bullets with numbers' },
-                { icon: <Rocket className="w-5 h-5 text-emerald-400" />, label: 'Fast Fix Plan', desc: '5 prioritised actions to improve your score today' },
-              ].map((pillar, i) => (
-                <motion.div
-                  key={pillar.label}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.06 }}
-                  className="p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800/60 hover:border-indigo-500/30 hover:bg-indigo-950/20 transition-all group"
-                >
-                  <div className="mb-3 p-2 bg-zinc-800/50 rounded-lg inline-block group-hover:scale-110 transition-transform">{pillar.icon}</div>
-                  <h3 className="text-xs font-semibold text-white mb-1 group-hover:text-indigo-300 transition-colors">{pillar.label}</h3>
-                  <p className="text-[10px] text-zinc-500 leading-relaxed">{pillar.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Right: score preview mockup */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
+        {/* 8-Pillars Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[
+            { icon: <ShieldCheck className="w-5 h-5 text-zinc-100" />, label: 'ATS Compatibility', desc: 'Does your resume pass automated screening systems?' },
+            { icon: <Target className="w-5 h-5 text-white" />, label: 'Keyword Gap Analysis', desc: 'Missing keywords vs. your target job description' },
+            { icon: <BarChart3 className="w-5 h-5 text-zinc-100" />, label: 'Quantification Score', desc: 'How many bullets have measurable outcomes?' },
+            { icon: <Zap className="w-5 h-5 text-zinc-100" />, label: 'Action Verb Audit', desc: 'Weak vs. strong verbs with one-click rewrites' },
+            { icon: <Sparkles className="w-5 h-5 text-zinc-100" />, label: 'Impact Language', desc: 'Does your language convey business impact?' },
+            { icon: <LayoutDashboard className="w-5 h-5 text-zinc-100" />, label: 'Section Quality', desc: 'Per-section scoring: Summary, Experience, Skills' },
+            { icon: <PenTool className="w-5 h-5 text-zinc-100" />, label: 'Bullet Rewrites', desc: 'AI rewrites your 3 weakest bullets with numbers' },
+            { icon: <Rocket className="w-5 h-5 text-zinc-100" />, label: 'Fast Fix Plan', desc: '5 prioritised actions to improve your score today' },
+          ].map((pillar, i) => (
+            <div
+              key={pillar.label}
+              className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-[2.5rem] hover:shadow-xl hover:border-zinc-700 transition-all duration-300 flex flex-col justify-between space-y-6 backdrop-blur-sm group"
             >
-              <div className="rounded-3xl border border-zinc-800/60 bg-zinc-950/60 backdrop-blur-xl overflow-hidden shadow-2xl shadow-black/50">
-                {/* Mock header */}
-                <div className="flex items-center gap-2 px-5 py-3 border-b border-zinc-800/60 bg-zinc-900/40">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-                  <span className="text-[10px] text-zinc-500 ml-2 font-mono">resume-review — InterviewOS</span>
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-slate-950 flex items-center justify-center border border-zinc-800 shadow-sm group-hover:scale-110 transition-transform">
+                  {pillar.icon}
                 </div>
-
-                {/* Mock score dashboard */}
-                <div className="p-6 space-y-5">
-                  {/* Big score ring mockup */}
-                  <div className="flex items-center gap-6">
-                    <div className="relative w-20 h-20 shrink-0">
-                      <svg width="80" height="80" className="-rotate-90">
-                        <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8"/>
-                        <circle cx="40" cy="40" r="32" fill="none" stroke="#818CF8" strokeWidth="8" strokeLinecap="round"
-                          strokeDasharray={201} strokeDashoffset={201 * 0.27} style={{transition:'stroke-dashoffset 1s ease'}}/>
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-lg font-bold text-white">73</span>
-                        <span className="text-[8px] text-zinc-500">/100</span>
-                      </div>
-                    </div>
-                    <div className="space-y-1.5 flex-1">
-                      {[
-                        { label: 'ATS Score', val: 68, color: '#F59E0B' },
-                        { label: 'Keywords', val: 55, color: '#EF4444' },
-                        { label: 'Action Verbs', val: 81, color: '#10B981' },
-                        { label: 'Quantification', val: 45, color: '#EF4444' },
-                      ].map(m => (
-                        <div key={m.label} className="space-y-0.5">
-                          <div className="flex justify-between text-[9px]">
-                            <span className="text-zinc-400">{m.label}</span>
-                            <span className="font-bold" style={{color: m.color}}>{m.val}</span>
-                          </div>
-                          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                            <div className="h-full rounded-full" style={{width:`${m.val}%`, backgroundColor: m.color}} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Bullet rewrite preview */}
-                  <div className="rounded-xl overflow-hidden border border-white/5 text-[10px]">
-                    <div className="p-2.5 bg-red-500/5 border-b border-white/5">
-                      <span className="text-red-400 font-bold uppercase tracking-widest text-[8px]">Original · No metrics</span>
-                      <p className="text-zinc-500 italic mt-0.5">"Worked on backend services for the platform"</p>
-                    </div>
-                    <div className="p-2.5 bg-emerald-500/5">
-                      <span className="text-emerald-400 font-bold uppercase tracking-widest text-[8px]">AI Rewritten</span>
-                      <p className="text-zinc-300 mt-0.5">"Architected 3 backend microservices reducing API latency by 40%"</p>
-                    </div>
-                  </div>
-
-                  {/* Keyword chips */}
-                  <div className="space-y-2">
-                    <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">Missing Keywords</span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {['Docker', 'CI/CD', 'PostgreSQL', 'TypeScript'].map(kw => (
-                        <span key={kw} className="px-2 py-0.5 bg-red-500/10 border border-red-500/20 text-red-300 text-[9px] rounded-md">{kw}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <h4 className="text-md font-medium text-slate-100 tracking-tight">{pillar.label}</h4>
+                <p className="text-sm text-zinc-300 leading-relaxed font-medium">{pillar.desc}</p>
               </div>
+            </div>
+          ))}
+        </div>
 
-              {/* Floating badge */}
-              <div className="absolute -top-3 -right-3 px-3 py-1.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-[10px] font-bold text-white shadow-[0_0_15px_rgba(99,102,241,0.4)] border border-indigo-400/30">
-                Free · No login
-              </div>
-            </motion.div>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center">
-            <Link href="/resume-review">
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-sm rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] border border-indigo-400/20 transition-all"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Evaluate My Resume Free
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            </Link>
-            <p className="text-xs text-zinc-600 mt-3">No account needed · PDF upload · Results in &lt;30 seconds</p>
-          </div>
+        {/* CTA */}
+        <div className="flex flex-col items-center justify-center pt-8">
+          <Link href="/resume-review">
+            <button className="px-8 py-4 bg-white hover:bg-zinc-200 text-black rounded-xl text-[11px] font-medium tracking-tight flex items-center gap-2 transition-all shadow-md active:scale-95">
+              <FileText className="w-4 h-4" /> Evaluate My Resume Free
+            </button>
+          </Link>
+          <p className="text-xs text-zinc-500 mt-4 font-medium tracking-tight">No account needed · PDF upload · Results in &lt;30 seconds</p>
         </div>
       </section>
 
