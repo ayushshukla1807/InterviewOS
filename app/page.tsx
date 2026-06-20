@@ -3036,32 +3036,55 @@ function LandingPageContent() {
         </div>
       </section>
 
-      {/* Mini Resume Review CTA (Above FAQ) */}
-      <section className="relative z-10 max-w-4xl mx-auto w-full px-6 pt-12 pb-4">
-        <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-br from-indigo-900/10 to-purple-900/10 backdrop-blur-xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-700" />
+      {/* Try Demos / Tools CTA (Above FAQ) */}
+      <section className="relative z-10 max-w-6xl mx-auto w-full px-6 pt-12 pb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
-          <div className="relative z-10 space-y-4">
-            <h2 className="text-2xl md:text-4xl font-medium text-white tracking-tight">
-              Curious how your resume scores?
-            </h2>
-            <p className="text-zinc-400 text-sm max-w-xl mx-auto leading-relaxed">
-              Drop your resume into our free AI Evaluator. Get instant 8-pillar feedback, ATS scoring, and bullet rewrites. No sign-up required.
-            </p>
-            <div className="pt-4">
-              <Link href="/resume-review">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-sm rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] border border-indigo-400/20 transition-all"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  Evaluate My Resume Free
-                  <ArrowRight className="w-4 h-4" />
-                </motion.button>
-              </Link>
+          {/* AI Interviewer Demo */}
+          <Link 
+            href="/instructions?name=Guest&track=JS"
+            className="rounded-3xl border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800/60 p-8 text-center space-y-4 transition-all group"
+          >
+            <div className="mx-auto w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Code2 className="w-6 h-6 text-zinc-300" />
             </div>
-          </div>
+            <h3 className="text-lg font-medium text-white">AI Interviewer Demo</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">Experience a real-time technical interview with our AI agent.</p>
+            <div className="pt-2 text-sm font-medium text-white flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
+              Launch Demo <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+
+          {/* Simulator Demo */}
+          <Link 
+            href="/simulation"
+            className="rounded-3xl border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800/60 p-8 text-center space-y-4 transition-all group"
+          >
+            <div className="mx-auto w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <Briefcase className="w-6 h-6 text-zinc-300" />
+            </div>
+            <h3 className="text-lg font-medium text-white">Simulator Demo</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">Handle production alerts and Slack triage under pressure.</p>
+            <div className="pt-2 text-sm font-medium text-white flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
+              Launch Demo <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+
+          {/* Evaluate My Resume */}
+          <Link 
+            href="/resume-review"
+            className="rounded-3xl border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800/60 p-8 text-center space-y-4 transition-all group"
+          >
+            <div className="mx-auto w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+              <FileText className="w-6 h-6 text-zinc-300" />
+            </div>
+            <h3 className="text-lg font-medium text-white">Evaluate My Resume</h3>
+            <p className="text-zinc-400 text-sm leading-relaxed">Get instant 8-pillar feedback and ATS scoring.</p>
+            <div className="pt-2 text-sm font-medium text-white flex items-center justify-center gap-2 group-hover:gap-3 transition-all">
+              Review Resume <ArrowRight className="w-4 h-4" />
+            </div>
+          </Link>
+
         </div>
       </section>
 
