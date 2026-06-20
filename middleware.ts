@@ -5,7 +5,11 @@ const isProtectedRoute = createRouteMatcher([
   '/candidate(.*)',
   '/recruiter(.*)',
   '/founder(.*)',
-  '/report(.*)'
+  '/report(.*)',
+  '/session(.*)',
+  '/simulation(.*)',
+  '/instructions(.*)',
+  '/permissions(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -15,7 +19,10 @@ export default clerkMiddleware(async (auth, req) => {
       const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
       const protocol = req.headers.get('x-forwarded-proto') || 'https';
       const baseUrl = host ? `${protocol}://${host}` : req.url;
-      return NextResponse.redirect(new URL('/sign-in', baseUrl));
+      const signInUrl = new URL('/sign-in', baseUrl);
+      // Pass return URL so user lands back after login
+      signInUrl.searchParams.set('redirect_url', req.nextUrl.pathname);
+      return NextResponse.redirect(signInUrl);
     }
   }
   return NextResponse.next();
