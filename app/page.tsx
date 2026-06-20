@@ -3179,7 +3179,7 @@ function LandingPageContent() {
                     onClick={() => setIsBookingOpen(false)}
                     className="w-full py-3 bg-zinc-950 hover:bg-slate-800 text-white rounded-xl text-[10px] font-medium  tracking-tight flex items-center justify-center gap-2 transition-all text-center"
                   >
-                    Launch Coding Demo <Code2 className="w-3.5 h-3.5" />
+                    Launch AI Interviewer <Code2 className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 

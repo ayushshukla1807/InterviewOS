@@ -290,6 +290,17 @@ export default function ResumeReviewPage() {
       if (jobDescription.trim()) formData.append('jobDescription', jobDescription.trim());
 
       const res = await fetch('/api/resume-evaluate', { method: 'POST', body: formData });
+
+      // Guard: if Render returns HTML (cold-start 502/504 or missing env var), don't try to JSON.parse it
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error(
+          res.status === 502 || res.status === 504
+            ? 'Server is warming up — please wait 30 seconds and try again.'
+            : `Server error (${res.status}). The GEMINI_API_KEY environment variable may not be set on Render.`
+        );
+      }
+
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.error || 'Analysis failed');
