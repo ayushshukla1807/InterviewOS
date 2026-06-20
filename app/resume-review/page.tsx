@@ -157,7 +157,7 @@ function SectionCard({ title, icon, data }: { title: string; icon: React.ReactNo
   const color = data.score >= 80 ? '#10B981' : data.score >= 60 ? '#F59E0B' : '#EF4444';
 
   return (
-    <div className="border border-white/5 rounded-2xl overflow-hidden bg-black/20 hover:border-white/10 transition-all">
+    <div className="glass-card overflow-hidden hover:border-blue-500/25 transition-all">
       <button
         onClick={() => setOpen(!open)}
         className="w-full p-5 flex items-center justify-between gap-4 text-left group"
@@ -323,12 +323,9 @@ export default function ResumeReviewPage() {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white font-['Inter',system-ui,sans-serif] relative overflow-x-hidden">
 
-      {/* Background mesh */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full bg-purple-900/10 blur-[120px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-emerald-900/8 blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-blue-900/5 blur-[140px]" />
-      </div>
+      {/* Exact same background as InterviewOS landing page */}
+      <div className="mesh-bg" />
+      <div className="noise-overlay" />
 
       <div className="relative z-10">
         {/* Nav */}
@@ -395,7 +392,7 @@ export default function ResumeReviewPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="rounded-3xl border border-white/8 bg-black/40 backdrop-blur-xl overflow-hidden"
+            className="glass-card overflow-hidden"
           >
             <div className="p-8 space-y-6">
               {/* Drop zone */}
@@ -541,7 +538,7 @@ export default function ResumeReviewPage() {
               className="max-w-7xl mx-auto px-6 pb-20 space-y-8"
             >
               {/* Score Header */}
-              <div className="rounded-3xl border border-white/8 bg-black/40 backdrop-blur-xl overflow-hidden">
+              <div className="glass-card overflow-hidden">
                 <div className="p-8">
                   <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 items-center">
                     {/* Main score ring */}
@@ -583,7 +580,7 @@ export default function ResumeReviewPage() {
                 <div className="space-y-6">
 
                   {/* ATS Card */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-5">
+                  <div className="glass-card p-6 space-y-5">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-bold text-white flex items-center gap-2">
                         <Shield className="w-4 h-4 text-purple-400" /> ATS Report
@@ -614,7 +611,7 @@ export default function ResumeReviewPage() {
                   </div>
 
                   {/* Quantification */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-bold text-white flex items-center gap-2">
                         <BarChart2 className="w-4 h-4 text-blue-400" /> Quantification
@@ -647,7 +644,7 @@ export default function ResumeReviewPage() {
                   </div>
 
                   {/* Format */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <h2 className="text-sm font-bold text-white flex items-center gap-2">
                       <Layers className="w-4 h-4 text-amber-400" /> Format Analysis
                     </h2>
@@ -686,7 +683,7 @@ export default function ResumeReviewPage() {
                   <SectionCard title="Projects" icon={<Award className="w-4 h-4" />} data={result.sections.projects} />
 
                   {/* Action Verb Audit */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-bold text-white flex items-center gap-2">
                         <BrainCircuit className="w-4 h-4 text-fuchsia-400" /> Action Verb Audit
@@ -728,7 +725,7 @@ export default function ResumeReviewPage() {
                 <div className="space-y-6">
 
                   {/* Keyword Analysis */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <div className="flex items-center justify-between">
                       <h2 className="text-sm font-bold text-white flex items-center gap-2">
                         <Target className="w-4 h-4 text-blue-400" /> Keyword Gap
@@ -759,7 +756,7 @@ export default function ResumeReviewPage() {
                   </div>
 
                   {/* Strengths & Weaknesses */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <h2 className="text-sm font-bold text-white">Strengths & Weaknesses</h2>
 
                     <div className="space-y-2">
@@ -781,7 +778,7 @@ export default function ResumeReviewPage() {
                   </div>
 
                   {/* Fast Improvement Plan */}
-                  <div className="rounded-2xl border border-white/8 bg-black/40 backdrop-blur-xl p-6 space-y-4">
+                  <div className="glass-card p-6 space-y-4">
                     <h2 className="text-sm font-bold text-white flex items-center gap-2">
                       <Zap className="w-4 h-4 text-amber-400" /> Fast Fix Plan
                     </h2>
@@ -809,7 +806,7 @@ export default function ResumeReviewPage() {
                   </div>
 
                   {/* CTA card */}
-                  <div className="rounded-2xl border border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-blue-500/5 p-6 space-y-4">
+                  <div className="glass-card border-purple-500/20 p-6 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
                         <BrainCircuit className="w-5 h-5 text-white" />
@@ -858,7 +855,7 @@ export default function ResumeReviewPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + i * 0.08 }}
-                  className="p-5 rounded-2xl border border-white/5 bg-black/30 space-y-2"
+                  className="glass-card p-5 space-y-2 hover:border-blue-500/20 transition-all"
                 >
                   <div className="p-2 rounded-xl bg-white/5 w-fit">{f.icon}</div>
                   <h3 className="text-sm font-semibold text-white">{f.title}</h3>
