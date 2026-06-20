@@ -33,7 +33,25 @@ export async function GET(req: NextRequest) {
     }
 
     // Sync to MongoDB with the chosen role
-    const mongoUser = await getOrCreateMongoUser(userId, name, email, preferredRole as any);
+    let mongoUser;
+    try {
+      mongoUser = await getOrCreateMongoUser(userId, name, email, preferredRole as any);
+    } catch (dbError: any) {
+      console.error('MongoDB sync failed, falling back to Clerk user:', dbError);
+      // Fallback user object to prevent infinite redirect loops on the frontend if DB is down
+      mongoUser = {
+        _id: userId,
+        id: userId,
+        name,
+        email,
+        role: preferredRole,
+        plan: 'free',
+        xp: 0,
+        level: 1,
+        streak: 0,
+        badges: []
+      };
+    }
 
     return NextResponse.json({ user: mongoUser }, { status: 200 });
   } catch (error: any) {
