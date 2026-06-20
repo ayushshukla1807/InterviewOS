@@ -3035,6 +3035,35 @@ function LandingPageContent() {
         </div>
       </section>
 
+      {/* Mini Resume Review CTA (Above FAQ) */}
+      <section className="relative z-10 max-w-4xl mx-auto w-full px-6 pt-12 pb-4">
+        <div className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-900/10 to-blue-900/10 backdrop-blur-xl p-8 md:p-12 text-center space-y-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[80px] rounded-full pointer-events-none group-hover:bg-purple-500/20 transition-all duration-700" />
+          
+          <div className="relative z-10 space-y-4">
+            <h2 className="text-2xl md:text-4xl font-medium text-white tracking-tight">
+              Curious how your resume scores?
+            </h2>
+            <p className="text-zinc-400 text-sm max-w-xl mx-auto leading-relaxed">
+              Drop your resume into our free AI Evaluator. Get instant 8-pillar feedback, ATS scoring, and bullet rewrites. No sign-up required.
+            </p>
+            <div className="pt-4">
+              <Link href="/resume-review">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold text-sm rounded-2xl shadow-lg shadow-purple-500/20 transition-all"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Evaluate My Resume Free
+                  <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Accordion Section */}
       <section id="faq" className="relative z-10 max-w-4xl mx-auto w-full px-6 py-20 space-y-12">
         <div className="text-center space-y-3">
