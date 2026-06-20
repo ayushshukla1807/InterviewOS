@@ -402,6 +402,33 @@ export default function CandidateDashboard() {
               </motion.div>
             </motion.div>
 
+            {/* Resume Evaluator CTA */}
+            <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.15}} className="glass-card p-6 space-y-4 relative overflow-hidden group border border-purple-500/10 hover:border-purple-500/25 transition-all">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-800/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-purple-700/20 transition-all duration-700" />
+              <div>
+                <h2 className="text-xs font-medium tracking-tight text-zinc-400 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-purple-400" /> Resume Evaluator
+                </h2>
+                <p className="text-[10px] text-zinc-500 mt-2 tracking-tight leading-relaxed">ATS score, keyword gaps, bullet rewrites & 8-pillar feedback</p>
+              </div>
+              <Link href="/resume-review">
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full py-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 hover:from-purple-600/30 hover:to-blue-600/30 border border-purple-500/20 rounded-2xl flex items-center justify-center gap-3 transition-all cursor-pointer group/btn"
+                >
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow-lg shadow-purple-500/20 group-hover/btn:scale-110 transition-transform">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-sm font-semibold text-white">Evaluate My Resume</p>
+                    <p className="text-[10px] text-zinc-400">Free · No sign-up needed</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover/btn:translate-x-1 transition-transform ml-auto mr-1" />
+                </motion.div>
+              </Link>
+            </motion.div>
+
             {/* Quick Track Selection */}
             <motion.div initial={{opacity: 0, y: 20}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="glass-card p-8 space-y-6">
               <div>
