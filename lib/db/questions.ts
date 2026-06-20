@@ -21,33 +21,33 @@ class InterviewOSQuestionEngine {
     const initialSet: Question[] = [
       {
         id: 'JS-001',
-        title: 'V8 Memory Management & Scavenge Algorithm',
+        title: 'Build a Countdown Timer',
         track: 'JS',
-        difficulty: 'Advanced',
-        category: 'Theoretical',
-        prompt: 'How does the V8 engine distinguish between the Young Generation and Old Generation? Explain the "Scavenge" algorithm and how "closures" can lead to memory leaks in long-running Node.js processes.',
-        weightage: 25,
-        tags: ['V8', 'Memory', 'Optimization']
-      },
-      {
-        id: 'SEC-001',
-        title: 'Zero-Knowledge Proofs in Auth Systems',
-        track: 'Security',
-        difficulty: 'Expert',
-        category: 'System Design',
-        prompt: 'How would you implement a ZKP-based authentication system to prevent server-side password storage? Discuss the trade-offs between computational overhead and security.',
-        weightage: 40,
-        tags: ['Cryptography', 'Security', 'Architecture']
-      },
-      {
-        id: 'OPS-001',
-        title: 'Multi-Region Kubernetes Traffic Splitting',
-        track: 'DevOps',
-        difficulty: 'Architect',
+        difficulty: 'Beginner',
         category: 'Coding',
-        prompt: 'Design an Istio-based traffic splitting strategy for a blue-green deployment across 3 global clusters. How do you handle sticky sessions in a stateless environment?',
-        weightage: 35,
-        tags: ['Kubernetes', 'Istio', 'Scale']
+        prompt: 'Create a countdown timer in JavaScript (or React). It should take an initial time in seconds, display the time remaining in MM:SS format, and have Start, Pause, and Reset buttons. Ensure the timer does not drift significantly and handles cleanup properly.',
+        weightage: 20,
+        tags: ['JS', 'React', 'DOM', 'Timers']
+      },
+      {
+        id: 'JS-002',
+        title: 'Implement Debounce Function',
+        track: 'JS',
+        difficulty: 'Intermediate',
+        category: 'Coding',
+        prompt: 'Write a `debounce` function that takes a function `fn` and a time `t` in milliseconds as input, and returns a debounced version of that function. The debounced function should delay the execution of `fn` until `t` milliseconds have elapsed since the last time the debounced function was invoked.',
+        weightage: 25,
+        tags: ['JS', 'Closures', 'Optimization']
+      },
+      {
+        id: 'DSA-001',
+        title: 'Valid Parentheses',
+        track: 'DSA',
+        difficulty: 'Beginner',
+        category: 'Coding',
+        prompt: 'Given a string `s` containing just the characters `(`, `)`, `{`, `}`, `[` and `]`, determine if the input string is valid. An input string is valid if open brackets are closed by the same type of brackets, and in the correct order.',
+        weightage: 20,
+        tags: ['DSA', 'Stacks', 'Strings']
       }
     ];
 
