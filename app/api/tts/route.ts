@@ -35,6 +35,18 @@ const ELEVEN_PERSONALITY_VOICE_MAP: Record<string, string> = {
   supportive_colleague:   'EXAVITQu4vr4xnSDxMaL',
 };
 
+// Azure TTS fallback map
+const AZURE_PERSONALITY_VOICE_MAP: Record<string, string> = {
+  overbearing_executive:  'en-US-ChristopherNeural',
+  micromanager:           'en-US-GuyNeural',
+  passive_aggressive:     'en-US-AriaNeural',
+  credit_stealer:         'en-US-JennyNeural',
+  lazy_contributor:       'en-US-EricNeural',
+  difficult_client:       'en-US-GuyNeural',
+  political_manager:      'en-US-ChristopherNeural',
+  supportive_colleague:   'en-US-SaraNeural',
+};
+
 // ─── Cartesia TTS (Primary) ───────────────────────────────────────────────────
 async function generateCartesiaTTS(
   text: string,
@@ -102,6 +114,35 @@ async function generateElevenLabsTTS(
   return response.arrayBuffer();
 }
 
+// ─── Azure TTS (Fallback 1) ───────────────────────────────────────────────────
+async function generateAzureTTS(
+  text: string,
+  voiceName: string,
+  apiKey: string,
+  region: string
+): Promise<ArrayBuffer> {
+  const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+  const ssml = `<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' name='${voiceName}'>${text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</voice></speak>`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Ocp-Apim-Subscription-Key': apiKey,
+      'Content-Type': 'application/ssml+xml',
+      'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3',
+      'User-Agent': 'InterviewOS',
+    },
+    body: ssml,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Azure TTS failed (${response.status}): ${errorText}`);
+  }
+
+  return response.arrayBuffer();
+}
+
 // ─── Main Route ───────────────────────────────────────────────────────────────
 export async function POST(req: Request) {
   try {
@@ -126,6 +167,8 @@ export async function POST(req: Request) {
 
     const cartesiaKey = process.env.CARTESIA_API_KEY;
     const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
+    const azureKey = process.env.AZURE_SPEECH_KEY;
+    const azureRegion = process.env.AZURE_SPEECH_REGION;
     
     // Map specific interviewer names to unique Cartesia voices
     const CARTESIA_NAME_MAP: Record<string, string> = {
@@ -133,7 +176,7 @@ export async function POST(req: Request) {
       'Zara': '5c42302c-194b-4d0c-ba1a-8cb485c84ab9', // Professional Female
       'Ava': '41534e16-2966-4c6b-9670-111411def906',  // Warm Female
       'Sathvik': 'd46abd1d-2d02-43e8-819f-51fb652c1c61', // Calm Male
-      'Zoe': 'bf991597-6c13-47e4-8411-91ec2de5c466',   // Bright Female (Wait, bf991597 is polished. Or another ID. We can just use the mapped ones.)
+      'Zoe': 'bf991597-6c13-47e4-8411-91ec2de5c466',   // Bright Female
     };
 
     // ElevenLabs Name Map
@@ -143,6 +186,15 @@ export async function POST(req: Request) {
       'Ava': 'EXAVITQu4vr4xnSDxMaL',
       'Sathvik': 'bIHbv24MWmeRgasZH58o',
       'Zoe': 'cjVigY5qzO86Huf0OWal',
+    };
+
+    // Azure Name Map
+    const AZURE_NAME_MAP: Record<string, string> = {
+      'Syed': 'en-US-GuyNeural',
+      'Zara': 'en-US-AriaNeural',
+      'Ava': 'en-US-SaraNeural',
+      'Sathvik': 'en-IN-PrabhatNeural',
+      'Zoe': 'en-US-JaneNeural',
     };
 
     // ── Attempt Cartesia first ────────────────────────────────────────────────
@@ -169,7 +221,36 @@ export async function POST(req: Request) {
         });
       } catch (cartesiaErr: unknown) {
         const msg = cartesiaErr instanceof Error ? cartesiaErr.message : 'Cartesia error';
-        console.warn('Cartesia TTS failed, falling back to ElevenLabs:', msg);
+        console.warn('Cartesia TTS failed, falling back:', msg);
+        // Fall through to Azure/ElevenLabs
+      }
+    }
+
+    // ── Azure TTS Fallback ────────────────────────────────────────────────────
+    if (azureKey && azureRegion) {
+      try {
+        let azureVoiceId = voice === 'alloy' ? 'en-US-GuyNeural' : 'en-US-AriaNeural';
+        if (personality && AZURE_PERSONALITY_VOICE_MAP[personality]) {
+          azureVoiceId = AZURE_PERSONALITY_VOICE_MAP[personality];
+        } else if (interviewerName && AZURE_NAME_MAP[interviewerName]) {
+          azureVoiceId = AZURE_NAME_MAP[interviewerName];
+        } else if (voice === 'nova') {
+          azureVoiceId = 'en-US-SaraNeural';
+        }
+
+        const audioBuffer = await generateAzureTTS(safeText, azureVoiceId, azureKey, azureRegion);
+
+        return new NextResponse(audioBuffer, {
+          headers: {
+            'Content-Type': 'audio/mpeg',
+            'Cache-Control': 'no-store, max-age=0',
+            'X-TTS-Provider': 'azure-fallback',
+            'X-Voice-Used': azureVoiceId,
+          },
+        });
+      } catch (azureErr: unknown) {
+        const msg = azureErr instanceof Error ? azureErr.message : 'Azure error';
+        console.warn('Azure TTS failed, falling back to ElevenLabs:', msg);
         // Fall through to ElevenLabs
       }
     }
